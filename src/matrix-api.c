@@ -18,168 +18,529 @@
 
 #include "matrix-api.h"
 
-#include <string.h>
-#include <libsoup/soup.h>
-
 /**
  * SECTION:matrix-api
- * @short_description: Low level API calls to communicate with a
- *                     Matrix.org server
  * @title: MatrixAPI
- * @stability: Unstable
- * @include: matrix-glib/matrix.h
+ * @short_description: An interface for actual API implementations,
+ * like #MatrixHTTPAPI
  *
- * This is a class for low level communication with a Matrix.org
- * server.
- */
+ * This interface provides a skeleton for all API functionality for
+ * client communication with a Matrix.org homeserver.
+ **/
 
 /**
  * MatrixAPI:
  *
- * The MatrixAPI object’s instance definition.
+ * An opaque pointer type.
+ **/
+
+/**
+ * MatrixAPIInterface:
+ * @login: virtual function for matrix_api_login()
+ * @register_account: virtual_function for
+ *                    matrix_api_register_account()
+ * @initial_sync: virtual function for matrix_api_initial_sync()
+ * @event_stream: virtual function for matrix_api_event_stream()
+ * @create_room: virtual function for matrix_api_create_room()
+ * @join_room: virtual function for matrix_api_join_room()
+ * @send_state_event: virtual function for
+ *                    matrix_api_send_state_event()
+ * @send_message_event: virtual function for
+ *                      matrix_api_send_message_event()
+ * @send_message: virtual function for matrix_api_send_message()
+ * @send_emote: virtual function for matrix_api_send_emote()
+ * @get_room_name: virtual function for matrix_api_get_room_name()
+ * @get_room_topic: virtual function for matrix_api_get_room_topic()
+ * @leave_room: virtual function for matrix_api_leave_room()
+ * @invite_user: virtual function for matrix_api_invite_user()
+ * @kick_user: virtual function for matrix_api_kick_user()
+ * @set_membership: virtual function for matrix_api_set_membership()
+ * @ban_user: virtual function for matrix_api_ban_user()
+ * @get_room_state: virtual function for matrix_api_get_room_state()
+ * @get_text_body: virtual function for matrix_api_get_text_body()
+ * @get_html_body: virtual function for matrix_api_get_html_body()
+ * @get_emote_body: virtual function for matrix_api_get_emote_body()
+ * @_send: virtual function for matrix_api_send()
+ *
+ * The interface vtable for #MatrixAPI
  */
 
 /**
- * MatrixAPIClass:
- * @parent_class: the parent class structure (#GObjectClass)
+ * MatrixAPICallback:
+ * @api: A #MatrixAPI implementation
+ * @content: the JSON content of the response, as a #JsonNode
+ * @data: User data specified when calling original request function
  *
- * The MatrixAPI object’s class definition.
+ * A callback function to use with API calls.
  */
 
-#define API_ENDPOINT "/_matrix/client/api/v1"
-
-typedef struct _MatrixAPIPrivate {
-    SoupSession *soup_session;
-    guint txn_id;
-    gchar *url;
-    gchar *token;
-    gboolean validate_cert;
-} MatrixAPIPrivate;
-
-enum {
-    PROP_URL = 1,
-    N_PROPERTIES
-};
-
-GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
-
-G_DEFINE_TYPE_WITH_PRIVATE(MatrixAPI, matrix_api, G_TYPE_OBJECT);
+G_DEFINE_INTERFACE(MatrixAPI, matrix_api, G_TYPE_OBJECT);
 
 static void
-matrix_api_finalize(GObject *gobject)
+matrix_api_default_init(MatrixAPIInterface *iface)
 {
-    g_signal_handlers_destroy(gobject);
-    G_OBJECT_CLASS(matrix_api_parent_class)->finalize(gobject);
 }
 
-static void
-matrix_api_set_property(GObject *gobject,
-                        guint prop_id,
-                        const GValue *value,
-                        GParamSpec *pspec)
+/**
+ * matrix_api_ban_user:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID where the user should be banned
+ * @user_id: the user ID to ban
+ * @reason: (allow-none): the reason of the ban
+ *
+ * Ban the specified user from the specified room. An optional reason
+ * can be specified.
+ */
+void
+matrix_api_ban_user(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    gchar *room_id,
+                    gchar *user_id,
+                    gchar *reason)
 {
-    MatrixAPI *api = MATRIX_API(gobject);
-    MatrixAPIPrivate *priv = matrix_api_get_instance_private(api);
+    g_return_if_fail(MATRIX_IS_API(api));
 
-    switch (prop_id) {
-        case PROP_URL:
-        {
-            const gchar *base_url;
-            gchar *last_occurence;
-
-            base_url = g_value_get_string(value);
-
-            if (!g_str_is_ascii(base_url)) {
-                g_warning("URL specified (%s) is not ASCII", base_url);
-
-                return;
-            }
-
-            last_occurence = g_strrstr(base_url, API_ENDPOINT);
-
-            if ((g_strcmp0(last_occurence, API_ENDPOINT) == 0) ||
-                (g_strcmp0(last_occurence, API_ENDPOINT"/") == 0)) {
-                priv->url = g_strdup(base_url);
-            } else {
-                priv->url = g_strdup_printf(
-                        "%s%s%s",
-                        base_url,
-                        (base_url[strlen(base_url) - 1] == '/') ? "" : "/",
-                        API_ENDPOINT);
-            }
-
-            break;
-        }
-
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
-    }
+    MATRIX_API_GET_IFACE(api)
+        ->ban_user(api, callback, user_data, room_id, user_id, reason);
 }
 
-static void
-matrix_api_get_property(GObject *gobject,
-                        guint prop_id,
-                        GValue *value,
-                        GParamSpec *pspec)
+/**
+ * matrix_api_create_room:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @alias: the alias (name) of the room
+ * @is_public: if %TRUE, the room will be accessible for anyone
+ * @invitees: (allow-none): list of user IDs to invite to the new room
+ *
+ * Create a new room with the given name and invite the users in
+ * @invitees.
+ */
+void
+matrix_api_create_room(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       gchar *alias,
+                       gboolean is_public,
+                       GStrv invitees)
 {
-    MatrixAPI *api = MATRIX_API(gobject);
-    MatrixAPIPrivate *priv = matrix_api_get_instance_private(api);
+    g_return_if_fail(MATRIX_IS_API(api));
 
-    switch (prop_id) {
-        case PROP_URL:
-            g_value_set_string(value, priv->url);
-
-            break;
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
-    }
+    MATRIX_API_GET_IFACE(api)
+        ->create_room(api, callback, user_data, alias, is_public, invitees);
 }
 
-static void
-matrix_api_class_init(MatrixAPIClass *klass)
+/**
+ * matrix_api_event_stream:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @from_token: (allow-none): events will be listed from this token
+ * @timeout: timeout of the request
+ *
+ * Get the event stream, optionally beginning from @from_token.
+ */
+void
+matrix_api_event_stream(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        gchar *from_token,
+                        gulong timeout)
 {
-    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+    g_return_if_fail(MATRIX_IS_API(api));
 
-    gobject_class->set_property = matrix_api_set_property;
-    gobject_class->get_property = matrix_api_get_property;
-    gobject_class->finalize = matrix_api_finalize;
-
-    /**
-     * MatrixAPI:url:
-     *
-     * The base URL to use for communication with the Matrix.org
-     * server.
-     */
-    obj_properties[PROP_URL] = g_param_spec_string(
-            "url", "Server URL",
-            "Matrix.org home server to connect to.",
-            NULL,
-            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-    g_object_class_install_properties(gobject_class,
-                                N_PROPERTIES,
-                                obj_properties);
+    MATRIX_API_GET_IFACE(api)
+        ->event_stream(api, callback, user_data, from_token, timeout);
 }
 
-static void
-matrix_api_init(MatrixAPI *api)
+/**
+ * matrix_api_get_room_name:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to get a name for
+ *
+ * Get the name (alias) of a room.
+ */
+void
+matrix_api_get_room_name(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         gchar *room_id)
 {
-    MatrixAPIPrivate *priv = matrix_api_get_instance_private(api);
+    g_return_if_fail(MATRIX_IS_API(api));
 
-    priv->txn_id = 0;
-    priv->url = NULL;
-    priv->token = NULL;
-    priv->validate_cert = TRUE;
-    priv->soup_session = soup_session_new_with_options(
-            SOUP_SESSION_ADD_FEATURE_BY_TYPE, SOUP_TYPE_CONTENT_SNIFFER,
-            NULL);
+    MATRIX_API_GET_IFACE(api)
+        ->get_room_name(api, callback, user_data, room_id);
 }
 
-MatrixAPI *
-matrix_api_new(const gchar *base_url, const gchar *token)
+/**
+ * matrix_api_get_room_state:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to get a state for
+ *
+ * Get the state of a room.
+ */
+void
+matrix_api_get_room_state(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          gchar *room_id)
 {
-    return g_object_new(MATRIX_TYPE_API,
-                        "base-url", base_url,
-                        "token", token,
-                        NULL);
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->get_room_state(api, callback, user_data, room_id);
+}
+
+/**
+ * matrix_api_get_room_topic:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to get a topic for
+ *
+ * Get the topic of a room.
+ */
+void
+matrix_api_get_room_topic(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          gchar *room_id)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->get_room_topic(api, callback, user_data, room_id);
+}
+
+/**
+ * matrix_api_initial_sync:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @limit: the maximum number of events to get
+ *
+ * perform an initial sync of events
+ */
+void
+matrix_api_initial_sync(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        guint limit)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->initial_sync(api, callback, user_data, limit);
+}
+
+/**
+ * matrix_api_invite_user:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to invite the user to
+ * @user_id: the user ID to invite
+ *
+ * Invite a user to a room.
+ */
+void
+matrix_api_invite_user(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       gchar *room_id,
+                       gchar *user_id)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->invite_user(api, callback, user_data, room_id, user_id);
+}
+
+/**
+ * matrix_api_join_room:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id_or_alias: the room ID or room alias to join to
+ *
+ * Join a room.
+ */
+void
+matrix_api_join_room(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     gchar *room_id_or_alias)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->join_room(api, callback, user_data, room_id_or_alias);
+}
+
+/**
+ * matrix_api_kick_user:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to kick the user from
+ * @user_id: the user to kick
+ * @reason: (allow-none): the reason of kicking
+ *
+ * Kick a user from a room, with an optional reason.
+ */
+void
+matrix_api_kick_user(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     gchar *room_id,
+                     gchar *user_id,
+                     gchar *reason)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->kick_user(api, callback, user_data, room_id, user_id, reason);
+}
+
+/**
+ * matrix_api_leave_room:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room ID to kick the user from
+ *
+ * Leave a room
+ */
+void
+matrix_api_leave_room(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      gchar *room_id)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->leave_room(api, callback, user_data, room_id);
+}
+
+/**
+ * matrix_api_login:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @login_type: the login type to use
+ * @parameters: (allow-none): parameters to pass for the login request
+ *
+ * Attempt to login with type @login_type. Implementations of this
+ * method must set the token property on a successful login.
+ */
+void
+matrix_api_login(MatrixAPI *api,
+                 MatrixAPICallback callback,
+                 gpointer user_data,
+                 gchar *login_type,
+                 GHashTable *parameters)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->login(api, callback, user_data, login_type, parameters);
+}
+
+/**
+ * matrix_api_register_account:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @login_type: the login type to use
+ * @parameters: (allow-none): parameters to pass for the registration
+ * request
+ *
+ * Attempt to register with type @login_type. Implementations of this
+ * method must set the token property on a successful login.
+ */
+void
+matrix_api_register_account(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            gchar *login_type,
+                            GHashTable *parameters)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->register_account(api, callback, user_data, login_type, parameters);
+}
+
+/**
+ * matrix_api_send_emote:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room to send the emote to
+ * @text_content: the emote text to send
+ *
+ * Send an emote to the room.
+ */
+void
+matrix_api_send_emote(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      gchar *room_id,
+                      gchar *text_content)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->send_emote(api, callback, user_data, room_id, text_content);
+}
+
+/**
+ * matrix_api_send_message:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room to send the emote to
+ * @text_content: the emote text to send
+ * @msg_type: the type of the message to be sent
+ *
+ * Send a custom message to the room.
+ */
+void
+matrix_api_send_message(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        gchar *room_id,
+                        gchar *text_content,
+                        gchar *msg_type)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->send_message(api,
+                       callback, user_data,
+                       room_id,
+                       text_content,
+                       msg_type);
+}
+
+/**
+ * matrix_api_send_message_event:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room to send the emote to
+ * @event_type: the type of the event to send
+ * @content: the content of the event as a #JsonNode
+ * @txn_id: the transaction ID to use
+ *
+ * Send a message event to the room.
+ */
+void
+matrix_api_send_message_event(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              gchar *room_id,
+                              gchar *event_type,
+                              JsonNode *content,
+                              guint txn_id)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->send_message_event(api,
+                             callback, user_data,
+                             room_id,
+                             event_type,
+                             content,
+                             txn_id);
+}
+
+/**
+ * matrix_api_send_state_event:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room to send the emote to
+ * @event_type: the type of the event to send
+ * @content: the content of the event as a #JsonNode
+ * @state_key: the state key to send
+ *
+ * Send a state event to the room
+ */
+void
+matrix_api_send_state_event(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            gchar *room_id,
+                            gchar *event_type,
+                            JsonNode *content,
+                            gchar *state_key)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->send_state_event(api,
+                           callback, user_data,
+                           room_id,
+                           event_type,
+                           content,
+                           state_key);
+}
+
+/**
+ * matrix_api_set_membership:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id: the room to send the emote to
+ * @user_id: the user of whom membership will be set
+ * @membership: the new membership of the user
+ * @reason: (allow-none): the reason of the change
+ *
+ * Set the membership of the user for the given room.
+ */
+void
+matrix_api_set_membership(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          gchar *room_id,
+                          gchar *user_id,
+                          gchar *membership,
+                          gchar *reason)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->set_membership(api,
+                         callback, user_data,
+                         room_id,
+                         user_id,
+                         membership,
+                         reason);
 }

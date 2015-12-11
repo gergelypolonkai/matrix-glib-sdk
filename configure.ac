@@ -55,6 +55,7 @@ AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.38])
 PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.38])
 PKG_CHECK_MODULES([SOUP], [libsoup-2.4])
+PKG_CHECK_MODULES([JSON], [json-glib-1.0])
 
 LIBMATRIX_GLIB_LIBS='$(top_builddir)/src/libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la'
 AC_SUBST(LIBMATRIX_GLIB_LIBS)
