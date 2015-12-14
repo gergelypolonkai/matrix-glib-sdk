@@ -160,6 +160,7 @@ struct _MatrixAPIInterface {
     void *padding[20];
 };
 
+GType matrix_api_get_type(void) G_GNUC_CONST;
 void matrix_api_initial_sync(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,
