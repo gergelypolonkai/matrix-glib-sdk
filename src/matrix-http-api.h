@@ -49,6 +49,7 @@ void matrix_http_api_set_validate_certificate(MatrixHTTPAPI *api,
                                               gboolean validate_certificate);
 gboolean matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api);
 
+MatrixHTTPAPI *matrix_http_api_new(const gchar *base_url, const gchar *token);
 G_END_DECLS
 
 #endif /* __MATRIX_HTTP_API_H__ */

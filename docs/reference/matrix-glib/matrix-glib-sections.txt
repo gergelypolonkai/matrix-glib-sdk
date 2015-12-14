@@ -53,6 +53,7 @@ matrix_api_get_type
 
 <SECTION>
 <FILE>matrix-http-api</FILE>
+matrix_http_api_new
 matrix_http_api_get_validate_certificate
 matrix_http_api_set_validate_certificate
 <SUBSECTION Standard>

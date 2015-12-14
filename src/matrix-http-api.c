@@ -255,6 +255,15 @@ matrix_http_api_init(MatrixHTTPAPI *api)
             NULL);
 }
 
+/**
+ * matrix_http_api_new:
+ * @base_url: the URL to use as the API endpoint
+ * @token: (allow-none): an authorization token to use. If %NULL,
+ *         requests that need authentication will fail
+ *
+ * Create a new #MatrixHTTPAPI object with the specified base URL, and
+ * an optional authorization token
+ */
 MatrixHTTPAPI *
 matrix_http_api_new(const gchar *base_url, const gchar *token)
 {
