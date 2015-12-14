@@ -50,6 +50,7 @@ void matrix_http_api_set_validate_certificate(MatrixHTTPAPI *api,
 gboolean matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api);
 const gchar *matrix_http_api_get_base_url(MatrixHTTPAPI *api);
 
+GHashTable *matrix_http_api_gen_parameters(const gchar *param1_name, ...);
 MatrixHTTPAPI *matrix_http_api_new(const gchar *base_url, const gchar *token);
 G_END_DECLS
 

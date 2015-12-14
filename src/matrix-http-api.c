@@ -307,6 +307,46 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
 }
 
 /**
+ * matrix_http_api_gen_parameters:
+ * @param1_name: name of the first parameter
+ * @...: value of the first parameter, followed by name/value pairs,
+ *       terminated by a NULL value as a parameter name
+ *
+ * Generate a GHashTable suitable as the parameters argument for
+ * different API calls.
+ *
+ * Returns: (transfer full): a #GHashTable with the specified
+ *          parameter table
+ */
+GHashTable *
+matrix_http_api_gen_parameters(const gchar *param1_name, ...)
+{
+    GHashTable *table;
+    va_list var_args;
+    gchar *name;
+
+    g_return_val_if_fail(param1_name != NULL, NULL);
+
+    table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+
+    va_start(var_args, param1_name);
+
+    name = (gchar *)param1_name;
+
+    while (name) {
+        gchar *value = va_arg(var_args, gchar *);
+
+        g_hash_table_insert(table, name, value);
+
+        name = va_arg(var_args, gchar *);
+    }
+
+    va_end(var_args);
+
+    return table;
+}
+
+/**
  * matrix_http_api_get_base_url:
  * @api: a #MatrixHTTPAPI implementation
  *
