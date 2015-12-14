@@ -16,7 +16,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "matrix-api.h"
 #include "matrix-http-api.h"
 
 #include <string.h>
@@ -64,6 +63,13 @@ enum {
     N_PROPERTIES
 };
 
+typedef struct {
+    MatrixHTTPAPI *api;
+    JsonNode *request_content;
+    MatrixAPICallback callback;
+    gpointer callback_data;
+} MatrixHTTPAPIRequest;
+
 GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 
 static void matrix_http_api_matrix_api_init(MatrixAPIInterface *iface);
@@ -74,7 +80,9 @@ G_DEFINE_TYPE_WITH_CODE(MatrixHTTPAPI, matrix_http_api, G_TYPE_OBJECT,
 
 static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
-{}
+{
+    iface->login = matrix_http_api_login;
+}
 
 static void
 matrix_http_api_finalize(GObject *gobject)
@@ -250,9 +258,7 @@ matrix_http_api_init(MatrixHTTPAPI *api)
     priv->url = NULL;
     priv->token = NULL;
     priv->validate_certificate = TRUE;
-    priv->soup_session = soup_session_new_with_options(
-            SOUP_SESSION_ADD_FEATURE_BY_TYPE, SOUP_TYPE_CONTENT_SNIFFER,
-            NULL);
+    priv->soup_session = soup_session_new();
 }
 
 /**
@@ -304,6 +310,189 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
     return priv->validate_certificate;
+}
+
+static void
+response_callback(SoupSession *session,
+                  SoupMessage *msg,
+                  MatrixHTTPAPIRequest *request)
+{
+    MatrixHTTPAPI *api = request->api;
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+
+    if (msg->status_code < SOUP_STATUS_CONTINUE) {
+        g_info("Request failed: %d: %s", msg->status_code, msg->reason_phrase);
+    } else {
+        SoupBuffer *buffer;
+        const guint8 *data;
+        gsize datalen;
+        JsonParser *parser;
+        GError *err = NULL;
+        JsonNode *content;
+
+        buffer = soup_message_body_flatten(msg->response_body);
+        soup_buffer_get_data(buffer, &data, &datalen);
+
+        parser = json_parser_new();
+        if (json_parser_load_from_data(parser,
+                                       (const gchar *)data, datalen,
+                                       &err)) {
+            g_debug("Message successfully parsed");
+            content = json_parser_get_root(parser);
+
+            if (JSON_NODE_HOLDS_OBJECT(content)) {
+                JsonObject *root_object;
+                JsonNode *node;
+
+                root_object = json_node_get_object(content);
+
+                /* Check if the response holds an access token; if it
+                 * does, set it as our new token */
+                if ((node = json_object_get_member(
+                             root_object, "access_token")) != NULL) {
+                    const gchar *access_token;
+
+                    if ((access_token = json_node_get_string(node)) != NULL) {
+                        g_debug("Access token: %s", access_token);
+                        g_free(priv->token);
+                        priv->token = g_strdup(access_token);
+                    }
+                }
+
+                /* Check if the response holds a homeserver name */
+                if ((node = json_object_get_member(
+                             root_object, "home_server")) != NULL) {
+                    const gchar *homeserver = json_node_get_string(node);
+
+                    g_debug("Our home server calls itself %s", homeserver);
+                }
+
+               /* Call the assigned function, if any */
+                if (request->callback) {
+                    request->callback(
+                            MATRIX_API(api),
+                            content,
+                            request->callback_data);
+                }
+            } else {
+                g_debug("Invalid response: %s", data);
+            }
+        } else {
+            g_debug("Malformed response: %s", data);
+        }
+    }
+}
+
+static void
+matrix_http_api_send(MatrixHTTPAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *method,
+                     const gchar *path,
+                     JsonNode *content,
+                     GHashTable *params)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+    SoupMessage *msg;
+    JsonGenerator *generator;
+    gsize datalen;
+    gchar *data;
+    gchar *url;
+    MatrixHTTPAPIRequest *request;
+
+    if (!g_str_is_ascii(method)) {
+        g_warning("Method must be ASCII encoded!");
+
+        return;
+    }
+
+    if ((g_ascii_strcasecmp("POST", method) != 0)
+        && (g_ascii_strcasecmp("GET", method) != 0)
+        && (g_ascii_strcasecmp("PUT", method) != 0)
+        && (g_ascii_strcasecmp("DELETE", method) != 0)) {
+        g_warning("Invalid method name '%s'", method);
+
+        return;
+    }
+
+    generator = json_generator_new();
+    json_generator_set_root(generator, content);
+    data = json_generator_to_data(generator, &datalen);
+
+    url = g_strdup_printf("%s%s", priv->url, path);
+    g_debug("Sending %s to %s", method, url);
+
+    msg = soup_message_new(method, url);
+    g_free(url);
+    soup_message_set_flags(msg, SOUP_MESSAGE_NO_REDIRECT);
+    soup_message_set_request(msg,
+                             "application/json",
+                             SOUP_MEMORY_TAKE,
+                             data,
+                             datalen);
+    request = g_new0(MatrixHTTPAPIRequest, 1);
+    request->request_content = content;
+    request->api = api;
+    request->callback = callback;
+    request->callback_data = user_data;
+
+    g_object_ref(msg);
+    soup_session_queue_message(priv->soup_session,
+                            msg,
+                            (SoupSessionCallback)response_callback, request);
+}
+
+static void
+update_parameters(gchar *key, gchar *value, JsonBuilder *builder)
+{
+    JsonNode *node = json_node_new(JSON_NODE_VALUE);
+
+    json_node_set_string(node, value);
+    json_builder_set_member_name(builder, key);
+    json_builder_add_value(builder, node);
+}
+
+/**
+ * matrix_http_api_login:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request if
+ * finished
+ * @user_data: user data to pass to the callback function
+ * @login_type: the login type to use
+ * @parameters: parameters to send with the login request
+ *
+ * Perform /login
+ */
+void
+matrix_http_api_login(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      gchar *login_type,
+                      GHashTable *parameters)
+{
+    JsonBuilder *builder;
+    JsonNode *content,
+             *node;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    node = json_node_new(JSON_NODE_VALUE);
+    json_node_set_string(node, login_type);
+    json_builder_set_member_name(builder, "type");
+    json_builder_add_value(builder, node);
+
+    g_hash_table_foreach(parameters, (GHFunc)update_parameters, builder);
+
+    json_builder_end_object(builder);
+
+    content = json_builder_get_root(builder);
+
+    matrix_http_api_send(MATRIX_HTTP_API(api),
+                         callback, user_data,
+                         "POST", "/login",
+                         content,
+                         parameters);
 }
 
 /**

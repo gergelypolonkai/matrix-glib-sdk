@@ -58,6 +58,7 @@ matrix_http_api_get_validate_certificate
 matrix_http_api_set_validate_certificate
 matrix_http_api_get_base_url
 matrix_http_api_gen_parameters
+matrix_http_api_login
 <SUBSECTION Standard>
 MatrixHTTPAPI
 MatrixHTTPAPIClass

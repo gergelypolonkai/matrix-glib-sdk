@@ -21,6 +21,8 @@
 
 #include <glib-object.h>
 
+#include "matrix-api.h"
+
 G_BEGIN_DECLS
 
 #define MATRIX_TYPE_HTTP_API         (matrix_http_api_get_type())
@@ -52,6 +54,11 @@ const gchar *matrix_http_api_get_base_url(MatrixHTTPAPI *api);
 
 GHashTable *matrix_http_api_gen_parameters(const gchar *param1_name, ...);
 MatrixHTTPAPI *matrix_http_api_new(const gchar *base_url, const gchar *token);
+void matrix_http_api_login(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           gchar *login_type,
+                           GHashTable *parameters);
 G_END_DECLS
 
 #endif /* __MATRIX_HTTP_API_H__ */
