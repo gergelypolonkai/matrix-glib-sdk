@@ -6,6 +6,7 @@ Makefile.in
 /src/*.la
 /src/*.gir
 /src/*.typelib
+/src/test-client
 /aclocal.m4
 /ar-lib
 /autom4te.cache
