@@ -59,6 +59,12 @@ void matrix_http_api_login(MatrixAPI *api,
                            gpointer user_data,
                            gchar *login_type,
                            GHashTable *parameters);
+void matrix_http_api_register_account(MatrixAPI *api,
+                                      MatrixAPICallback callback,
+                                      gpointer user_data,
+                                      gchar *login_type,
+                                      GHashTable *parameters);
+
 G_END_DECLS
 
 #endif /* __MATRIX_HTTP_API_H__ */

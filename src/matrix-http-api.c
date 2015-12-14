@@ -82,6 +82,7 @@ static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->login = matrix_http_api_login;
+    iface->register_account = matrix_http_api_register_account;
 }
 
 static void
@@ -452,23 +453,13 @@ update_parameters(gchar *key, gchar *value, JsonBuilder *builder)
     json_builder_add_value(builder, node);
 }
 
-/**
- * matrix_http_api_login:
- * @api: a #MatrixAPI implementation
- * @callback: (scope async): the function to call when the request if
- * finished
- * @user_data: user data to pass to the callback function
- * @login_type: the login type to use
- * @parameters: parameters to send with the login request
- *
- * Perform /login
- */
-void
-matrix_http_api_login(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      gchar *login_type,
-                      GHashTable *parameters)
+static void
+matrix_http_api_login_or_register(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  gchar *type,
+                                  gchar *login_type,
+                                  GHashTable *parameters)
 {
     JsonBuilder *builder;
     JsonNode *content,
@@ -490,9 +481,35 @@ matrix_http_api_login(MatrixAPI *api,
 
     matrix_http_api_send(MATRIX_HTTP_API(api),
                          callback, user_data,
-                         "POST", "/login",
+                         "POST", type,
                          content,
                          parameters);
+}
+
+/**
+ * matrix_http_api_login:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request if
+ * finished
+ * @user_data: user data to pass to the callback function
+ * @login_type: the login type to use
+ * @parameters: parameters to send with the login request
+ *
+ * Perform /login
+ */
+void
+matrix_http_api_login(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      gchar *login_type,
+                      GHashTable *parameters)
+{
+    matrix_http_api_login_or_register(api,
+                                      callback,
+                                      user_data,
+                                      "/login",
+                                      login_type,
+                                      parameters);
 }
 
 /**
@@ -547,4 +564,30 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
     return priv->url;
+}
+
+/**
+ * matrix_http_api_register_account:
+ * @api: a #MatrixAPI implementation
+ * @callback: (scope async): the function to call when the request if
+ * finished
+ * @user_data: user data to pass to the callback function
+ * @login_type: the login type to use
+ * @parameters: parameters to send with the registration request
+ *
+ * Perform /register
+ */
+void
+matrix_http_api_register_account(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 gchar *login_type,
+                                 GHashTable *parameters)
+{
+    matrix_http_api_login_or_register(api,
+                                      callback,
+                                      user_data,
+                                      "/register",
+                                      login_type,
+                                      parameters);
 }
