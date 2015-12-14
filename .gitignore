@@ -27,6 +27,10 @@ Makefile.in
 /stamp-h1
 /gtk-doc.make
 /m4/
+/GPATH
+/GRTAGS
+/GSYMS
+/GTAGS
 /src/matrix-version.h
 /docs/reference/matrix-glib/version.xml
 /docs/reference/matrix-glib/html/
