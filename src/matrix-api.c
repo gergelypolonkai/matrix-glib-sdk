@@ -114,7 +114,7 @@ matrix_api_ban_user(MatrixAPI *api,
  * @callback: (scope async): the function to call when the request is
  *            finished
  * @user_data: user data to pass to the callback function
- * @alias: the alias (name) of the room
+ * @room_alias: the alias (name) of the room
  * @is_public: if %TRUE, the room will be accessible for anyone
  * @invitees: (allow-none): list of user IDs to invite to the new room
  *
