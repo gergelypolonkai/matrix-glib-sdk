@@ -59,7 +59,7 @@ typedef struct _MatrixHTTPAPIPrivate {
 
 enum {
     PROP_VALIDATE_CERTIFICATE = 1,
-    PROP_URL,
+    PROP_BASE_URL,
     N_PROPERTIES
 };
 
@@ -97,7 +97,7 @@ matrix_http_api_set_property(GObject *gobject,
 
             break;
 
-        case PROP_URL:
+        case PROP_BASE_URL:
         {
             const gchar *base_url;
             gchar *last_occurence;
@@ -110,17 +110,35 @@ matrix_http_api_set_property(GObject *gobject,
                 return;
             }
 
+            g_free(priv->url);
+
             last_occurence = g_strrstr(base_url, API_ENDPOINT);
 
+            /* Check if the provided URL already ends with the API endpoint */
             if ((g_strcmp0(last_occurence, API_ENDPOINT) == 0) ||
                 (g_strcmp0(last_occurence, API_ENDPOINT"/") == 0)) {
+                /* if so, just use it */
                 priv->url = g_strdup(base_url);
             } else {
-                priv->url = g_strdup_printf(
-                        "%s%s%s",
-                        base_url,
-                        (base_url[strlen(base_url) - 1] == '/') ? "" : "/",
-                        API_ENDPOINT);
+                /* if not, add the API endpoint */
+
+                gchar *url;
+
+                /* If the provided URL already contains the API
+                 * endpoint, but it’s not at the end, print a message,
+                 * but still continue */
+                if (last_occurence != NULL) {
+                    g_info("Provided URL (%s) already contains the API endpoint but not at the end; appending anyway", base_url);
+                }
+
+                url = g_strdup(base_url);
+                if (url[strlen(url) - 1] == '/') {
+                    url[strlen(url) - 1] = 0;
+                }
+
+                priv->url = g_strdup_printf("%s%s", url, API_ENDPOINT);
+
+                g_free(url);
             }
 
             break;
@@ -146,7 +164,7 @@ matrix_http_api_get_property(GObject *gobject,
 
             break;
 
-        case PROP_URL:
+        case PROP_BASE_URL:
             g_value_set_string(value, priv->url);
 
             break;
@@ -178,13 +196,14 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     /**
-     * MatrixHTTPAPI:url:
+     * MatrixHTTPAPI:base-url:
      *
      * The base URL to use for communication with the Matrix.org
-     * server.
+     * server. If the URL doesn’t end with the correct API endpoint
+     * (/_matrix/client/api/v1), it gets appended automatically.
      */
-    obj_properties[PROP_URL] = g_param_spec_string(
-            "url", "Server URL",
+    obj_properties[PROP_BASE_URL] = g_param_spec_string(
+            "base-url", "Server's base URL",
             "Matrix.org home server to connect to.",
             NULL,
             G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
