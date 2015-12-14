@@ -81,8 +81,7 @@ struct _MatrixAPIInterface {
                                gpointer user_data,
                                gchar *room_id,
                                gchar *event_type,
-                               JsonNode *content,
-                               guint txn_id);
+                               JsonNode *content);
     void (*send_message)(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
@@ -202,8 +201,7 @@ void matrix_api_send_message_event(MatrixAPI *api,
                                    gpointer user_data,
                                    gchar *room_id,
                                    gchar *event_type,
-                                   JsonNode *content,
-                                   guint txn_id);
+                                   JsonNode *content);
 void matrix_api_send_message(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,

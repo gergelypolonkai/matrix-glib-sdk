@@ -455,7 +455,6 @@ matrix_api_send_message(MatrixAPI *api,
  * @room_id: the room to send the emote to
  * @event_type: the type of the event to send
  * @content: the content of the event as a #JsonNode
- * @txn_id: the transaction ID to use
  *
  * Send a message event to the room.
  */
@@ -465,8 +464,7 @@ matrix_api_send_message_event(MatrixAPI *api,
                               gpointer user_data,
                               gchar *room_id,
                               gchar *event_type,
-                              JsonNode *content,
-                              guint txn_id)
+                              JsonNode *content)
 {
     g_return_if_fail(MATRIX_IS_API(api));
 
@@ -475,8 +473,7 @@ matrix_api_send_message_event(MatrixAPI *api,
                              callback, user_data,
                              room_id,
                              event_type,
-                             content,
-                             txn_id);
+                             content);
 }
 
 /**
