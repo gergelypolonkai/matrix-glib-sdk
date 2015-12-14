@@ -16,8 +16,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "matrix-http-api.h"
 #include "matrix-api.h"
+#include "matrix-http-api.h"
 
 #include <string.h>
 #include <libsoup/soup.h>
@@ -60,6 +60,7 @@ typedef struct _MatrixHTTPAPIPrivate {
 enum {
     PROP_VALIDATE_CERTIFICATE = 1,
     PROP_BASE_URL,
+    PROP_TOKEN,
     N_PROPERTIES
 };
 
@@ -144,6 +145,15 @@ matrix_http_api_set_property(GObject *gobject,
             break;
         }
 
+        case PROP_TOKEN:
+            if (priv->token) {
+                g_free(priv->token);
+            }
+
+            priv->token = g_strdup(g_value_get_string(value));
+
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
     }
@@ -168,6 +178,12 @@ matrix_http_api_get_property(GObject *gobject,
             g_value_set_string(value, priv->url);
 
             break;
+
+        case PROP_TOKEN:
+            g_value_set_string(value, priv->token);
+
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
     }
@@ -207,6 +223,18 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
             "Matrix.org home server to connect to.",
             NULL,
             G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+    /**
+     * MatrixHTTPAPI:token:
+     *
+     * The token to use for authorization. The matrix_http_api_login()
+     * and matrix_http_api_register() calls set this automatically.
+     */
+    obj_properties[PROP_TOKEN] = g_param_spec_string(
+            "token", "Authorization token",
+            "The token to use for authorization",
+            NULL,
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties(gobject_class,
                                       N_PROPERTIES,
