@@ -305,3 +305,17 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
 
     return priv->validate_certificate;
 }
+
+/**
+ * matrix_http_api_get_base_url:
+ * @api: a #MatrixHTTPAPI implementation
+ *
+ * Returns: (transfer none): the base URL set for @api
+ */
+const gchar *
+matrix_http_api_get_base_url(MatrixHTTPAPI *api)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+
+    return priv->url;
+}
