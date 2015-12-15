@@ -1,7 +1,9 @@
 #  Matrix Client SDK for GLib
 
 This is a Matrix client-server SDK for GLib >= 2.40. As of now it
-mostly mimics the official Python SDK.
+mostly mimics the official Python SDK. The API and ABI are both very
+volatile as of now; don’t rely on any specific feature until the API
+is frozen.
 
 # Usage
 
