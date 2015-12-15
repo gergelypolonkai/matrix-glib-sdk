@@ -83,6 +83,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->login = matrix_http_api_login;
     iface->register_account = matrix_http_api_register_account;
+    iface->initial_sync = matrix_http_api_initial_sync;
 }
 
 static void
@@ -590,4 +591,43 @@ matrix_http_api_register_account(MatrixAPI *api,
                                       "/register",
                                       login_type,
                                       parameters);
+}
+
+/**
+ * matrix_http_api_initial_sync:
+ * @api: a #MatrixHTTPAPI object
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @limit: maximum number of messages to return for each room
+ *
+ * Perform /initialSync
+ */
+void
+matrix_http_api_initial_sync(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             guint limit)
+{
+    JsonBuilder *builder;
+    JsonNode *content,
+             *node;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    node = json_node_new(JSON_NODE_VALUE);
+    json_node_set_int(node, limit);
+    json_builder_set_member_name(builder, "limit");
+    json_builder_add_value(builder, node);
+
+    json_builder_end_object(builder);
+
+    content = json_builder_get_root(builder);
+
+    matrix_http_api_send(MATRIX_HTTP_API(api),
+                         callback, user_data,
+                         "POST", "/initialSync",
+                         content,
+                         NULL);
 }

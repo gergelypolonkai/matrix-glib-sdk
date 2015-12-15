@@ -64,6 +64,10 @@ void matrix_http_api_register_account(MatrixAPI *api,
                                       gpointer user_data,
                                       gchar *login_type,
                                       GHashTable *parameters);
+void matrix_http_api_initial_sync(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  guint limit);
 
 G_END_DECLS
 
