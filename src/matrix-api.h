@@ -48,7 +48,7 @@ typedef struct _MatrixAPI          MatrixAPI;
 typedef void (*MatrixAPICallback)(MatrixAPI *api,
                                   JsonNode *content,
                                   gpointer data,
-                                  GError **err);
+                                  GError *err);
 
 struct _MatrixAPIInterface {
     /*< private >*/

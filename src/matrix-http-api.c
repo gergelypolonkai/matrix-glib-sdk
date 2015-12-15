@@ -348,6 +348,7 @@ response_callback(SoupSession *session,
             if (JSON_NODE_HOLDS_OBJECT(content)) {
                 JsonObject *root_object;
                 JsonNode *node;
+                GError *err = NULL;
 
                 root_object = json_node_get_object(content);
 
@@ -372,13 +373,48 @@ response_callback(SoupSession *session,
                     g_debug("Our home server calls itself %s", homeserver);
                 }
 
+                /* Check if the response holds an error code */
+                if ((node = json_object_get_member(
+                             root_object, "errcode")) != NULL) {
+                    const gchar *errcode = json_node_get_string(node);
+                    gchar *message = NULL;
+                    MatrixAPIError error_code = MATRIX_API_ERROR_UNKNOWN_ERROR;
+
+                    /* Set the message as M_CODE: message */
+                    if ((node = json_object_get_member(
+                                 root_object, "error")) != NULL) {
+                        message = g_strdup_printf("%s: %s",
+                                                  errcode,
+                                                  json_node_get_string(node));
+                    } else {
+                        /* If there is no message, issue a warning and
+                         * set up the message as plain M_CODE */
+                        message = g_strdup(errcode);
+                    }
+
+                    /* Set the actual GError code according to errcode */
+                    if (strcmp("M_MISSING_TOKEN", errcode) == 0) {
+                        error_code = MATRIX_API_ERROR_MISSING_TOKEN;
+                    } else if (strcmp("M_FORBIDDEN", errcode) == 0) {
+                        error_code = MATRIX_API_ERROR_FORBIDDEN;
+                    } else if (strcmp("M_UNKNOWN", errcode) == 0) {
+                        error_code = MATRIX_API_ERROR_UNKNOWN;
+                    }
+
+                    err = g_error_new_literal(MATRIX_API_ERROR,
+                                              error_code,
+                                              message);
+
+                }
+
                /* Call the assigned function, if any */
                 if (request->callback) {
                     request->callback(
                             MATRIX_API(api),
                             content,
                             request->callback_data,
-                            NULL);
+                            err);
+                    g_clear_error(&err);
                 }
             } else {
                 g_debug("Invalid response: %s", data);

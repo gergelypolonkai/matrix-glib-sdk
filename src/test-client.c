@@ -31,10 +31,19 @@ static GOptionEntry entries[] = {
 };
 
 static void
-login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError **err)
+login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 {
     JsonPath *path = json_path_new();
     JsonNode *result;
+    GMainLoop *loop = data;
+
+    if (err) {
+        g_printf("ERROR: %s\n", err->message);
+
+        g_main_loop_quit(loop);
+
+        return;
+    }
 
     json_path_compile(path, "$.user_id", NULL);
 
@@ -92,7 +101,7 @@ main(int argc, char *argv[])
             "password", password,
             NULL);
     matrix_http_api_login(MATRIX_API(api),
-                          login_finished, NULL,
+                          login_finished, loop,
                           "m.login.password",
                           params);
 
