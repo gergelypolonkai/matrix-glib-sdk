@@ -635,6 +635,7 @@ matrix_http_api_initial_sync(MatrixAPI *api,
 
 /**
  * matrix_http_api_create_room:
+ * @api: a #MatrixHTTPAPI object
  * @callback: (scope async): the function to call when the request is
  *            finished
  * @user_data: user data to pass to the callback function
