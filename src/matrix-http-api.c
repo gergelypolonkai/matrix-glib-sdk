@@ -431,6 +431,12 @@ response_callback(SoupSession *session,
 }
 
 static void
+update_query_params(gchar *key, gchar *value, SoupURI *uri)
+{
+    soup_uri_set_query_from_fields(uri, key, value, NULL);
+}
+
+static void
 matrix_http_api_send(MatrixHTTPAPI *api,
                      MatrixAPICallback callback,
                      gpointer user_data,
@@ -472,6 +478,15 @@ matrix_http_api_send(MatrixHTTPAPI *api,
     }
 
     uri = soup_uri_new_with_base(priv->uri, path);
+
+    if (params) {
+        g_hash_table_foreach(params, (GHFunc)update_query_params, uri);
+    }
+
+    if (priv->token) {
+        update_query_params("access_token", priv->token, uri);
+    }
+
     url = soup_uri_to_string(uri, FALSE);
     soup_uri_free(uri);
     g_debug("Sending %s to %s", method, url);

@@ -95,6 +95,12 @@ main(int argc, char *argv[])
 
     g_info("Starting up: %s with %s:%s", url, user, password);
 
+    /*
+     * [ ] register
+     * [X] login
+     * [ ] create_room
+     * [ ] join_room
+     */
     api = matrix_http_api_new(url, NULL);
     params = matrix_http_api_gen_parameters(
             "user", user,
