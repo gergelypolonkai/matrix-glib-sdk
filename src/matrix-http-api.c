@@ -340,7 +340,7 @@ response_callback(SoupSession *session,
         if (json_parser_load_from_data(parser,
                                        (const gchar *)data, datalen,
                                        &err)) {
-            g_debug("Message successfully parsed");
+            g_debug("Data: %s", data);
             content = json_parser_get_root(parser);
 
             if (JSON_NODE_HOLDS_OBJECT(content)) {
