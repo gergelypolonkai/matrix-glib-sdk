@@ -84,6 +84,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->login = matrix_http_api_login;
     iface->register_account = matrix_http_api_register_account;
     iface->initial_sync = matrix_http_api_initial_sync;
+    iface->create_room = matrix_http_api_create_room;
 }
 
 static void
@@ -628,6 +629,69 @@ matrix_http_api_initial_sync(MatrixAPI *api,
     matrix_http_api_send(MATRIX_HTTP_API(api),
                          callback, user_data,
                          "POST", "/initialSync",
+                         content,
+                         NULL);
+}
+
+/**
+ * matrix_http_api_create_room:
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_alias: an alias for the room
+ * @is_public: set to %TRUE if the room should be publicly visible
+ * @invitees: a list of user IDs to initially invite to the room
+ *
+ * Perform /createRoom
+ */
+void
+matrix_http_api_create_room(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            gchar *room_alias,
+                            gboolean is_public,
+                            GStrv invitees)
+{
+    JsonBuilder *builder;
+    JsonNode *content,
+             *node;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    node = json_node_new(JSON_NODE_VALUE);
+    json_node_set_string(node, is_public ? "public" : "private");
+    json_builder_set_member_name(builder, "visibility");
+    json_builder_add_value(builder, node);
+
+    if (room_alias && *room_alias) {
+        node = json_node_new(JSON_NODE_VALUE);
+        json_node_set_string(node, room_alias);
+        json_builder_set_member_name(builder, "room_alias_name");
+        json_builder_add_value(builder, node);
+    }
+
+    if (invitees && *invitees) {
+        JsonArray *user_array = json_array_new();
+        gchar **user_id;
+
+        for (user_id = invitees; *user_id; user_id++) {
+            json_array_add_string_element(user_array, *user_id);
+        }
+
+        node = json_node_new(JSON_NODE_ARRAY);
+        json_node_set_array(node, user_array);
+        json_builder_set_member_name(builder, "invite");
+        json_builder_add_value(builder, node);
+    }
+
+    json_builder_end_object(builder);
+
+    content = json_builder_get_root(builder);
+
+    matrix_http_api_send(MATRIX_HTTP_API(api),
+                         callback, user_data,
+                         "POST", "/createRoom",
                          content,
                          NULL);
 }

@@ -68,6 +68,12 @@ void matrix_http_api_initial_sync(MatrixAPI *api,
                                   MatrixAPICallback callback,
                                   gpointer user_data,
                                   guint limit);
+void matrix_http_api_create_room(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 gchar *room_alias,
+                                 gboolean is_public,
+                                 GStrv invitees);
 
 G_END_DECLS
 

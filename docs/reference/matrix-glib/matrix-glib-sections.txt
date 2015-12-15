@@ -61,6 +61,7 @@ matrix_http_api_gen_parameters
 matrix_http_api_register_account
 matrix_http_api_login
 matrix_http_api_initial_sync
+matrix_http_api_create_room
 <SUBSECTION Standard>
 MatrixHTTPAPI
 MatrixHTTPAPIClass
