@@ -240,7 +240,8 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
      * MatrixHTTPAPI:token:
      *
      * The token to use for authorization. The matrix_http_api_login()
-     * and matrix_http_api_register() calls set this automatically.
+     * and matrix_http_api_register_account() calls set this
+     * automatically.
      */
     obj_properties[PROP_TOKEN] = g_param_spec_string(
             "token", "Authorization token",
@@ -497,8 +498,8 @@ matrix_http_api_login_or_register(MatrixAPI *api,
 /**
  * matrix_http_api_login:
  * @api: a #MatrixAPI implementation
- * @callback: (scope async): the function to call when the request is
- *            finished
+ * @callback: (scope async) (allow-none): the function to call when
+ *            the request is finished
  * @user_data: user data to pass to the callback function
  * @login_type: the login type to use
  * @parameters: parameters to send with the login request
@@ -564,6 +565,8 @@ matrix_http_api_gen_parameters(const gchar *param1_name, ...)
  * matrix_http_api_get_base_url:
  * @api: a #MatrixHTTPAPI implementation
  *
+ * Get the base URL set for @api.
+ *
  * Returns: (transfer none): the base URL set for @api
  */
 const gchar *
@@ -577,8 +580,8 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
 /**
  * matrix_http_api_register_account:
  * @api: a #MatrixAPI implementation
- * @callback: (scope async): the function to call when the request is
- *            finished
+ * @callback: (scope async) (allow-none): the function to call when
+ *            the request is finished
  * @user_data: user data to pass to the callback function
  * @login_type: the login type to use
  * @parameters: parameters to send with the registration request
@@ -603,8 +606,8 @@ matrix_http_api_register_account(MatrixAPI *api,
 /**
  * matrix_http_api_initial_sync:
  * @api: a #MatrixHTTPAPI object
- * @callback: (scope async): the function to call when the request is
- *            finished
+ * @callback: (scope async) (allow-none): the function to call when
+ *            the request is finished
  * @user_data: user data to pass to the callback function
  * @limit: maximum number of messages to return for each room
  *
@@ -642,8 +645,8 @@ matrix_http_api_initial_sync(MatrixAPI *api,
 /**
  * matrix_http_api_create_room:
  * @api: a #MatrixHTTPAPI object
- * @callback: (scope async): the function to call when the request is
- *            finished
+ * @callback: (scope async) (allow-none): the function to call when
+ *            the request is finished
  * @user_data: user data to pass to the callback function
  * @room_alias: an alias for the room
  * @is_public: set to %TRUE if the room should be publicly visible
@@ -706,8 +709,8 @@ matrix_http_api_create_room(MatrixAPI *api,
 /**
  * matrix_http_api_join_room:
  * @api: a #MatrixHTTPAPI object
- * @callback: (scope async): the function to call when the request is
- *            finished
+ * @callback: (scope async) (allow-none): the function to call when
+ *            the request is finished
  * @user_data: user data to pass to the callback function
  * @room_id_or_alias: an alias or the ID of the room
  *
