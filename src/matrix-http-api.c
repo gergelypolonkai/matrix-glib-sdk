@@ -50,7 +50,6 @@
 
 typedef struct _MatrixHTTPAPIPrivate {
     SoupSession *soup_session;
-    guint txn_id;
     SoupURI *uri;
     gchar *token;
     gboolean validate_certificate;
@@ -82,10 +81,6 @@ static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->login = matrix_http_api_login;
-    iface->register_account = matrix_http_api_register_account;
-    iface->initial_sync = matrix_http_api_initial_sync;
-    iface->create_room = matrix_http_api_create_room;
-    iface->join_room = matrix_http_api_join_room;
 }
 
 static void
@@ -97,9 +92,9 @@ matrix_http_api_finalize(GObject *gobject)
 
 static void
 matrix_http_api_set_property(GObject *gobject,
-                        guint prop_id,
-                        const GValue *value,
-                        GParamSpec *pspec)
+                             guint prop_id,
+                             const GValue *value,
+                             GParamSpec *pspec)
 {
     MatrixHTTPAPI *api = MATRIX_HTTP_API(gobject);
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
@@ -178,9 +173,9 @@ matrix_http_api_set_property(GObject *gobject,
 
 static void
 matrix_http_api_get_property(GObject *gobject,
-                        guint prop_id,
-                        GValue *value,
-                        GParamSpec *pspec)
+                             guint prop_id,
+                             GValue *value,
+                             GParamSpec *pspec)
 {
     MatrixHTTPAPI *api = MATRIX_HTTP_API(gobject);
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
@@ -264,7 +259,6 @@ matrix_http_api_init(MatrixHTTPAPI *api)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
-    priv->txn_id = 0;
     priv->uri = NULL;
     priv->token = NULL;
     priv->validate_certificate = TRUE;
@@ -303,7 +297,7 @@ matrix_http_api_set_validate_certificate(MatrixHTTPAPI *api,
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
-   priv->validate_certificate = validate_certificate;
+    priv->validate_certificate = validate_certificate;
 }
 
 /**
@@ -412,7 +406,7 @@ response_callback(SoupSession *session,
 
                 }
 
-               /* Call the assigned function, if any */
+                /* Call the assigned function, if any */
                 if (request->callback) {
                     request->callback(
                             MATRIX_API(api),
@@ -428,196 +422,6 @@ response_callback(SoupSession *session,
             g_debug("Malformed response: %s", data);
         }
     }
-}
-
-static void
-update_query_params(gchar *key, gchar *value, SoupURI *uri)
-{
-    soup_uri_set_query_from_fields(uri, key, value, NULL);
-}
-
-static void
-matrix_http_api_send(MatrixHTTPAPI *api,
-                     MatrixAPICallback callback,
-                     gpointer user_data,
-                     const gchar *method,
-                     const gchar *path,
-                     JsonNode *content,
-                     GHashTable *params)
-{
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
-    SoupMessage *msg;
-    JsonGenerator *generator;
-    gsize datalen;
-    gchar *data;
-    gchar *url;
-    MatrixHTTPAPIRequest *request;
-    SoupURI *uri;
-
-    if (!g_str_is_ascii(method)) {
-        g_warning("Method must be ASCII encoded!");
-
-        return;
-    }
-
-    if ((g_ascii_strcasecmp("POST", method) != 0)
-        && (g_ascii_strcasecmp("GET", method) != 0)
-        && (g_ascii_strcasecmp("PUT", method) != 0)
-        && (g_ascii_strcasecmp("DELETE", method) != 0)) {
-        g_warning("Invalid method name '%s'", method);
-
-        return;
-    }
-
-    if (content) {
-        generator = json_generator_new();
-        json_generator_set_root(generator, content);
-        data = json_generator_to_data(generator, &datalen);
-    } else {
-        data = g_strdup("");
-    }
-
-    uri = soup_uri_new_with_base(priv->uri, path);
-
-    if (params) {
-        g_hash_table_foreach(params, (GHFunc)update_query_params, uri);
-    }
-
-    if (priv->token) {
-        update_query_params("access_token", priv->token, uri);
-    }
-
-    url = soup_uri_to_string(uri, FALSE);
-    soup_uri_free(uri);
-    g_debug("Sending %s to %s", method, url);
-
-    msg = soup_message_new(method, url);
-    g_free(url);
-    soup_message_set_flags(msg, SOUP_MESSAGE_NO_REDIRECT);
-    soup_message_set_request(msg,
-                             "application/json",
-                             SOUP_MEMORY_TAKE,
-                             data,
-                             datalen);
-    request = g_new0(MatrixHTTPAPIRequest, 1);
-    request->request_content = content;
-    request->api = api;
-    request->callback = callback;
-    request->callback_data = user_data;
-
-    g_object_ref(msg);
-    soup_session_queue_message(priv->soup_session,
-                            msg,
-                            (SoupSessionCallback)response_callback, request);
-}
-
-static void
-update_parameters(gchar *key, gchar *value, JsonBuilder *builder)
-{
-    JsonNode *node = json_node_new(JSON_NODE_VALUE);
-
-    json_node_set_string(node, value);
-    json_builder_set_member_name(builder, key);
-    json_builder_add_value(builder, node);
-}
-
-static void
-matrix_http_api_login_or_register(MatrixAPI *api,
-                                  MatrixAPICallback callback,
-                                  gpointer user_data,
-                                  gchar *type,
-                                  gchar *login_type,
-                                  GHashTable *parameters)
-{
-    JsonBuilder *builder;
-    JsonNode *content,
-             *node;
-
-    builder = json_builder_new();
-    json_builder_begin_object(builder);
-
-    node = json_node_new(JSON_NODE_VALUE);
-    json_node_set_string(node, login_type);
-    json_builder_set_member_name(builder, "type");
-    json_builder_add_value(builder, node);
-
-    g_hash_table_foreach(parameters, (GHFunc)update_parameters, builder);
-
-    json_builder_end_object(builder);
-
-    content = json_builder_get_root(builder);
-
-    matrix_http_api_send(MATRIX_HTTP_API(api),
-                         callback, user_data,
-                         "POST", type,
-                         content,
-                         parameters);
-}
-
-/**
- * matrix_http_api_login:
- * @api: a #MatrixAPI implementation
- * @callback: (scope async) (allow-none): the function to call when
- *            the request is finished
- * @user_data: user data to pass to the callback function
- * @login_type: the login type to use
- * @parameters: parameters to send with the login request
- *
- * Perform /login
- */
-void
-matrix_http_api_login(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      gchar *login_type,
-                      GHashTable *parameters)
-{
-    matrix_http_api_login_or_register(api,
-                                      callback,
-                                      user_data,
-                                      "login",
-                                      login_type,
-                                      parameters);
-}
-
-/**
- * matrix_http_api_gen_parameters:
- * @param1_name: name of the first parameter
- * @...: value of the first parameter, followed by name/value pairs,
- *       terminated by a NULL value as a parameter name
- *
- * Generate a GHashTable suitable as the parameters argument for
- * different API calls.
- *
- * Returns: (transfer full): a #GHashTable with the specified
- *          parameter table
- */
-GHashTable *
-matrix_http_api_gen_parameters(const gchar *param1_name, ...)
-{
-    GHashTable *table;
-    va_list var_args;
-    gchar *name;
-
-    g_return_val_if_fail(param1_name != NULL, NULL);
-
-    table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-
-    va_start(var_args, param1_name);
-
-    name = (gchar *)param1_name;
-
-    while (name) {
-        gchar *value = va_arg(var_args, gchar *);
-
-        g_hash_table_insert(table, name, value);
-
-        name = va_arg(var_args, gchar *);
-    }
-
-    va_end(var_args);
-
-    return table;
 }
 
 /**
@@ -636,153 +440,49 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
     return soup_uri_to_string(priv->uri, FALSE);
 }
 
-/**
- * matrix_http_api_register_account:
- * @api: a #MatrixAPI implementation
- * @callback: (scope async) (allow-none): the function to call when
- *            the request is finished
- * @user_data: user data to pass to the callback function
- * @login_type: the login type to use
- * @parameters: parameters to send with the registration request
- *
- * Perform /register
- */
-void
-matrix_http_api_register_account(MatrixAPI *api,
-                                 MatrixAPICallback callback,
-                                 gpointer user_data,
-                                 gchar *login_type,
-                                 GHashTable *parameters)
+static void
+matrix_http_api_send(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *method,
+                     const gchar *path,
+                     const JsonNode *content,
+                     GError **error)
 {
-    matrix_http_api_login_or_register(api,
-                                      callback,
-                                      user_data,
-                                      "register",
-                                      login_type,
-                                      parameters);
-}
+    if (!g_str_is_ascii(method)) {
+        g_warning("Method must be ASCII encoded!");
 
-/**
- * matrix_http_api_initial_sync:
- * @api: a #MatrixHTTPAPI object
- * @callback: (scope async) (allow-none): the function to call when
- *            the request is finished
- * @user_data: user data to pass to the callback function
- * @limit: maximum number of messages to return for each room
- *
- * Perform /initialSync
- */
-void
-matrix_http_api_initial_sync(MatrixAPI *api,
-                             MatrixAPICallback callback,
-                             gpointer user_data,
-                             guint limit)
-{
-    GHashTable *query_params;
-    gchar *limit_string = g_strdup_printf("%d", limit);
-
-    query_params = matrix_http_api_gen_parameters("limit", limit_string, NULL);
-    g_free(limit_string);
-
-    matrix_http_api_send(MATRIX_HTTP_API(api),
-                         callback, user_data,
-                         "POST", "initialSync",
-                         NULL,
-                         query_params);
-}
-
-/**
- * matrix_http_api_create_room:
- * @api: a #MatrixHTTPAPI object
- * @callback: (scope async) (allow-none): the function to call when
- *            the request is finished
- * @user_data: user data to pass to the callback function
- * @room_alias: an alias for the room
- * @is_public: set to %TRUE if the room should be publicly visible
- * @invitees: a list of user IDs to initially invite to the room
- *
- * Perform /createRoom
- */
-void
-matrix_http_api_create_room(MatrixAPI *api,
-                            MatrixAPICallback callback,
-                            gpointer user_data,
-                            gchar *room_alias,
-                            gboolean is_public,
-                            GStrv invitees)
-{
-    JsonBuilder *builder;
-    JsonNode *content,
-             *node;
-
-    builder = json_builder_new();
-    json_builder_begin_object(builder);
-
-    node = json_node_new(JSON_NODE_VALUE);
-    json_node_set_string(node, is_public ? "public" : "private");
-    json_builder_set_member_name(builder, "visibility");
-    json_builder_add_value(builder, node);
-
-    if (room_alias && *room_alias) {
-        node = json_node_new(JSON_NODE_VALUE);
-        json_node_set_string(node, room_alias);
-        json_builder_set_member_name(builder, "room_alias_name");
-        json_builder_add_value(builder, node);
-    }
-
-    if (invitees && *invitees) {
-        JsonArray *user_array = json_array_new();
-        gchar **user_id;
-
-        for (user_id = invitees; *user_id; user_id++) {
-            json_array_add_string_element(user_array, *user_id);
-        }
-
-        node = json_node_new(JSON_NODE_ARRAY);
-        json_node_set_array(node, user_array);
-        json_builder_set_member_name(builder, "invite");
-        json_builder_add_value(builder, node);
-    }
-
-    json_builder_end_object(builder);
-
-    content = json_builder_get_root(builder);
-
-    matrix_http_api_send(MATRIX_HTTP_API(api),
-                         callback, user_data,
-                         "POST", "createRoom",
-                         content,
-                         NULL);
-}
-
-/**
- * matrix_http_api_join_room:
- * @api: a #MatrixHTTPAPI object
- * @callback: (scope async) (allow-none): the function to call when
- *            the request is finished
- * @user_data: user data to pass to the callback function
- * @room_id_or_alias: an alias or the ID of the room
- *
- * Perform /join/$room_id
- */
-void
-matrix_http_api_join_room(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          gchar *room_id_or_alias)
-{
-    gchar *path, *escaped_alias;
-
-    if (!room_id_or_alias && !*room_id_or_alias) {
         return;
     }
 
-    escaped_alias = soup_uri_encode(room_id_or_alias, NULL);
-    path = g_strdup_printf("join/%s", escaped_alias);
-    g_free(escaped_alias);
+    if ((g_ascii_strcasecmp("GET", method) != 0)
+        && (g_ascii_strcasecmp("POST", method) != 0)
+        && (g_ascii_strcasecmp("PUT", method) != 0)
+        && (g_ascii_strcasecmp("DELETE", method) != 0)) {
+        g_warning("Invalid method name '%s'", method);
 
-    matrix_http_api_send(MATRIX_HTTP_API(api),
+        return;
+    }
+
+}
+
+void
+matrix_http_api_login(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      const gchar *type,
+                      const JsonNode *content,
+                      GError **error)
+{
+    JsonNode *body;
+    JsonObject *root_object;
+
+    body = json_node_copy((JsonNode *)content);
+    root_object = json_node_get_object(body);
+    json_object_set_string_member(root_object, "type", type);
+
+    matrix_http_api_send(api,
                          callback, user_data,
-                         "POST", path,
-                         NULL, NULL);
+                         "POST", "/login", body,
+                         error);
 }

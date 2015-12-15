@@ -50,235 +50,935 @@ typedef void (*MatrixAPICallback)(MatrixAPI *api,
                                   gpointer data,
                                   GError *err);
 
+typedef enum {
+    MATRIX_API_RESIZE_METHOD_CROP,
+    MATRIX_API_RESIZE_METHOD_SCALE
+} MatrixAPIResizeMethod;
+
+typedef enum {
+    MATRIX_API_PRESENCE_ONLINE,
+    MATRIX_API_PRESENCE_OFFLINE,
+    MATRIX_API_PRESENCE_UNAVAILABLE,
+    MATRIX_API_PRESENCE_FREE_FOR_CHAT
+} MatrixAPIPresence;
+
+typedef enum {
+    MATRIX_API_ROOM_PRESET_NONE,
+    MATRIX_API_ROOM_PRESET_PRIVATE,
+    MATRIX_API_ROOM_PRESET_TRUSTED_PRIVATE,
+    MATRIX_API_ROOM_PRESET_PUBLIC
+} MatrixAPIRoomPreset;
+
+typedef enum {
+    MATRIX_API_ROOM_VISIBILITY_DEFAULT,
+    MATRIX_API_ROOM_VISIBILITY_PUBLIC,
+    MATRIX_API_ROOM_VISIBILITY_PRIVATE
+} MatrixAPIRoomVisibility;
+
+typedef enum {
+    MATRIX_API_EVENT_DIRECTION_FORWARD,
+    MATRIX_API_EVENT_DIRECTION_BACKWARD
+} MatrixAPIEventDirection;
+
+typedef enum {
+    MATRIX_API_EVENT_FORMAT_DEFAULT,
+    MATRIX_API_EVENT_FORMAT_CLIENT,
+    MATRIX_API_EVENT_FORMAT_FEDERATION
+} MatrixAPIEventFormat;
+
+typedef enum {
+    MATRIX_API_RECEIPT_TYPE_READ
+} MatrixAPIReceiptType;
+
+typedef enum {
+    MATRIX_API_PUSHER_KIND_OVERRIDE,
+    MATRIX_API_PUSHER_KIND_SENDER,
+    MATRIX_API_PUSHER_KIND_ROOM,
+    MATRIX_API_PUSHER_KIND_CONTENT,
+    MATRIX_API_PUSHER_KIND_UNDERRIDE
+} MatrixAPIPusherKind;
+
+typedef enum {
+    MATRIX_API_PUSHER_CONDITION_KIND_EVENT_MATCH,
+    MATRIX_API_PUSHER_CONDITION_KIND_PROFILE_TAG,
+    MATRIX_API_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME,
+    MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
+} MatrixAPIPusherConditionKind;
+
+typedef struct _MatrixAPIPresenceFilter {
+    guint limit;
+    GList *senders;
+    GList *not_senders;
+    GList *types;
+    GList *not_types;
+} MatrixAPIPresenceFilter;
+
+typedef struct _MatrixAPIEventFilter {
+    GList *rooms;
+    GList *not_rooms;
+    guint limit;
+    GList *senders;
+    GList *not_senders;
+    GList *types;
+    GList *not_types;
+} MatrixAPIEventFilter;
+
+typedef struct _MatrixAPIRoomFilter {
+    MatrixAPIEventFilter *ephemeral;
+    gboolean include_leave;
+    MatrixAPIEventFilter *state;
+    MatrixAPIEventFilter *timeline;
+} MatrixAPIRoomFilter;
+
+typedef struct _MatrixAPIFilter {
+    GList *event_fields;
+    MatrixAPIEventFormat event_format;
+    MatrixAPIPresenceFilter *presence;
+    MatrixAPIRoomFilter *room;
+} MatrixAPIFilter;
+
+typedef struct _MatrixAPI3PidCredential {
+    gchar *client_secret;
+    gchar *id_server;
+    gchar *session_id;
+} MatrixAPI3PidCredential;
+
+typedef struct _MatrixAPIPusher {
+    gchar *app_display_name;
+    gchar *app_id;
+    gboolean append;
+    gchar *device_display_name;
+    gchar *kind;
+    gchar *lang;
+    gchar *profile_tag;
+    gchar *pushkey;
+    JsonNode *data;
+} MatrixAPIPusher;
+
+typedef struct _MatrixAPIStateEvent {
+    gchar *type;
+    gchar *state_key;
+    gchar *content;
+} MatrixAPIStateEvent;
+
 struct _MatrixAPIInterface {
     /*< private >*/
     GTypeInterface g_iface;
 
     /*< public >*/
 
-   void (*register_account)(MatrixAPI *api,
-                             MatrixAPICallback callback,
-                             gpointer user_data,
-                             gchar *login_type,
-                             GHashTable *parameters);
-    void (*login)(MatrixAPI *api,
-                  MatrixAPICallback callback,
-                  gpointer user_data,
-                  gchar *login_type,
-                  GHashTable *parameters);
-    void (*initial_sync)(MatrixAPI *api,
+    /* Properties */
+    const gchar *(*get_token)(MatrixAPI *api);
+    void (*set_token)(MatrixAPI *api, const gchar *token);
+
+    /* Media */
+    void (*media_download)(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *server_name,
+                           const gchar *media_id,
+                           GError **error);
+    void (*media_thumbnail)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *server_name,
+                            const gchar *media_id,
+                            guint width,
+                            guint height,
+                            MatrixAPIResizeMethod method,
+                            GError **error);
+    void (*media_upload)(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
-                         guint limit);
-    void (*event_stream)(MatrixAPI *api,
-                         MatrixAPICallback callback,
-                         gpointer user_data,
-                         gchar *from_token,
-                         gulong timeout);
+                         const gchar *content_type,
+                         const GByteArray *content,
+                         GError **error);
+
+    /* Presence */
+    void (*get_presence_list)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *user_id,
+                              GError **error);
+    void (*update_presence_list)(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 const gchar *user_id,
+                                 GList *drop_ids,
+                                 GList *invite_ids,
+                                 GError **error);
+    void (*get_user_presence)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *user_id,
+                              GError **error);
+    void (*set_user_presence)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *user_id,
+                              MatrixAPIPresence presence,
+                              const gchar *status_message,
+                              GError **error);
+
+    /* Push notifications */
+    void (*modify_pusher)(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          MatrixAPIPusher *pusher,
+                          GError **error);
+    void (*get_pushers)(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        GError **error);
+    void (*delete_pusher)(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *scope,
+                          MatrixAPIPusherKind kind,
+                          const gchar *rule_id,
+                          GError **error);
+    void (*get_pusher)(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       const gchar *scope,
+                       MatrixAPIPusherKind kind,
+                       const gchar *rule_id,
+                       GError **error);
+    void (*add_pusher)(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       const gchar *scope,
+                       MatrixAPIPusherKind kind,
+                       const gchar *rule_id,
+                       const gchar *before,
+                       const gchar *after,
+                       GList *actions,
+                       GList *conditions,
+                       GError **error);
+    void (*toggle_pusher)(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *scope,
+                          MatrixAPIPusherKind kind,
+                          const gchar *rule_id,
+                          gboolean enabled,
+                          GError **error);
+
+    /* Room creation */
     void (*create_room)(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
-                        gchar *alias,
-                        gboolean is_public,
-                        GStrv invitees);
-    void (*join_room)(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      gchar *room_id_or_alias);
-    void (*send_state_event)(MatrixAPI *api,
-                             MatrixAPICallback callback,
-                             gpointer user_data,
-                             gchar *room_id,
-                             gchar *event_type,
-                             JsonNode *content,
-                             gchar *state_key);
-    void (*send_message_event)(MatrixAPI *api,
-                               MatrixAPICallback callback,
-                               gpointer user_data,
-                               gchar *room_id,
-                               gchar *event_type,
-                               JsonNode *content);
-    void (*send_message)(MatrixAPI *api,
-                         MatrixAPICallback callback,
-                         gpointer user_data,
-                         gchar *room_id,
-                         gchar *text_content,
-                         gchar *msg_type);
-    void (*send_emote)(MatrixAPI *api,
-                       MatrixAPICallback callback,
-                       gpointer user_data,
-                       gchar *room_id,
-                       gchar *text_content);
-    void (*get_room_name)(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          gchar *room_id);
-    void (*get_room_topic)(MatrixAPI *api,
-                           MatrixAPICallback callback,
-                           gpointer user_data,
-                           gchar *room_id);
-    void (*leave_room)(MatrixAPI *api,
-                       MatrixAPICallback callback,
-                       gpointer user_data,
-                       gchar *room_id);
-    void (*invite_user)(MatrixAPI *api,
+                        MatrixAPIRoomPreset preset,
+                        const gchar *room_name,
+                        const gchar *room_alias,
+                        const gchar *topic,
+                        MatrixAPIRoomVisibility visibility,
+                        JsonNode *creation_content,
+                        GList *initial_state,
+                        GList *invitees,
+                        GError **error);
+
+    /* Room directory */
+    void (*delete_room_alias)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *room_alias,
+                              GError **error);
+    void (*get_room_id)(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
-                        gchar *room_id,
-                        gchar *user_id);
-    void (*kick_user)(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      gchar *room_id,
-                      gchar *user_id,
-                      gchar *reason);
-    void (*set_membership)(MatrixAPI *api,
-                           MatrixAPICallback callback,
-                           gpointer user_data,
-                           gchar *room_id,
-                           gchar *user_id,
-                           gchar *membership,
-                           gchar *reason);
+                        const gchar *room_alias,
+                        GError **error);
+    void (*create_room_alias)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *room_id,
+                              const gchar *room_alias,
+                              GError **error);
+
+    /* Room discovery */
+    void (*list_public_rooms)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              GError **error);
+
+    /* Room membership */
+
     void (*ban_user)(MatrixAPI *api,
                      MatrixAPICallback callback,
                      gpointer user_data,
-                     gchar *room_id,
-                     gchar *user_id,
-                     gchar *reason);
+                     const gchar *room_id,
+                     const gchar *user_id,
+                     const gchar *reason,
+                     GError **error);
+    void (*forget_room)(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        const gchar *room_id,
+                        GError **error);
+    void (*invite_user_3rdparty)(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 const gchar *room_id,
+                                 const gchar *address,
+                                 const gchar *medium,
+                                 const gchar *id_server,
+                                 GError **error);
+    void (*invite_user)(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        const gchar *room_id,
+                        const gchar *user_id,
+                        GError **error);
+    void (*join_room)(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      const gchar *room_id_or_alias,
+                      GError **error);
+    void (*leave_room)(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       const gchar *room_id,
+                       GError **error);
+
+    /* Room participation */
+
+    void (*event_stream)(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         const gchar *from_token,
+                         gulong timeout,
+                         GError **error);
+    void (*get_event)(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      const gchar *event_id,
+                      GError **error);
+    void (*initial_sync)(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         guint limit,
+                         gboolean archived,
+                         GError **error);
+    void (*get_event_context)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *room_id,
+                              const gchar *event_id,
+                              guint limit,
+                              GError **error);
+    void (*initial_sync_room)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *room_id,
+                              GError **error);
+    void (*list_room_members)(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *room_id,
+                              GError **error);
+    void (*list_room_messages)(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *room_id,
+                               const gchar *from_token,
+                               MatrixAPIEventDirection direction,
+                               guint limit,
+                               GError **error);
+    void (*send_event_receipt)(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *room_id,
+                               MatrixAPIReceiptType type,
+                               const gchar *event_id,
+                               JsonNode *receipt,
+                               GError **error);
+    void (*redact_event)(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         const gchar *room_id,
+                         const gchar *event_id,
+                         const gchar *txn_id,
+                         const gchar *reason,
+                         GError **error);
+    void (*send_message_event)(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *room_id,
+                               const gchar *event_type,
+                               const gchar *txn_id,
+                               const JsonNode *content,
+                               GError **error);
     void (*get_room_state)(MatrixAPI *api,
                            MatrixAPICallback callback,
                            gpointer user_data,
-                           gchar *room_id);
-    void (*get_text_body)(MatrixAPI *api,
+                           const gchar *room_id,
+                           const gchar *event_type,
+                           const gchar *state_key,
+                           GError **error);
+    void (*send_room_event)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *room_id,
+                            const gchar *event_type,
+                            const gchar *state_key,
+                            const JsonNode *content,
+                            GError **error);
+    void (*notify_room_typing)(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *user_id,
+                               const gchar *room_id,
+                               guint timeout,
+                               gboolean typing,
+                               GError **error);
+    void (*sync)(MatrixAPI *api,
+                 MatrixAPICallback callback,
+                 gpointer user_data,
+                 const gchar *filter_id,
+                 const MatrixAPIFilter *filter,
+                 const gchar *since,
+                 gboolean full_state,
+                 gboolean set_presence,
+                 gulong timeout,
+                 GError **error);
+    void (*create_filter)(MatrixAPI *api,
                           MatrixAPICallback callback,
                           gpointer user_data,
-                          gchar *text,
-                          gchar *msgtype);
-    void (*get_html_body)(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          gchar *html,
-                          gchar *msgtype);
-    void (*get_emote_body)(MatrixAPI *api,
-                           MatrixAPICallback callback,
-                           gpointer user_data,
-                           gchar *text);
-    void (*_send)(MatrixAPI *api,
+                          const gchar *user_id,
+                          MatrixAPIFilter *filter,
+                          GError **error);
+    void (*download_filter)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *user_id,
+                            const gchar *filter_id,
+                            GError **error);
+
+    /* Search */
+    void *search_reserved;
+
+    /* Server administration */
+
+    void (*whois)(MatrixAPI *api,
                   MatrixAPICallback callback,
                   gpointer user_data,
-                  gchar *method,
-                  gchar *path,
-                  gchar *content,
-                  gchar *query_params,
-                  gchar *headers);
+                  const gchar *user_id,
+                  GError **error);
+
+    /* Session management */
+
+    void (*login)(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  const gchar *type,
+                  const JsonNode *content,
+                  GError **error);
+    void (*token_refresh)(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *refresh_token,
+                          GError **error);
+
+    /* User data */
+
+    void (*get_3pids)(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      GError **error);
+    void (*add_3pid)(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     gboolean bind_creds,
+                     MatrixAPI3PidCredential *threepid_creds,
+                     GError **error);
+    void (*change_password)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *new_password,
+                            GError **error);
+    void (*get_profile)(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        const gchar *user_id,
+                        GError **error);
+    void (*get_avatar_url)(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *user_id,
+                           GError **error);
+    void (*set_avatar_url)(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *user_id,
+                           const gchar *avatar_url,
+                           GError **error);
+    void (*get_display_name)(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *user_id,
+                             GError **error);
+    void (*set_display_name)(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *user_id,
+                             const gchar *display_name,
+                             GError **error);
+    void (*register_account)(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             gboolean bind_email,
+                             const gchar *username,
+                             const gchar *password,
+                             GError **error);
+    void (*set_account_data)(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *user_id,
+                             const gchar *room_id,
+                             const gchar *type,
+                             const JsonNode *content,
+                             GError **error);
+    void (*get_room_tags)(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *user_id,
+                          const gchar *room_id,
+                          GError **error);
+    void (*delete_room_tag)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *user_id,
+                            const gchar *room_id,
+                            const gchar *tag,
+                            GError **error);
+    void (*add_room_tag)(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         const gchar *user_id,
+                         const gchar *room_id,
+                         const gchar *tag,
+                         const JsonNode *content,
+                         GError **error);
+
+    /* VoIP */
+
+    void (*get_turn_server)(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            GError **error);
 
     /*< private >*/
-    void *padding[20];
+    /* Leave room for endpoint expansion */
+    void *padding[50];
 };
 
 GType matrix_api_get_type(void) G_GNUC_CONST;
-void matrix_api_initial_sync(MatrixAPI *api,
+
+/* Property getters and setters */
+
+const gchar *matrix_api_get_token(MatrixAPI *api);
+void matrix_api_set_token(MatrixAPI *api, const gchar *token);
+
+/* API definition */
+
+/* Media */
+void matrix_api_media_download(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *server_name,
+                               const gchar *media_id,
+                               GError **error);
+void matrix_api_media_thumbnail(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                const gchar *server_name,
+                                const gchar *media_id,
+                                guint width,
+                                guint height,
+                                MatrixAPIResizeMethod method,
+                                GError **error);
+void matrix_api_media_upload(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,
-                             guint limit);
-void matrix_api_register_account(MatrixAPI *api,
-                                 MatrixAPICallback callback,
-                                 gpointer user_data,
-                                 gchar *login_type,
-                                 GHashTable *parameters);
-void matrix_api_login(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      gchar *login_type,
-                      GHashTable *parameters);
+                             const gchar *content_type,
+                             const GByteArray *content,
+                             GError **error);
+
+/* Presence */
+void matrix_api_get_presence_list(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *user_id,
+                                  GError **error);
+void matrix_api_update_presence_list(MatrixAPI *api,
+                                     MatrixAPICallback callback,
+                                     gpointer user_data,
+                                     const gchar *user_id,
+                                     GList *drop_ids,
+                                     GList *invite_ids,
+                                     GError **error);
+void matrix_api_get_user_presence(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *user_id,
+                                  GError **error);
+void matrix_api_set_user_presence(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *user_id,
+                                  MatrixAPIPresence presence,
+                                  const gchar *status_message,
+                                  GError **error);
+
+/* Push notifications */
+void matrix_api_modify_pusher(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              MatrixAPIPusher *pusher,
+                              GError **error);
+void matrix_api_get_pushers(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            GError **error);
+void matrix_api_delete_pusher(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *scope,
+                              MatrixAPIPusherKind kind,
+                              const gchar *rule_id,
+                              GError **error);
+void matrix_api_get_pusher(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *scope,
+                           MatrixAPIPusherKind kind,
+                           const gchar *rule_id,
+                           GError **error);
+void matrix_api_add_pusher(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *scope,
+                           MatrixAPIPusherKind kind,
+                           const gchar *rule_id,
+                           const gchar *before,
+                           const gchar *after,
+                           GList *actions,
+                           GList *conditions,
+                           GError **error);
+void matrix_api_toggle_pusher(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *scope,
+                              MatrixAPIPusherKind kind,
+                              const gchar *rule_id,
+                              gboolean enabled,
+                              GError **error);
+
+/* Room creation */
 void matrix_api_create_room(MatrixAPI *api,
                             MatrixAPICallback callback,
                             gpointer user_data,
-                            gchar *alias,
-                            gboolean is_public,
-                            GStrv invitees);
-void matrix_api_join_room(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          gchar *room_id_or_alias);
-void matrix_api_event_stream(MatrixAPI *api,
-                             MatrixAPICallback callback,
-                             gpointer user_data,
-                             gchar *from_token,
-                             gulong timeout);
-void matrix_api_send_state_event(MatrixAPI *api,
-                                 MatrixAPICallback callback,
-                                 gpointer user_data,
-                                 gchar *room_id,
-                                 gchar *event_type,
-                                 JsonNode *content,
-                                 gchar *state_key);
-void matrix_api_send_message_event(MatrixAPI *api,
-                                   MatrixAPICallback callback,
-                                   gpointer user_data,
-                                   gchar *room_id,
-                                   gchar *event_type,
-                                   JsonNode *content);
-void matrix_api_send_message(MatrixAPI *api,
-                             MatrixAPICallback callback,
-                             gpointer user_data,
-                             gchar *room_id,
-                             gchar *text_content,
-                             gchar *msg_type);
-void matrix_api_send_emote(MatrixAPI *api,
-                           MatrixAPICallback callback,
-                           gpointer user_data,
-                           gchar *room_id,
-                           gchar *text_content);
-void matrix_api_get_room_name(MatrixAPI *api,
-                              MatrixAPICallback callback,
-                              gpointer user_data,
-                              gchar *room_id);
-void matrix_api_get_room_topic(MatrixAPI *api,
-                               MatrixAPICallback callback,
-                               gpointer user_data,
-                               gchar *room_id);
-void matrix_api_leave_room(MatrixAPI *api,
-                           MatrixAPICallback callback,
-                           gpointer user_data,
-                           gchar *room_id);
-void matrix_api_invite_user(MatrixAPI *api,
+                            MatrixAPIRoomPreset preset,
+                            const gchar *room_name,
+                            const gchar *room_alias,
+                            const gchar *topic,
+                            MatrixAPIRoomVisibility visibility,
+                            JsonNode *creation_content,
+                            GList *initial_state,
+                            GList *invitees,
+                            GError **error);
+
+/* Room directory */
+void matrix_api_delete_room_alias(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *room_alias,
+                                  GError **error);
+void matrix_api_get_room_id(MatrixAPI *api,
                             MatrixAPICallback callback,
                             gpointer user_data,
-                            gchar *room_id,
-                            gchar *user_id);
-void matrix_api_kick_user(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          gchar *room_id,
-                          gchar *user_id,
-                          gchar *reason);
-void matrix_api_set_membership(MatrixAPI *api,
-                               MatrixAPICallback callback,
-                               gpointer user_data,
-                               gchar *room_id,
-                               gchar *user_id,
-                               gchar *membership,
-                               gchar *reason);
+                            const gchar *room_alias,
+                            GError **error);
+void matrix_api_create_room_alias(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *room_id,
+                                  const gchar *room_alias,
+                                  GError **error);
+
+/* Room discovery */
+void matrix_api_list_public_rooms(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  GError **error);
+
+/* Room membership */
+
 void matrix_api_ban_user(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
-                         gchar *room_id,
-                         gchar *user_id,
-                         gchar *reason);
+                         const gchar *room_id,
+                         const gchar *user_id,
+                         const gchar *reason,
+                         GError **error);
+void matrix_api_forget_room(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *room_id,
+                            GError **error);
+void matrix_api_invite_user_3rdparty(MatrixAPI *api,
+                                     MatrixAPICallback callback,
+                                     gpointer user_data,
+                                     const gchar *room_id,
+                                     const gchar *address,
+                                     const gchar *medium,
+                                     const gchar *id_server,
+                                     GError **error);
+void matrix_api_invite_user(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *room_id,
+                            const gchar *user_id,
+                            GError **error);
+void matrix_api_join_room(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *room_id_or_alias,
+                          GError **error);
+void matrix_api_leave_room(MatrixAPI *api,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           const gchar *room_id,
+                           GError **error);
+
+/* Room participation */
+
+void matrix_api_event_stream(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *from_token,
+                             gulong timeout,
+                             GError **error);
+void matrix_api_get_event(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          const gchar *event_id,
+                          GError **error);
+void matrix_api_initial_sync(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             guint limit,
+                             gboolean archived,
+                             GError **error);
+void matrix_api_get_event_context(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *room_id,
+                                  const gchar *event_id,
+                                  guint limit,
+                                  GError **error);
+void matrix_api_initial_sync_room(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *room_id,
+                                  GError **error);
+void matrix_api_list_room_members(MatrixAPI *api,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  const gchar *room_id,
+                                  GError **error);
+void matrix_api_list_room_messages(MatrixAPI *api,
+                                   MatrixAPICallback callback,
+                                   gpointer user_data,
+                                   const gchar *room_id,
+                                   const gchar *from_token,
+                                   MatrixAPIEventDirection direction,
+                                   guint limit,
+                                   GError **error);
+void matrix_api_send_event_receipt(MatrixAPI *api,
+                                   MatrixAPICallback callback,
+                                   gpointer user_data,
+                                   const gchar *room_id,
+                                   MatrixAPIReceiptType type,
+                                   const gchar *event_id,
+                                   JsonNode *receipt,
+                                   GError **error);
+void matrix_api_redact_event(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *room_id,
+                             const gchar *event_id,
+                             const gchar *txn_id,
+                             const gchar *reason,
+                             GError **error);
+void matrix_api_send_message_event(MatrixAPI *api,
+                                   MatrixAPICallback callback,
+                                   gpointer user_data,
+                                   const gchar *room_id,
+                                   const gchar *event_type,
+                                   const gchar *txn_id,
+                                   const JsonNode *content,
+                                   GError **error);
 void matrix_api_get_room_state(MatrixAPI *api,
                                MatrixAPICallback callback,
                                gpointer user_data,
-                               gchar *room_id);
-void matrix_api_get_text_body(MatrixAPI *api, gchar *text, gchar *msgtype);
-void matrix_api_get_html_body(MatrixAPI *api, gchar *html, gchar *msgtype);
-void matrix_api_get_emote_body(MatrixAPI *api, gchar *text);
-void _send(MatrixAPI *api,
-           gchar *method,
-           gchar *path,
-           gchar *content,
-           GHashTable *query_params,
-           GHashTable *headers);
+                               const gchar *room_id,
+                               const gchar *event_type,
+                               const gchar *state_key,
+                               GError **error);
+void matrix_api_send_room_event(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                const gchar *room_id,
+                                const gchar *event_type,
+                                const gchar *state_key,
+                                const JsonNode *content,
+                                GError **error);
+void matrix_api_notify_room_typing(MatrixAPI *api,
+                                   MatrixAPICallback callback,
+                                   gpointer user_data,
+                                   const gchar *user_id,
+                                   const gchar *room_id,
+                                   guint timeout,
+                                   gboolean typing,
+                                   GError **error);
+void matrix_api_sync(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *filter_id,
+                     const MatrixAPIFilter *filter,
+                     const gchar *since,
+                     gboolean full_state,
+                     gboolean set_presence,
+                     gulong timeout,
+                     GError **error);
+void matrix_api_create_filter(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *user_id,
+                              MatrixAPIFilter *filter,
+                              GError **error);
+void matrix_api_download_filter(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                const gchar *user_id,
+                                const gchar *filter_id,
+                                GError **error);
+
+/* Search */
+
+/* Add the search function here */
+
+/* Server administration */
+
+void matrix_api_whois(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      const gchar *user_id,
+                      GError **error);
+
+/* Session management */
+
+void matrix_api_login(MatrixAPI *api,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      const gchar *type,
+                      const JsonNode *content,
+                      GError **error);
+void matrix_api_token_refresh(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *refresh_token,
+                              GError **error);
+
+/* User data */
+
+void matrix_api_get_3pids(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          GError **error);
+void matrix_api_add_3pid(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         gboolean bind_creds,
+                         MatrixAPI3PidCredential *threepid_creds,
+                         GError **error);
+void matrix_api_change_password(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                const gchar *new_password,
+                                GError **error);
+void matrix_api_get_profile(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            const gchar *user_id,
+                            GError **error);
+void matrix_api_get_avatar_url(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *user_id,
+                               GError **error);
+void matrix_api_set_avatar_url(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               const gchar *user_id,
+                               const gchar *avatar_url,
+                               GError **error);
+void matrix_api_get_display_name(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 const gchar *user_id,
+                                 GError **error);
+void matrix_api_set_display_name(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 const gchar *user_id,
+                                 const gchar *display_name,
+                                 GError **error);
+void matrix_api_register_account(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 gboolean bind_email,
+                                 const gchar *username,
+                                 const gchar *password,
+                                 GError **error);
+void matrix_api_set_account_data(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 const gchar *user_id,
+                                 const gchar *room_id,
+                                 const gchar *type,
+                                 const JsonNode *content,
+                                 GError **error);
+void matrix_api_get_room_tags(MatrixAPI *api,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              const gchar *user_id,
+                              const gchar *room_id,
+                              GError **error);
+void matrix_api_delete_room_tag(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                const gchar *user_id,
+                                const gchar *room_id,
+                                const gchar *tag,
+                                GError **error);
+void matrix_api_add_room_tag(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             const gchar *user_id,
+                             const gchar *room_id,
+                             const gchar *tag,
+                             JsonNode *content,
+                             GError **error);
+
+/* VoIP */
+
+void matrix_api_get_turn_server(MatrixAPI *api,
+                                MatrixAPICallback callback,
+                                gpointer user_data,
+                                GError **error);
 
 G_END_DECLS
 

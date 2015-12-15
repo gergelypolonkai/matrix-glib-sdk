@@ -36,6 +36,10 @@ create_room_finished(MatrixAPI *api,
                      gpointer data,
                      GError *err)
 {
+    if (err) {
+        g_debug("Error: %s", err->message);
+    }
+
     g_printf("Room registered\n");
 }
 
@@ -68,10 +72,13 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 
         g_printf("Logged in as %s\n", user_id);
 
-        matrix_http_api_create_room(api,
-                                    create_room_finished, NULL,
-                                    "matrix-glib-sdk-test", TRUE,
-                                    NULL);
+        /* matrix_http_api_create_room(api, */
+        /*                             create_room_finished, NULL, */
+        /*                             MATRIX_API_ROOM_PRESET_PUBLIC, */
+        /*                             "matrix-glib-sdk-test", NULL, */
+        /*                             "GLib SDK test room", */
+        /*                             MATRIX_API_ROOM_VISIBILITY_DEFAULT, */
+        /*                             NULL, NULL, NULL); */
     } else {
         g_printf("Login unsuccessful!\n");
     }
@@ -86,6 +93,8 @@ main(int argc, char *argv[])
     GOptionContext *opts;
     GError *err = NULL;
     gchar *url;
+    JsonBuilder *builder;
+    JsonNode *login_content;
 
     opts = g_option_context_new(NULL);
     g_option_context_add_main_entries(opts, entries, NULL);
@@ -111,19 +120,31 @@ main(int argc, char *argv[])
 
     /*
      * [ ] register
-     * [X] login
-     * [X] create_room
+     * [ ] login
+     * [ ] create_room
      * [ ] join_room
      */
     api = matrix_http_api_new(url, NULL);
-    params = matrix_http_api_gen_parameters(
-            "user", user,
-            "password", password,
-            NULL);
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+    json_builder_set_member_name(builder, "user");
+    json_builder_add_string_value(builder, user);
+    json_builder_set_member_name(builder, "password");
+    json_builder_add_string_value(builder, password);
+    json_builder_end_object(builder);
+    login_content = json_builder_get_root(builder);
+
     matrix_http_api_login(MATRIX_API(api),
                           login_finished, loop,
                           "m.login.password",
-                          params);
+                          login_content,
+                          &err);
+
+    if (err) {
+        g_warning("Error: %s", err->message);
+
+        return;
+    }
 
     g_info("Entering main loop");
     g_main_loop_run(loop);
