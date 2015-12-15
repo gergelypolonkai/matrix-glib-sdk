@@ -40,15 +40,22 @@ matrix_api_send_message
 matrix_api_send_message_event
 matrix_api_send_state_event
 matrix_api_set_membership
+<SUBSECTION>
+MatrixAPIError
+MATRIX_API_ERROR
 <SUBSECTION Standard>
 MatrixAPI
 MatrixAPIInterface
+MATRIX_TYPE_API_ERROR
+matrix_api_error_get_type
 MATRIX_TYPE_API
 MATRIX_API
 MATRIX_IS_API
 MATRIX_API_GET_IFACE
 MatrixApiPrivate
 matrix_api_get_type
+<SUBSECTION Private>
+matrix_api_error_quark
 </SECTION>
 
 <SECTION>

@@ -33,6 +33,7 @@ Makefile.in
 /GSYMS
 /GTAGS
 /src/matrix-version.h
+/src/matrix-enumtypes.[ch]
 /docs/reference/matrix-glib/version.xml
 /docs/reference/matrix-glib/html/
 /docs/reference/matrix-glib/xml/

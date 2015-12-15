@@ -24,6 +24,19 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+    MATRIX_API_ERROR_NONE,
+    MATRIX_API_ERROR_MISSING_TOKEN,
+    MATRIX_API_ERROR_FORBIDDEN,
+    MATRIX_API_ERROR_UNKNOWN,
+    /* Allow for a lot of Matrix.org defined codes
+       Do not define error codes after this! */
+    MATRIX_API_ERROR_UNKNOWN_ERROR = 16384
+} MatrixAPIError;
+
+#define MATRIX_API_ERROR matrix_api_error_quark()
+GQuark matrix_api_error_quark(void);
+
 #define MATRIX_TYPE_API         (matrix_api_get_type())
 #define MATRIX_API(o)           (G_TYPE_CHECK_INSTANCE_CAST((o), MATRIX_TYPE_API, MatrixAPI))
 #define MATRIX_IS_API(o)        (G_TYPE_CHECK_INSTANCE_TYPE((o), MATRIX_TYPE_API))

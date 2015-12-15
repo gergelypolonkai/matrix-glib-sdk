@@ -9,13 +9,19 @@ INST_H_SRC_FILES = \
 	matrix-http-api.h \
 	$(NULL)
 
-INST_H_BUILT_FILES = matrix-version.h
+INST_H_BUILT_FILES = \
+	matrix-version.h \
+	matrix-enumtypes.h \
+	$(NULL)
+
+matrix_enum_headers = matrix-api.h
 
 libmatrix_glib_0_0_la_SOURCES = \
 	matrix-client.c \
 	matrix-version.c \
 	matrix-api.c \
 	matrix-http-api.c \
+	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)
@@ -24,12 +30,26 @@ libmatrix_glib_0_0_la_CFLAGS = $(GLIB_CFLAGS) $(GOBJECT_CFLAGS) $(SOUP_CFLAGS) $
 libmatrix_glib_0_0_la_LIBADD = $(GLIB_LIBS) $(GOBJECT_LIBS) $(SOUP_LIBS) $(JSON_LIBS)
 libmatrix_glib_0_0_la_DEPENDENCIES =
 
+BUILT_SOURCES = matrix-enumtypes.c matrix-enumtypes.h
+
 test_client_SOURCES = test-client.c $(libmatrix_glib_0_0_la_SOURCES)
 test_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS)
 test_client_LDADD = $(libmatrix_glib_0_0_la_LIBADD)
 
-CLEANFILES =
-EXTRA_DIST = $(INST_H_SRC_FILES)
+CLEANFILES = $(BUILT_SOURCES)
+EXTRA_DIST = \
+	matrix-enumtypes.h.template \
+	matrix-enumtypes.c.template \
+	$(INST_H_SRC_FILES) \
+	$(NULL)
+
+matrix-enumtypes.h: $(matrix_enum_headers) matrix-enumtypes.h.template
+	$(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > \
+		$@.tmp && mv $@.tmp $@
+
+matrix-enumtypes.c: $(matrix_enum_headers) matrix-enumtypes.h matrix-enumtypes.c.template
+	$(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > \
+		$@.tmp && mv $@.tmp $@
 
 include $(INTROSPECTION_MAKEFILE)
 MatrixGlib-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
