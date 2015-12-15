@@ -74,6 +74,10 @@ void matrix_http_api_create_room(MatrixAPI *api,
                                  gchar *room_alias,
                                  gboolean is_public,
                                  GStrv invitees);
+void matrix_http_api_join_room(MatrixAPI *api,
+                               MatrixAPICallback callback,
+                               gpointer user_data,
+                               gchar *room_id_or_alias);
 
 G_END_DECLS
 

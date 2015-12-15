@@ -85,6 +85,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->register_account = matrix_http_api_register_account;
     iface->initial_sync = matrix_http_api_initial_sync;
     iface->create_room = matrix_http_api_create_room;
+    iface->join_room = matrix_http_api_join_room;
 }
 
 static void
@@ -418,9 +419,13 @@ matrix_http_api_send(MatrixHTTPAPI *api,
         return;
     }
 
-    generator = json_generator_new();
-    json_generator_set_root(generator, content);
-    data = json_generator_to_data(generator, &datalen);
+    if (content) {
+        generator = json_generator_new();
+        json_generator_set_root(generator, content);
+        data = json_generator_to_data(generator, &datalen);
+    } else {
+        data = g_strdup("");
+    }
 
     url = g_strdup_printf("%s%s", priv->url, path);
     g_debug("Sending %s to %s", method, url);
@@ -695,4 +700,36 @@ matrix_http_api_create_room(MatrixAPI *api,
                          "POST", "/createRoom",
                          content,
                          NULL);
+}
+
+/**
+ * matrix_http_api_join_room:
+ * @api: a #MatrixHTTPAPI object
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: user data to pass to the callback function
+ * @room_id_or_alias: an alias or the ID of the room
+ *
+ * Perform /join/$room_id
+ */
+void
+matrix_http_api_join_room(MatrixAPI *api,
+                          MatrixAPICallback callback,
+                          gpointer user_data,
+                          gchar *room_id_or_alias)
+{
+    gchar *path, *escaped_alias;
+
+    if (!room_id_or_alias && !*room_id_or_alias) {
+        return;
+    }
+
+    escaped_alias = soup_uri_encode(room_id_or_alias, NULL);
+    path = g_strdup_printf("/join/%s", escaped_alias);
+    g_free(escaped_alias);
+
+    matrix_http_api_send(MATRIX_HTTP_API(api),
+                         callback, user_data,
+                         "POST", path,
+                         NULL, NULL);
 }
