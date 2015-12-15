@@ -48,8 +48,6 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data)
 
         user_id = json_array_get_string_element(array, 0);
 
-        g_printf("Node type: %s\n", json_node_type_name(result));
-
         g_printf("Logged in as %s\n", user_id);
     } else {
         g_printf("Login unsuccessful!\n");
