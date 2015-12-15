@@ -46,12 +46,12 @@
  * The MatrixHTTPAPI object’s class definition.
  */
 
-#define API_ENDPOINT "/_matrix/client/api/v1"
+#define API_ENDPOINT "/_matrix/client/api/v1/"
 
 typedef struct _MatrixHTTPAPIPrivate {
     SoupSession *soup_session;
     guint txn_id;
-    gchar *url;
+    SoupURI *uri;
     gchar *token;
     gboolean validate_certificate;
 } MatrixHTTPAPIPrivate;
@@ -114,6 +114,7 @@ matrix_http_api_set_property(GObject *gobject,
         {
             const gchar *base_url;
             gchar *last_occurence;
+            gchar *url;
 
             base_url = g_value_get_string(value);
 
@@ -123,7 +124,9 @@ matrix_http_api_set_property(GObject *gobject,
                 return;
             }
 
-            g_free(priv->url);
+            if (priv->uri) {
+                soup_uri_free(priv->uri);
+            }
 
             last_occurence = g_strrstr(base_url, API_ENDPOINT);
 
@@ -131,11 +134,11 @@ matrix_http_api_set_property(GObject *gobject,
             if ((g_strcmp0(last_occurence, API_ENDPOINT) == 0) ||
                 (g_strcmp0(last_occurence, API_ENDPOINT"/") == 0)) {
                 /* if so, just use it */
-                priv->url = g_strdup(base_url);
+                url = g_strdup(base_url);
             } else {
                 /* if not, add the API endpoint */
 
-                gchar *url;
+                gchar *url_tmp;
 
                 /* If the provided URL already contains the API
                  * endpoint, but it’s not at the end, print a message,
@@ -144,15 +147,17 @@ matrix_http_api_set_property(GObject *gobject,
                     g_info("Provided URL (%s) already contains the API endpoint but not at the end; appending anyway", base_url);
                 }
 
-                url = g_strdup(base_url);
-                if (url[strlen(url) - 1] == '/') {
-                    url[strlen(url) - 1] = 0;
+                url_tmp = g_strdup(base_url);
+                if (url_tmp[strlen(url_tmp) - 1] == '/') {
+                    url_tmp[strlen(url_tmp) - 1] = 0;
                 }
 
-                priv->url = g_strdup_printf("%s%s", url, API_ENDPOINT);
-
-                g_free(url);
+                url = g_strdup_printf("%s%s", url_tmp, API_ENDPOINT);
+                g_free(url_tmp);
             }
+
+            priv->uri = soup_uri_new(url);
+            g_free(url);
 
             break;
         }
@@ -187,7 +192,7 @@ matrix_http_api_get_property(GObject *gobject,
             break;
 
         case PROP_BASE_URL:
-            g_value_set_string(value, priv->url);
+            g_value_take_string(value, soup_uri_to_string(priv->uri, FALSE));
 
             break;
 
@@ -260,7 +265,7 @@ matrix_http_api_init(MatrixHTTPAPI *api)
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
     priv->txn_id = 0;
-    priv->url = NULL;
+    priv->uri = NULL;
     priv->token = NULL;
     priv->validate_certificate = TRUE;
     priv->soup_session = soup_session_new();
@@ -441,6 +446,7 @@ matrix_http_api_send(MatrixHTTPAPI *api,
     gchar *data;
     gchar *url;
     MatrixHTTPAPIRequest *request;
+    SoupURI *uri;
 
     if (!g_str_is_ascii(method)) {
         g_warning("Method must be ASCII encoded!");
@@ -465,7 +471,9 @@ matrix_http_api_send(MatrixHTTPAPI *api,
         data = g_strdup("");
     }
 
-    url = g_strdup_printf("%s%s", priv->url, path);
+    uri = soup_uri_new_with_base(priv->uri, path);
+    url = soup_uri_to_string(uri, FALSE);
+    soup_uri_free(uri);
     g_debug("Sending %s to %s", method, url);
 
     msg = soup_message_new(method, url);
@@ -552,7 +560,7 @@ matrix_http_api_login(MatrixAPI *api,
     matrix_http_api_login_or_register(api,
                                       callback,
                                       user_data,
-                                      "/login",
+                                      "login",
                                       login_type,
                                       parameters);
 }
@@ -603,14 +611,14 @@ matrix_http_api_gen_parameters(const gchar *param1_name, ...)
  *
  * Get the base URL set for @api.
  *
- * Returns: (transfer none): the base URL set for @api
+ * Returns: (transfer full): the base URL set for @api
  */
 const gchar *
 matrix_http_api_get_base_url(MatrixHTTPAPI *api)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
-    return priv->url;
+    return soup_uri_to_string(priv->uri, FALSE);
 }
 
 /**
@@ -634,7 +642,7 @@ matrix_http_api_register_account(MatrixAPI *api,
     matrix_http_api_login_or_register(api,
                                       callback,
                                       user_data,
-                                      "/register",
+                                      "register",
                                       login_type,
                                       parameters);
 }
@@ -655,27 +663,17 @@ matrix_http_api_initial_sync(MatrixAPI *api,
                              gpointer user_data,
                              guint limit)
 {
-    JsonBuilder *builder;
-    JsonNode *content,
-             *node;
+    GHashTable *query_params;
+    gchar *limit_string = g_strdup_printf("%d", limit);
 
-    builder = json_builder_new();
-    json_builder_begin_object(builder);
-
-    node = json_node_new(JSON_NODE_VALUE);
-    json_node_set_int(node, limit);
-    json_builder_set_member_name(builder, "limit");
-    json_builder_add_value(builder, node);
-
-    json_builder_end_object(builder);
-
-    content = json_builder_get_root(builder);
+    query_params = matrix_http_api_gen_parameters("limit", limit_string, NULL);
+    g_free(limit_string);
 
     matrix_http_api_send(MATRIX_HTTP_API(api),
                          callback, user_data,
-                         "POST", "/initialSync",
-                         content,
-                         NULL);
+                         "POST", "initialSync",
+                         NULL,
+                         query_params);
 }
 
 /**
@@ -737,7 +735,7 @@ matrix_http_api_create_room(MatrixAPI *api,
 
     matrix_http_api_send(MATRIX_HTTP_API(api),
                          callback, user_data,
-                         "POST", "/createRoom",
+                         "POST", "createRoom",
                          content,
                          NULL);
 }
@@ -765,7 +763,7 @@ matrix_http_api_join_room(MatrixAPI *api,
     }
 
     escaped_alias = soup_uri_encode(room_id_or_alias, NULL);
-    path = g_strdup_printf("/join/%s", escaped_alias);
+    path = g_strdup_printf("join/%s", escaped_alias);
     g_free(escaped_alias);
 
     matrix_http_api_send(MATRIX_HTTP_API(api),
