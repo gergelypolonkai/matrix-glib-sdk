@@ -31,6 +31,15 @@ static GOptionEntry entries[] = {
 };
 
 static void
+create_room_finished(MatrixAPI *api,
+                     JsonNode *content,
+                     gpointer data,
+                     GError *err)
+{
+    g_printf("Room registered\n");
+}
+
+static void
 login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 {
     JsonPath *path = json_path_new();
@@ -58,6 +67,11 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
         user_id = json_array_get_string_element(array, 0);
 
         g_printf("Logged in as %s\n", user_id);
+
+        matrix_http_api_create_room(api,
+                                    create_room_finished, NULL,
+                                    "matrix-glib-sdk-test", TRUE,
+                                    NULL);
     } else {
         g_printf("Login unsuccessful!\n");
     }
@@ -98,7 +112,7 @@ main(int argc, char *argv[])
     /*
      * [ ] register
      * [X] login
-     * [ ] create_room
+     * [X] create_room
      * [ ] join_room
      */
     api = matrix_http_api_new(url, NULL);
