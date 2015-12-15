@@ -32,7 +32,10 @@ G_BEGIN_DECLS
 typedef struct _MatrixAPIInterface MatrixAPIInterface;
 typedef struct _MatrixAPI          MatrixAPI;
 
-typedef void (*MatrixAPICallback)(MatrixAPI *api, JsonNode *content, gpointer data);
+typedef void (*MatrixAPICallback)(MatrixAPI *api,
+                                  JsonNode *content,
+                                  gpointer data,
+                                  GError **err);
 
 struct _MatrixAPIInterface {
     /*< private >*/

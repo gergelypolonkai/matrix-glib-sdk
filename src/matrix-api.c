@@ -70,6 +70,7 @@
  * @api: A #MatrixAPI implementation
  * @content: the JSON content of the response, as a #JsonNode
  * @data: User data specified when calling original request function
+ * @err: a #GError
  *
  * A callback function to use with API calls.
  */

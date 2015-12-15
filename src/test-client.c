@@ -31,7 +31,7 @@ static GOptionEntry entries[] = {
 };
 
 static void
-login_finished(MatrixAPI *api, JsonNode *content, gpointer data)
+login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError **err)
 {
     JsonPath *path = json_path_new();
     JsonNode *result;

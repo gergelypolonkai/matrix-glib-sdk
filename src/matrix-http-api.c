@@ -376,7 +376,8 @@ response_callback(SoupSession *session,
                     request->callback(
                             MATRIX_API(api),
                             content,
-                            request->callback_data);
+                            request->callback_data,
+                            NULL);
                 }
             } else {
                 g_debug("Invalid response: %s", data);
