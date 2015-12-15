@@ -62,7 +62,7 @@ struct _MatrixAPIInterface {
     void (*create_room)(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
-                        gchar *room_alias,
+                        gchar *alias,
                         gboolean is_public,
                         GStrv invitees);
     void (*join_room)(MatrixAPI *api,

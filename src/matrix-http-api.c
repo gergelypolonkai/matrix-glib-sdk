@@ -489,8 +489,8 @@ matrix_http_api_login_or_register(MatrixAPI *api,
 /**
  * matrix_http_api_login:
  * @api: a #MatrixAPI implementation
- * @callback: (scope async): the function to call when the request if
- * finished
+ * @callback: (scope async): the function to call when the request is
+ *            finished
  * @user_data: user data to pass to the callback function
  * @login_type: the login type to use
  * @parameters: parameters to send with the login request
@@ -569,8 +569,8 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
 /**
  * matrix_http_api_register_account:
  * @api: a #MatrixAPI implementation
- * @callback: (scope async): the function to call when the request if
- * finished
+ * @callback: (scope async): the function to call when the request is
+ *            finished
  * @user_data: user data to pass to the callback function
  * @login_type: the login type to use
  * @parameters: parameters to send with the registration request
