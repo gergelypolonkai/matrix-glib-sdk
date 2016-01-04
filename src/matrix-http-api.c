@@ -72,20 +72,22 @@ typedef struct {
 GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 
 static void matrix_http_api_matrix_api_init(MatrixAPIInterface *iface);
+static void i_set_token(MatrixAPI *api, const gchar *token);
+static const gchar *i_get_token(MatrixAPI *api);
 
 G_DEFINE_TYPE_WITH_CODE(MatrixHTTPAPI, matrix_http_api, G_TYPE_OBJECT,
                         G_ADD_PRIVATE(MatrixHTTPAPI)
-                        G_IMPLEMENT_INTERFACE(MATRIX_TYPE_API, matrix_http_api_matrix_api_init));
-
-static void
-matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
-{
-    iface->login = matrix_http_api_login;
-}
+                        G_IMPLEMENT_INTERFACE(MATRIX_TYPE_API,
+                                              matrix_http_api_matrix_api_init));
 
 static void
 matrix_http_api_finalize(GObject *gobject)
 {
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(gobject));
+
+    g_free(priv->token);
+
     g_signal_handlers_destroy(gobject);
     G_OBJECT_CLASS(matrix_http_api_parent_class)->finalize(gobject);
 }
@@ -126,8 +128,7 @@ matrix_http_api_set_property(GObject *gobject,
             last_occurence = g_strrstr(base_url, API_ENDPOINT);
 
             /* Check if the provided URL already ends with the API endpoint */
-            if ((g_strcmp0(last_occurence, API_ENDPOINT) == 0) ||
-                (g_strcmp0(last_occurence, API_ENDPOINT"/") == 0)) {
+            if (g_strcmp0(last_occurence, API_ENDPOINT) == 0) {
                 /* if so, just use it */
                 url = g_strdup(base_url);
             } else {
@@ -143,12 +144,16 @@ matrix_http_api_set_property(GObject *gobject,
                 }
 
                 url_tmp = g_strdup(base_url);
+
+                /* Cut trailing slash, if present */
                 if (url_tmp[strlen(url_tmp) - 1] == '/') {
                     url_tmp[strlen(url_tmp) - 1] = 0;
                 }
 
                 url = g_strdup_printf("%s%s", url_tmp, API_ENDPOINT);
                 g_free(url_tmp);
+
+                g_debug("Set base URL to %s", url);
             }
 
             priv->uri = soup_uri_new(url);
@@ -158,11 +163,7 @@ matrix_http_api_set_property(GObject *gobject,
         }
 
         case PROP_TOKEN:
-            if (priv->token) {
-                g_free(priv->token);
-            }
-
-            priv->token = g_strdup(g_value_get_string(value));
+            i_set_token(MATRIX_API(api), g_value_get_string(value));
 
             break;
 
@@ -192,7 +193,8 @@ matrix_http_api_get_property(GObject *gobject,
             break;
 
         case PROP_TOKEN:
-            g_value_set_string(value, priv->token);
+            g_value_set_string(value,
+                               i_get_token(MATRIX_API(api)));
 
             break;
 
@@ -222,6 +224,9 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
             "TRUE if server certificates should be validated",
             TRUE,
             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    g_object_class_install_property(gobject_class,
+                                    PROP_VALIDATE_CERTIFICATE,
+                                    obj_properties[PROP_VALIDATE_CERTIFICATE]);
 
     /**
      * MatrixHTTPAPI:base-url:
@@ -235,23 +240,11 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
             "Matrix.org home server to connect to.",
             NULL,
             G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+    g_object_class_install_property(gobject_class,
+                                    PROP_BASE_URL,
+                                    obj_properties[PROP_BASE_URL]);
 
-    /**
-     * MatrixHTTPAPI:token:
-     *
-     * The token to use for authorization. The matrix_http_api_login()
-     * and matrix_http_api_register_account() calls set this
-     * automatically.
-     */
-    obj_properties[PROP_TOKEN] = g_param_spec_string(
-            "token", "Authorization token",
-            "The token to use for authorization",
-            NULL,
-            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-    g_object_class_install_properties(gobject_class,
-                                      N_PROPERTIES,
-                                      obj_properties);
+    g_object_class_override_property(gobject_class, PROP_TOKEN, "token");
 }
 
 static void
@@ -281,6 +274,25 @@ matrix_http_api_new(const gchar *base_url, const gchar *token)
                         "base-url", base_url,
                         "token", token,
                         NULL);
+}
+
+static void
+i_set_token(MatrixAPI *api, const gchar *token)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    g_free(priv->token);
+    priv->token = g_strdup(token);
+}
+
+static const gchar *
+i_get_token(MatrixAPI *api)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    return priv->token;
 }
 
 /**
@@ -317,9 +329,9 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
 }
 
 static void
-response_callback(SoupSession *session,
-                  SoupMessage *msg,
-                  MatrixHTTPAPIRequest *request)
+_response_callback(SoupSession *session,
+                   SoupMessage *msg,
+                   MatrixHTTPAPIRequest *request)
 {
     MatrixHTTPAPI *api = request->api;
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
@@ -358,9 +370,9 @@ response_callback(SoupSession *session,
                     const gchar *access_token;
 
                     if ((access_token = json_node_get_string(node)) != NULL) {
-                        g_debug("Access token: %s", access_token);
-                        g_free(priv->token);
-                        priv->token = g_strdup(access_token);
+                        g_debug("Got new access token: %s", access_token);
+
+                        i_set_token(MATRIX_API(api), access_token);
                     }
                 }
 
@@ -441,14 +453,21 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
 }
 
 static void
-matrix_http_api_send(MatrixAPI *api,
-                     MatrixAPICallback callback,
-                     gpointer user_data,
-                     const gchar *method,
-                     const gchar *path,
-                     const JsonNode *content,
-                     GError **error)
+_send(MatrixHTTPAPI *api,
+      MatrixAPICallback callback,
+      gpointer user_data,
+      const gchar *method,
+      const gchar *path,
+      const JsonNode *content,
+      GError **error)
 {
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+    SoupURI *request_path;
+    SoupMessage *message;
+    gchar *data;
+    gsize datalen;
+    MatrixHTTPAPIRequest *request;
+
     if (!g_str_is_ascii(method)) {
         g_warning("Method must be ASCII encoded!");
 
@@ -464,15 +483,47 @@ matrix_http_api_send(MatrixAPI *api,
         return;
     }
 
+    request_path = soup_uri_new_with_base(priv->uri, path);
+    message = soup_message_new_from_uri(method, request_path);
+    soup_uri_free(request_path);
+
+    if (content) {
+        JsonGenerator *generator;
+
+        generator = json_generator_new();
+        json_generator_set_root(generator, (JsonNode *)content);
+        data = json_generator_to_data(generator, &datalen);
+    } else {
+        data = g_strdup("");
+        datalen = 0;
+    }
+
+    soup_message_set_flags(message, SOUP_MESSAGE_NO_REDIRECT);
+    soup_message_set_request(message,
+                             "application/json",
+                             SOUP_MEMORY_TAKE,
+                             data, datalen);
+    g_object_ref(message);
+
+    request = g_new0(MatrixHTTPAPIRequest, 1);
+    request->request_content = (JsonNode *)content;
+    request->api = api;
+    request->callback = callback;
+    request->callback_data = user_data;
+
+    soup_session_queue_message(priv->soup_session,
+                               message,
+                               (SoupSessionCallback)_response_callback,
+                               request);
 }
 
 void
-matrix_http_api_login(MatrixAPI *api,
-                      MatrixAPICallback callback,
-                      gpointer user_data,
-                      const gchar *type,
-                      const JsonNode *content,
-                      GError **error)
+i_login(MatrixAPI *api,
+        MatrixAPICallback callback,
+        gpointer user_data,
+        const gchar *type,
+        const JsonNode *content,
+        GError **error)
 {
     JsonNode *body;
     JsonObject *root_object;
@@ -481,8 +532,16 @@ matrix_http_api_login(MatrixAPI *api,
     root_object = json_node_get_object(body);
     json_object_set_string_member(root_object, "type", type);
 
-    matrix_http_api_send(api,
-                         callback, user_data,
-                         "POST", "/login", body,
-                         error);
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "POST", "login", body,
+          error);
+}
+
+static void
+matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
+{
+    iface->set_token = i_set_token;
+    iface->get_token = i_get_token;
+    iface->login = i_login;
 }

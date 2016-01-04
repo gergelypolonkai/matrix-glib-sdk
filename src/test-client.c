@@ -134,11 +134,11 @@ main(int argc, char *argv[])
     json_builder_end_object(builder);
     login_content = json_builder_get_root(builder);
 
-    matrix_http_api_login(MATRIX_API(api),
-                          login_finished, loop,
-                          "m.login.password",
-                          login_content,
-                          &err);
+    matrix_api_login(MATRIX_API(api),
+                     login_finished, loop,
+                     "m.login.password",
+                     login_content,
+                     &err);
 
     if (err) {
         g_warning("Error: %s", err->message);

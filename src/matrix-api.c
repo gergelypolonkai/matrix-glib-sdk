@@ -426,8 +426,8 @@ matrix_api_default_init(MatrixAPIInterface *iface)
     /**
      * MatrixAPI:token:
      *
-     * The token to use for authorization. The matrix_http_api_login()
-     * and matrix_http_api_register_account() calls set this
+     * The token to use for authorization. The matrix_api_login() and
+     * matrix_api_register_account() calls must set this
      * automatically.
      */
     g_object_interface_install_property(
