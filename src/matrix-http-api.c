@@ -52,6 +52,7 @@ typedef struct _MatrixHTTPAPIPrivate {
     SoupSession *soup_session;
     SoupURI *uri;
     gchar *token;
+    gchar *refresh_token;
     gboolean validate_certificate;
 } MatrixHTTPAPIPrivate;
 
@@ -59,6 +60,7 @@ enum {
     PROP_VALIDATE_CERTIFICATE = 1,
     PROP_BASE_URL,
     PROP_TOKEN,
+    PROP_REFRESH_TOKEN,
     N_PROPERTIES
 };
 
@@ -74,6 +76,8 @@ GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 static void matrix_http_api_matrix_api_init(MatrixAPIInterface *iface);
 static void i_set_token(MatrixAPI *api, const gchar *token);
 static const gchar *i_get_token(MatrixAPI *api);
+static void i_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
+static const gchar *i_get_refresh_token(MatrixAPI *api);
 
 G_DEFINE_TYPE_WITH_CODE(MatrixHTTPAPI, matrix_http_api, G_TYPE_OBJECT,
                         G_ADD_PRIVATE(MatrixHTTPAPI)
@@ -87,6 +91,7 @@ matrix_http_api_finalize(GObject *gobject)
             MATRIX_HTTP_API(gobject));
 
     g_free(priv->token);
+    g_free(priv->refresh_token);
 
     g_signal_handlers_destroy(gobject);
     G_OBJECT_CLASS(matrix_http_api_parent_class)->finalize(gobject);
@@ -167,6 +172,12 @@ matrix_http_api_set_property(GObject *gobject,
 
             break;
 
+        case PROP_REFRESH_TOKEN:
+            i_set_refresh_token(MATRIX_API(api),
+                                g_value_get_string(value));
+
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
     }
@@ -195,6 +206,11 @@ matrix_http_api_get_property(GObject *gobject,
         case PROP_TOKEN:
             g_value_set_string(value,
                                i_get_token(MATRIX_API(api)));
+
+            break;
+
+        case PROP_REFRESH_TOKEN:
+            g_value_set_string(value, i_get_refresh_token(MATRIX_API(api)));
 
             break;
 
@@ -245,6 +261,9 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
                                     obj_properties[PROP_BASE_URL]);
 
     g_object_class_override_property(gobject_class, PROP_TOKEN, "token");
+    g_object_class_override_property(gobject_class,
+                                     PROP_REFRESH_TOKEN,
+                                     "refresh-token");
 }
 
 static void
@@ -254,6 +273,7 @@ matrix_http_api_init(MatrixHTTPAPI *api)
 
     priv->uri = NULL;
     priv->token = NULL;
+    priv->refresh_token = NULL;
     priv->validate_certificate = TRUE;
     priv->soup_session = soup_session_new();
 }
@@ -293,6 +313,25 @@ i_get_token(MatrixAPI *api)
             MATRIX_HTTP_API(api));
 
     return priv->token;
+}
+
+static void
+i_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    g_free(priv->refresh_token);
+    priv->token = g_strdup(refresh_token);
+}
+
+static const gchar *
+i_get_refresh_token(MatrixAPI *api)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    return priv->refresh_token;
 }
 
 /**
@@ -373,6 +412,20 @@ _response_callback(SoupSession *session,
                         g_debug("Got new access token: %s", access_token);
 
                         i_set_token(MATRIX_API(api), access_token);
+                    }
+                }
+
+                /* Check if the response holds a refresh token; if it
+                 * does, set it as our new refresh token */
+                if ((node = json_object_get_member(
+                             root_object, "refresh_token")) != NULL) {
+                    const gchar *refresh_token;
+
+                    if ((refresh_token = json_node_get_string(node)) != NULL) {
+                        g_debug("Got new refresh token: %s", refresh_token);
+
+                        i_set_refresh_token(MATRIX_API(api),
+                                                          refresh_token);
                     }
                 }
 
@@ -543,5 +596,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
     iface->get_token = i_get_token;
+    iface->set_refresh_token = i_set_refresh_token;
+    iface->get_refresh_token = i_get_refresh_token;
     iface->login = i_login;
 }

@@ -436,6 +436,21 @@ matrix_api_default_init(MatrixAPIInterface *iface)
                                 "The authorization token to use in requests",
                                 NULL,
                                 G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+    /**
+     * MatrixAPI:refresh-token:
+     *
+     * The token to use for refreshing the authorization token. It is
+     * issued by the server after a successful registration, login,
+     * and token refresh, but can also be changed with
+     * matrix_api_set_refresh_token() (or setting this property).
+     */
+    g_object_interface_install_property(
+            iface,
+            g_param_spec_string("refresh-token", "Refresh token",
+                                "The token issued by the server for authorization token renewal",
+                                NULL,
+                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /* Property getters and setters */
@@ -479,6 +494,44 @@ matrix_api_set_token(MatrixAPI *api, const gchar *token)
 
     MATRIX_API_GET_IFACE(api)
         ->set_token(api, token);
+}
+
+/**
+ * matrix_api_get_refresh_token:
+ * @api: a #MatrixAPI implementation
+ *
+ * Get the refresh token currently set. See matrix_api_set_token() for
+ * limitations.
+ *
+ * Returns: (transfer none) (allow-none): the refresh token to be used
+ *          for authorization token refreshment, or %NULL if there is
+ *          none set. The returned value is owned by the @api object
+ *          and should not be freed nor modified
+ */
+const gchar *
+matrix_api_get_refresh_token(MatrixAPI *api)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    return MATRIX_API_GET_IFACE(api)
+        ->get_refresh_token(api);
+}
+
+/**
+ * matrix_api_set_refresh_token:
+ * @api: a #MatrixAPI implementation
+ * @refresh_token: the refresh token to set
+ *
+ * Set the refresh token to be used in subsequent requests. See
+ * matrix_api_set_token() for limitations.
+ */
+void
+matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->set_refresh_token(api, refresh_token);
 }
 
 /* Media */

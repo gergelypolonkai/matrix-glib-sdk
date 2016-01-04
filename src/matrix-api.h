@@ -171,6 +171,11 @@ struct _MatrixAPIInterface {
     const gchar *(*get_token)(MatrixAPI *api);
     void (*set_token)(MatrixAPI *api, const gchar *token);
 
+    const gchar *(*get_refresh_token)(MatrixAPI *api);
+    void (*set_refresh_token)(MatrixAPI *api, const gchar *refresh_token);
+
+    void *properties_reserved[10];
+
     /* Media */
     void (*media_download)(MatrixAPI *api,
                            MatrixAPICallback callback,
@@ -577,8 +582,10 @@ GType matrix_api_get_type(void) G_GNUC_CONST;
 
 /* Property getters and setters */
 
-const gchar *matrix_api_get_token(MatrixAPI *api);
 void matrix_api_set_token(MatrixAPI *api, const gchar *token);
+const gchar *matrix_api_get_token(MatrixAPI *api);
+void matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
+const gchar *matrix_api_get_refresh_token(MatrixAPI *api);
 
 /* API definition */
 

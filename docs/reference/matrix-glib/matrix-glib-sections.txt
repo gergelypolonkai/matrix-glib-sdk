@@ -32,6 +32,8 @@ MatrixAPIReceiptType
 <SUBSECTION>
 matrix_api_set_token
 matrix_api_get_token
+matrix_api_set_refresh_token
+matrix_api_get_refresh_token
 
 <SUBSECTION>
 matrix_api_media_download
