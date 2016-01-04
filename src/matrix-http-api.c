@@ -53,6 +53,7 @@ typedef struct _MatrixHTTPAPIPrivate {
     SoupURI *uri;
     gchar *token;
     gchar *refresh_token;
+    gchar *user_id;
     gboolean validate_certificate;
 } MatrixHTTPAPIPrivate;
 
@@ -61,6 +62,7 @@ enum {
     PROP_BASE_URL,
     PROP_TOKEN,
     PROP_REFRESH_TOKEN,
+    PROP_USER_ID,
     N_PROPERTIES
 };
 
@@ -78,6 +80,7 @@ static void i_set_token(MatrixAPI *api, const gchar *token);
 static const gchar *i_get_token(MatrixAPI *api);
 static void i_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
 static const gchar *i_get_refresh_token(MatrixAPI *api);
+static const gchar *i_get_user_id(MatrixAPI *api);
 
 G_DEFINE_TYPE_WITH_CODE(MatrixHTTPAPI, matrix_http_api, G_TYPE_OBJECT,
                         G_ADD_PRIVATE(MatrixHTTPAPI)
@@ -92,6 +95,7 @@ matrix_http_api_finalize(GObject *gobject)
 
     g_free(priv->token);
     g_free(priv->refresh_token);
+    g_free(priv->user_id);
 
     g_signal_handlers_destroy(gobject);
     G_OBJECT_CLASS(matrix_http_api_parent_class)->finalize(gobject);
@@ -214,6 +218,11 @@ matrix_http_api_get_property(GObject *gobject,
 
             break;
 
+        case PROP_USER_ID:
+            g_value_set_string(value, i_get_user_id(MATRIX_API(api)));
+
+            break;
+
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
     }
@@ -264,6 +273,7 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
     g_object_class_override_property(gobject_class,
                                      PROP_REFRESH_TOKEN,
                                      "refresh-token");
+    g_object_class_override_property(gobject_class, PROP_USER_ID, "user-id");
 }
 
 static void
@@ -274,6 +284,7 @@ matrix_http_api_init(MatrixHTTPAPI *api)
     priv->uri = NULL;
     priv->token = NULL;
     priv->refresh_token = NULL;
+    priv->user_id = NULL;
     priv->validate_certificate = TRUE;
     priv->soup_session = soup_session_new();
 }
@@ -332,6 +343,15 @@ i_get_refresh_token(MatrixAPI *api)
             MATRIX_HTTP_API(api));
 
     return priv->refresh_token;
+}
+
+static const gchar *
+i_get_user_id(MatrixAPI *api)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    return priv->user_id;
 }
 
 /**
@@ -435,6 +455,18 @@ _response_callback(SoupSession *session,
                     const gchar *homeserver = json_node_get_string(node);
 
                     g_debug("Our home server calls itself %s", homeserver);
+                }
+
+                /* Check if the response holds a user ID; if it does,
+                 * set this as our user ID */
+                if ((node = json_object_get_member(
+                             root_object, "user_id")) != NULL) {
+                    const gchar *user_id = json_node_get_string(node);
+
+                    g_free(priv->user_id);
+                    priv->user_id = g_strdup(user_id);
+
+                    g_debug("We are reported to be logged in as %s", user_id);
                 }
 
                 /* Check if the response holds an error code */
@@ -598,5 +630,6 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_token = i_get_token;
     iface->set_refresh_token = i_set_refresh_token;
     iface->get_refresh_token = i_get_refresh_token;
+    iface->get_user_id = i_get_user_id;
     iface->login = i_login;
 }

@@ -451,6 +451,20 @@ matrix_api_default_init(MatrixAPIInterface *iface)
                                 "The token issued by the server for authorization token renewal",
                                 NULL,
                                 G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+    /**
+     * MatrixAPI:user-id:
+     *
+     * The Matrix user ID that is currently authenticated to the
+     * server. It is set by the registration and login processes
+     * automatically, and cannot be set from outside.
+     */
+    g_object_interface_install_property(
+            iface,
+            g_param_spec_string("user-id", "User ID",
+                                "The Matrix user ID that is authenticated to the server",
+                                NULL,
+                                G_PARAM_READABLE));
 }
 
 /* Property getters and setters */
@@ -532,6 +546,30 @@ matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
 
     MATRIX_API_GET_IFACE(api)
         ->set_refresh_token(api, refresh_token);
+}
+
+/**
+ * matrix_api_get_user_id:
+ * @api: a #MatrixAPI implementation
+ *
+ * Get the Matrix user ID that is currently authenticated with the
+ * server.
+ *
+ * Returns: (transfer none) (allow-none): the Matrix user ID
+ *          authenticated by the last successful register or login
+ *          call (ie. matrix_api_login() or
+ *          matrix_api_register_account()). If no user is
+ *          authenticated, this function returns %NULL. The returned
+ *          value is owned by the @api object and should not be freed
+ *          nor modified
+ */
+const gchar *
+matrix_api_get_user_id(MatrixAPI *api)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    return MATRIX_API_GET_IFACE(api)
+        ->get_user_id(api);
 }
 
 /* Media */

@@ -174,6 +174,8 @@ struct _MatrixAPIInterface {
     const gchar *(*get_refresh_token)(MatrixAPI *api);
     void (*set_refresh_token)(MatrixAPI *api, const gchar *refresh_token);
 
+    const gchar *(*get_user_id)(MatrixAPI *api);
+
     void *properties_reserved[10];
 
     /* Media */
@@ -586,6 +588,7 @@ void matrix_api_set_token(MatrixAPI *api, const gchar *token);
 const gchar *matrix_api_get_token(MatrixAPI *api);
 void matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
 const gchar *matrix_api_get_refresh_token(MatrixAPI *api);
+const gchar *matrix_api_get_user_id(MatrixAPI *api);
 
 /* API definition */
 
