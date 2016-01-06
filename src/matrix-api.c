@@ -465,6 +465,19 @@ matrix_api_default_init(MatrixAPIInterface *iface)
                                 "The Matrix user ID that is authenticated to the server",
                                 NULL,
                                 G_PARAM_READABLE));
+
+    /**
+     * MatrixAPI:homeserver:
+     *
+     * The Matrix home server, as it calls itself. It is filled
+     * automatically by login and register calls.
+     */
+    g_object_interface_install_property(
+            iface,
+            g_param_spec_string("homeserver", "Homeserver",
+                                "The home server, as it calls itself",
+                                NULL,
+                                G_PARAM_READABLE));
 }
 
 /* Property getters and setters */
@@ -570,6 +583,28 @@ matrix_api_get_user_id(MatrixAPI *api)
 
     return MATRIX_API_GET_IFACE(api)
         ->get_user_id(api);
+}
+
+/**
+ * matrix_api_get_homeserver:
+ * @api: a #MatrixAPI implementation
+ *
+ * Get the homeserver's name, as it calls itself. It gets set
+ * automatically by login and register calls, e.g. matrix_api_login()
+ * or matrix_api_register_account().
+ *
+ * Returns: (transfer none) (allow-none): the Matrix homeserver's
+ * name, as it calls itself. If no homeserver name is reported yet
+ * (e.g. because login or register wasn't called yet), this function
+ * returns %NULL.
+ */
+const gchar *
+matrix_api_get_homeserver(MatrixAPI *api)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    return MATRIX_API_GET_IFACE(api)
+        ->get_homeserver(api);
 }
 
 /* Media */

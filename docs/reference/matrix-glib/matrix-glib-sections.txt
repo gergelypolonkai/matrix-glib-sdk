@@ -35,6 +35,7 @@ matrix_api_get_token
 matrix_api_set_refresh_token
 matrix_api_get_refresh_token
 matrix_api_get_user_id
+matrix_api_get_homeserver
 
 <SUBSECTION>
 matrix_api_media_download
