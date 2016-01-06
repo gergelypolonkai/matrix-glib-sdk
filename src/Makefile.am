@@ -6,6 +6,7 @@ bin_PROGRAMS = test-client
 INST_H_SRC_FILES = \
 	matrix-client.h \
 	matrix-api.h \
+	matrix-api-types.h \
 	matrix-http-api.h \
 	$(NULL)
 
@@ -20,6 +21,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-client.c \
 	matrix-version.c \
 	matrix-api.c \
+	matrix-api-types.c \
 	matrix-http-api.c \
 	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \

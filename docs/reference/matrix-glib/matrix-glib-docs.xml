@@ -19,9 +19,10 @@
   <chapter>
     <title>Matrix Client</title>
     <xi:include href="xml/matrix-client.xml"/>
+    <xi:include href="xml/matrix-api-types.xml"/>
+    <xi:include href="xml/matrix-api.xml"/>
     <xi:include href="xml/matrix-http-api.xml"/>
     <xi:include href="xml/matrix-version.xml"/>
-    <xi:include href="xml/matrix-api.xml"/>
   </chapter>
   <chapter id="object-tree">
     <title>Object Hierarchy</title>

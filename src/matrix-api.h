@@ -22,6 +22,8 @@
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 
+#include "matrix-api-types.h"
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -105,35 +107,17 @@ typedef enum {
     MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
 } MatrixAPIPusherConditionKind;
 
-typedef struct _MatrixAPIPresenceFilter {
-    guint limit;
-    GList *senders;
-    GList *not_senders;
-    GList *types;
-    GList *not_types;
-} MatrixAPIPresenceFilter;
-
-typedef struct _MatrixAPIEventFilter {
-    GList *rooms;
-    GList *not_rooms;
-    guint limit;
-    GList *senders;
-    GList *not_senders;
-    GList *types;
-    GList *not_types;
-} MatrixAPIEventFilter;
-
 typedef struct _MatrixAPIRoomFilter {
-    MatrixAPIEventFilter *ephemeral;
+    MatrixAPIFilterRules *ephemeral;
     gboolean include_leave;
-    MatrixAPIEventFilter *state;
-    MatrixAPIEventFilter *timeline;
+    MatrixAPIFilterRules *state;
+    MatrixAPIFilterRules *timeline;
 } MatrixAPIRoomFilter;
 
 typedef struct _MatrixAPIFilter {
     GList *event_fields;
     MatrixAPIEventFormat event_format;
-    MatrixAPIPresenceFilter *presence;
+    MatrixAPIFilterRules *presence;
     MatrixAPIRoomFilter *room;
 } MatrixAPIFilter;
 

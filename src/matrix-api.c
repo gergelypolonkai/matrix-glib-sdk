@@ -22,7 +22,7 @@
  * SECTION:matrix-api
  * @title: MatrixAPI
  * @short_description: An interface for actual API implementations,
- * like #MatrixHTTPAPI
+ *                     like #MatrixHTTPAPI
  *
  * This interface provides a skeleton for all API functionality for
  * client communication with a Matrix.org homeserver.
@@ -308,40 +308,6 @@
  */
 
 /**
- * MatrixAPIEventFilter:
- * @rooms: (element-type GString): a list of room IDs to include. If
- *         %NULL, all rooms will be included. A <code>*</code> can be
- *         used as a wildcard to match any sequence of characters
- * @not_rooms: (element-type GString): a list of room IDs to
- *             exclude. If %NULL, no rooms are excluded. A matching
- *             room will be excluded even if it is listed in @rooms. A
- *             <code>*</code> can be used as a wildcard to match any
- *             sequence of characters
- * @limit: the maximum number of events to return. If <code>0</code>,
- *         no limit is applied
- * @senders: (element-type GString): a list of senders IDs to
- *           include. If %NULL then all senders are included. A
- *           <code>*</code> can be used as a wildcard to match any
- *           sequence of characters
- * @not_senders: (element-type GString): a list of sender IDs to
- *               exclude. If %NULL then no senders are excluded. A
- *               matching sender will be excluded even if it is listed
- *               in the @senders filter. A <code>*</code> can be used
- *               as a wildcard to match any sequence of characters
- * @types: (element-type GString): a list of event types to
- *         include. If %NULL then all event types are included. A
- *         <code>*</code> can be used as a wildcard to match any
- *         sequence of characters
- * @not_types: (element-type GString): a list of event types to
- *             exclude. If this list is absent then no event types are
- *             excluded. A matching type will be excluded even if it
- *             is listed in the @types filter. A <code>*</code> can be
- *             used as a wildcard to match any sequence of characters
- *
- * A struct to hold event filters.
- */
-
-/**
  * MatrixAPIRoomFilter:
  * @ephemeral: the events that aren't recorded in the room history,
  *             e.g. typing and receipts, to include for rooms
@@ -350,32 +316,6 @@
  * @timeline: the message and state update events to include for rooms
  *
  * A struct to hold a room event filter
- */
-
-/**
- * MatrixAPIPresenceFilter:
- * @limit: the maximum number of events to return. If <code>0</code>,
- *         no limit will be applied
- * @senders: (element-type GString): a list of senders IDs to
- *           include. If %NULL then all senders are included. A
- *           <code>*</code> can be used as a wildcard to match any
- *           sequence of characters
- * @not_senders: (element-type GString): a list of sender IDs to
- *               exclude. If %NULL then no senders are excluded. A
- *               matching sender will be excluded even if it is listed
- *               in the @senders filter. A <code>*</code> can be used
- *               as a wildcard to match any sequence of characters
- * @types: (element-type GString): a list of event types to
- *         include. If %NULL then all event types are included. A
- *         <code>*</code> can be used as a wildcard to match any
- *         sequence of characters
- * @not_types: (element-type GString): a list of event types to
- *             exclude. If %NULL then no event types are excluded. A
- *             matching type will be excluded even if it is listed in
- *             the @types filter. A <code>*</code> can be used as a
- *             wildcard to match any sequence of characters
- *
- * A struct to hold a presence filter.
  */
 
 /**
@@ -614,12 +554,13 @@ matrix_api_get_homeserver(MatrixAPI *api)
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @server_name: the server name from the <code>mxc://</code> URI (the
  *               authority component)
  * @media_id: the media ID from the <code>mxc://</code> URI (the path
  *            component)
- * @error: (allow-none): a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Download content from the content repository.
  */
@@ -644,7 +585,8 @@ matrix_api_media_download(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @server_name: the server name from the <code>mxc://</code> URI (the
  *               authority component)
  * @media_id: the media ID from the <code>mxc://</code> URI (the path
@@ -653,7 +595,7 @@ matrix_api_media_download(MatrixAPI *api,
  * @height: the desired height of the thumbnail, or 0 to use the
  *          default
  * @method: the resizing method to use
- * @error: (allow-none): a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Download a thumbnail of the content from the content
  * repository. The actual thumbnail may not match the size specified.
@@ -684,11 +626,12 @@ matrix_api_media_thumbnail(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @content_type: (allow-none): the content type of the file being
  *                uploaded
  * @content: the content to be uploaded
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Upload some content to the content repository.
  */
@@ -713,9 +656,10 @@ matrix_api_media_upload(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose presence list should be retrieved
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Retrieve a list of presence events for every user on this list.
  */
@@ -737,13 +681,14 @@ matrix_api_get_presence_list(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose presence list is being modified
  * @drop_ids: (element-type GString): a list of user IDs to remove
  *            from the list
  * @invite_ids: (element-type GString): a list of user IDs to add to
  *              the list
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Add or remove users from the specified user's presence list.
  */
@@ -769,9 +714,10 @@ matrix_api_update_presence_list(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose presence list is being modified
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the given user's presence state.
  */
@@ -795,11 +741,12 @@ matrix_api_get_user_presence(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose presence list is being modified
  * @presence: the new presence state
  * @status_message: a status message attached to this state
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Set the given user's presence. You cannot set the presence of
  * another user.
@@ -829,9 +776,10 @@ matrix_api_set_user_presence(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @pusher: the pusher information
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Modify a pushers for the active user on this homeserver.
  */
@@ -855,8 +803,9 @@ matrix_api_modify_pusher(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
- * @error: a #GError
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
+ * @error: return location for a #GError, or %NULL
  *
  * Retrieve all push rulesets.
  */
@@ -877,13 +826,14 @@ matrix_api_get_pushers(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @scope: either <code>global</code> to specify global rules, or
  *         <code>device/&lt;profile tag&gt;</code> for rules for a
  *         given <code>profile tag</code>.
  * @kind: the kind of rule
  * @rule_id: an identifier for the rule
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Delete a push rule.
  */
@@ -909,13 +859,14 @@ matrix_api_delete_pusher(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @scope: either <code>global</code> to specify global rules, or
  *         <code>device/&lt;profile tag&gt;</code> for rules for a
  *         given <code>profile tag</code>.
  * @kind: the kind of rule
  * @rule_id: an identifier for the rule
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Retrieve a specific push rule.
  */
@@ -941,7 +892,8 @@ matrix_api_get_pusher(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @scope: either <code>global</code> to specify global rules, or
  *         <code>device/&lt;profile tag&gt;</code> for rules for a
  *         given <code>profile tag</code>.
@@ -957,7 +909,7 @@ matrix_api_get_pusher(MatrixAPI *api,
  *              the conditions that must hold true for an event for a
  *              rule to be applied. A rule with no conditions always
  *              matches
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Add or change a push rule.
  */
@@ -989,7 +941,8 @@ matrix_api_add_pusher(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
- * @user_data: user data to pass to the callback function @callback
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @scope: either <code>global</code> to specify global rules, or
  *         <code>device/&lt;profile tag&gt;</code> for rules for a
  *         given <code>profile tag</code>.
@@ -997,7 +950,7 @@ matrix_api_add_pusher(MatrixAPI *api,
  * @rule_id: an identifier for the rule
  * @enabled: if %TRUE, the rule will be enabled, otherwise it gets
  *           disabled
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Enable or disable the specified push rule.
  */
@@ -1025,7 +978,8 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (allow-none): user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @preset: a room preset to use
  * @room_name: (allow-none): the desired name for the room
  * @room_alias: (allow-none): the alias of the room
@@ -1037,7 +991,7 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  *                 list of state events to set in the new room
  * @invitees: (element-type GString) (allow-none): list of user IDs to
  *            invite to the new room
- * @error: (allow-none): a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Create a new room with the given name and invite the users in
  * @invitees.
@@ -1073,9 +1027,10 @@ matrix_api_create_room(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (allow-none): user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_alias: the alias name to remove
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Remove the mapping of @room_alias to its room ID
  *
@@ -1101,9 +1056,9 @@ matrix_api_delete_room_alias(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (allow-none): user data to pass to the callback function
+ * @user_data: (closure) (allow-none): user data to pass to the callback function
  * @room_alias: the room alias
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the room ID corresponding to this room alias.
  */
@@ -1125,10 +1080,11 @@ matrix_api_get_room_id(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (allow-none): user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to add this alias to
  * @room_alias: the room alias to set
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Create a new mapping from room alias to room ID.
  */
@@ -1156,8 +1112,9 @@ matrix_api_create_room_alias(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (allow-none): user data to pass to the callback function
- * @error: a #GError
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
+ * @error: return location for a #GError, or %NULL
  *
  * List the public rooms on the server.
  */
@@ -1180,11 +1137,12 @@ matrix_api_list_public_rooms(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID where the user should be banned
  * @user_id: the user ID to ban
  * @reason: (allow-none): the reason of the ban
- * @error: (allow-none): a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Ban the specified user from the specified room. An optional reason
  * can be specified.
@@ -1209,9 +1167,10 @@ matrix_api_ban_user(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to forget
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Stop the requesting user remembering about a particular room.
  *
@@ -1241,14 +1200,15 @@ matrix_api_forget_room(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to which to invite the user
  * @address: the invitee's 3rd party identifier
  * @medium: the kind of address being passed in the address field,
  *          e.g. <code>email</code>
  * @id_server: the hostname+port of the identity server which should
  *             be used for 3rd party identifier lookups
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Invite a user to the room by a 3rd party identifier. They do not
  * start participating in the room until they actually join the room.
@@ -1281,10 +1241,11 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to invite the user to
  * @user_id: the user ID to invite
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Invite a user to a room.
  */
@@ -1307,9 +1268,10 @@ matrix_api_invite_user(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id_or_alias: the room ID or room alias to join to
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Join a room.
  */
@@ -1331,9 +1293,10 @@ matrix_api_join_room(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to kick the user from
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Leave a room
  */
@@ -1357,10 +1320,11 @@ matrix_api_leave_room(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @from_token: (allow-none): events will be listed from this token
  * @timeout: timeout of the request
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the event stream, optionally beginning from @from_token.
  */
@@ -1383,9 +1347,10 @@ matrix_api_event_stream(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @event_id: the event ID to get
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get a single event by event ID.
  */
@@ -1407,10 +1372,11 @@ matrix_api_get_event(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @limit: the maximum number of events to get
  * @archived: whether to include rooms that the user has left
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * perform an initial sync of events
  */
@@ -1433,12 +1399,13 @@ matrix_api_initial_sync(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room to get events from
  * @event_id: the event to get context around
  * @limit: the maximum number of events to get. If 0, a default value
  *         is used (10, according to the specification)
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Gets a number of events that happened just before and after the
  * specified event.
@@ -1465,9 +1432,10 @@ matrix_api_get_event_context(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room to get the data for
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get a copy of the current state and the most recent messages in a
  * room.
@@ -1490,9 +1458,10 @@ matrix_api_initial_sync_room(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room to get the member events for
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the list of members for a room.
  */
@@ -1514,7 +1483,8 @@ matrix_api_list_room_members(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room to get the events for
  * @from_token: the token to start returning events from. This token
  *              can be obtained by calling matrix_api_initial_sync()
@@ -1522,7 +1492,7 @@ matrix_api_list_room_members(MatrixAPI *api,
  * @direction: the direction of the returned events
  * @limit: the maximum number of events to return. If 0, a default
  *         value will be used (10, according to the specification
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get a list of message and state events for a room.
  */
@@ -1550,13 +1520,14 @@ matrix_api_list_room_messages(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room in which to send the event
  * @type: type of the receipt
  * @event_id: the event ID to acknowledge up to
  * @receipt: extra receipt information to attach. Note that the server
  *           will automatically attach the <code>ts</code> field
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Update the marker for the given receipt type to the event ID specified.
  */
@@ -1584,14 +1555,15 @@ matrix_api_send_event_receipt(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room from which to redact the event
  * @event_id: the event ID to acknowledge up to
  * @txn_id: the transaction ID for this event. Clients should generate
  *          a unique ID; it will be used by the server to ensure
  *          idempotency of requests
  * @reason: (allow-none): the reason for the event being redacted
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Strip all information out of an event which isn't critical to the
  * integrity of the server-side representation of the room. This
@@ -1625,14 +1597,15 @@ matrix_api_redact_event(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room to send the event to
  * @event_type: the type of event to send
  * @txn_id: the transaction ID for this event. Clients should generate
  *          a unique ID; it will be used by the server to ensure
  *          idempotency of requests
  * @content: the content of the event as a #JsonNode
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Send a message event to the room.
  */
@@ -1661,12 +1634,13 @@ matrix_api_send_message_event(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to get a state for
  * @event_type: (allow-none): the type of state to look up
  * @state_key: (allow-none): the key of the state to look up. If
  *             @event_type is %NULL, this parameter is ignored
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Look up the contents of a state event in a room. If both
  * @event_type and @state_key are empty, get a list of state events
@@ -1694,13 +1668,14 @@ matrix_api_get_room_state(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @room_id: the room ID to get a state for
  * @event_type: the type of state to look up
  * @state_key: (allow-none): the key of the state to look up. If
  *             @event_type is %NULL, this parameter is ignored
  * @content: the content of the state event
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Send a state event to the room. These events will be overwritten if
  * @room_id, @event_type and @state_key all match.
@@ -1734,14 +1709,15 @@ matrix_api_send_room_event(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user who has started to type
  * @room_id: the room in which the user is typing
  * @timeout: the length of time in milliseconds to mark this user as
  *           typing
  * @typing: whether the user is typing or not. If %FALSE, @timeout can
  *          be omitted (ie. set to 0)
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Tell the server the user is typing for the next @timeout
  * milliseconds. If @typing is %FALSE, it tells the server that the
@@ -1771,7 +1747,8 @@ matrix_api_notify_room_typing(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @filter_id: (allow-none): a filter ID created by the filter API
  *             (e.g. matrix_api_create_filter())
  * @filter: (allow-none): a definition on what events to fetch
@@ -1783,7 +1760,7 @@ matrix_api_notify_room_typing(MatrixAPI *api,
  * @set_presence: controls whether the client is automatically marked
  *                as online by polling this API.
  * @timeout: the maximum time to poll in milliseconds
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Synchronize the client's state with the latest state on the
  * server. Clients should use this API when they first log in to get
@@ -1821,13 +1798,14 @@ matrix_api_sync(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the ID of the user uploading the filter. An access token
  *           must be present (either specifying one with
  *           matrix_api_set_token() or requested from the server via
  *           matrix_api_register_account() or matrix_api_login().
  * @filter: the filter to upload
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Upload a new filter definition to the homeserver. It will return a
  * filter ID that may be used in future requests.
@@ -1854,10 +1832,11 @@ matrix_api_create_filter(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user ID to download a filter from
  * @filter_id: the filter ID to download
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Download a filter.
  */
@@ -1886,9 +1865,10 @@ matrix_api_download_filter(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user ID to look up
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get information about a particular user.
  */
@@ -1912,10 +1892,11 @@ matrix_api_whois(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @type: the login type to use
  * @content: (allow-none): parameters to pass for the login request
- * @error: (allow-none): a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Attempt to login with type @type. Implementations of this method
  * must set the token property on a successful login.
@@ -1939,9 +1920,10 @@ matrix_api_login(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @refresh_token: the refresh token that was issued by the server
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Exchanges a refresh token for a new access token. This is intended
  * to be used if the access token has expired.
@@ -1966,8 +1948,9 @@ matrix_api_token_refresh(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
- * @error: a #GError
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
+ * @error: return location for a #GError, or %NULL
  *
  * Get a list of the third party identifiers that a homeserver has
  * associated with the user's account.
@@ -1996,12 +1979,13 @@ matrix_api_get_3pids(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @bind_creds: whether the homeserver should also bind this third
  *              party identifier to the account's Matrix ID with the
  *              passed Identity Server.
  * @threepid_creds: the credentials to associate with the account
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Add contact information to the user's account.
  */
@@ -2024,9 +2008,10 @@ matrix_api_add_3pid(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @new_password: the new password for the account
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Change the active user's password.
  */
@@ -2048,9 +2033,10 @@ matrix_api_change_password(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose profile to get
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get a user's profile.
  */
@@ -2072,9 +2058,10 @@ matrix_api_get_profile(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose avatar URL to get
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the URL of the specified user's avatar.
  */
@@ -2096,10 +2083,11 @@ matrix_api_get_avatar_url(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose avatar URL to set
  * @avatar_url: the avatar URL info
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Set the user's avatar URL.
  */
@@ -2122,9 +2110,10 @@ matrix_api_set_avatar_url(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose display name to get
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Get the user's display name.
  */
@@ -2146,10 +2135,11 @@ matrix_api_get_display_name(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user whose display name to set
  * @display_name: the display name info
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Set the user's display name.
  */
@@ -2174,13 +2164,14 @@ matrix_api_set_display_name(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @bind_email: if %TRUE, the server binds the e-mail used for
  *              authentication to the Matrix ID with the ID server
  * @username: (allow-none): the local part of the desired Matrix
  *            ID. If omitted, the server will generate a local part
  * @password: (allow-none): the desired password for the account
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Attempt to register with type @login_type. Implementations of this
  * method must set the token property on a successful login.
@@ -2206,7 +2197,8 @@ matrix_api_register_account(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the user to set account data for. An access token must be
  *           present and be authorized to make requests for this user
  *           ID
@@ -2215,7 +2207,7 @@ matrix_api_register_account(MatrixAPI *api,
  * @type: the event type of the account data to set. Custom types
  *        should be namespaced to avoid clashes.
  * @content: the content of the account data
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Set some account data for the client. This config is only visible
  * to the user who set the account data. The config will be synced to
@@ -2244,12 +2236,13 @@ matrix_api_set_account_data(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the ID of the user to get the tags for. An access token
  *           must be set, and it must be authorised to make requests
  *           for this user ID
  * @room_id: the room to get tags for
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * List the tags set by a user on a room.
  */
@@ -2272,11 +2265,12 @@ matrix_api_get_room_tags(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the id of the user to remove a tag for
  * @room_id: the id of the room to remove the tag from
  * @tag: the tag to remove
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Remove a tag from the room.
  */
@@ -2302,12 +2296,13 @@ matrix_api_delete_room_tag(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
  * @user_id: the ID of the user to add the tag for
  * @room_id: the ID of the room to add the tag for
  * @tag: the tag to add
  * @content: extra data for the tag, e.g. ordering
- * @error: a #GError
+ * @error: return location for a #GError, or %NULL
  *
  * Add a tag to the room.
  */
@@ -2336,8 +2331,9 @@ matrix_api_add_room_tag(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async): the function to call when the request is
  *            finished
- * @user_data: user data to pass to the callback function
- * @error: a #GError
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
+ * @error: return location for a #GError, or %NULL
  *
  * Get credentials for the client to use when initiating calls.
  */
