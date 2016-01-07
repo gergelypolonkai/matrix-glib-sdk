@@ -88,6 +88,17 @@ matrix_api_filter_get_presence_filter
 matrix_api_filter_set_room_filter
 matrix_api_filter_get_room_filter
 
+<SUBSECTION>
+MatrixAPI3PidCredential
+matrix_api_3pid_credential_new
+matrix_api_3pid_credential_ref
+matrix_api_3pid_credential_unref
+matrix_api_3pid_credential_set_id_server
+matrix_api_3pid_credential_get_id_server
+matrix_api_3pid_credential_set_session_id
+matrix_api_3pid_credential_get_session_id
+matrix_api_3pid_credential_set_client_secret
+matrix_api_3pid_credential_get_client_secret
 
 <SUBSECTION Standard>
 MATRIX_TYPE_API_EVENT_FORMAT
@@ -98,6 +109,8 @@ MATRIX_TYPE_API_ROOM_FILTER
 matrix_api_room_filter_get_type
 MATRIX_TYPE_API_FILTER
 matrix_api_filter_get_type
+MATRIX_TYPE_API_3PID_CREDENTIAL
+matrix_api_3pid_credential_get_type
 </SECTION>
 
 <SECTION>
@@ -209,7 +222,6 @@ MATRIX_API_ERROR
 
 <SUBSECTION>
 MatrixAPIStateEvent
-MatrixAPI3PidCredential
 
 <SUBSECTION Standard>
 MatrixAPI

@@ -136,6 +136,24 @@ void matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
                                        MatrixAPIRoomFilter *room_filter);
 MatrixAPIRoomFilter *matrix_api_filter_get_room_filter(MatrixAPIFilter *filter);
 
+typedef struct _MatrixAPI3PidCredential MatrixAPI3PidCredential;
+
+GType matrix_api_3pid_credential_get_type(void);
+#define MATRIX_TYPE_API_3PID_CREDENTIAL (matrix_api_3pid_credential_get_type())
+
+MatrixAPI3PidCredential *matrix_api_3pid_credential_new(void);
+MatrixAPI3PidCredential *matrix_api_3pid_credential_ref(MatrixAPI3PidCredential *credential);
+void matrix_api_3pid_credential_unref(MatrixAPI3PidCredential *credential);
+void matrix_api_3pid_credential_set_id_server(MatrixAPI3PidCredential *credential,
+                                              const gchar *id_server);
+const gchar *matrix_api_3pid_credential_get_id_server(MatrixAPI3PidCredential *credential);
+void matrix_api_3pid_credential_set_session_id(MatrixAPI3PidCredential *credential,
+                                               const gchar *session_id);
+const gchar *matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *credential);
+void matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
+                                                  const gchar *client_secret);
+const gchar *matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential);
+
 G_END_DECLS
 
 #endif /* __MATRIX_API_TYPES_H__ */

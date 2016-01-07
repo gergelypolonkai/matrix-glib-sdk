@@ -1336,3 +1336,172 @@ matrix_api_filter_get_room_filter(MatrixAPIFilter *filter)
 {
     return filter->room;
 }
+
+/**
+ * MatrixAPI3PidCredential:
+ *
+ * An opaque structure to store credentials to use with Identity
+ * Server communication.
+ */
+struct _MatrixAPI3PidCredential {
+    gchar *id_server;
+    gchar *session_id;
+    gchar *client_secret;
+    guint refcount;
+};
+
+G_DEFINE_BOXED_TYPE(MatrixAPI3PidCredential, matrix_api_3pid_credential,
+                    (GBoxedCopyFunc)matrix_api_3pid_credential_ref,
+                    (GBoxedFreeFunc)matrix_api_3pid_credential_unref);
+
+/**
+ * matrix_api_3pid_credential_new:
+ *
+ * Create a new #MatrixAPI3PidCredential object with reference count
+ * of 1.
+ *
+ * Returns: (transfer full): a new #MatrixAPI3PidCredential
+ */
+MatrixAPI3PidCredential *
+matrix_api_3pid_credential_new(void)
+{
+    MatrixAPI3PidCredential *credential;
+
+    credential = g_new0(MatrixAPI3PidCredential, 1);
+    credential->refcount = 1;
+
+    return credential;
+}
+
+static void
+matrix_api_3pid_credential_free(MatrixAPI3PidCredential *credential)
+{
+    g_free(credential->id_server);
+    g_free(credential->session_id);
+    g_free(credential->client_secret);
+    g_free(credential);
+}
+
+/**
+ * matrix_api_3pid_credential_ref:
+ * @credential: a #MatrixAPI3PidCredential
+ *
+ * Increase reference count of @credential by one.
+ *
+ * Returns: (transfer none): the same #MatrixAPI3PidCredential
+ */
+MatrixAPI3PidCredential *
+matrix_api_3pid_credential_ref(MatrixAPI3PidCredential *credential)
+{
+    credential->refcount++;
+
+    return credential;
+}
+
+/**
+ * matrix_api_3pid_credential_unref:
+ * @credential: a #MatrixAPI3PidCredential
+ *
+ * Decrease reference count of @credential by one. If reference count
+ * reaches zero, @credential gets freed.
+ */
+void
+matrix_api_3pid_credential_unref(MatrixAPI3PidCredential *credential)
+{
+    if (--credential->refcount == 0) {
+        matrix_api_3pid_credential_free(credential);
+    }
+}
+
+/**
+ * matrix_api_3pid_credential_set_id_server:
+ * @credential: a #MatrixAPI3PidCredential
+ * @id_server: the Identity Server to use
+ *
+ * Set the Identity Server to use for this credential.
+ */
+void
+matrix_api_3pid_credential_set_id_server(MatrixAPI3PidCredential *credential,
+                                         const gchar *id_server)
+{
+    g_free(credential->id_server);
+    credential->id_server = g_strdup(id_server);
+}
+
+/**
+ * matrix_api_3pid_credential_get_id_server:
+ * @credential: a #MatrixAPI3PidCredential
+ *
+ * Get the Identity Server used for this credential.
+ *
+ * Returns: the Identity Server's name. The returned value is owned by
+ *          @credential and should not be freed nor modified
+ */
+const gchar *
+matrix_api_3pid_credential_get_id_server(MatrixAPI3PidCredential *credential)
+{
+    return credential->id_server;
+}
+
+/**
+ * matrix_api_3pid_credential_set_session_id:
+ * @credential: a #MatrixAPI3PidCredential
+ * @session_id: the session identifier given by the Identity Server
+ *
+ * Set the session identifier got from the Identity Server.
+ */
+void
+matrix_api_3pid_credential_set_session_id(MatrixAPI3PidCredential *credential,
+                                          const gchar *session_id)
+{
+    g_free(credential->session_id);
+    credential->session_id = g_strdup(session_id);
+}
+
+/**
+ * matrix_api_3pid_credential_get_session_id:
+ * @credential: a #MatrixAPI3PidCredential
+ *
+ * Get the session identifier for this credential.
+ *
+ * Returns: the session identifier. The returned value is owned by
+ *          @credential and should not be freed nor modified.
+ */
+const gchar *
+matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *credential)
+{
+    return credential->session_id;
+}
+
+/**
+ * matrix_api_3pid_credential_set_client_secret:
+ * @credential: a #MatrixAPI3PidCredential
+ * @client_secret: the client secret used in the session with the
+ *                 Identity Server
+ *
+ * Set the client secret that was used in the session with the
+ * Identity Server.
+ */
+void
+matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
+                                             const gchar *client_secret)
+{
+    g_free(credential->client_secret);
+    credential->client_secret = g_strdup(client_secret);
+}
+
+/**
+ * matrix_api_3pid_credential_get_client_secret:
+ * @credential: a #MatrixAPI3PidCredential
+ *
+ * Get the client secret that was used in the session with the
+ * Identity Server.
+ *
+ * Returns: the client secret. The returned value is owned by
+ *          @credential and should not be freed nor modified.
+ */
+const gchar *
+matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential)
+{
+    return credential->client_secret;
+}

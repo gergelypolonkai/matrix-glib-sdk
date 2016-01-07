@@ -283,17 +283,6 @@
  */
 
 /**
- * MatrixAPI3PidCredential:
- * @client_secret: the client secret used in the session with the
- *                 Identity Server
- * @id_server: the Identity Server to use
- * @session_id: the session identifier given by the Identity Server
- *
- * Structure to store credentials to use with Identity Server
- * communication.
- */
-
-/**
  * MatrixAPIStateEvent:
  * @type: the event type
  * @state_key: the key of the state event
