@@ -22,6 +22,8 @@
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 
+G_BEGIN_DECLS
+
 typedef struct _MatrixAPIFilterRules MatrixAPIFilterRules;
 
 GType matrix_api_filter_rules_get_type(void);
@@ -78,5 +80,31 @@ const GList *matrix_api_filter_rules_get_excluded_types(MatrixAPIFilterRules *ru
 JsonNode *matrix_api_filter_rules_get_json_node(MatrixAPIFilterRules *rules);
 gchar *matrix_api_filter_rules_get_json_data(MatrixAPIFilterRules *rules,
                                              gsize *datalen);
+
+typedef struct _MatrixAPIRoomFilter MatrixAPIRoomFilter;
+
+GType matrix_api_room_filter_get_type(void);
+#define MATRIX_TYPE_API_ROOM_FILTER (matrix_api_room_filter_get_type())
+
+MatrixAPIRoomFilter *matrix_api_room_filter_new(void);
+MatrixAPIRoomFilter *matrix_api_room_filter_ref(MatrixAPIRoomFilter *filter);
+void matrix_api_room_filter_unref(MatrixAPIRoomFilter *filter);
+void matrix_api_room_filter_set_include_leave(MatrixAPIRoomFilter *filter,
+                                              gboolean include_leave);
+gboolean matrix_api_room_filter_get_include_leave(MatrixAPIRoomFilter *filter);
+void matrix_api_room_filter_set_ephemeral(MatrixAPIRoomFilter *filter,
+                                          MatrixAPIFilterRules *rules);
+MatrixAPIFilterRules *matrix_api_room_filter_get_ephemeral(MatrixAPIRoomFilter *filter);
+void matrix_api_room_filter_set_state(MatrixAPIRoomFilter *filter,
+                                      MatrixAPIFilterRules *rules);
+MatrixAPIFilterRules *matrix_api_room_filter_get_state(MatrixAPIRoomFilter *filter);
+void matrix_api_room_filter_set_timeline(MatrixAPIRoomFilter *filter,
+                                         MatrixAPIFilterRules *rules);
+MatrixAPIFilterRules *matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter);
+JsonNode *matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter);
+gchar *matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
+                                            gsize *datalen);
+
+G_END_DECLS
 
 #endif /* __MATRIX_API_TYPES_H__ */

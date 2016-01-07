@@ -760,3 +760,299 @@ matrix_api_filter_rules_get_json_data(MatrixAPIFilterRules *rules,
 
     return data;
 }
+
+/**
+ * MatrixAPIRoomFilter:
+ *
+ * An opaque structure to hold room filters.
+ */
+struct _MatrixAPIRoomFilter {
+    gboolean include_leave;
+    MatrixAPIFilterRules *ephemeral;
+    MatrixAPIFilterRules *state;
+    MatrixAPIFilterRules *timeline;
+    guint refcount;
+};
+
+G_DEFINE_BOXED_TYPE(MatrixAPIRoomFilter, matrix_api_room_filter,
+                    (GBoxedCopyFunc)matrix_api_room_filter_ref,
+                    (GBoxedFreeFunc)matrix_api_room_filter_unref);
+
+/**
+ * matrix_api_room_filter_new:
+ *
+ * Create a new #MatrixAPIRoomFilter object with reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixAPIRoomFilter
+ */
+MatrixAPIRoomFilter *
+matrix_api_room_filter_new(void)
+{
+    MatrixAPIRoomFilter *filter;
+
+    filter = g_new0(MatrixAPIRoomFilter, 1);
+    filter->refcount = 1;
+
+    return filter;
+}
+
+static void
+matrix_api_room_filter_free(MatrixAPIRoomFilter *filter)
+{
+    if (filter->ephemeral) {
+        matrix_api_filter_rules_unref(filter->ephemeral);
+    }
+
+    if (filter->state) {
+        matrix_api_filter_rules_unref(filter->state);
+    }
+
+    if (filter->timeline) {
+        matrix_api_filter_rules_unref(filter->timeline);
+    }
+
+    g_free(filter);
+}
+
+/**
+ * matrix_api_room_filter_ref:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Increase reference count of @filter by one.
+ *
+ * Returns: (transfer none): the same #MatrixAPIRoomFilter
+ */
+MatrixAPIRoomFilter *
+matrix_api_room_filter_ref(MatrixAPIRoomFilter *filter)
+{
+    filter->refcount++;
+
+    return filter;
+}
+
+/**
+ * matrix_api_room_filter_unref:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Decrease reference count of @filter by one. If reference count
+ * reaches zero, @filter is freed.
+ */
+void
+matrix_api_room_filter_unref(MatrixAPIRoomFilter *filter)
+{
+    if (--filter->refcount == 0) {
+        matrix_api_room_filter_free(filter);
+    }
+}
+
+/**
+ * matrix_api_room_filter_set_include_leave:
+ * @filter: a #MatrixAPIRoomFilter
+ * @include_leave: %TRUE if events from left rooms should be included
+ *
+ * Sets if events for rooms that the user has left should be included
+ * in the filtered event list.
+ */
+void
+matrix_api_room_filter_set_include_leave(MatrixAPIRoomFilter *filter,
+                                         gboolean include_leave)
+{
+    filter->include_leave = include_leave;
+}
+
+/**
+ * matrix_api_room_filter_get_include_leave:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * If %TRUE, events from rooms that the user has left will be included
+ * in the filtered event list.
+ *
+ * Returns: the value of <code>include_leave</code>
+ */
+gboolean
+matrix_api_room_filter_get_include_leave(MatrixAPIRoomFilter *filter)
+{
+    return filter->include_leave;
+}
+
+/**
+ * matrix_api_room_filter_set_ephemeral:
+ * @filter: a #MatrixAPIRoomFilter
+ * @rules: (transfer none): filtering rules for ephemeral events
+ *
+ * Set filtering rules for ephemeral events, i.e. events that are not
+ * recorded in the room history (typing notifications, receipts, etc.)
+ * @filter gets a reference on @rules, so the caller may unref it.
+ */
+void
+matrix_api_room_filter_set_ephemeral(MatrixAPIRoomFilter *filter,
+                                     MatrixAPIFilterRules *rules)
+{
+    if (filter->ephemeral) {
+        matrix_api_filter_rules_unref(filter->ephemeral);
+    }
+
+    filter->ephemeral = matrix_api_filter_rules_ref(rules);
+}
+
+/**
+ * matrix_api_room_filter_get_ephemeral:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Gets the filtering rules for ephemeral events. See
+ * matrix_api_room_filter_set_ephemeral() for details.
+ *
+ * Returns: (transfer none): the filtering rules for ephemeral events.
+ */
+MatrixAPIFilterRules *
+matrix_api_room_filter_get_ephemeral(MatrixAPIRoomFilter *filter)
+{
+    return filter->ephemeral;
+}
+
+/**
+ * matrix_api_room_filter_set_state:
+ * @filter: a #MatrixAPIRoomFilter
+ * @rules: (transfer none): filtering rules for state events
+ *
+ * Sets filtering rules for state events. @filter obtains a reference
+ * on @rules, so the caller may unref it safely.
+ */
+void
+matrix_api_room_filter_set_state(MatrixAPIRoomFilter *filter,
+                                 MatrixAPIFilterRules *rules)
+{
+    if (filter->state) {
+        matrix_api_filter_rules_unref(filter->state);
+    }
+
+    filter->state = matrix_api_filter_rules_ref(rules);
+}
+
+/**
+ * matrix_api_room_filter_get_state:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Gets the filtering rules for state events.
+ *
+ * Returns: (transfer none): the filtering rules for state events
+ */
+MatrixAPIFilterRules *
+matrix_api_room_filter_get_state(MatrixAPIRoomFilter *filter)
+{
+    return filter->state;
+}
+
+/**
+ * matrix_api_room_filter_set_timeline:
+ * @filter: a #MatrixAPIRoomFilter
+ * @rules: (transfer none): filtering rules for timeline events
+ *         (messages and state events from rooms)
+ *
+ * Set filtering rules for timeline events.
+ */
+void
+matrix_api_room_filter_set_timeline(MatrixAPIRoomFilter *filter,
+                                    MatrixAPIFilterRules *rules)
+{
+    if (filter->timeline) {
+        matrix_api_filter_rules_unref(filter->timeline);
+    }
+
+    filter->timeline = matrix_api_filter_rules_ref(rules);
+}
+
+/**
+ * matrix_api_room_filter_get_timeline:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Gets filtering rules for timeline events (see
+ * matrix_api_room_filter_set_timeline() for details.
+ *
+ * Returns: (transfer none): the filtering rules for timeline events
+ */
+MatrixAPIFilterRules *
+matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter)
+{
+    return filter->timeline;
+}
+
+/**
+ * matrix_api_room_filter_get_json_node:
+ * @filter: a #MatrixAPIRoomFilter
+ *
+ * Gets the #JsonNode representation of the filtering ruleset.
+ *
+ * Returns: (transfer full): the JSON representation of the filtering
+ *          ruleset as a #JsonNode
+ */
+JsonNode *
+matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter)
+{
+    JsonBuilder *builder;
+    JsonNode *node;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "include_leave");
+    json_builder_add_boolean_value(builder, filter->include_leave);
+
+    if (filter->ephemeral) {
+        json_builder_set_member_name(builder, "ephemeral");
+        json_builder_add_value(builder,
+                               matrix_api_filter_rules_get_json_node(
+                                       filter->ephemeral));
+    }
+
+    if (filter->state) {
+        json_builder_set_member_name(builder, "state");
+        json_builder_add_value(builder,
+                               matrix_api_filter_rules_get_json_node(
+                                       filter->state));
+    }
+
+    if (filter->timeline) {
+        json_builder_set_member_name(builder, "timeline");
+        json_builder_add_value(builder,
+                               matrix_api_filter_rules_get_json_node(
+                                       filter->timeline));
+    }
+
+    json_builder_end_object(builder);
+
+    node = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return node;
+}
+
+/**
+ * matrix_api_room_filter_get_json_data:
+ * @filter: a #MatrixAPIRoomFilter
+ * @datalen: (out) (allow-none): storage for the length of the JSON
+ *           data, or %NULL
+ *
+ * Get the string representation of the filtering ruleset as a JSON
+ * object.
+ *
+ * Returns: the JSON object representation of the filtering ruleset
+ *          data as a string
+ */
+gchar *
+matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
+                                     gsize *datalen)
+{
+    JsonGenerator *generator;
+    JsonNode *node = matrix_api_room_filter_get_json_node(filter);
+    gchar *data;
+
+    generator = json_generator_new();
+    json_generator_set_root(generator, node);
+    json_node_free(node);
+
+    data = json_generator_to_data(generator, datalen);
+    g_object_unref(generator);
+
+    return data;
+}

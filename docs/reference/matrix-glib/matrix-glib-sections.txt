@@ -18,6 +18,8 @@ matrix_client_get_type
 <SECTION>
 <FILE>matrix-api-types</FILE>
 <TITLE>Fundamental types for MatrixAPI</TITLE>
+
+<SUBSECTION>
 MatrixAPIFilterRules
 matrix_api_filter_rules_new
 matrix_api_filter_rules_ref
@@ -51,9 +53,27 @@ matrix_api_filter_rules_get_excluded_types
 matrix_api_filter_rules_get_json_node
 matrix_api_filter_rules_get_json_data
 
+<SUBSECTION>
+MatrixAPIRoomFilter
+matrix_api_room_filter_new
+matrix_api_room_filter_ref
+matrix_api_room_filter_unref
+matrix_api_room_filter_set_include_leave
+matrix_api_room_filter_get_include_leave
+matrix_api_room_filter_set_ephemeral
+matrix_api_room_filter_get_ephemeral
+matrix_api_room_filter_set_state
+matrix_api_room_filter_get_state
+matrix_api_room_filter_set_timeline
+matrix_api_room_filter_get_timeline
+matrix_api_room_filter_get_json_node
+matrix_api_room_filter_get_json_data
+
 <SUBSECTION Standard>
 MATRIX_TYPE_API_FILTER_RULES
 matrix_api_filter_rules_get_type
+MATRIX_TYPE_API_ROOM_FILTER
+matrix_api_room_filter_get_type
 </SECTION>
 
 <SECTION>
@@ -166,7 +186,6 @@ MATRIX_API_ERROR
 <SUBSECTION>
 MatrixAPIEventFormat
 MatrixAPIFilter
-MatrixAPIRoomFilter
 MatrixAPIStateEvent
 MatrixAPI3PidCredential
 

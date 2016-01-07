@@ -107,13 +107,6 @@ typedef enum {
     MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
 } MatrixAPIPusherConditionKind;
 
-typedef struct _MatrixAPIRoomFilter {
-    MatrixAPIFilterRules *ephemeral;
-    gboolean include_leave;
-    MatrixAPIFilterRules *state;
-    MatrixAPIFilterRules *timeline;
-} MatrixAPIRoomFilter;
-
 typedef struct _MatrixAPIFilter {
     GList *event_fields;
     MatrixAPIEventFormat event_format;

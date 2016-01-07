@@ -308,17 +308,6 @@
  */
 
 /**
- * MatrixAPIRoomFilter:
- * @ephemeral: the events that aren't recorded in the room history,
- *             e.g. typing and receipts, to include for rooms
- * @include_leave: include rooms that the user has left in the sync
- * @state: the state events to include for rooms
- * @timeline: the message and state update events to include for rooms
- *
- * A struct to hold a room event filter
- */
-
-/**
  * MatrixAPIFilter:
  * @event_fields: (element-type GString): list of event fields to
  *                include. If %NULL then all fields are included. The
