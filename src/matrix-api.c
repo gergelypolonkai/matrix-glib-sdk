@@ -238,20 +238,6 @@
  */
 
 /**
- * MatrixAPIEventFormat:
- * @MATRIX_API_EVENT_FORMAT_DEFAULT: event format will be omitted from
- *                                   the filter, so the server will
- *                                   use its default (usually
- *                                   @MATRIX_API_EVENT_FORMAT_FEDERATION)
- * @MATRIX_API_EVENT_FORMAT_CLIENT: return the events in a format
- *                                  suitable for clients
- * @MATRIX_API_EVENT_FORMAT_FEDERATION: return the raw event as
- *                                      receieved over federation
- *
- * Event format received when synchronizing.
- */
-
-/**
  * MatrixAPIPusher:
  * @app_display_name: a string that will allow the user to identify
  *                    what application owns the pusher

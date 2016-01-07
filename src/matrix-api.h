@@ -83,12 +83,6 @@ typedef enum {
 } MatrixAPIEventDirection;
 
 typedef enum {
-    MATRIX_API_EVENT_FORMAT_DEFAULT,
-    MATRIX_API_EVENT_FORMAT_CLIENT,
-    MATRIX_API_EVENT_FORMAT_FEDERATION
-} MatrixAPIEventFormat;
-
-typedef enum {
     MATRIX_API_RECEIPT_TYPE_READ
 } MatrixAPIReceiptType;
 

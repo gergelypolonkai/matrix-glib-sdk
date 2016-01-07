@@ -15,7 +15,10 @@ INST_H_BUILT_FILES = \
 	matrix-enumtypes.h \
 	$(NULL)
 
-matrix_enum_headers = matrix-api.h
+matrix_enum_headers = \
+	matrix-api.h \
+	matrix-api-types.h \
+	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
 	matrix-client.c \

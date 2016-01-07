@@ -20,6 +20,9 @@ matrix_client_get_type
 <TITLE>Fundamental types for MatrixAPI</TITLE>
 
 <SUBSECTION>
+MatrixAPIEventFormat
+
+<SUBSECTION>
 MatrixAPIFilterRules
 matrix_api_filter_rules_new
 matrix_api_filter_rules_ref
@@ -70,6 +73,8 @@ matrix_api_room_filter_get_json_node
 matrix_api_room_filter_get_json_data
 
 <SUBSECTION Standard>
+MATRIX_TYPE_API_EVENT_FORMAT
+matrix_api_event_format_get_type
 MATRIX_TYPE_API_FILTER_RULES
 matrix_api_filter_rules_get_type
 MATRIX_TYPE_API_ROOM_FILTER
@@ -184,7 +189,6 @@ MatrixAPIError
 MATRIX_API_ERROR
 
 <SUBSECTION>
-MatrixAPIEventFormat
 MatrixAPIFilter
 MatrixAPIStateEvent
 MatrixAPI3PidCredential
@@ -202,8 +206,6 @@ MatrixApiPrivate
 matrix_api_get_type
 MATRIX_TYPE_API_EVENT_DIRECTION
 matrix_api_event_direction_get_type
-MATRIX_TYPE_API_EVENT_FORMAT
-matrix_api_event_format_get_type
 MATRIX_TYPE_API_PRESENCE
 matrix_api_presence_get_type
 MATRIX_TYPE_API_PUSHER_CONDITION_KIND

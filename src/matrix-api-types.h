@@ -24,6 +24,12 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+    MATRIX_API_EVENT_FORMAT_DEFAULT,
+    MATRIX_API_EVENT_FORMAT_CLIENT,
+    MATRIX_API_EVENT_FORMAT_FEDERATION
+} MatrixAPIEventFormat;
+
 typedef struct _MatrixAPIFilterRules MatrixAPIFilterRules;
 
 GType matrix_api_filter_rules_get_type(void);

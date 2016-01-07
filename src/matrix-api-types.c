@@ -29,6 +29,20 @@
  */
 
 /**
+ * MatrixAPIEventFormat:
+ * @MATRIX_API_EVENT_FORMAT_DEFAULT: event format will be omitted from
+ *                                   the filter, so the server will
+ *                                   use its default (usually
+ *                                   @MATRIX_API_EVENT_FORMAT_FEDERATION)
+ * @MATRIX_API_EVENT_FORMAT_CLIENT: return the events in a format
+ *                                  suitable for clients
+ * @MATRIX_API_EVENT_FORMAT_FEDERATION: return the raw event as
+ *                                      receieved over federation
+ *
+ * Event format received when synchronizing.
+ */
+
+/**
  * MatrixAPIFilterRules: (ref-func matrix_api_filter_rules_ref) (unref-func matrix_api_filter_rules_unref)
  *
  * An opaque structure to hold filter rules that can be used to filter
@@ -757,6 +771,7 @@ matrix_api_filter_rules_get_json_data(MatrixAPIFilterRules *rules,
     json_node_free(node);
 
     data = json_generator_to_data(generator, datalen);
+    g_object_unref(generator);
 
     return data;
 }
