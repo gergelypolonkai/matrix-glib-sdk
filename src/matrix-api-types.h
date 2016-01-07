@@ -111,6 +111,31 @@ JsonNode *matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter);
 gchar *matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
                                             gsize *datalen);
 
+typedef struct _MatrixAPIFilter MatrixAPIFilter;
+
+GType matrix_api_filter_get_type(void);
+#define MATRIX_TYPE_API_FILTER (matrix_api_filter_get_type())
+
+MatrixAPIFilter *matrix_api_filter_new(void);
+MatrixAPIFilter *matrix_api_filter_ref(MatrixAPIFilter *filter);
+void matrix_api_filter_unref(MatrixAPIFilter *filter);
+void matrix_api_filter_set_event_fields(MatrixAPIFilter *filter,
+                                        GList *event_fields);
+void matrix_api_filter_add_event_field(MatrixAPIFilter *filter,
+                                       const gchar *event_field);
+void matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
+                                          const gchar *event_field);
+const GList *matrix_api_filter_get_event_fields(MatrixAPIFilter *filter);
+void matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
+                                        MatrixAPIEventFormat event_format);
+MatrixAPIEventFormat matrix_api_filter_get_event_format(MatrixAPIFilter *filter);
+void matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
+                                           MatrixAPIFilterRules *presence_filter);
+MatrixAPIFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter);
+void matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
+                                       MatrixAPIRoomFilter *room_filter);
+MatrixAPIRoomFilter *matrix_api_filter_get_room_filter(MatrixAPIFilter *filter);
+
 G_END_DECLS
 
 #endif /* __MATRIX_API_TYPES_H__ */

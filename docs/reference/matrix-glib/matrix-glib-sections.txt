@@ -72,6 +72,23 @@ matrix_api_room_filter_get_timeline
 matrix_api_room_filter_get_json_node
 matrix_api_room_filter_get_json_data
 
+<SUBSECTION>
+MatrixAPIFilter
+matrix_api_filter_new
+matrix_api_filter_ref
+matrix_api_filter_unref
+matrix_api_filter_set_event_fields
+matrix_api_filter_add_event_field
+matrix_api_filter_delete_event_field
+matrix_api_filter_get_event_fields
+matrix_api_filter_set_event_format
+matrix_api_filter_get_event_format
+matrix_api_filter_set_presence_filter
+matrix_api_filter_get_presence_filter
+matrix_api_filter_set_room_filter
+matrix_api_filter_get_room_filter
+
+
 <SUBSECTION Standard>
 MATRIX_TYPE_API_EVENT_FORMAT
 matrix_api_event_format_get_type
@@ -79,6 +96,8 @@ MATRIX_TYPE_API_FILTER_RULES
 matrix_api_filter_rules_get_type
 MATRIX_TYPE_API_ROOM_FILTER
 matrix_api_room_filter_get_type
+MATRIX_TYPE_API_FILTER
+matrix_api_filter_get_type
 </SECTION>
 
 <SECTION>
@@ -189,7 +208,6 @@ MatrixAPIError
 MATRIX_API_ERROR
 
 <SUBSECTION>
-MatrixAPIFilter
 MatrixAPIStateEvent
 MatrixAPI3PidCredential
 

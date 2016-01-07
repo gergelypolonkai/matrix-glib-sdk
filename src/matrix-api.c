@@ -294,30 +294,6 @@
  */
 
 /**
- * MatrixAPIFilter:
- * @event_fields: (element-type GString): list of event fields to
- *                include. If %NULL then all fields are included. The
- *                entries may include <code>.</code> charaters to
- *                indicate sub-fields. So
- *                <code>['content.body']</code> will include the
- *                <code>body</code> field of the <code>content</code>
- *                object. A literal <code>.</code> character in a
- *                field name may be escaped using a <code>\</code>. A
- *                server may include more fields than were requested
- * @event_format: the format to use for
- *                events. %MATRIX_API_EVENT_FORMAT_CLIENT will return
- *                the events in a format suitable for
- *                clients. %MATRIX_API_EVENT_FORMAT_FEDERATION will
- *                return the raw event as receieved over
- *                federation. The default is
- *                %MATRIX_API_EVENT_FORMAT_CLIENT
- * @presence: the presence updates to include
- * @room: room filters
- *
- * A struct to define an event filter.
- */
-
-/**
  * MatrixAPIStateEvent:
  * @type: the event type
  * @state_key: the key of the state event

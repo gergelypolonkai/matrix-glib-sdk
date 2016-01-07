@@ -1071,3 +1071,268 @@ matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
 
     return data;
 }
+
+/**
+ * MatrixAPIFilter:
+ *
+ * An opaque structure to hold an event filter.
+ */
+struct _MatrixAPIFilter {
+    GList *event_fields;
+    MatrixAPIEventFormat event_format;
+    MatrixAPIFilterRules *presence;
+    MatrixAPIRoomFilter *room;
+    guint refcount;
+};
+
+G_DEFINE_BOXED_TYPE(MatrixAPIFilter, matrix_api_filter,
+                    (GBoxedCopyFunc)matrix_api_filter_ref,
+                    (GBoxedFreeFunc)matrix_api_filter_unref);
+
+/**
+ * matrix_api_filter_new:
+ *
+ * Create a new #MatrixAPIFilter object with reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixAPIFilter
+ */
+MatrixAPIFilter *
+matrix_api_filter_new(void)
+{
+    MatrixAPIFilter *filter;
+
+    filter = g_new0(MatrixAPIFilter, 1);
+    filter->refcount = 1;
+
+    return filter;
+}
+
+static void
+matrix_api_filter_free(MatrixAPIFilter *filter)
+{
+    g_list_free_full(filter->event_fields, g_free);
+
+    if (filter->presence) {
+        matrix_api_filter_rules_unref(filter->presence);
+    }
+
+    if (filter->room) {
+        matrix_api_room_filter_unref(filter->room);
+    }
+
+    g_free(filter);
+}
+
+/**
+ * matrix_api_filter_ref:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Increase reference count of @filter by one.
+ *
+ * Returns: (transfer none): the same #MatrixAPIFilter
+ */
+MatrixAPIFilter *
+matrix_api_filter_ref(MatrixAPIFilter *filter)
+{
+    filter->refcount++;
+
+    return filter;
+}
+
+/**
+ * matrix_api_filter_unref:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Decrease reference count of @filter by one. If reference count
+ * reaches zero, @filter is freed.
+ */
+void
+matrix_api_filter_unref(MatrixAPIFilter *filter)
+{
+    if (--filter->refcount == 0) {
+        matrix_api_filter_free(filter);
+    }
+}
+
+/**
+ * matrix_api_filter_set_event_fields:
+ * @filter: a #MatrixAPIFilter
+ * @event_fields: (in) (element-type utf8) (transfer full) (allow-none):
+ *                a list of event fields to include. If %NULL then all
+ *                fields are included. The entries may include
+ *                <code>.</code> charaters to indicate sub-fields. So
+ *                <code>['content.body']</code> will include the
+ *                <code>body</code> field of the <code>content</code>
+ *                object. A literal <code>.</code> character in a
+ *                field name may be escaped using a <code>\</code>. A
+ *                server may include more fields than were requested
+ *
+ * Set the event fields to include in the filtered events.
+ */
+void
+matrix_api_filter_set_event_fields(MatrixAPIFilter *filter,
+                                   GList *event_fields)
+{
+    g_list_free_full(filter->event_fields, g_free);
+    filter->event_fields = event_fields;
+}
+
+/**
+ * matrix_api_filter_add_event_field:
+ * @filter: a #MatrixAPIFilter
+ * @event_field: an event field to add to the list. See
+ *               matrix_api_filter_set_event_fields() for details
+ *
+ * Add an event field to the list of fields that will be present in
+ * the filtered events.
+ */
+void
+matrix_api_filter_add_event_field(MatrixAPIFilter *filter,
+                                  const gchar *event_field)
+{
+    g_return_if_fail(event_field != NULL);
+
+    if (!g_list_find_custom(filter->event_fields, event_field,
+                            (GCompareFunc)g_strcmp0)) {
+        filter->event_fields = g_list_prepend(filter->event_fields,
+                                              g_strdup(event_field));
+    }
+}
+
+/**
+ * matrix_api_filter_delete_event_field:
+ * @filter: a #MatrixAPIFilter
+ * @event_field: an event field to remove from the list
+ *
+ * Remove @event_field from the list of fields that will be present in
+ * the filtered events.
+ */
+void
+matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
+                                     const gchar *event_field)
+{
+    GList *event_field_element;
+
+    g_return_if_fail(event_field != NULL);
+
+    while (event_field_element = g_list_find_custom(filter->event_fields,
+                                                    event_field,
+                                                    (GCompareFunc)g_strcmp0)) {
+        filter->event_fields = g_list_remove_link(filter->event_fields,
+                                                  event_field_element);
+        g_list_free_full(event_field_element, g_free);
+    }
+}
+
+/**
+ * matrix_api_filter_get_event_fields:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Get the list of event fields that will be present in the filtered
+ * events.
+ *
+ * Returns: (transfer none) (element-type utf8) (allow-none): the list
+ *          of event fields. The returned value is owned by @filter
+ *          and should not be freed nor modified.
+ */
+const GList *
+matrix_api_filter_get_event_fields(MatrixAPIFilter *filter)
+{
+    return filter->event_fields;
+}
+
+/**
+ * matrix_api_filter_set_event_format:
+ * @filter: a #MatrixAPIFilter
+ * @event_format: the desired event format for filtered events
+ *
+ * Set the desired event format for the filtered events (e.g. for
+ * matrix_api_sync())
+ */
+void
+matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
+                                   MatrixAPIEventFormat event_format)
+{
+    filter->event_format = event_format;
+}
+
+/**
+ * matrix_api_filter_get_event_format:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Get the desired event format set in @filter.
+ *
+ * Returns: the event format currently set
+ */
+MatrixAPIEventFormat
+matrix_api_filter_get_event_format(MatrixAPIFilter *filter)
+{
+    return filter->event_format;
+}
+
+/**
+ * matrix_api_filter_set_presence_filter:
+ * @filter: a #MatrixAPIFilter
+ * @presence_filter: (transfer none): the desired filters to use
+ *
+ * Set a filtering ruleset for presence events.
+ */
+void
+matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
+                                      MatrixAPIFilterRules *presence_filter)
+{
+    if (filter->presence) {
+        matrix_api_filter_rules_unref(filter->presence);
+    }
+
+    filter->presence = matrix_api_filter_rules_ref(presence_filter);
+}
+
+/**
+ * matrix_api_filter_get_presence_filter:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Get the current filtering ruleset for presence events.
+ *
+ * Returns: (transfer none): the current ruleset. The returned value
+ *          is owned by @filter; if the callee wants to use it
+ *          separately, it should create a reference for it
+ */
+MatrixAPIFilterRules *
+matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter)
+{
+    return filter->presence;
+}
+
+/**
+ * matrix_api_filter_set_room_filter:
+ * @filter: a #MatrixAPIFilter
+ * @room_filter: the desired room filters to use in @filter
+ *
+ * Set a new filtering ruleset for room events in @filter.
+ */
+void
+matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
+                                  MatrixAPIRoomFilter *room_filter)
+{
+    if (filter->room) {
+        matrix_api_room_filter_unref(filter->room);
+    }
+
+    filter->room = matrix_api_room_filter_ref(room_filter);
+}
+
+/**
+ * matrix_api_filter_get_room_filter:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Get the filtering ruleset for room events in @filter.
+ *
+ * Returns: (transfer none): the current filtering ruleset for room
+ * events
+ */
+MatrixAPIRoomFilter *
+matrix_api_filter_get_room_filter(MatrixAPIFilter *filter)
+{
+    return filter->room;
+}
