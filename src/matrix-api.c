@@ -215,51 +215,6 @@
  */
 
 /**
- * MatrixAPIPusher:
- * @app_display_name: a string that will allow the user to identify
- *                    what application owns the pusher
- * @app_id: a reverse DNS style identifier for the application. It is
- *          recommended that this ends with the platform, such that
- *          different platform versions get different app
- *          identifiers. Maximum length is 64 characters, which is
- *          currently not enforced by this SDK
- * @append: if %TRUE, the homeserver should add another pusher with
- *          the given push key and app ID in addition to any others
- *          with different user IDs. Otherwise, the homeserver must
- *          remove any other pushers with the same App ID and pushkey
- *          for different users
- * @device_display_name: a string that will allow the user to identify
- *                       what device owns this pusher
- * @kind: the kind of pusher to configure. <code>http</code> makes a
- *        pusher that sends HTTP pokes. %NULL deletes the pusher.
- * @lang: the preferred language for receiving notifications,
- *        e.g. <code>en</code> or <code>en-US</code>
- * @profile_tag: a string that determines what set of device rules
- *               will be matched when evaluating push rules for this
- *               pusher. It is an arbitrary string. Multiple devices
- *               may use the same <code>profile_tag</code>. It is
- *               advised that when an app's data is copied or restored
- *               to a different device, this value remain the
- *               same. Client apps should offer ways to change the
- *               profile_tag, optionally copying rules from the old
- *               profile tag. Maximum length is 32 bytes, which is
- *               currently not enforced by this SDK
- * @pushkey: a unique identifier for this pusher. The value you should
- *           use for this is the routing or destination address
- *           information for the notification, for example, the APNS
- *           token for APNS or the Registration ID for GCM. If your
- *           notification client has no such concept, use any unique
- *           identifier. Maximum length is 512 bytes, which is
- *           currently not enforced by this SDK
- * @data: A dictionary of information for the pusher implementation
- *        itself. For example, if kind is <code>http</code>, this
- *        should contain <code>url</code> which is the URL to use to
- *        send notifications to.
- *
- * Ruleset for creating pushers.
- */
-
-/**
  * MatrixAPIStateEvent:
  * @type: the event type
  * @state_key: the key of the state event

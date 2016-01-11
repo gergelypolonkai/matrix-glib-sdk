@@ -88,18 +88,6 @@ typedef enum {
     MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
 } MatrixAPIPusherConditionKind;
 
-typedef struct _MatrixAPIPusher {
-    gchar *app_display_name;
-    gchar *app_id;
-    gboolean append;
-    gchar *device_display_name;
-    gchar *kind;
-    gchar *lang;
-    gchar *profile_tag;
-    gchar *pushkey;
-    JsonNode *data;
-} MatrixAPIPusher;
-
 typedef struct _MatrixAPIStateEvent {
     gchar *type;
     gchar *state_key;

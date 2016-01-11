@@ -104,6 +104,33 @@ matrix_api_3pid_credential_get_session_id
 matrix_api_3pid_credential_set_client_secret
 matrix_api_3pid_credential_get_client_secret
 
+<SUBSECTION>
+MatrixAPIPusher
+matrix_api_pusher_new
+matrix_api_pusher_ref
+matrix_api_pusher_unref
+matrix_api_pusher_set_device_display_name
+matrix_api_pusher_get_device_display_name
+matrix_api_pusher_set_app_display_name
+matrix_api_pusher_get_app_display_name
+matrix_api_pusher_set_app_id
+matrix_api_pusher_get_app_id
+matrix_api_pusher_set_append
+matrix_api_pusher_get_append
+matrix_api_pusher_set_kind
+matrix_api_pusher_get_kind
+matrix_api_pusher_set_lang
+matrix_api_pusher_get_lang
+matrix_api_pusher_set_profile_tag
+matrix_api_pusher_get_profile_tag
+matrix_api_pusher_set_pushkey
+matrix_api_pusher_get_pushkey
+matrix_api_pusher_set_data
+matrix_api_pusher_take_data
+matrix_api_pusher_get_data
+matrix_api_pusher_get_json_node
+matrix_api_pusher_get_json_data
+
 <SUBSECTION Standard>
 MATRIX_TYPE_API_EVENT_FORMAT
 matrix_api_event_format_get_type
@@ -115,6 +142,8 @@ MATRIX_TYPE_API_FILTER
 matrix_api_filter_get_type
 MATRIX_TYPE_API_3PID_CREDENTIAL
 matrix_api_3pid_credential_get_type
+MATRIX_TYPE_API_PUSHER
+matrix_api_pusher_get_type
 </SECTION>
 
 <SECTION>
@@ -125,7 +154,6 @@ MatrixAPIRoomPreset
 MatrixAPIRoomVisibility
 MatrixAPIResizeMethod
 MatrixAPIPresence
-MatrixAPIPusher
 MatrixAPIPusherKind
 MatrixAPIPusherConditionKind
 MatrixAPIEventDirection

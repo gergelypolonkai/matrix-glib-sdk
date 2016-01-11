@@ -29,6 +29,7 @@ typedef enum {
     MATRIX_API_ERROR_MISSING_TOKEN,
     MATRIX_API_ERROR_FORBIDDEN,
     MATRIX_API_ERROR_UNKNOWN,
+    MATRIX_API_ERROR_INCOMPLETE,
     /* Allow for a lot of Matrix.org defined codes
        Do not define error codes after this! */
     MATRIX_API_ERROR_UNKNOWN_ERROR = 16384
@@ -166,6 +167,47 @@ const gchar *matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *
 void matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
                                                   const gchar *client_secret);
 const gchar *matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential);
+
+typedef struct _MatrixAPIPusher MatrixAPIPusher;
+
+GType matrix_api_pusher_get_type(void);
+#define MATRIX_TYPE_API_PUSHER (matrix_api_pusher_get_type())
+
+MatrixAPIPusher *matrix_api_pusher_new(void);
+MatrixAPIPusher *matrix_api_pusher_ref(MatrixAPIPusher *pusher);
+void matrix_api_pusher_unref(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_device_display_name(MatrixAPIPusher *pusher,
+                                               const gchar *device_display_name);
+const gchar *matrix_api_pusher_get_device_display_name(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_app_display_name(MatrixAPIPusher *pusher,
+                                            const gchar *app_display_name);
+const gchar *matrix_api_pusher_get_app_display_name(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_app_id(MatrixAPIPusher *pusher,
+                                  const gchar *app_id);
+const gchar *matrix_api_pusher_get_app_id(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_append(MatrixAPIPusher *pusher,
+                                  gboolean append);
+gboolean matrix_api_pusher_get_append(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_kind(MatrixAPIPusher *pusher,
+                                const gchar *kind);
+const gchar *matrix_api_pusher_get_kind(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_lang(MatrixAPIPusher *pusher,
+                                const gchar *lang);
+const gchar *matrix_api_pusher_get_lang(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_profile_tag(MatrixAPIPusher *pusher,
+                                       const gchar *profile_tag);
+const gchar *matrix_api_pusher_get_profile_tag(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_pushkey(MatrixAPIPusher *pusher,
+                                   const gchar *pushkey);
+const gchar *matrix_api_pusher_get_pushkey(MatrixAPIPusher *pusher);
+void matrix_api_pusher_set_data(MatrixAPIPusher *pusher, const JsonNode *data);
+void matrix_api_pusher_take_data(MatrixAPIPusher *pusher, JsonNode *data);
+const JsonNode *matrix_api_pusher_get_data(MatrixAPIPusher *pusher);
+JsonNode *matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher,
+                                          GError **err);
+gchar *matrix_api_pusher_get_json_data(MatrixAPIPusher *pusher,
+                                       gsize *datalen,
+                                       GError **err);
 
 G_END_DECLS
 
