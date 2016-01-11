@@ -214,15 +214,6 @@
  * Receipt types of acknowledgment.
  */
 
-/**
- * MatrixAPIStateEvent:
- * @type: the event type
- * @state_key: the key of the state event
- * @content: the contents of the state event
- *
- * A struct to hold a state event filter.
- */
-
 G_DEFINE_INTERFACE(MatrixAPI, matrix_api, G_TYPE_OBJECT);
 
 static void

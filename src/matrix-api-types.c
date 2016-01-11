@@ -2051,3 +2051,239 @@ gchar *matrix_api_pusher_get_json_data(MatrixAPIPusher *pusher,
 
     return data;
 }
+
+/**
+ * MatrixAPIStateEvent:
+ *
+ * An opaque structure to hold a state event filter.
+ */
+struct _MatrixAPIStateEvent {
+    gchar *type;
+    gchar *state_key;
+    JsonNode *content;
+    guint refcount;
+};
+
+G_DEFINE_BOXED_TYPE(MatrixAPIStateEvent, matrix_api_state_event,
+                    (GBoxedCopyFunc)matrix_api_state_event_ref,
+                    (GBoxedFreeFunc)matrix_api_state_event_unref);
+
+/**
+ * matrix_api_state_event_new:
+ *
+ * Create a new #MatrixAPIStateEvent object with reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixAPIStateEvent
+ */
+MatrixAPIStateEvent *
+matrix_api_state_event_new(void)
+{
+    MatrixAPIStateEvent *event;
+
+    event = g_new0(MatrixAPIStateEvent, 1);
+    event->refcount = 1;
+
+    return event;
+}
+
+static void
+matrix_api_state_event_free(MatrixAPIStateEvent *event)
+{
+    g_free(event->type);
+    g_free(event->state_key);
+
+    if (event->content) {
+        json_node_free(event->content);
+    }
+
+    g_free(event);
+}
+
+/**
+ * matrix_api_state_event_ref:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Increase reference count of @event by one.
+ *
+ * Returns: (transfer none): the same #MatrixAPIStateEvent
+ */
+MatrixAPIStateEvent *
+matrix_api_state_event_ref(MatrixAPIStateEvent *event)
+{
+    event->refcount++;
+
+    return event;
+}
+
+/**
+ * matrix_api_state_event_unref:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Decrease reference count of @event by one. If reference count
+ * reaches zero, @event is freed.
+ */
+void
+matrix_api_state_event_unref(MatrixAPIStateEvent *event)
+{
+    if (--event->refcount == 0) {
+        matrix_api_state_event_free(event);
+    }
+}
+
+/**
+ * matrix_api_state_event_set_event_type:
+ * @event: a #MatrixAPIStateEvent
+ * @event_type: the type of the state event
+ *
+ * Set the type of the state event in @event.
+ */
+void
+matrix_api_state_event_set_event_type(MatrixAPIStateEvent *event,
+                                      const gchar *event_type)
+{
+    g_free(event->type);
+    event->type = g_strdup(event_type);
+}
+
+/**
+ * matrix_api_state_event_get_event_type:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Get the type of the state event in @event.
+ *
+ * Returns: (transfer none): the event type. The returned value is
+ *          owned by @event and should not be freed nor modified.
+ */
+const gchar *
+matrix_api_state_event_get_event_type(MatrixAPIStateEvent *event)
+{
+    return event->type;
+}
+
+/**
+ * matrix_api_state_event_set_state_key:
+ * @event: a #MatrixAPIStateEvent
+ * @state_key: the key of the state event
+ *
+ * Set the state key for the state event @event.
+ */
+void
+matrix_api_state_event_set_state_key(MatrixAPIStateEvent *event,
+                                     const gchar *state_key)
+{
+    g_free(event->state_key);
+    event->state_key = g_strdup(state_key);
+}
+
+/**
+ * matrix_api_state_event_get_state_key:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Get the state key of @event.
+ *
+ * Returns: (transfer none): the state key. The returned value is
+ *          owned by @event and should not be freed nor modified
+ */
+const gchar *
+matrix_api_state_event_get_state_key(MatrixAPIStateEvent *event)
+{
+    return event->state_key;
+}
+
+/**
+ * matrix_api_state_event_set_content:
+ * @event: a #MatrixAPIStateEvent
+ * @content: the desired content of the state event
+ *
+ * Set the content of the state event.
+ */
+void
+matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
+                                   const JsonNode *content)
+{
+    if (event->content) {
+        json_node_free(event->content);
+    }
+
+    event->content = json_node_copy((JsonNode *)content);
+}
+
+/**
+ * matrix_api_state_event_get_content:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Get the contents of the state event.
+ *
+ * Returns: (transfer none): the contents of the state event. The
+ *          returned value is owned by @event and should not be freed
+ *          nor modified
+ */
+const JsonNode *
+matrix_api_state_event_get_content(MatrixAPIStateEvent *event)
+{
+    return event->content;
+}
+
+/**
+ * matrix_api_state_event_get_json_node:
+ * @event: a #MatrixAPIStateEvent
+ *
+ * Get the JSON representation of the state event as a #JsonNode
+ * object.
+ *
+ * Returns: (transfer full): the JSON representation of the state
+ *          event
+ */
+JsonNode *
+matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event)
+{
+    JsonBuilder *builder;
+    JsonNode *node;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "state_key");
+    json_builder_add_string_value(builder, event->state_key);
+
+    json_builder_set_member_name(builder, "type");
+    json_builder_add_string_value(builder, event->type);
+
+    json_builder_set_member_name(builder, "content");
+    json_builder_add_value(builder, event->content);
+
+    json_builder_end_object(builder);
+
+    node = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return node;
+}
+
+/**
+ * matrix_api_state_event_get_json_data:
+ * @event: a #MatrixAPIStateEvent
+ * @datalen: (out): storage for the the length of the JSON data or
+ *           %NULL
+ *
+ * Get the JSON representation of the state event as a string.
+ *
+ * Returns: (transfer full): the JSON representation of the state
+ *          event
+ */
+gchar *
+matrix_api_state_event_get_json_data(MatrixAPIStateEvent *event, gsize *datalen)
+{
+    JsonGenerator *generator;
+    JsonNode *node = matrix_api_state_event_get_json_node(event);
+    gchar *data;
+
+    generator = json_generator_new();
+    json_generator_set_root(generator, node);
+    json_node_free(node);
+
+    data = json_generator_to_data(generator, datalen);
+    g_object_unref(generator);
+
+    return data;
+}

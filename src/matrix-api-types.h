@@ -209,6 +209,27 @@ gchar *matrix_api_pusher_get_json_data(MatrixAPIPusher *pusher,
                                        gsize *datalen,
                                        GError **err);
 
+typedef struct _MatrixAPIStateEvent MatrixAPIStateEvent;
+
+GType matrix_api_state_event_get_type(void);
+#define MATRIX_TYPE_API_STATE_EVENT (matrix_api_state_event_get_type())
+
+MatrixAPIStateEvent *matrix_api_state_event_new(void);
+MatrixAPIStateEvent *matrix_api_state_event_ref(MatrixAPIStateEvent *event);
+void matrix_api_state_event_unref(MatrixAPIStateEvent *event);
+void matrix_api_state_event_set_event_type(MatrixAPIStateEvent *event,
+                                           const gchar *event_type);
+const gchar *matrix_api_state_event_get_event_type(MatrixAPIStateEvent *event);
+void matrix_api_state_event_set_state_key(MatrixAPIStateEvent *event,
+                                          const gchar *state_key);
+const gchar *matrix_api_state_event_get_state_key(MatrixAPIStateEvent *event);
+void matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
+                                        const JsonNode *content);
+const JsonNode *matrix_api_state_event_get_content(MatrixAPIStateEvent *event);
+JsonNode *matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event);
+gchar *matrix_api_state_event_get_json_data(MatrixAPIStateEvent *event,
+                                            gsize *datalen);
+
 G_END_DECLS
 
 #endif /* __MATRIX_API_TYPES_H__ */

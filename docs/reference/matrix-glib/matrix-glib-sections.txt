@@ -131,6 +131,20 @@ matrix_api_pusher_get_data
 matrix_api_pusher_get_json_node
 matrix_api_pusher_get_json_data
 
+<SUBSECTION>
+MatrixAPIStateEvent
+matrix_api_state_event_new
+matrix_api_state_event_ref
+matrix_api_state_event_unref
+matrix_api_state_event_set_event_type
+matrix_api_state_event_get_event_type
+matrix_api_state_event_set_state_key
+matrix_api_state_event_get_state_key
+matrix_api_state_event_set_content
+matrix_api_state_event_get_content
+matrix_api_state_event_get_json_node
+matrix_api_state_event_get_json_data
+
 <SUBSECTION Standard>
 MATRIX_TYPE_API_EVENT_FORMAT
 matrix_api_event_format_get_type
@@ -144,6 +158,8 @@ MATRIX_TYPE_API_3PID_CREDENTIAL
 matrix_api_3pid_credential_get_type
 MATRIX_TYPE_API_PUSHER
 matrix_api_pusher_get_type
+MATRIX_TYPE_API_STATE_EVENT
+matrix_api_state_event_get_type
 </SECTION>
 
 <SECTION>
@@ -247,9 +263,6 @@ matrix_api_add_room_tag
 
 <SUBSECTION>
 matrix_api_get_turn_server
-
-<SUBSECTION>
-MatrixAPIStateEvent
 
 <SUBSECTION Standard>
 MatrixAPI
