@@ -20,6 +20,10 @@ matrix_client_get_type
 <TITLE>Fundamental types for MatrixAPI</TITLE>
 
 <SUBSECTION>
+MatrixAPIError
+MATRIX_API_ERROR
+
+<SUBSECTION>
 MatrixAPIEventFormat
 
 <SUBSECTION>
@@ -215,10 +219,6 @@ matrix_api_add_room_tag
 
 <SUBSECTION>
 matrix_api_get_turn_server
-
-<SUBSECTION>
-MatrixAPIError
-MATRIX_API_ERROR
 
 <SUBSECTION>
 MatrixAPIStateEvent

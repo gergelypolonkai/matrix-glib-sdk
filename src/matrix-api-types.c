@@ -29,6 +29,36 @@
  */
 
 /**
+ * MatrixAPIError:
+ * @MATRIX_API_ERROR_NONE: no error
+ * @MATRIX_API_ERROR_MISSING_TOKEN: authorization token is missing
+ *                                  from the request
+ * @MATRIX_API_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
+ *                              missing/invalid token, or using a bad
+ *                              password during login)
+ * @MATRIX_API_ERROR_UNKNOWN: an error unknown to the Matrix server
+ * @MATRIX_API_ERROR_UNKNOWN_ERROR: an error unknown to this library
+ *
+ * Value mappings from Matrix.org API error codes
+ * (e.g. <code>M_MISSING_TOKEN</code>). They should be set
+ * automatically by API calls, if the response contains an error code.
+ */
+
+/**
+ * MATRIX_API_ERROR:
+ *
+ * Error domain for Matrix GLib SDK API. See #GError for more
+ * information on error domains.
+ */
+
+/**
+ * matrix_api_error_quark:
+ *
+ * Gets the Matrix API error #GQuark
+ */
+G_DEFINE_QUARK(matrix-api-error-quark, matrix_api_error);
+
+/**
  * MatrixAPIEventFormat:
  * @MATRIX_API_EVENT_FORMAT_DEFAULT: event format will be omitted from
  *                                   the filter, so the server will
