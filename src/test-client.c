@@ -38,9 +38,9 @@ create_room_finished(MatrixAPI *api,
 {
     if (err) {
         g_debug("Error: %s", err->message);
+    } else {
+        g_printf("Room registered\n");
     }
-
-    g_printf("Room registered\n");
 }
 
 static void
@@ -72,13 +72,13 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 
         g_printf("Logged in as %s\n", user_id);
 
-        /* matrix_http_api_create_room(api, */
-        /*                             create_room_finished, NULL, */
-        /*                             MATRIX_API_ROOM_PRESET_PUBLIC, */
-        /*                             "matrix-glib-sdk-test", NULL, */
-        /*                             "GLib SDK test room", */
-        /*                             MATRIX_API_ROOM_VISIBILITY_DEFAULT, */
-        /*                             NULL, NULL, NULL); */
+        matrix_api_create_room(api,
+                               create_room_finished, NULL,
+                               MATRIX_API_ROOM_PRESET_PUBLIC,
+                               "GLib SDK test room", "matrix-glib-sdk-test",
+                               "GLib SDK test room",
+                               MATRIX_API_ROOM_VISIBILITY_DEFAULT,
+                               NULL, NULL, NULL, NULL);
     } else {
         g_printf("Login unsuccessful!\n");
     }
@@ -118,12 +118,6 @@ main(int argc, char *argv[])
 
     g_info("Starting up: %s with %s:%s", url, user, password);
 
-    /*
-     * [ ] register
-     * [ ] login
-     * [ ] create_room
-     * [ ] join_room
-     */
     api = matrix_http_api_new(url, NULL);
     builder = json_builder_new();
     json_builder_begin_object(builder);

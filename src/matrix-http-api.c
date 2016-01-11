@@ -17,6 +17,7 @@
  */
 
 #include "matrix-http-api.h"
+#include "matrix-enumtypes.h"
 
 #include <string.h>
 #include <libsoup/soup.h>
@@ -636,7 +637,7 @@ _send(MatrixHTTPAPI *api,
                                request);
 }
 
-void
+static void
 i_login(MatrixAPI *api,
         MatrixAPICallback callback,
         gpointer user_data,
@@ -658,6 +659,139 @@ i_login(MatrixAPI *api,
 }
 
 static void
+add_state_event(MatrixAPIStateEvent *event, JsonBuilder *builder)
+{
+    JsonNode *node = matrix_api_state_event_get_json_node(event);
+
+    json_builder_add_value(builder, node);
+    json_node_free(node);
+}
+
+static void
+add_string(gchar *str, JsonBuilder *builder)
+{
+    json_builder_add_string_value(builder, str);
+}
+
+static void
+i_create_room(MatrixAPI *api,
+              MatrixAPICallback callback,
+              gpointer user_data,
+              MatrixAPIRoomPreset preset,
+              const gchar *room_name,
+              const gchar *room_alias,
+              const gchar *topic,
+              MatrixAPIRoomVisibility visibility,
+              JsonNode *creation_content,
+              GList *initial_state,
+              GList *invitees,
+              GError **error)
+{
+    JsonNode *body;
+    JsonObject *root_object;
+    JsonBuilder *builder;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    if (creation_content) {
+        json_builder_set_member_name(builder, "creation_content");
+        json_builder_add_value(builder, creation_content);
+    }
+
+    if (initial_state) {
+        json_builder_set_member_name(builder, "initial_state");
+        json_builder_begin_array(builder);
+        g_list_foreach(initial_state, (GFunc)add_state_event, builder);
+        json_builder_end_array(builder);
+    }
+
+    if (invitees) {
+        json_builder_set_member_name(builder, "invite");
+        json_builder_begin_array(builder);
+        g_list_foreach(invitees, (GFunc)add_string, builder);
+        json_builder_end_array(builder);
+    }
+
+    if (room_name) {
+        json_builder_set_member_name(builder, "name");
+        json_builder_add_string_value(builder, room_name);
+    }
+
+    if (preset != MATRIX_API_ROOM_PRESET_NONE) {
+        GEnumClass *_enum_class = g_type_class_ref(MATRIX_TYPE_API_ROOM_PRESET);
+        GEnumValue *enum_value;
+
+        if ((enum_value = g_enum_get_value(
+                     G_ENUM_CLASS(_enum_class),
+                     preset)) != NULL) {
+            gchar *i;
+            gchar *value_nick = g_strdup(enum_value->value_nick);
+
+            for (i = value_nick; *i; i++) {
+                if (*i == '-') {
+                    *i = '_';
+                }
+            }
+
+            json_builder_set_member_name(builder, "preset");
+            json_builder_add_string_value(builder, value_nick);
+            g_free(value_nick);
+        } else {
+            g_debug("Invalid room preset type");
+        }
+
+        g_type_class_unref(_enum_class);
+    }
+
+    if (room_alias) {
+        json_builder_set_member_name(builder, "room_alias_name");
+        json_builder_add_string_value(builder, room_alias);
+    }
+
+    if (topic) {
+        json_builder_set_member_name(builder, "topic");
+        json_builder_add_string_value(builder, topic);
+    }
+
+    if (visibility != MATRIX_API_ROOM_VISIBILITY_DEFAULT) {
+        GEnumClass *_enum_class = g_type_class_ref(
+                MATRIX_TYPE_API_ROOM_VISIBILITY);
+        GEnumValue *enum_value;
+
+        if ((enum_value = g_enum_get_value(
+                     G_ENUM_CLASS(_enum_class),
+                     visibility)) != NULL) {
+            gchar *i;
+            gchar *value_nick = g_strdup(enum_value->value_nick);
+
+            for (i = value_nick; *i; i++) {
+                if (*i == '-') {
+                    *i = '_';
+                }
+            }
+
+            json_builder_set_member_name(builder, "visibility");
+            json_builder_add_string_value(builder, value_nick);
+            g_free(value_nick);
+        } else {
+            g_debug("Invalid room visibility type");
+        }
+
+        g_type_class_unref(_enum_class);
+    }
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "POST", "createRoom", body,
+          error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -667,4 +801,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_user_id = i_get_user_id;
     iface->get_homeserver = i_get_homeserver;
     iface->login = i_login;
+    iface->create_room = i_create_room;
 }
