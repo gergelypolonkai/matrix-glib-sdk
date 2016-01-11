@@ -39,55 +39,6 @@ typedef void (*MatrixAPICallback)(MatrixAPI *api,
                                   gpointer data,
                                   GError *err);
 
-typedef enum {
-    MATRIX_API_RESIZE_METHOD_CROP,
-    MATRIX_API_RESIZE_METHOD_SCALE
-} MatrixAPIResizeMethod;
-
-typedef enum {
-    MATRIX_API_PRESENCE_ONLINE,
-    MATRIX_API_PRESENCE_OFFLINE,
-    MATRIX_API_PRESENCE_UNAVAILABLE,
-    MATRIX_API_PRESENCE_FREE_FOR_CHAT
-} MatrixAPIPresence;
-
-typedef enum {
-    MATRIX_API_ROOM_PRESET_NONE,
-    MATRIX_API_ROOM_PRESET_PRIVATE,
-    MATRIX_API_ROOM_PRESET_TRUSTED_PRIVATE,
-    MATRIX_API_ROOM_PRESET_PUBLIC
-} MatrixAPIRoomPreset;
-
-typedef enum {
-    MATRIX_API_ROOM_VISIBILITY_DEFAULT,
-    MATRIX_API_ROOM_VISIBILITY_PUBLIC,
-    MATRIX_API_ROOM_VISIBILITY_PRIVATE
-} MatrixAPIRoomVisibility;
-
-typedef enum {
-    MATRIX_API_EVENT_DIRECTION_FORWARD,
-    MATRIX_API_EVENT_DIRECTION_BACKWARD
-} MatrixAPIEventDirection;
-
-typedef enum {
-    MATRIX_API_RECEIPT_TYPE_READ
-} MatrixAPIReceiptType;
-
-typedef enum {
-    MATRIX_API_PUSHER_KIND_OVERRIDE,
-    MATRIX_API_PUSHER_KIND_SENDER,
-    MATRIX_API_PUSHER_KIND_ROOM,
-    MATRIX_API_PUSHER_KIND_CONTENT,
-    MATRIX_API_PUSHER_KIND_UNDERRIDE
-} MatrixAPIPusherKind;
-
-typedef enum {
-    MATRIX_API_PUSHER_CONDITION_KIND_EVENT_MATCH,
-    MATRIX_API_PUSHER_CONDITION_KIND_PROFILE_TAG,
-    MATRIX_API_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME,
-    MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
-} MatrixAPIPusherConditionKind;
-
 struct _MatrixAPIInterface {
     /*< private >*/
     GTypeInterface g_iface;

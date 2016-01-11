@@ -75,6 +75,145 @@ G_DEFINE_QUARK(matrix-api-error-quark, matrix_api_error);
  */
 
 /**
+ * MatrixAPIRoomPreset:
+ * @MATRIX_API_ROOM_PRESET_NONE: no preset
+ * @MATRIX_API_ROOM_PRESET_PRIVATE: preset for private rooms
+ * @MATRIX_API_ROOM_PRESET_TRUSTED_PRIVATE: same as private rooms, but
+ *                                          all users get the same
+ *                                          power level as the room
+ *                                          creator
+ * @MATRIX_API_ROOM_PRESET_PUBLIC: preset for public rooms
+ *
+ * Preset values for matrix_api_create_room() calls.
+ */
+
+/**
+ * MatrixAPIRoomVisibility:
+ * @MATRIX_API_ROOM_VISIBILITY_DEFAULT: use a server-assigned value
+ *                                      (usually <code>private</code>
+ * @MATRIX_API_ROOM_VISIBILITY_PUBLIC: make the room visible in the
+ *                                     public room list
+ * @MATRIX_API_ROOM_VISIBILITY_PRIVATE: hide the room from the public
+ *                                      room list
+ *
+ * Visibility values for room creation. Not to be confused with join
+ * rules.
+ */
+
+/**
+ * MatrixAPIResizeMethod:
+ * @MATRIX_API_RESIZE_METHOD_CROP: crop thumbnail to the requested
+ *                                 size
+ * @MATRIX_API_RESIZE_METHOD_SCALE: scale thumbnail to the requested
+ *                                  size
+ *
+ * Resizing methods for matrix_api_media_thumbnail().
+ */
+
+/**
+ * MatrixAPIPresence:
+ * @MATRIX_API_PRESENCE_ONLINE: user is online
+ * @MATRIX_API_PRESENCE_OFFLINE: user is offline
+ * @MATRIX_API_PRESENCE_UNAVAILABLE: user is unavailable (i.e. busy)
+ * @MATRIX_API_PRESENCE_FREE_FOR_CHAT: user is free for chat
+ *
+ * Presence values for matrix_api_set_user_presence() and other
+ * presence related queries.
+ */
+
+/**
+ * MatrixAPIPusherKind:
+ * @MATRIX_API_PUSHER_KIND_OVERRIDE: highest priority rules
+ * @MATRIX_API_PUSHER_KIND_SENDER: for (unencrypted) messages that
+ *                                 match certain patterns
+ * @MATRIX_API_PUSHER_KIND_ROOM: for all messages for a given
+ *                               room. The rule ID of a room rule is
+ *                               always the ID of the room that it
+ *                               affects
+ * @MATRIX_API_PUSHER_KIND_CONTENT: for messages from a specific
+ *                                  Matrix user ID. The rule ID of
+ *                                  such rules is always the Matrix ID
+ *                                  of the user whose messages they'd
+ *                                  apply to
+ * @MATRIX_API_PUSHER_KIND_UNDERRIDE: lowest priority rules
+ *
+ * Pusher types.
+ */
+
+/**
+ * MatrixAPIPusherConditionKind:
+ * @MATRIX_API_PUSHER_CONDITION_KIND_EVENT_MATCH: glob pattern match
+ *                                                on a field of the
+ *                                                event. Requires a
+ *                                                <code>key</code> and
+ *                                                a
+ *                                                <code>pattern</code>
+ *                                                parameter
+ * @MATRIX_API_PUSHER_CONDITION_KIND_PROFILE_TAG: matches the profile
+ *                                                tag of the device
+ *                                                that the
+ *                                                notification would
+ *                                                be delivered
+ *                                                to. Requires a
+ *                                                <code>profile_tag</code>
+ *                                                parameter
+ * @MATRIX_API_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME: matches
+ *                                                          unencrypted
+ *                                                          messages
+ *                                                          where the
+ *                                                          content's
+ *                                                          body
+ *                                                          contains
+ *                                                          the
+ *                                                          owner's
+ *                                                          display
+ *                                                          name in
+ *                                                          that room.
+ * @MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT: matches the
+ *                                                      current number
+ *                                                      of members in
+ *                                                      the
+ *                                                      room. Requires
+ *                                                      an
+ *                                                      <code>is</code>
+ *                                                      parameter,
+ *                                                      which must be
+ *                                                      an integer,
+ *                                                      optionally
+ *                                                      prefixed by
+ *                                                      <code>==</code>,
+ *                                                      <code>&lt;</code>,
+ *                                                      <code>&gt;</code>,
+ *                                                      <code>&lt;=</code>
+ *                                                      or
+ *                                                      <code>&gt;=</code>. If
+ *                                                      the prefix is
+ *                                                      omitted, it
+ *                                                      defaults to
+ *                                                      <code>==</code>
+ *
+ * Condition types for pushers.
+ */
+
+/**
+ * MatrixAPIEventDirection:
+ * @MATRIX_API_EVENT_DIRECTION_FORWARD: List events after the
+ *                                      specified one
+ * @MATRIX_API_EVENT_DIRECTION_BACKWARD: List events before the
+ *                                       specified one
+ *
+ * Direction of events when requesting an event context.
+ */
+
+/**
+ * MatrixAPIReceiptType:
+ * @MATRIX_API_RECEIPT_TYPE_READ: indicate that the message has been
+ *                                read
+ *
+ * Receipt types of acknowledgment.
+ */
+
+/**
  * MatrixAPIFilterRules: (ref-func matrix_api_filter_rules_ref) (unref-func matrix_api_filter_rules_unref)
  *
  * An opaque structure to hold filter rules that can be used to filter

@@ -25,6 +25,14 @@ MATRIX_API_ERROR
 
 <SUBSECTION>
 MatrixAPIEventFormat
+MatrixAPIRoomPreset
+MatrixAPIRoomVisibility
+MatrixAPIResizeMethod
+MatrixAPIPresence
+MatrixAPIPusherKind
+MatrixAPIPusherConditionKind
+MatrixAPIEventDirection
+MatrixAPIReceiptType
 
 <SUBSECTION>
 MatrixAPIFilterRules
@@ -148,6 +156,22 @@ matrix_api_state_event_get_json_data
 <SUBSECTION Standard>
 MATRIX_TYPE_API_EVENT_FORMAT
 matrix_api_event_format_get_type
+MATRIX_TYPE_API_ROOM_PRESET
+matrix_api_room_preset_get_type
+MATRIX_TYPE_API_ROOM_VISIBILITY
+matrix_api_room_visibility_get_type
+MATRIX_TYPE_API_RESIZE_METHOD
+matrix_api_resize_method_get_type
+MATRIX_TYPE_API_PRESENCE
+matrix_api_presence_get_type
+MATRIX_TYPE_API_PUSHER_KIND
+matrix_api_pusher_kind_get_type
+MATRIX_TYPE_API_PUSHER_CONDITION_KIND
+matrix_api_pusher_condition_kind_get_type
+MATRIX_TYPE_API_EVENT_DIRECTION
+matrix_api_event_direction_get_type
+MATRIX_TYPE_API_RECEIPT_TYPE
+matrix_api_receipt_type_get_type
 MATRIX_TYPE_API_FILTER_RULES
 matrix_api_filter_rules_get_type
 MATRIX_TYPE_API_ROOM_FILTER
@@ -166,14 +190,6 @@ matrix_api_state_event_get_type
 <FILE>matrix-api</FILE>
 <TITLE>MatrixAPI</TITLE>
 MatrixAPICallback
-MatrixAPIRoomPreset
-MatrixAPIRoomVisibility
-MatrixAPIResizeMethod
-MatrixAPIPresence
-MatrixAPIPusherKind
-MatrixAPIPusherConditionKind
-MatrixAPIEventDirection
-MatrixAPIReceiptType
 
 <SUBSECTION>
 matrix_api_set_token
@@ -275,22 +291,7 @@ MATRIX_IS_API
 MATRIX_API_GET_IFACE
 MatrixApiPrivate
 matrix_api_get_type
-MATRIX_TYPE_API_EVENT_DIRECTION
-matrix_api_event_direction_get_type
-MATRIX_TYPE_API_PRESENCE
-matrix_api_presence_get_type
-MATRIX_TYPE_API_PUSHER_CONDITION_KIND
-matrix_api_pusher_condition_kind_get_type
-MATRIX_TYPE_API_PUSHER_KIND
-matrix_api_pusher_kind_get_type
-MATRIX_TYPE_API_RECEIPT_TYPE
-matrix_api_receipt_type_get_type
-MATRIX_TYPE_API_RESIZE_METHOD
-matrix_api_resize_method_get_type
-MATRIX_TYPE_API_ROOM_PRESET
-matrix_api_room_preset_get_type
-MATRIX_TYPE_API_ROOM_VISIBILITY
-matrix_api_room_visibility_get_type
+
 <SUBSECTION Private>
 matrix_api_error_quark
 </SECTION>
