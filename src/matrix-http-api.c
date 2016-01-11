@@ -416,16 +416,20 @@ _response_callback(SoupSession *session,
 {
     MatrixHTTPAPI *api = request->api;
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+    GError *err = NULL;
+    JsonNode *content = NULL;
 
     if (msg->status_code < SOUP_STATUS_CONTINUE) {
-        g_info("Request failed: %d: %s", msg->status_code, msg->reason_phrase);
-    } else {
+        err = g_error_new(MATRIX_API_ERROR,
+                          MATRIX_API_ERROR_COMMUNICATION_ERROR,
+                          "%s %d: %s",
+                          (msg->status_code < 100) ? "Network error" : "HTTP",
+                          msg->status_code, msg->reason_phrase);
+    } else { // No error
         SoupBuffer *buffer;
         const guint8 *data;
         gsize datalen;
         JsonParser *parser;
-        GError *err = NULL;
-        JsonNode *content;
 
         buffer = soup_message_body_flatten(msg->response_body);
         soup_buffer_get_data(buffer, &data, &datalen);
@@ -525,25 +529,31 @@ _response_callback(SoupSession *session,
                     err = g_error_new_literal(MATRIX_API_ERROR,
                                               error_code,
                                               message);
-
                 }
-
-                /* Call the assigned function, if any */
-                if (request->callback) {
-                    request->callback(
-                            MATRIX_API(api),
-                            content,
-                            request->callback_data,
-                            err);
-                    g_clear_error(&err);
-                }
-            } else {
-                g_debug("Invalid response: %s", data);
+           } else { // Not a JSON object
+                err = g_error_new(MATRIX_API_ERROR,
+                                  MATRIX_API_ERROR_BAD_RESPONSE,
+                                  "Bad response (not a JSON object)");
+                g_debug("Bad response: %s", data);
             }
-        } else {
+        } else { // Invalid JSON
+            err = g_error_new(MATRIX_API_ERROR,
+                              MATRIX_API_ERROR_BAD_RESPONSE,
+                              "Malformed response (invalid JSON)");
             g_debug("Malformed response: %s", data);
         }
     }
+
+    /* Call the assigned function, if any */
+    if (request->callback) {
+        request->callback(
+                MATRIX_API(api),
+                content,
+                request->callback_data,
+                err);
+    }
+
+    g_clear_error(&err);
 }
 
 /**

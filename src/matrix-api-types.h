@@ -26,10 +26,17 @@ G_BEGIN_DECLS
 
 typedef enum {
     MATRIX_API_ERROR_NONE,
-    MATRIX_API_ERROR_MISSING_TOKEN,
+    MATRIX_API_ERROR_COMMUNICATION_ERROR,
+    MATRIX_API_ERROR_INCOMPLETE,
+    MATRIX_API_ERROR_BAD_RESPONSE,
+
+    /* Add Matrix-defined error codes under here, changing `M_` to
+     * `MATRIX_API_ERROR`, i.e. `M_FORBIDDEN` =>
+     * `MATRIX_API_ERROR_FORBIDDEN` */
+    MATRIX_API_ERROR_MISSING_TOKEN = 500,
     MATRIX_API_ERROR_FORBIDDEN,
     MATRIX_API_ERROR_UNKNOWN,
-    MATRIX_API_ERROR_INCOMPLETE,
+
     /* Allow for a lot of Matrix.org defined codes
        Do not define error codes after this! */
     MATRIX_API_ERROR_UNKNOWN_ERROR = 16384

@@ -31,14 +31,19 @@
 /**
  * MatrixAPIError:
  * @MATRIX_API_ERROR_NONE: no error
+ * @MATRIX_API_ERROR_COMMUNICATION_ERROR: there was a problem in
+ *                                        communication
+ *                                        (e.g. connection error)
+ * @MATRIX_API_ERROR_INCOMPLETE: the passed/generated data is
+ *                               incomplete
+ * @MATRIX_API_ERROR_BAD_RESPONSE: malformed response, or the response
+ *                                 is not a JSON object
  * @MATRIX_API_ERROR_MISSING_TOKEN: authorization token is missing
  *                                  from the request
  * @MATRIX_API_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
  *                              missing/invalid token, or using a bad
  *                              password during login)
  * @MATRIX_API_ERROR_UNKNOWN: an error unknown to the Matrix server
- * @MATRIX_API_ERROR_INCOMPLETE: the passed/generated data is
- *                               incomplete
  * @MATRIX_API_ERROR_UNKNOWN_ERROR: an error unknown to this library
  *
  * Value mappings from Matrix.org API error codes
