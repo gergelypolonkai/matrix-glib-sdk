@@ -36,10 +36,12 @@ typedef enum {
     MATRIX_API_ERROR_MISSING_TOKEN = 500,
     MATRIX_API_ERROR_FORBIDDEN,
     MATRIX_API_ERROR_UNKNOWN,
+    MATRIX_API_ERROR_UNKNOWN_TOKEN,
 
     /* Allow for a lot of Matrix.org defined codes
        Do not define error codes after this! */
-    MATRIX_API_ERROR_UNKNOWN_ERROR = 16384
+    MATRIX_API_ERROR_UNSPECIFIED = 16383,
+    MATRIX_API_ERROR_UNKNOWN_ERROR
 } MatrixAPIError;
 
 #define MATRIX_API_ERROR matrix_api_error_quark()
