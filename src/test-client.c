@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gprintf.h>
 #include <json-glib/json-glib.h>
 
 #include "matrix-http-api.h"
@@ -156,7 +157,7 @@ main(int argc, char *argv[])
     if (err) {
         g_warning("Error: %s", err->message);
 
-        return;
+        return 1;
     }
 
     g_info("Entering main loop");
