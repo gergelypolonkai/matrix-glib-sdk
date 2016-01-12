@@ -26,11 +26,13 @@
 static gchar *user;
 static gchar *password;
 static gboolean no_validate_certs = FALSE;
+static gchar **homeserver = NULL;
 
 static GOptionEntry entries[] = {
     {"user", 'u', 0, G_OPTION_ARG_STRING, &user},
     {"password", 'p', 0, G_OPTION_ARG_STRING, &password},
     {"no-validate-certs", 'n', 0, G_OPTION_ARG_NONE, &no_validate_certs},
+    {G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &homeserver, "The homeserver to connect to", "homeserver"},
 };
 
 static void
@@ -111,7 +113,6 @@ main(int argc, char *argv[])
     GMainLoop *loop = g_main_loop_new(NULL, FALSE);
     GOptionContext *opts;
     GError *err = NULL;
-    gchar *url;
     JsonBuilder *builder;
     JsonNode *login_content;
 
@@ -125,7 +126,7 @@ main(int argc, char *argv[])
         return 1;
     }
 
-    if (argc != 2) {
+    if (argc != 1) {
         g_printerr("%s", g_option_context_get_help(opts, TRUE, NULL));
 
         return 1;
@@ -133,11 +134,9 @@ main(int argc, char *argv[])
 
     g_option_context_free(opts);
 
-    url = argv[1];
+    g_info("Starting up: %s with %s:%s", *homeserver, user, password);
 
-    g_info("Starting up: %s with %s:%s", url, user, password);
-
-    api = matrix_http_api_new(url, NULL);
+    api = matrix_http_api_new(*homeserver, NULL);
     matrix_http_api_set_validate_certificate(api, !no_validate_certs);
     builder = json_builder_new();
     json_builder_begin_object(builder);
