@@ -192,7 +192,7 @@ matrix_api_default_init(MatrixAPIInterface *iface)
 const gchar *
 matrix_api_get_token(MatrixAPI *api)
 {
-    g_return_if_fail(MATRIX_IS_API(api));
+    g_return_val_if_fail(MATRIX_IS_API(api), NULL);
 
     return MATRIX_API_GET_IFACE(api)
         ->get_token(api);
@@ -233,7 +233,7 @@ matrix_api_set_token(MatrixAPI *api, const gchar *token)
 const gchar *
 matrix_api_get_refresh_token(MatrixAPI *api)
 {
-    g_return_if_fail(MATRIX_IS_API(api));
+    g_return_val_if_fail(MATRIX_IS_API(api), NULL);
 
     return MATRIX_API_GET_IFACE(api)
         ->get_refresh_token(api);
@@ -274,7 +274,7 @@ matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
 const gchar *
 matrix_api_get_user_id(MatrixAPI *api)
 {
-    g_return_if_fail(MATRIX_IS_API(api));
+    g_return_val_if_fail(MATRIX_IS_API(api), NULL);
 
     return MATRIX_API_GET_IFACE(api)
         ->get_user_id(api);
@@ -296,7 +296,7 @@ matrix_api_get_user_id(MatrixAPI *api)
 const gchar *
 matrix_api_get_homeserver(MatrixAPI *api)
 {
-    g_return_if_fail(MATRIX_IS_API(api));
+    g_return_val_if_fail(MATRIX_IS_API(api), NULL);
 
     return MATRIX_API_GET_IFACE(api)
         ->get_homeserver(api);
