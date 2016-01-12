@@ -668,6 +668,8 @@ _send(MatrixHTTPAPI *api,
         datalen = 0;
     }
 
+    g_debug("Sending (%s %s): %s", method, url, data);
+
     soup_message_set_flags(message, SOUP_MESSAGE_NO_REDIRECT);
     soup_message_set_request(message,
                              "application/json",
