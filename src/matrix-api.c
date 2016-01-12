@@ -36,31 +36,69 @@
 
 /**
  * MatrixAPIInterface:
- * @login: virtual function for matrix_api_login()
- * @register_account: virtual_function for
- *                    matrix_api_register_account()
- * @initial_sync: virtual function for matrix_api_initial_sync()
- * @event_stream: virtual function for matrix_api_event_stream()
+ * @get_token: virtual function for matrix_api_get_token()
+ * @set_token: virtual function for matrix_api_set_token()
+ * @get_refresh_token: virtual function for matrix_api_get_refresh_token()
+ * @set_refresh_token: virtual function for matrix_api_set_refresh_token()
+ * @get_user_id: virtual function for matrix_api_get_user_id()
+ * @get_homeserver: virtual function for matrix_api_get_homeserver()
+ * @media_download: virtual function for matrix_api_media_download()
+ * @media_thumbnail: virtual function for matrix_api_media_thumbnail()
+ * @media_upload: virtual function for matrix_api_media_upload()
+ * @get_presence_list: virtual function for matrix_api_get_presence_list()
+ * @update_presence_list: virtual function for matrix_api_update_presence_list()
+ * @get_user_presence: virtual function for matrix_api_get_user_presence()
+ * @set_user_presence: virtual function for matrix_api_set_user_presence()
+ * @modify_pusher: virtual function for matrix_api_modify_pusher()
+ * @get_pushers: virtual function for matrix_api_get_pushers()
+ * @delete_pusher: virtual function for matrix_api_delete_pusher()
+ * @get_pusher: virtual function for matrix_api_get_pusher()
+ * @add_pusher: virtual function for matrix_api_add_pusher()
+ * @toggle_pusher: virtual function for matrix_api_toggle_pusher()
  * @create_room: virtual function for matrix_api_create_room()
- * @join_room: virtual function for matrix_api_join_room()
- * @send_state_event: virtual function for
- *                    matrix_api_send_state_event()
- * @send_message_event: virtual function for
- *                      matrix_api_send_message_event()
- * @send_message: virtual function for matrix_api_send_message()
- * @send_emote: virtual function for matrix_api_send_emote()
- * @get_room_name: virtual function for matrix_api_get_room_name()
- * @get_room_topic: virtual function for matrix_api_get_room_topic()
- * @leave_room: virtual function for matrix_api_leave_room()
- * @invite_user: virtual function for matrix_api_invite_user()
- * @kick_user: virtual function for matrix_api_kick_user()
- * @set_membership: virtual function for matrix_api_set_membership()
+ * @delete_room_alias: virtual function for matrix_api_delete_room_alias()
+ * @get_room_id: virtual function for matrix_api_get_room_id()
+ * @create_room_alias: virtual function for matrix_api_create_room_alias()
+ * @list_public_rooms: virtual function for matrix_api_list_public_rooms()
  * @ban_user: virtual function for matrix_api_ban_user()
+ * @forget_room: virtual function for matrix_api_forget_room()
+ * @invite_user_3rdparty: virtual function for matrix_api_invite_user_3rdparty()
+ * @invite_user: virtual function for matrix_api_invite_user()
+ * @join_room: virtual function for matrix_api_join_room()
+ * @leave_room: virtual function for matrix_api_leave_room()
+ * @event_stream: virtual function for matrix_api_event_stream()
+ * @get_event: virtual function for matrix_api_get_event()
+ * @initial_sync: virtual function for matrix_api_initial_sync()
+ * @get_event_context: virtual function for matrix_api_get_event_context()
+ * @initial_sync_room: virtual function for matrix_api_initial_sync_room()
+ * @list_room_members: virtual function for matrix_api_list_room_members()
+ * @list_room_messages: virtual function for matrix_api_list_room_messages()
+ * @send_event_receipt: virtual function for matrix_api_send_event_receipt()
+ * @redact_event: virtual function for matrix_api_redact_event()
+ * @send_message_event: virtual function for matrix_api_send_message_event()
  * @get_room_state: virtual function for matrix_api_get_room_state()
- * @get_text_body: virtual function for matrix_api_get_text_body()
- * @get_html_body: virtual function for matrix_api_get_html_body()
- * @get_emote_body: virtual function for matrix_api_get_emote_body()
- * @_send: virtual function for matrix_api_send()
+ * @send_room_event: virtual function for matrix_api_send_room_event()
+ * @notify_room_typing: virtual function for matrix_api_notify_room_typing()
+ * @sync: virtual function for matrix_api_sync()
+ * @create_filter: virtual function for matrix_api_create_filter()
+ * @download_filter: virtual function for matrix_api_download_filter()
+ * @whois: virtual function for matrix_api_whois()
+ * @login: virtual function for matrix_api_login()
+ * @token_refresh: virtual function for matrix_api_token_refresh()
+ * @get_3pids: virtual function for matrix_api_get_3pids()
+ * @add_3pid: virtual function for matrix_api_add_3pid()
+ * @change_password: virtual function for matrix_api_change_password()
+ * @get_profile: virtual function for matrix_api_get_profile()
+ * @get_avatar_url: virtual function for matrix_api_get_avatar_url()
+ * @set_avatar_url: virtual function for matrix_api_set_avatar_url()
+ * @get_display_name: virtual function for matrix_api_get_display_name()
+ * @set_display_name: virtual function for matrix_api_set_display_name()
+ * @register_account: virtual function for matrix_api_register_account()
+ * @set_account_data: virtual function for matrix_api_set_account_data()
+ * @get_room_tags: virtual function for matrix_api_get_room_tags()
+ * @delete_room_tag: virtual function for matrix_api_delete_room_tag()
+ * @add_room_tag: virtual function for matrix_api_add_room_tag()
+ * @get_turn_server: virtual function for matrix_api_get_turn_server()
  *
  * The interface vtable for #MatrixAPI
  */
@@ -698,8 +736,8 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
  * @preset: a room preset to use
- * @room_name: (allow-none): the desired name for the room
- * @room_alias: (allow-none): the alias of the room
+ * @room_name: (allow-none): the desired display name for the room
+ * @room_alias: (allow-none): an alias of the room
  * @topic: (allow-none): the topic of the room
  * @visibility: the initial visibility of the room
  * @creation_content: (allow-none): extra keys to be added to the

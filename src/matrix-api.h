@@ -56,8 +56,10 @@ struct _MatrixAPIInterface {
 
     const gchar *(*get_homeserver)(MatrixAPI *api);
 
+    /*< private >*/
     void *properties_reserved[10];
 
+    /*< public >*/
     /* Media */
     void (*media_download)(MatrixAPI *api,
                            MatrixAPICallback callback,
@@ -342,9 +344,11 @@ struct _MatrixAPIInterface {
                             const gchar *filter_id,
                             GError **error);
 
+    /*< private >*/
     /* Search */
     void *search_reserved;
 
+    /*< public >*/
     /* Server administration */
 
     void (*whois)(MatrixAPI *api,

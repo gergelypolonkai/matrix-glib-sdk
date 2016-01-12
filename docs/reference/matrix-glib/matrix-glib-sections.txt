@@ -189,6 +189,7 @@ matrix_api_state_event_get_type
 <SECTION>
 <FILE>matrix-api</FILE>
 <TITLE>MatrixAPI</TITLE>
+MatrixAPIInterface
 MatrixAPICallback
 
 <SUBSECTION>
@@ -282,7 +283,6 @@ matrix_api_get_turn_server
 
 <SUBSECTION Standard>
 MatrixAPI
-MatrixAPIInterface
 MATRIX_TYPE_API_ERROR
 matrix_api_error_get_type
 MATRIX_TYPE_API
