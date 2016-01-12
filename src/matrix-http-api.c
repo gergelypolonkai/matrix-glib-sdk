@@ -844,6 +844,32 @@ i_create_room(MatrixAPI *api,
 }
 
 static void
+i_initial_sync(MatrixAPI *api,
+               MatrixAPICallback callback,
+               gpointer user_data,
+               guint limit,
+               gboolean archived,
+               GError **err)
+{
+    GHashTable *params;
+
+    params = create_query_params();
+
+    if (limit != 0) {
+        g_hash_table_replace(params, "limit", g_strdup_printf("%d", limit));
+    }
+
+    if (archived) {
+        g_hash_table_replace(params, "archived", g_strdup("true"));
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "GET", "initialSync", params, NULL,
+          err);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -854,4 +880,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_homeserver = i_get_homeserver;
     iface->login = i_login;
     iface->create_room = i_create_room;
+    iface->initial_sync = i_initial_sync;
 }

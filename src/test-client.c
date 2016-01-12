@@ -41,6 +41,8 @@ create_room_finished(MatrixAPI *api,
     } else {
         g_printf("Room registered\n");
     }
+
+    matrix_api_initial_sync(MATRIX_API(api), NULL, NULL, 10, TRUE, NULL);
 }
 
 static void
