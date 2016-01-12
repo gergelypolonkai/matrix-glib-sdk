@@ -599,19 +599,26 @@ matrix_http_api_get_base_url(MatrixHTTPAPI *api)
     return soup_uri_to_string(priv->uri, FALSE);
 }
 
+#define create_query_params() (g_hash_table_new_full(g_str_hash,        \
+                                                     (GEqualFunc)g_strcmp0, \
+                                                     NULL,              \
+                                                     g_free))
+
+
 static void
 _send(MatrixHTTPAPI *api,
       MatrixAPICallback callback,
       gpointer user_data,
       const gchar *method,
       const gchar *path,
+      GHashTable *params,
       const JsonNode *content,
       GError **error)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
     SoupURI *request_path;
     SoupMessage *message;
-    gchar *data;
+    gchar *data, *url;
     gsize datalen;
     MatrixHTTPAPIRequest *request;
 
@@ -631,7 +638,23 @@ _send(MatrixHTTPAPI *api,
     }
 
     request_path = soup_uri_new_with_base(priv->uri, path);
+
+    if (!params) {
+        params = create_query_params();
+    }
+
+    if (priv->token) {
+        g_debug("Adding access token '%s'", priv->token);
+
+        g_hash_table_replace(params, "access_token", g_strdup(priv->token));
+    }
+
+    soup_uri_set_query_from_form(request_path, params);
+
+    g_hash_table_unref(params);
+
     message = soup_message_new_from_uri(method, request_path);
+    url = soup_uri_to_string(request_path, FALSE);
     soup_uri_free(request_path);
 
     if (content) {
@@ -681,7 +704,7 @@ i_login(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
-          "POST", "login", body,
+          "POST", "login", NULL, body,
           error);
 }
 
@@ -814,7 +837,7 @@ i_create_room(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
-          "POST", "createRoom", body,
+          "POST", "createRoom", NULL, body,
           error);
 }
 
