@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "matrix-http-api.h"
 #include "matrix-enumtypes.h"
 
@@ -498,39 +499,65 @@ _response_callback(SoupSession *session,
                     g_debug("We are reported to be logged in as %s", user_id);
                 }
 
-                /* Check if the response holds an error code */
-                if ((node = json_object_get_member(
-                             root_object, "errcode")) != NULL) {
-                    const gchar *errcode = json_node_get_string(node);
-                    gchar *message = NULL;
-                    MatrixAPIError error_code = MATRIX_API_ERROR_UNKNOWN_ERROR;
+                { // Check if the response holds an error
+                    JsonNode *errcode_node = json_object_get_member(root_object,
+                                                                    "errcode");
+                    JsonNode *error_node = json_object_get_member(root_object,
+                                                                  "error");
 
-                    /* Set the message as M_CODE: message */
-                    if ((node = json_object_get_member(
-                                 root_object, "error")) != NULL) {
-                        message = g_strdup_printf("%s: %s",
-                                                  errcode,
-                                                  json_node_get_string(node));
-                    } else {
-                        /* If there is no message, issue a warning and
-                         * set up the message as plain M_CODE */
-                        message = g_strdup(errcode);
+                    if (errcode_node || error_node) {
+                        gchar *message;
+                        const gchar *errcode = NULL;
+                        const gchar *error = NULL;
+                        MatrixAPIError error_code = MATRIX_API_ERROR_UNKNOWN_ERROR;
+
+                        if (errcode_node) {
+                            GEnumClass *error_class;
+                            GEnumValue *value;
+
+                            errcode = json_node_get_string(errcode_node);
+
+                            if (strncmp("M_", errcode, 2) == 0) {
+                                gchar *matrix_error_code = g_strdup_printf(
+                                        "MATRIX_API_ERROR_%s", errcode + 2);
+
+                                error_class = g_type_class_ref(
+                                        MATRIX_TYPE_API_ERROR);
+                                value = g_enum_get_value_by_name(
+                                        error_class, matrix_error_code);
+                                g_free(matrix_error_code);
+                                g_type_class_unref(error_class);
+
+                                if (value) {
+                                    error_code = value->value;
+                                } else {
+                                    g_info("An unknown error code '%s' was sent by the homeserver. You may want to report it to the %s developers", errcode, PACKAGE_NAME);
+                                }
+                            }
+                        } else {
+                            g_info("An error was sent by the homeserver, but no error code was specified. You may want to report this to the homeserver administrators.");
+                            error_code = MATRIX_API_ERROR_UNSPECIFIED;
+                        }
+
+                        if (error_node) {
+                            error = json_node_get_string(error_node);
+                        }
+
+                        if (errcode_node && error_node) {
+                            message = g_strdup_printf("%s: %s", errcode, error);
+                        } else if (errcode_node) {
+                            message = g_strdup(errcode);
+                        } else {
+                            message = g_strdup_printf(
+                                    "(No errcode given) %s", error);
+                        }
+
+                        err = g_error_new_literal(MATRIX_API_ERROR,
+                                                  error_code,
+                                                  message);
                     }
-
-                    /* Set the actual GError code according to errcode */
-                    if (strcmp("M_MISSING_TOKEN", errcode) == 0) {
-                        error_code = MATRIX_API_ERROR_MISSING_TOKEN;
-                    } else if (strcmp("M_FORBIDDEN", errcode) == 0) {
-                        error_code = MATRIX_API_ERROR_FORBIDDEN;
-                    } else if (strcmp("M_UNKNOWN", errcode) == 0) {
-                        error_code = MATRIX_API_ERROR_UNKNOWN;
-                    }
-
-                    err = g_error_new_literal(MATRIX_API_ERROR,
-                                              error_code,
-                                              message);
                 }
-           } else { // Not a JSON object
+            } else { // Not a JSON object
                 err = g_error_new(MATRIX_API_ERROR,
                                   MATRIX_API_ERROR_BAD_RESPONSE,
                                   "Bad response (not a JSON object)");
