@@ -393,6 +393,7 @@ matrix_http_api_set_validate_certificate(MatrixHTTPAPI *api,
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
     priv->validate_certificate = validate_certificate;
+    g_object_set(priv->soup_session, "ssl-strict", validate_certificate, NULL);
 }
 
 /**

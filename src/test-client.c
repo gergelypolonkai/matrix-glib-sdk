@@ -24,10 +24,12 @@
 
 static gchar *user;
 static gchar *password;
+static gboolean no_validate_certs = FALSE;
 
 static GOptionEntry entries[] = {
     {"user", 'u', 0, G_OPTION_ARG_STRING, &user},
     {"password", 'p', 0, G_OPTION_ARG_STRING, &password},
+    {"no-validate-certs", 'n', 0, G_OPTION_ARG_NONE, &no_validate_certs},
 };
 
 static void
@@ -135,6 +137,7 @@ main(int argc, char *argv[])
     g_info("Starting up: %s with %s:%s", url, user, password);
 
     api = matrix_http_api_new(url, NULL);
+    matrix_http_api_set_validate_certificate(api, !no_validate_certs);
     builder = json_builder_new();
     json_builder_begin_object(builder);
     json_builder_set_member_name(builder, "user");
