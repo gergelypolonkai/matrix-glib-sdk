@@ -346,7 +346,7 @@ i_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
             MATRIX_HTTP_API(api));
 
     g_free(priv->refresh_token);
-    priv->token = g_strdup(refresh_token);
+    priv->refresh_token = g_strdup(refresh_token);
 }
 
 static const gchar *
@@ -470,8 +470,7 @@ _response_callback(SoupSession *session,
                     if ((refresh_token = json_node_get_string(node)) != NULL) {
                         g_debug("Got new refresh token: %s", refresh_token);
 
-                        i_set_refresh_token(MATRIX_API(api),
-                                                          refresh_token);
+                        i_set_refresh_token(MATRIX_API(api), refresh_token);
                     }
                 }
 
