@@ -118,7 +118,7 @@ matrix_http_api_set_property(GObject *gobject,
 
     switch (prop_id) {
         case PROP_VALIDATE_CERTIFICATE:
-            priv->validate_certificate = g_value_get_boolean(value);
+            matrix_http_api_set_validate_certificate(api, g_value_get_boolean(value));
 
             break;
 
