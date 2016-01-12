@@ -31,6 +31,17 @@ static GOptionEntry entries[] = {
 };
 
 static void
+initial_sync_finished(MatrixAPI *api,
+                      JsonNode *content,
+                      gpointer data,
+                      GError *err)
+{
+    g_printf("initialSync finished\n");
+
+    matrix_api_event_stream(MATRIX_API(api), NULL, NULL, NULL, 0, NULL);
+}
+
+static void
 create_room_finished(MatrixAPI *api,
                      JsonNode *content,
                      gpointer data,
@@ -42,7 +53,10 @@ create_room_finished(MatrixAPI *api,
         g_printf("Room registered\n");
     }
 
-    matrix_api_initial_sync(MATRIX_API(api), NULL, NULL, 10, TRUE, NULL);
+    matrix_api_initial_sync(MATRIX_API(api),
+                            initial_sync_finished,
+                            data, 10, TRUE,
+                            NULL);
 }
 
 static void

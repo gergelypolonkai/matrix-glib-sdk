@@ -870,6 +870,33 @@ i_initial_sync(MatrixAPI *api,
 }
 
 static void
+i_event_stream(MatrixAPI *api,
+               MatrixAPICallback callback,
+               gpointer user_data,
+               const gchar *from_token,
+               gulong timeout,
+               GError **err)
+{
+    GHashTable *params;
+
+    params = create_query_params();
+
+    if (from_token) {
+        g_hash_table_replace(params, "from", g_strdup(from_token));
+    }
+
+    if (timeout != 0) {
+        g_hash_table_replace(params,
+                             "timeout", g_strdup_printf("%ul", timeout));
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "GET", "events", params, NULL,
+          err);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -881,4 +908,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->login = i_login;
     iface->create_room = i_create_room;
     iface->initial_sync = i_initial_sync;
+    iface->event_stream = i_event_stream;
 }
