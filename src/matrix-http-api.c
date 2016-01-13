@@ -171,7 +171,6 @@ matrix_http_api_set_property(GObject *gobject,
             new_uri = soup_uri_new(url);
 
             if (new_uri && SOUP_URI_VALID_FOR_HTTP(new_uri)) {
-                g_printf("setting\n");
                 if (priv->uri) {
                     soup_uri_free(priv->uri);
                 }
@@ -465,7 +464,9 @@ _response_callback(SoupSession *session,
         if (json_parser_load_from_data(parser,
                                        (const gchar *)data, datalen,
                                        &err)) {
-            g_debug("Data: %s", data);
+            SoupURI *request_uri = soup_message_get_uri(msg);
+
+            g_debug("Data (%s): %s", soup_uri_get_path(request_uri) + strlen(API_ENDPOINT), data);
             content = json_parser_get_root(parser);
 
             if (JSON_NODE_HOLDS_OBJECT(content)) {
@@ -920,7 +921,7 @@ i_event_stream(MatrixAPI *api,
 
     if (timeout != 0) {
         g_hash_table_replace(params,
-                             "timeout", g_strdup_printf("%ul", timeout));
+                             "timeout", g_strdup_printf("%lu", timeout));
     }
 
     _send(MATRIX_HTTP_API(api),
