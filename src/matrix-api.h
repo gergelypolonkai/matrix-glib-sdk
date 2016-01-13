@@ -46,11 +46,11 @@ struct _MatrixAPIInterface {
     /*< public >*/
 
     /* Properties */
-    const gchar *(*get_token)(MatrixAPI *api);
     void (*set_token)(MatrixAPI *api, const gchar *token);
+    const gchar *(*get_token)(MatrixAPI *api);
 
-    const gchar *(*get_refresh_token)(MatrixAPI *api);
     void (*set_refresh_token)(MatrixAPI *api, const gchar *refresh_token);
+    const gchar *(*get_refresh_token)(MatrixAPI *api);
 
     const gchar *(*get_user_id)(MatrixAPI *api);
 

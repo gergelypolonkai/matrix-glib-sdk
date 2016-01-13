@@ -1000,11 +1000,87 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_refresh_token = i_get_refresh_token;
     iface->get_user_id = i_get_user_id;
     iface->get_homeserver = i_get_homeserver;
-    iface->login = i_login;
+
+    /* Media */
+    iface->media_download = NULL;
+    iface->media_thumbnail = NULL;
+    iface->media_upload = NULL;
+
+    /* Presence */
+    iface->get_presence_list = NULL;
+    iface->update_presence_list = NULL;
+    iface->get_user_presence = NULL;
+    iface->set_user_presence = NULL;
+
+    /* Push notifications */
+    iface->modify_pusher = NULL;
+    iface->get_pushers = NULL;
+    iface->delete_pusher = NULL;
+    iface->get_pusher = NULL;
+    iface->add_pusher = NULL;
+    iface->toggle_pusher = NULL;
+
+    /* Room creation */
     iface->create_room = i_create_room;
-    iface->initial_sync = i_initial_sync;
-    iface->event_stream = i_event_stream;
-    iface->leave_room = i_leave_room;
+
+    /* Room directory */
+    iface->delete_room_alias = NULL;
+    iface->get_room_id = NULL;
+    iface->create_room_alias = NULL;
+
+    /* Room discovery */
     iface->list_public_rooms = i_list_public_rooms;
+
+    /* Room membership */
+    iface->ban_user = NULL;
+    iface->forget_room = NULL;
+    iface->invite_user_3rdparty = NULL;
+    iface->invite_user = NULL;
     iface->join_room = i_join_room;
+    iface->leave_room = i_leave_room;
+
+    /* Room participation */
+    iface->event_stream = i_event_stream;
+    iface->get_event = NULL;
+    iface->initial_sync = i_initial_sync;
+    iface->get_event_context = NULL;
+    iface->initial_sync_room = NULL;
+    iface->list_room_members = NULL;
+    iface->list_room_messages = NULL;
+    iface->send_event_receipt = NULL;
+    iface->redact_event = NULL;
+    iface->send_message_event = NULL;
+    iface->get_room_state = NULL;
+    iface->send_room_event = NULL;
+    iface->notify_room_typing = NULL;
+    iface->sync = NULL;
+    iface->create_filter = NULL;
+    iface->download_filter = NULL;
+
+    /* Search */
+
+    /* Server administration */
+    iface->whois = NULL;
+
+    /* Session management */
+    iface->login = i_login;
+    iface->token_refresh = NULL;
+
+    /* User data */
+    iface->get_3pids = NULL;
+    iface->add_3pid = NULL;
+    iface->change_password = NULL;
+    iface->get_profile = NULL;
+    iface->get_avatar_url = NULL;
+    iface->set_avatar_url = NULL;
+    iface->get_display_name = NULL;
+    iface->set_display_name = NULL;
+    iface->register_account = NULL;
+    iface->set_account_data = NULL;
+    iface->get_room_tags = NULL;
+    iface->delete_room_tag = NULL;
+    iface->add_room_tag = NULL;
+
+    /* VoIP */
+    iface->get_turn_server = NULL;
 }
