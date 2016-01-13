@@ -127,6 +127,7 @@ matrix_http_api_set_property(GObject *gobject,
             const gchar *base_url;
             gchar *last_occurence;
             gchar *url;
+            SoupURI *new_uri;
 
             base_url = g_value_get_string(value);
 
@@ -134,10 +135,6 @@ matrix_http_api_set_property(GObject *gobject,
                 g_warning("URL specified (%s) is not ASCII", base_url);
 
                 return;
-            }
-
-            if (priv->uri) {
-                soup_uri_free(priv->uri);
             }
 
             last_occurence = g_strrstr(base_url, API_ENDPOINT);
@@ -171,7 +168,31 @@ matrix_http_api_set_property(GObject *gobject,
                 g_debug("Set base URL to %s", url);
             }
 
-            priv->uri = soup_uri_new(url);
+            new_uri = soup_uri_new(url);
+
+            if (new_uri && SOUP_URI_VALID_FOR_HTTP(new_uri)) {
+                g_printf("setting\n");
+                if (priv->uri) {
+                    soup_uri_free(priv->uri);
+                }
+
+                priv->uri = new_uri;
+                g_free(priv->token);
+                priv->token = NULL;
+                g_free(priv->refresh_token);
+                priv->refresh_token = NULL;
+                g_free(priv->homeserver);
+                priv->homeserver = NULL;
+                g_free(priv->user_id);
+                priv->user_id = NULL;
+            } else {
+                if (new_uri) {
+                    soup_uri_free(new_uri);
+                }
+
+                g_warning("Invalid URL: %s", url);
+            }
+
             g_free(url);
 
             break;
@@ -622,6 +643,14 @@ _send(MatrixHTTPAPI *api,
     gchar *data, *url;
     gsize datalen;
     MatrixHTTPAPIRequest *request;
+
+    if (!priv->uri) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_COMMUNICATION_ERROR,
+                    "No valid base URL");
+
+        return;
+    }
 
     if (!g_str_is_ascii(method)) {
         g_warning("Method must be ASCII encoded!");
