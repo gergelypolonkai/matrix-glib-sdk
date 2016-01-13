@@ -126,7 +126,7 @@ main(int argc, char *argv[])
         return 1;
     }
 
-    if (argc != 1) {
+    if ((argc != 1) || !homeserver) {
         g_printerr("%s", g_option_context_get_help(opts, TRUE, NULL));
 
         return 1;
@@ -147,6 +147,7 @@ main(int argc, char *argv[])
     json_builder_end_object(builder);
     login_content = json_builder_get_root(builder);
 
+    g_debug("Logging in");
     matrix_api_login(MATRIX_API(api),
                      login_finished, loop,
                      "m.login.password",
