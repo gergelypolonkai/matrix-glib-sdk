@@ -1025,7 +1025,7 @@ matrix_api_invite_user(MatrixAPI *api,
  *            finished
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
- * @room_id_or_alias: the room ID or room alias to join to
+ * @room_ids: the room ID to join to
  * @error: return location for a #GError, or %NULL
  *
  * Join a room.
@@ -1034,7 +1034,7 @@ void
 matrix_api_join_room(MatrixAPI *api,
                      MatrixAPICallback callback,
                      gpointer user_data,
-                     const gchar *room_id_or_alias,
+                     const gchar *room_id,
                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

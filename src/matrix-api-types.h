@@ -29,6 +29,7 @@ typedef enum {
     MATRIX_API_ERROR_COMMUNICATION_ERROR,
     MATRIX_API_ERROR_INCOMPLETE,
     MATRIX_API_ERROR_BAD_RESPONSE,
+    MATRIX_API_ERROR_INVALID_ROOM_ID,
 
     /* Add Matrix-defined error codes under here, changing `M_` to
      * `MATRIX_API_ERROR`, i.e. `M_FORBIDDEN` =>

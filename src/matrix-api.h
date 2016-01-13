@@ -222,7 +222,7 @@ struct _MatrixAPIInterface {
     void (*join_room)(MatrixAPI *api,
                       MatrixAPICallback callback,
                       gpointer user_data,
-                      const gchar *room_id_or_alias,
+                      const gchar *room_id,
                       GError **error);
     void (*leave_room)(MatrixAPI *api,
                        MatrixAPICallback callback,

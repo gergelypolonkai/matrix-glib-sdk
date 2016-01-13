@@ -38,6 +38,8 @@
  *                               incomplete
  * @MATRIX_API_ERROR_BAD_RESPONSE: malformed response, or the response
  *                                 is not a JSON object
+ * @MATRIX_API_ERROR_INVALID_ROOM_ID: the provided string doesn’t
+ *                                    contain a valid room ID
  * @MATRIX_API_ERROR_MISSING_TOKEN: authorization token is missing
  *                                  from the request
  * @MATRIX_API_ERROR_FORBIDDEN: access was forbidden (e.g. due to a

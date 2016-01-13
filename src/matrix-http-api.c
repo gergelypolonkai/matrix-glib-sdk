@@ -963,6 +963,35 @@ i_list_public_rooms(MatrixAPI *api,
 }
 
 static void
+i_join_room(MatrixAPI *api,
+            MatrixAPICallback callback,
+            gpointer user_data,
+            const gchar *room_id,
+            GError **error)
+{
+    gchar *encoded_room_id, *path;
+
+    // TODO: a more thorough check should be used here
+    if (*room_id != '!') {
+        g_set_error(err,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INVALID_ROOM_ID,
+                    "Invalid room ID");
+
+        return;
+    }
+
+    encoded_room_id = soup_uri_encode(room_id_or_alias, NULL);
+    path = g_strdup_printf("rooms/%s/join", encoded_room_id);
+    g_free(encoded_room_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "POST", path, NULL, NULL,
+          error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -977,4 +1006,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->event_stream = i_event_stream;
     iface->leave_room = i_leave_room;
     iface->list_public_rooms = i_list_public_rooms;
+    iface->join_room = i_join_room;
 }

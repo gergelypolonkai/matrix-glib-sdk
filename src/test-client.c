@@ -58,10 +58,8 @@ create_room_finished(MatrixAPI *api,
         g_printf("Room registered\n");
     }
 
-    matrix_api_initial_sync(MATRIX_API(api),
-                            initial_sync_finished,
-                            data, 10, TRUE,
-                            NULL);
+    matrix_api_join_room(api, NULL, NULL, "#matrix-glib-sdk-test:elxa4y5sd12", NULL);
+    matrix_api_list_public_rooms(api, NULL, NULL, NULL);
 }
 
 static void
@@ -93,8 +91,10 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 
         g_printf("Logged in as %s\n", user_id);
 
-        matrix_api_list_public_rooms(api, NULL, NULL, NULL);
-
+        matrix_api_initial_sync(MATRIX_API(api),
+                                initial_sync_finished,
+                                data, 10, TRUE,
+                                NULL);
         matrix_api_create_room(api,
                                create_room_finished, NULL,
                                MATRIX_API_ROOM_PRESET_PUBLIC,
