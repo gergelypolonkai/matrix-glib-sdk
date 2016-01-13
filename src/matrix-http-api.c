@@ -951,6 +951,18 @@ i_leave_room(MatrixAPI *api,
 }
 
 static void
+i_list_public_rooms(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    GError **error)
+{
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "GET", "publicRooms", NULL, NULL,
+          error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -964,4 +976,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->initial_sync = i_initial_sync;
     iface->event_stream = i_event_stream;
     iface->leave_room = i_leave_room;
+    iface->list_public_rooms = i_list_public_rooms;
 }

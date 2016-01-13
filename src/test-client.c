@@ -93,6 +93,8 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 
         g_printf("Logged in as %s\n", user_id);
 
+        matrix_api_list_public_rooms(api, NULL, NULL, NULL);
+
         matrix_api_create_room(api,
                                create_room_finished, NULL,
                                MATRIX_API_ROOM_PRESET_PUBLIC,
