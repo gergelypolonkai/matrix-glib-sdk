@@ -698,8 +698,8 @@ _send(MatrixHTTPAPI *api,
         json_generator_set_root(generator, (JsonNode *)content);
         data = json_generator_to_data(generator, &datalen);
     } else {
-        data = g_strdup("");
-        datalen = 0;
+        data = g_strdup("{}");
+        datalen = 2;
     }
 
     g_debug("Sending (%s %s): %s", method, url, data);
