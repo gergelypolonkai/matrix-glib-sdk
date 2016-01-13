@@ -48,6 +48,8 @@
  * @MATRIX_API_ERROR_UNKNOWN: an error unknown to the Matrix server
  * @MATRIX_API_ERROR_UNKNOWN_TOKEN: the token provided is not known
  *                                  for the homeserver
+ * @MATRIX_API_ERROR_NOT_JSON: illegal request, the content is not
+ *                             valid JSON
  * @MATRIX_API_ERROR_UNSPECIFIED: no error code was sent by the
  *                                homeserver
  * @MATRIX_API_ERROR_UNKNOWN_ERROR: an error unknown to this library
