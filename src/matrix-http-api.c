@@ -291,12 +291,15 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
      * The base URL to use for communication with the Matrix.org
      * server. If the URL doesn’t end with the correct API endpoint
      * (/_matrix/client/api/v1), it gets appended automatically.
+     *
+     * Changing the base URL automatically clears all authorization
+     * tokens.
      */
     obj_properties[PROP_BASE_URL] = g_param_spec_string(
             "base-url", "Server's base URL",
             "Matrix.org home server to connect to.",
             NULL,
-            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
     g_object_class_install_property(gobject_class,
                                     PROP_BASE_URL,
                                     obj_properties[PROP_BASE_URL]);
