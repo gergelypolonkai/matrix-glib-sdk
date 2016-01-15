@@ -50,6 +50,8 @@
  *                                  for the homeserver
  * @MATRIX_API_ERROR_NOT_JSON: illegal request, the content is not
  *                             valid JSON
+ * @MATRIX_API_ERROR_UNRECOGNIZED: the homeserver didn't understand
+ *                                 the request
  * @MATRIX_API_ERROR_UNSPECIFIED: no error code was sent by the
  *                                homeserver
  * @MATRIX_API_ERROR_UNKNOWN_ERROR: an error unknown to this library

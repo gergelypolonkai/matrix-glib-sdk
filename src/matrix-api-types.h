@@ -39,6 +39,7 @@ typedef enum {
     MATRIX_API_ERROR_UNKNOWN,
     MATRIX_API_ERROR_UNKNOWN_TOKEN,
     MATRIX_API_ERROR_NOT_JSON,
+    MATRIX_API_ERROR_UNRECOGNIZED,
 
     /* Allow for a lot of Matrix.org defined codes
        Do not define error codes after this! */
