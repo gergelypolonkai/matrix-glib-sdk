@@ -18,6 +18,7 @@
 
 #include <glib/gprintf.h>
 #include <json-glib/json-glib.h>
+#include <libsoup/soup.h>
 
 #include "matrix-http-api.h"
 
@@ -63,6 +64,34 @@ create_room_finished(MatrixAPI *api,
 }
 
 static void
+get_user_presence_finished(MatrixAPI *api,
+                           JsonNode *json_content,
+                           gpointer data,
+                           GError *err)
+{
+    JsonObject *root_obj;
+    const gchar *avatar_url;
+    SoupURI *avatar_uri;
+
+    root_obj = json_node_get_object(json_content);
+    avatar_url = json_object_get_string_member(root_obj, "avatar_url");
+
+    g_info("Avatar URL: %s", avatar_url);
+
+    avatar_uri = soup_uri_new(avatar_url);
+    g_info("Scheme: %s; authority: %s; path: %s",
+           soup_uri_get_scheme(avatar_uri),
+           soup_uri_get_host(avatar_uri),
+           soup_uri_get_path(avatar_uri));
+    matrix_api_media_download(api,
+                              NULL, NULL,
+                              soup_uri_get_host(avatar_uri),
+                              soup_uri_get_path(avatar_uri) + 1,
+                              NULL);
+    soup_uri_free(avatar_uri);
+}
+
+static void
 login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 {
     JsonPath *path = json_path_new();
@@ -103,6 +132,9 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
                                MATRIX_API_ROOM_VISIBILITY_DEFAULT,
                                NULL, NULL, NULL, NULL);
         matrix_api_get_presence_list(api, NULL, NULL, user_id, NULL);
+        matrix_api_get_user_presence(api,
+                                     get_user_presence_finished, NULL,
+                                     user_id, NULL);
     } else {
         g_printf("Login unsuccessful!\n");
     }

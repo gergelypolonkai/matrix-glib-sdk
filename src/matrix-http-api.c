@@ -1025,6 +1025,27 @@ i_get_presence_list(MatrixAPI *api,
 }
 
 static void
+i_get_user_presence(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *user_id,
+                    GError **error)
+{
+    gchar *encoded_user_id;
+    gchar *path;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("presence/%s/status", encoded_user_id);
+    g_free(encoded_user_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "GET", path, NULL, NULL,
+          error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1042,7 +1063,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     /* Presence */
     iface->get_presence_list = i_get_presence_list;
     iface->update_presence_list = NULL;
-    iface->get_user_presence = NULL;
+    iface->get_user_presence = i_get_user_presence;
     iface->set_user_presence = NULL;
 
     /* Push notifications */
