@@ -2314,6 +2314,46 @@ i_versions(MatrixAPI *api,
 }
 
 static void
+i_add_3pid(MatrixAPI *api,
+           MatrixAPICallback callback,
+           gpointer user_data,
+           gboolean bind_creds,
+           MatrixAPI3PidCredential *threepid_creds,
+           GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *body, *id_node;
+
+    if ((id_node = matrix_api_3pid_credential_get_json_node(
+                 threepid_creds, error)) == NULL) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "Incomplete credential");
+
+        return;
+    }
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "bind");
+    json_builder_add_boolean_value(builder, bind_creds);
+
+    json_builder_set_member_name(builder, "threePidCreds");
+    json_builder_add_value(builder, id_node);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", "account/3pid", NULL, NULL, body, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2391,7 +2431,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* User data */
     iface->get_3pids = i_get_3pids;
-    iface->add_3pid = NULL;
+    iface->add_3pid = i_add_3pid;
     iface->change_password = NULL;
     iface->get_profile = NULL;
     iface->get_avatar_url = NULL;
