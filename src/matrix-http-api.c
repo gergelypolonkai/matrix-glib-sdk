@@ -1906,6 +1906,39 @@ i_list_room_messages(MatrixAPI *api,
 }
 
 static void
+i_send_event_receipt(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *room_id,
+                     MatrixAPIReceiptType receipt_type,
+                     const gchar *event_id,
+                     JsonNode *receipt,
+                     GError **error)
+{
+    gchar *encoded_room_id, *receipt_type_string, *encoded_event_id, *path;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    encoded_event_id = soup_uri_encode(event_id, NULL);
+    receipt_type_string = enum_to_string(MATRIX_TYPE_API_RECEIPT_TYPE,
+                                         receipt_type,
+                                         TRUE);
+    path = g_strdup_printf("rooms/%s/receipt/%s/%s",
+                           encoded_room_id,
+                           receipt_type_string,
+                           encoded_event_id);
+    g_free(encoded_room_id);
+    g_free(encoded_event_id);
+    g_free(receipt_type_string);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, receipt, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1961,7 +1994,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->initial_sync_room = i_initial_sync_room;
     iface->list_room_members = i_list_room_members;
     iface->list_room_messages = i_list_room_messages;
-    iface->send_event_receipt = NULL;
+    iface->send_event_receipt = i_send_event_receipt;
     iface->redact_event = NULL;
     iface->send_message_event = NULL;
     iface->get_room_state = NULL;
