@@ -57,6 +57,7 @@ typedef enum {
 } MatrixAPIEventFormat;
 
 typedef enum {
+    MATRIX_API_RESIZE_METHOD_DEFAULT,
     MATRIX_API_RESIZE_METHOD_CROP,
     MATRIX_API_RESIZE_METHOD_SCALE
 } MatrixAPIResizeMethod;

@@ -117,6 +117,7 @@ G_DEFINE_QUARK(matrix-api-error-quark, matrix_api_error);
 
 /**
  * MatrixAPIResizeMethod:
+ * @MATRIX_API_RESIZE_METHOD_DEFAULT: use the server default value
  * @MATRIX_API_RESIZE_METHOD_CROP: crop thumbnail to the requested
  *                                 size
  * @MATRIX_API_RESIZE_METHOD_SCALE: scale thumbnail to the requested
