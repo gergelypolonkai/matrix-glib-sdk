@@ -2225,6 +2225,27 @@ i_download_filter(MatrixAPI *api,
 }
 
 static void
+i_whois(MatrixAPI *api,
+        MatrixAPICallback callback,
+        gpointer user_data,
+        const gchar *user_id,
+        GError **error)
+{
+    gchar *encoded_user_id, *path;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("admin/whois/%s", encoded_user_id);
+    g_free(encoded_user_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2293,7 +2314,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     /* Search */
 
     /* Server administration */
-    iface->whois = NULL;
+    iface->whois = i_whois;
     iface->versions = NULL;
 
     /* Session management */
