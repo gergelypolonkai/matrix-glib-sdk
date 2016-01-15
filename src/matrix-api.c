@@ -390,7 +390,7 @@ matrix_api_media_thumbnail(MatrixAPI *api,
  *             @callback
  * @content_type: (allow-none): the content type of the file being
  *                uploaded
- * @content: the content to be uploaded
+ * @content: (transfer full): the content to be uploaded
  * @error: return location for a #GError, or %NULL
  *
  * Upload some content to the content repository.
@@ -400,7 +400,7 @@ matrix_api_media_upload(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
                         const gchar *content_type,
-                        const GByteArray *content,
+                        GByteArray *content,
                         GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

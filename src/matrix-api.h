@@ -82,7 +82,7 @@ struct _MatrixAPIInterface {
                          MatrixAPICallback callback,
                          gpointer user_data,
                          const gchar *content_type,
-                         const GByteArray *content,
+                         GByteArray *content,
                          GError **error);
 
     /* Presence */
@@ -499,7 +499,7 @@ void matrix_api_media_upload(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,
                              const gchar *content_type,
-                             const GByteArray *content,
+                             GByteArray *content,
                              GError **error);
 
 /* Presence */
