@@ -1353,7 +1353,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->set_user_presence = i_set_user_presence;
 
     /* Push notifications */
-    iface->modify_pusher = NULL;
+    iface->update_pusher = NULL;
     iface->get_pushers = NULL;
     iface->delete_pusher = NULL;
     iface->get_pusher = NULL;

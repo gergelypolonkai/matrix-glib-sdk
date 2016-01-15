@@ -112,7 +112,7 @@ struct _MatrixAPIInterface {
                               GError **error);
 
     /* Push notifications */
-    void (*modify_pusher)(MatrixAPI *api,
+    void (*update_pusher)(MatrixAPI *api,
                           MatrixAPICallback callback,
                           gpointer user_data,
                           MatrixAPIPusher *pusher,
@@ -529,7 +529,7 @@ void matrix_api_set_user_presence(MatrixAPI *api,
                                   GError **error);
 
 /* Push notifications */
-void matrix_api_modify_pusher(MatrixAPI *api,
+void matrix_api_update_pusher(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
                               MatrixAPIPusher *pusher,

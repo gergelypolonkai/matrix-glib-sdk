@@ -49,7 +49,7 @@
  * @update_presence_list: virtual function for matrix_api_update_presence_list()
  * @get_user_presence: virtual function for matrix_api_get_user_presence()
  * @set_user_presence: virtual function for matrix_api_set_user_presence()
- * @modify_pusher: virtual function for matrix_api_modify_pusher()
+ * @update_pusher: virtual function for matrix_api_update_pusher()
  * @get_pushers: virtual function for matrix_api_get_pushers()
  * @delete_pusher: virtual function for matrix_api_delete_pusher()
  * @get_pusher: virtual function for matrix_api_get_pusher()
@@ -532,7 +532,7 @@ matrix_api_set_user_presence(MatrixAPI *api,
 /* Push notifications */
 
 /**
- * matrix_api_modify_pusher:
+ * matrix_api_update_pusher:
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): a function to call when the
  *            request is finished
@@ -541,10 +541,11 @@ matrix_api_set_user_presence(MatrixAPI *api,
  * @pusher: the pusher information
  * @error: return location for a #GError, or %NULL
  *
- * Modify a pushers for the active user on this homeserver.
+ * Create, update or delete a pusher for the active user on this
+ * homeserver.
  */
 void
-matrix_api_modify_pusher(MatrixAPI *api,
+matrix_api_update_pusher(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
                          MatrixAPIPusher *pusher,
@@ -553,7 +554,7 @@ matrix_api_modify_pusher(MatrixAPI *api,
     g_return_if_fail(MATRIX_IS_API(api));
 
     MATRIX_API_GET_IFACE(api)
-        ->modify_pusher(api,
+        ->update_pusher(api,
                         callback, user_data,
                         pusher, error);
 }
