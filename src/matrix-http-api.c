@@ -1387,6 +1387,38 @@ i_delete_pusher(MatrixAPI *api,
 }
 
 static void
+i_get_pusher(MatrixAPI *api,
+             MatrixAPICallback callback,
+             gpointer user_data,
+             const gchar *scope,
+             MatrixAPIPusherKind kind,
+             const gchar *rule_id,
+             GError **error)
+{
+    gchar *encoded_scope, *encoded_rule_id, *kind_string, *path;
+
+    encoded_scope = soup_uri_encode(scope, NULL);
+    encoded_rule_id = soup_uri_encode(rule_id, NULL);
+    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+
+    path = g_strdup_printf("pushrules/%s/%s/%s",
+                           encoded_scope,
+                           kind_string,
+                           encoded_rule_id);
+
+    g_free(encoded_scope);
+    g_free(encoded_rule_id);
+    g_free(kind_string);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1411,7 +1443,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->update_pusher = i_update_pusher;
     iface->get_pushers = i_get_pushers;
     iface->delete_pusher = i_delete_pusher;
-    iface->get_pusher = NULL;
+    iface->get_pusher = i_get_pusher;
     iface->add_pusher = NULL;
     iface->toggle_pusher = NULL;
 
