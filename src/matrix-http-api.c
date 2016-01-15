@@ -49,10 +49,12 @@
  */
 
 #define API_ENDPOINT "/_matrix/client/api/v1/"
+#define MEDIA_ENDPOINT "/_matrix/media/v1/"
 
 typedef struct _MatrixHTTPAPIPrivate {
     SoupSession *soup_session;
     SoupURI *uri;
+    SoupURI *media_uri;
     gchar *token;
     gchar *refresh_token;
     gchar *user_id;
@@ -70,12 +72,18 @@ enum {
     N_PROPERTIES
 };
 
+typedef enum {
+    CALL_API,
+    CALL_MEDIA
+} CallType;
+
 typedef struct {
     MatrixHTTPAPI *api;
     JsonNode *request_content;
     MatrixAPICallback callback;
     gpointer callback_data;
     gboolean accept_non_json;
+    CallType call_type;
 } MatrixHTTPAPIRequest;
 
 GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
@@ -152,7 +160,7 @@ matrix_http_api_set_property(GObject *gobject,
         {
             const gchar *base_url;
             gchar *last_occurence;
-            SoupURI *api_uri;
+            SoupURI *api_uri, *media_uri;
 
             base_url = g_value_get_string(value);
 
@@ -170,16 +178,21 @@ matrix_http_api_set_property(GObject *gobject,
             }
 
             _set_url(&api_uri, base_url, API_ENDPOINT);
+            _set_url(&media_uri, base_url, MEDIA_ENDPOINT);
 
-            if (api_uri) {
-                gchar *api_url;
+            if (api_uri && media_uri) {
+                gchar *api_url, *media_url;
 
                 if (priv->uri) {
                     soup_uri_free(priv->uri);
                 }
 
+                if (priv->media_uri) {
+                    soup_uri_free(priv->media_uri);
+                }
 
                 priv->uri = api_uri;
+                priv->media_uri = media_uri;
 
                 // Free all tokens and IDs, as they won’t be valid for
                 // the new server
@@ -193,15 +206,21 @@ matrix_http_api_set_property(GObject *gobject,
                 priv->user_id = NULL;
 
                 api_url = soup_uri_to_string(api_uri, FALSE);
+                media_url = soup_uri_to_string(media_uri, FALSE);
 
                 g_debug("API URL: %s", api_url);
+                g_debug("Media URL: %s", media_url);
 
                 g_free(api_url);
+                g_free(media_url);
             } else {
                 if (api_uri) {
                     soup_uri_free(api_uri);
                 }
 
+                if (media_uri) {
+                    soup_uri_free(media_uri);
+                }
 
                 g_warning("Invalid URL: %s", base_url);
             }
@@ -470,8 +489,21 @@ _response_callback(SoupSession *session,
         gsize datalen;
         JsonParser *parser;
         SoupURI *request_uri = soup_message_get_uri(msg);
-        const gchar *request_url = soup_uri_get_path(request_uri)
-            + strlen(API_ENDPOINT);
+        const gchar *request_url;
+
+        switch (request->call_type) {
+            case CALL_API:
+                request_url = soup_uri_get_path(request_uri)
+                    + strlen(API_ENDPOINT);
+
+                break;
+
+            case CALL_MEDIA:
+                request_url = soup_uri_get_path(request_uri)
+                    + strlen(MEDIA_ENDPOINT);
+
+                break;
+        }
 
         buffer = soup_message_body_flatten(msg->response_body);
         soup_buffer_get_data(buffer, &data, &datalen);
@@ -662,6 +694,7 @@ static void
 _send(MatrixHTTPAPI *api,
       MatrixAPICallback callback,
       gpointer user_data,
+      CallType call_type,
       const gchar *method,
       const gchar *path,
       GHashTable *params,
@@ -699,7 +732,17 @@ _send(MatrixHTTPAPI *api,
         return;
     }
 
-    request_path = soup_uri_new_with_base(priv->uri, path);
+    switch (call_type) {
+        case CALL_API:
+            request_path = soup_uri_new_with_base(priv->uri, path);
+
+            break;
+
+        case CALL_MEDIA:
+            request_path = soup_uri_new_with_base(priv->media_uri, path);
+
+            break;
+    }
 
     if (!params) {
         params = create_query_params();
@@ -745,6 +788,7 @@ _send(MatrixHTTPAPI *api,
     request->callback = callback;
     request->callback_data = user_data;
     request->accept_non_json = accept_non_json;
+    request->call_type = call_type;
 
     soup_session_queue_message(priv->soup_session,
                                message,
@@ -769,6 +813,7 @@ i_login(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "POST", "login", NULL, body,
           FALSE, error);
 }
@@ -902,6 +947,7 @@ i_create_room(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "POST", "createRoom", NULL, body,
           FALSE, error);
 }
@@ -928,6 +974,7 @@ i_initial_sync(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "GET", "initialSync", params, NULL,
           FALSE, err);
 }
@@ -955,6 +1002,7 @@ i_event_stream(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "GET", "events", params, NULL,
           FALSE, err);
 }
@@ -974,6 +1022,7 @@ i_leave_room(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "POST", path, NULL, NULL,
           FALSE, error);
     g_free(path);
@@ -987,6 +1036,7 @@ i_list_public_rooms(MatrixAPI *api,
 {
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "GET", "publicRooms", NULL, NULL,
           FALSE, error);
 }
@@ -1015,6 +1065,7 @@ i_join_room(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "POST", path, NULL, NULL,
           FALSE, error);
     g_free(path);
@@ -1036,6 +1087,7 @@ i_get_presence_list(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "GET", path, NULL, NULL,
           FALSE, error);
     g_free(path);
