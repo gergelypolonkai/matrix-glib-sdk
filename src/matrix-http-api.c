@@ -1939,6 +1939,51 @@ i_send_event_receipt(MatrixAPI *api,
 }
 
 static void
+i_redact_event(MatrixAPI *api,
+               MatrixAPICallback callback,
+               gpointer user_data,
+               const gchar *room_id,
+               const gchar *event_id,
+               const gchar *txn_id,
+               const gchar *reason,
+               GError **error)
+{
+    gchar *encoded_room_id, *encoded_event_id, *encoded_txn_id, *path;
+    JsonBuilder *builder;
+    JsonNode *body = NULL;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    encoded_event_id = soup_uri_encode(event_id, NULL);
+    encoded_txn_id = soup_uri_encode(txn_id, NULL);
+    path = g_strdup_printf("rooms/%s/redact/%s/%s",
+                           encoded_room_id,
+                           encoded_event_id,
+                           encoded_txn_id);
+    g_free(encoded_room_id);
+    g_free(encoded_event_id);
+    g_free(encoded_txn_id);
+
+    if (reason) {
+        builder = json_builder_new();
+        json_builder_begin_object(builder);
+
+        json_builder_set_member_name(builder, "reason");
+        json_builder_add_string_value(builder, reason);
+
+        json_builder_end_object(builder);
+        body = json_builder_get_root(builder);
+        g_object_unref(builder);
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "PUT", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1995,7 +2040,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->list_room_members = i_list_room_members;
     iface->list_room_messages = i_list_room_messages;
     iface->send_event_receipt = i_send_event_receipt;
-    iface->redact_event = NULL;
+    iface->redact_event = i_redact_event;
     iface->send_message_event = NULL;
     iface->get_room_state = NULL;
     iface->send_room_event = NULL;
