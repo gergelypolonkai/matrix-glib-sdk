@@ -583,7 +583,8 @@ _response_callback(SoupSession *session,
                                                   message);
                     }
                 }
-            } else { // Not a JSON object
+            } else if (!JSON_NODE_HOLDS_ARRAY(content)) {
+                // Not a JSON object, neither an array
                 err = g_error_new(MATRIX_API_ERROR,
                                   MATRIX_API_ERROR_BAD_RESPONSE,
                                   "Bad response (not a JSON object)");
@@ -992,6 +993,27 @@ i_join_room(MatrixAPI *api,
 }
 
 static void
+i_get_presence_list(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *user_id,
+                    GError **error)
+{
+    gchar *encoded_user_id;
+    gchar *path;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("presence/list/%s", encoded_user_id);
+    g_free(encoded_user_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          "GET", path, NULL, NULL,
+          error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1007,7 +1029,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->media_upload = NULL;
 
     /* Presence */
-    iface->get_presence_list = NULL;
+    iface->get_presence_list = i_get_presence_list;
     iface->update_presence_list = NULL;
     iface->get_user_presence = NULL;
     iface->set_user_presence = NULL;

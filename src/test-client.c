@@ -102,6 +102,7 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
                                "GLib SDK test room",
                                MATRIX_API_ROOM_VISIBILITY_DEFAULT,
                                NULL, NULL, NULL, NULL);
+        matrix_api_get_presence_list(api, NULL, NULL, user_id, NULL);
     } else {
         g_printf("Login unsuccessful!\n");
     }
