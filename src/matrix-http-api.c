@@ -1861,6 +1861,51 @@ i_list_room_members(MatrixAPI *api,
 }
 
 static void
+i_list_room_messages(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *room_id,
+                     const gchar *from_token,
+                     MatrixAPIEventDirection direction,
+                     guint limit,
+                     GError **error)
+{
+    gchar *encoded_room_id, *path;
+    GHashTable *params;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    path = g_strdup_printf("rooms/%s/messages", encoded_room_id);
+    g_free(encoded_room_id);
+
+    params  = create_query_params();
+
+    g_hash_table_replace(params, "from", g_strdup(from_token));
+
+    switch (direction) {
+        case MATRIX_API_EVENT_DIRECTION_BACKWARD:
+            g_hash_table_replace(params, "dir", g_strdup("b"));
+
+            break;
+
+        case MATRIX_API_EVENT_DIRECTION_FORWARD:
+            g_hash_table_replace(params, "dir", g_strdup("f"));
+
+            break;
+    }
+
+    if (limit != 0) {
+        g_hash_table_replace(params, "limit", g_strdup_printf("%u", limit));
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, params, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1915,7 +1960,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_event_context = i_get_event_context;
     iface->initial_sync_room = i_initial_sync_room;
     iface->list_room_members = i_list_room_members;
-    iface->list_room_messages = NULL;
+    iface->list_room_messages = i_list_room_messages;
     iface->send_event_receipt = NULL;
     iface->redact_event = NULL;
     iface->send_message_event = NULL;
