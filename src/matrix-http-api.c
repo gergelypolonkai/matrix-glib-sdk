@@ -1332,6 +1332,27 @@ i_set_user_presence(MatrixAPI *api,
 }
 
 static void
+i_update_pusher(MatrixAPI *api,
+                MatrixAPICallback callback,
+                gpointer user_data,
+                MatrixAPIPusher *pusher,
+                GError **error)
+{
+    JsonNode *pusher_node;
+
+    if ((pusher_node = matrix_api_pusher_get_json_node(
+                 pusher, error)) == NULL) {
+        return;
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", "pushers/set", NULL, NULL, pusher_node, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1353,7 +1374,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->set_user_presence = i_set_user_presence;
 
     /* Push notifications */
-    iface->update_pusher = NULL;
+    iface->update_pusher = i_update_pusher;
     iface->get_pushers = NULL;
     iface->delete_pusher = NULL;
     iface->get_pusher = NULL;
