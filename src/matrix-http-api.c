@@ -973,14 +973,14 @@ i_join_room(MatrixAPI *api,
 
     // TODO: a more thorough check should be used here
     if (*room_id != '!') {
-        g_set_error(err,
+        g_set_error(error,
                     MATRIX_API_ERROR, MATRIX_API_ERROR_INVALID_ROOM_ID,
                     "Invalid room ID");
 
         return;
     }
 
-    encoded_room_id = soup_uri_encode(room_id_or_alias, NULL);
+    encoded_room_id = soup_uri_encode(room_id, NULL);
     path = g_strdup_printf("rooms/%s/join", encoded_room_id);
     g_free(encoded_room_id);
 

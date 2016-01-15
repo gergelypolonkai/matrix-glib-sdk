@@ -87,7 +87,7 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
             g_printf("Result is not one long?\n");
         }
 
-        user_id = json_array_get_string_element(array, 0);
+        user_id = matrix_api_get_user_id(MATRIX_API(api));
 
         g_printf("Logged in as %s\n", user_id);
 

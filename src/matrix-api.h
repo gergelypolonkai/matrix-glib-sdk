@@ -639,7 +639,7 @@ void matrix_api_invite_user(MatrixAPI *api,
 void matrix_api_join_room(MatrixAPI *api,
                           MatrixAPICallback callback,
                           gpointer user_data,
-                          const gchar *room_id_or_alias,
+                          const gchar *room_id,
                           GError **error);
 void matrix_api_leave_room(MatrixAPI *api,
                            MatrixAPICallback callback,

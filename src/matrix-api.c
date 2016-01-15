@@ -1025,7 +1025,7 @@ matrix_api_invite_user(MatrixAPI *api,
  *            finished
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
- * @room_ids: the room ID to join to
+ * @room_id: the room ID to join to
  * @error: return location for a #GError, or %NULL
  *
  * Join a room.
@@ -1040,7 +1040,7 @@ matrix_api_join_room(MatrixAPI *api,
     g_return_if_fail(MATRIX_IS_API(api));
 
     MATRIX_API_GET_IFACE(api)
-        ->join_room(api, callback, user_data, room_id_or_alias, error);
+        ->join_room(api, callback, user_data, room_id, error);
 }
 
 /**
