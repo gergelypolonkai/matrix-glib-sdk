@@ -1840,6 +1840,27 @@ i_initial_sync_room(MatrixAPI *api,
 }
 
 static void
+i_list_room_members(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *room_id,
+                    GError **error)
+{
+    gchar *encoded_room_id, *path;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    path = g_strdup_printf("rooms/%s/members", encoded_room_id);
+    g_free(encoded_room_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1893,7 +1914,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->initial_sync = i_initial_sync;
     iface->get_event_context = i_get_event_context;
     iface->initial_sync_room = i_initial_sync_room;
-    iface->list_room_members = NULL;
+    iface->list_room_members = i_list_room_members;
     iface->list_room_messages = NULL;
     iface->send_event_receipt = NULL;
     iface->redact_event = NULL;
