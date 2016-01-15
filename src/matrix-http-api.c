@@ -1594,6 +1594,40 @@ i_get_room_id(MatrixAPI *api,
 }
 
 static void
+i_create_room_alias(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *room_id,
+                    const gchar *room_alias,
+                    GError **error)
+{
+    gchar *encoded_room_alias, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_room_alias = soup_uri_encode(room_alias, NULL);
+    path = g_strdup_printf("room/%s", encoded_room_alias);
+    g_free(encoded_room_alias);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "room_id");
+    json_builder_add_string_value(builder, room_id);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "PUT", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1628,7 +1662,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     /* Room directory */
     iface->delete_room_alias = i_delete_room_alias;
     iface->get_room_id = i_get_room_id;
-    iface->create_room_alias = NULL;
+    iface->create_room_alias = i_create_room_alias;
 
     /* Room discovery */
     iface->list_public_rooms = i_list_public_rooms;
