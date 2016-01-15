@@ -1109,8 +1109,35 @@ i_get_user_presence(MatrixAPI *api,
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
+          CALL_API,
           "GET", path, NULL, NULL,
           FALSE, error);
+    g_free(path);
+}
+
+static void
+i_media_download(MatrixAPI *api,
+                 MatrixAPICallback callback,
+                 gpointer user_data,
+                 const gchar *server_name,
+                 const gchar *media_id,
+                 GError **error)
+{
+    gchar *encoded_server_name, *encoded_media_id, *path;
+
+    encoded_server_name = soup_uri_encode(server_name, NULL);
+    encoded_media_id = soup_uri_encode(media_id, NULL);
+    path = g_strdup_printf("download/%s/%s",
+                           encoded_server_name,
+                           encoded_media_id);
+    g_free(encoded_server_name);
+    g_free(encoded_media_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_MEDIA,
+          "GET", path, NULL, NULL,
+          TRUE, error);
     g_free(path);
 }
 
@@ -1125,7 +1152,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_homeserver = i_get_homeserver;
 
     /* Media */
-    iface->media_download = NULL;
+    iface->media_download = i_media_download;
     iface->media_thumbnail = NULL;
     iface->media_upload = NULL;
 

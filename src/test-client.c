@@ -89,6 +89,11 @@ get_user_presence_finished(MatrixAPI *api,
            soup_uri_get_scheme(avatar_uri),
            soup_uri_get_host(avatar_uri),
            soup_uri_get_path(avatar_uri));
+    matrix_api_media_download(api,
+                              NULL, NULL,
+                              soup_uri_get_host(avatar_uri),
+                              soup_uri_get_path(avatar_uri) + 1,
+                              NULL);
     soup_uri_free(avatar_uri);
 }
 
