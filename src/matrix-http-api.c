@@ -1668,6 +1668,27 @@ i_ban_user(MatrixAPI *api,
 }
 
 static void
+i_forget_room(MatrixAPI *api,
+              MatrixAPICallback callback,
+              gpointer user_data,
+              const gchar *room_id,
+              GError **error)
+{
+    gchar *encoded_room_id, *path;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    path = g_strdup_printf("rooms/%s/forget", encoded_room_id);
+    g_free(encoded_room_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1709,7 +1730,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Room membership */
     iface->ban_user = i_ban_user;
-    iface->forget_room = NULL;
+    iface->forget_room = i_forget_room;
     iface->invite_user_3rdparty = NULL;
     iface->invite_user = NULL;
     iface->join_room = i_join_room;
