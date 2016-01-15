@@ -1507,6 +1507,51 @@ static void i_add_pusher(MatrixAPI *api,
 }
 
 static void
+i_toggle_pusher(MatrixAPI *api,
+                MatrixAPICallback callback,
+                gpointer user_data,
+                const gchar *scope,
+                MatrixAPIPusherKind kind,
+                const gchar *rule_id,
+                gboolean enabled,
+                GError **error)
+{
+    gchar *encoded_scope, *encoded_rule_id, *kind_string, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_scope = soup_uri_encode(scope, NULL);
+    encoded_rule_id = soup_uri_encode(rule_id, NULL);
+    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+
+    path = g_strdup_printf("pushrules/%s/%s/%s",
+                           encoded_scope,
+                           kind_string,
+                           encoded_rule_id);
+
+    g_free(encoded_scope);
+    g_free(encoded_rule_id);
+    g_free(kind_string);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "enabled");
+    json_builder_add_boolean_value(builder, enabled);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1533,7 +1578,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->delete_pusher = i_delete_pusher;
     iface->get_pusher = i_get_pusher;
     iface->add_pusher = i_add_pusher;
-    iface->toggle_pusher = NULL;
+    iface->toggle_pusher = i_toggle_pusher;
 
     /* Room creation */
     iface->create_room = i_create_room;
