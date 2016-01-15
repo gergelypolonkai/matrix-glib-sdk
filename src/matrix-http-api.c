@@ -2097,6 +2097,50 @@ i_send_room_event(MatrixAPI *api,
 }
 
 static void
+i_notify_room_typing(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     const gchar *user_id,
+                     const gchar *room_id,
+                     guint timeout,
+                     gboolean typing,
+                     GError **error)
+{
+    gchar *encoded_room_id, *encoded_user_id, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("rooms/%s/typing/%s",
+                           encoded_room_id, encoded_user_id);
+    g_free(encoded_room_id);
+    g_free(encoded_user_id);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    if (timeout != 0) {
+        json_builder_set_member_name(builder, "timeout");
+        json_builder_add_int_value(builder, timeout);
+    }
+
+    json_builder_set_member_name(builder, "typing");
+    json_builder_add_boolean_value(builder, typing);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "PUT", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2157,7 +2201,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->send_message_event = i_send_message_event;
     iface->get_room_state = i_get_room_state;
     iface->send_room_event = i_send_room_event;
-    iface->notify_room_typing = NULL;
+    iface->notify_room_typing = i_notify_room_typing;
     iface->sync = NULL;
     iface->create_filter = NULL;
     iface->download_filter = NULL;
