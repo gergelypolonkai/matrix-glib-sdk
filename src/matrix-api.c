@@ -1435,7 +1435,7 @@ matrix_api_get_room_state(MatrixAPI *api,
  * @event_type: the type of state to look up
  * @state_key: (allow-none): the key of the state to look up. If
  *             @event_type is %NULL, this parameter is ignored
- * @content: the content of the state event
+ * @content: (transfer full): the content of the state event
  * @error: return location for a #GError, or %NULL
  *
  * Send a state event to the room. These events will be overwritten if
@@ -1453,7 +1453,7 @@ matrix_api_send_room_event(MatrixAPI *api,
                            const gchar *room_id,
                            const gchar *event_type,
                            const gchar *state_key,
-                           const JsonNode *content,
+                           JsonNode *content,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
