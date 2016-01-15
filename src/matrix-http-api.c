@@ -75,6 +75,7 @@ typedef struct {
     JsonNode *request_content;
     MatrixAPICallback callback;
     gpointer callback_data;
+    gboolean accept_non_json;
 } MatrixHTTPAPIRequest;
 
 GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
@@ -455,6 +456,7 @@ _response_callback(SoupSession *session,
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
     GError *err = NULL;
     JsonNode *content = NULL;
+    GByteArray *raw_content = NULL;
 
     if (msg->status_code < SOUP_STATUS_CONTINUE) {
         err = g_error_new(MATRIX_API_ERROR,
@@ -467,6 +469,9 @@ _response_callback(SoupSession *session,
         const guint8 *data;
         gsize datalen;
         JsonParser *parser;
+        SoupURI *request_uri = soup_message_get_uri(msg);
+        const gchar *request_url = soup_uri_get_path(request_uri)
+            + strlen(API_ENDPOINT);
 
         buffer = soup_message_body_flatten(msg->response_body);
         soup_buffer_get_data(buffer, &data, &datalen);
@@ -475,9 +480,7 @@ _response_callback(SoupSession *session,
         if (json_parser_load_from_data(parser,
                                        (const gchar *)data, datalen,
                                        &err)) {
-            SoupURI *request_uri = soup_message_get_uri(msg);
-
-            g_debug("Data (%s): %s", soup_uri_get_path(request_uri) + strlen(API_ENDPOINT), data);
+            g_debug("Data (%s): %s", request_url, data);
             content = json_parser_get_root(parser);
 
             if (JSON_NODE_HOLDS_OBJECT(content)) {
@@ -602,10 +605,18 @@ _response_callback(SoupSession *session,
                 g_debug("Bad response: %s", data);
             }
         } else { // Invalid JSON
-            err = g_error_new(MATRIX_API_ERROR,
-                              MATRIX_API_ERROR_BAD_RESPONSE,
-                              "Malformed response (invalid JSON)");
-            g_debug("Malformed response: %s", data);
+            if (request->accept_non_json) {
+                raw_content = g_byte_array_sized_new(datalen);
+                g_byte_array_append(raw_content, data, datalen);
+                g_debug("Binary data (%s): %" G_GSIZE_FORMAT " bytes",
+                        request_url,
+                        datalen);
+            } else {
+                err = g_error_new(MATRIX_API_ERROR,
+                                  MATRIX_API_ERROR_BAD_RESPONSE,
+                                  "Malformed response (invalid JSON)");
+                g_debug("Malformed response (%s): %s", request_url, data);
+            }
         }
     }
 
@@ -613,7 +624,11 @@ _response_callback(SoupSession *session,
     if (request->callback) {
         request->callback(
                 MATRIX_API(api),
+                soup_message_headers_get_content_type(
+                        msg->response_headers,
+                        NULL),
                 content,
+                raw_content,
                 request->callback_data,
                 err);
     }
@@ -651,6 +666,7 @@ _send(MatrixHTTPAPI *api,
       const gchar *path,
       GHashTable *params,
       const JsonNode *content,
+      gboolean accept_non_json,
       GError **error)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
@@ -728,6 +744,7 @@ _send(MatrixHTTPAPI *api,
     request->api = api;
     request->callback = callback;
     request->callback_data = user_data;
+    request->accept_non_json = accept_non_json;
 
     soup_session_queue_message(priv->soup_session,
                                message,
@@ -753,7 +770,7 @@ i_login(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "POST", "login", NULL, body,
-          error);
+          FALSE, error);
 }
 
 static void
@@ -886,7 +903,7 @@ i_create_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "POST", "createRoom", NULL, body,
-          error);
+          FALSE, error);
 }
 
 static void
@@ -912,7 +929,7 @@ i_initial_sync(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "GET", "initialSync", params, NULL,
-          err);
+          FALSE, err);
 }
 
 static void
@@ -939,7 +956,7 @@ i_event_stream(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "GET", "events", params, NULL,
-          err);
+          FALSE, err);
 }
 
 static void
@@ -958,7 +975,7 @@ i_leave_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "POST", path, NULL, NULL,
-          error);
+          FALSE, error);
     g_free(path);
 }
 
@@ -971,7 +988,7 @@ i_list_public_rooms(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "GET", "publicRooms", NULL, NULL,
-          error);
+          FALSE, error);
 }
 
 static void
@@ -999,7 +1016,7 @@ i_join_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "POST", path, NULL, NULL,
-          error);
+          FALSE, error);
     g_free(path);
 }
 
@@ -1020,7 +1037,7 @@ i_get_presence_list(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "GET", path, NULL, NULL,
-          error);
+          FALSE, error);
     g_free(path);
 }
 
@@ -1041,7 +1058,7 @@ i_get_user_presence(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           "GET", path, NULL, NULL,
-          error);
+          FALSE, error);
     g_free(path);
 }
 

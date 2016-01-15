@@ -38,8 +38,10 @@ static GOptionEntry entries[] = {
 
 static void
 initial_sync_finished(MatrixAPI *api,
-                      JsonNode *content,
-                      gpointer data,
+                      const gchar *content_type,
+                      JsonNode *json_content,
+                      GByteArray *raw_content,
+                      gpointer user_data,
                       GError *err)
 {
     g_printf("initialSync finished\n");
@@ -49,7 +51,9 @@ initial_sync_finished(MatrixAPI *api,
 
 static void
 create_room_finished(MatrixAPI *api,
-                     JsonNode *content,
+                     const gchar *content_type,
+                     JsonNode *json_content,
+                     GByteArray *raw_content,
                      gpointer data,
                      GError *err)
 {
@@ -65,7 +69,9 @@ create_room_finished(MatrixAPI *api,
 
 static void
 get_user_presence_finished(MatrixAPI *api,
+                           const gchar *content_type,
                            JsonNode *json_content,
+                           GByteArray *raw_content,
                            gpointer data,
                            GError *err)
 {
@@ -83,16 +89,16 @@ get_user_presence_finished(MatrixAPI *api,
            soup_uri_get_scheme(avatar_uri),
            soup_uri_get_host(avatar_uri),
            soup_uri_get_path(avatar_uri));
-    matrix_api_media_download(api,
-                              NULL, NULL,
-                              soup_uri_get_host(avatar_uri),
-                              soup_uri_get_path(avatar_uri) + 1,
-                              NULL);
     soup_uri_free(avatar_uri);
 }
 
 static void
-login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
+login_finished(MatrixAPI *api,
+               const gchar *content_type,
+               JsonNode *json_content,
+               GByteArray *raw_content,
+               gpointer data,
+               GError *err)
 {
     JsonPath *path = json_path_new();
     JsonNode *result;
@@ -108,7 +114,7 @@ login_finished(MatrixAPI *api, JsonNode *content, gpointer data, GError *err)
 
     json_path_compile(path, "$.user_id", NULL);
 
-    if ((result = json_path_match(path, content)) != NULL) {
+    if ((result = json_path_match(path, json_content)) != NULL) {
         JsonArray *array = json_node_get_array(result);
         const gchar *user_id;
 

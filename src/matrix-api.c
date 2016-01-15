@@ -106,11 +106,16 @@
 /**
  * MatrixAPICallback:
  * @api: A #MatrixAPI implementation
- * @content: the JSON content of the response, as a #JsonNode
- * @data: User data specified when calling original request function
- * @err: a #GError
+ * @content_type: the content_type of the response
+ * @json_content: (allow-none): the JSON content of the response, as a
+ *                #JsonNode
+ * @raw_content: (allow-none): the raw content of the response
+ * @user_data: User data specified when calling original request function
+ * @err: a #GError. It will hold any errors from the underlying API
+ *       (including communication or type errors)
  *
- * A callback function to use with API calls.
+ * A callback function to use with API calls. Either @json_content or
+ * @raw_content will be set.
  */
 
 G_DEFINE_INTERFACE(MatrixAPI, matrix_api, G_TYPE_OBJECT);
