@@ -80,6 +80,7 @@ typedef enum {
 typedef struct {
     MatrixHTTPAPI *api;
     JsonNode *request_content;
+    GByteArray *raw_content;
     MatrixAPICallback callback;
     gpointer callback_data;
     gboolean accept_non_json;
@@ -698,7 +699,9 @@ _send(MatrixHTTPAPI *api,
       const gchar *method,
       const gchar *path,
       GHashTable *params,
-      const JsonNode *content,
+      const gchar *content_type,
+      JsonNode *json_content,
+      GByteArray *raw_content,
       gboolean accept_non_json,
       GError **error)
 {
@@ -715,6 +718,14 @@ _send(MatrixHTTPAPI *api,
                     "No valid base URL");
 
         return;
+    }
+
+    if (json_content && raw_content) {
+        g_critical("Too many parameters for MatrixHTTPAPI._send. This is a bug");
+    }
+
+    if (raw_content && !content_type) {
+        g_critical("Raw content needs content_type to be set. This is a bug");
     }
 
     if (!g_str_is_ascii(method)) {
@@ -762,12 +773,15 @@ _send(MatrixHTTPAPI *api,
     url = soup_uri_to_string(request_path, FALSE);
     soup_uri_free(request_path);
 
-    if (content) {
+    if (json_content) {
         JsonGenerator *generator;
 
         generator = json_generator_new();
-        json_generator_set_root(generator, (JsonNode *)content);
+        json_generator_set_root(generator, (JsonNode *)json_content);
         data = json_generator_to_data(generator, &datalen);
+    } else if (raw_content) {
+        data = raw_content->data;
+        datalen = raw_content->len;
     } else {
         data = g_strdup("{}");
         datalen = 2;
@@ -777,13 +791,16 @@ _send(MatrixHTTPAPI *api,
 
     soup_message_set_flags(message, SOUP_MESSAGE_NO_REDIRECT);
     soup_message_set_request(message,
-                             "application/json",
-                             SOUP_MEMORY_TAKE,
+                             (content_type == NULL)
+                                 ? "application/json"
+                                 : content_type,
+                             raw_content ? SOUP_MEMORY_COPY : SOUP_MEMORY_TAKE,
                              data, datalen);
     g_object_ref(message);
 
     request = g_new0(MatrixHTTPAPIRequest, 1);
-    request->request_content = (JsonNode *)content;
+    request->request_content = json_content;
+    request->raw_content = raw_content;
     request->api = api;
     request->callback = callback;
     request->callback_data = user_data;
@@ -814,7 +831,7 @@ i_login(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "POST", "login", NULL, body,
+          "POST", "login", NULL, NULL, body, NULL,
           FALSE, error);
 }
 
@@ -948,7 +965,7 @@ i_create_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "POST", "createRoom", NULL, body,
+          "POST", "createRoom", NULL, NULL, body, NULL,
           FALSE, error);
 }
 
@@ -975,7 +992,7 @@ i_initial_sync(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "GET", "initialSync", params, NULL,
+          "GET", "initialSync", params, NULL, NULL, NULL,
           FALSE, err);
 }
 
@@ -1003,7 +1020,7 @@ i_event_stream(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "GET", "events", params, NULL,
+          "GET", "events", params, NULL, NULL, NULL,
           FALSE, err);
 }
 
@@ -1023,7 +1040,7 @@ i_leave_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "POST", path, NULL, NULL,
+          "POST", path, NULL, NULL, NULL, NULL,
           FALSE, error);
     g_free(path);
 }
@@ -1037,7 +1054,7 @@ i_list_public_rooms(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "GET", "publicRooms", NULL, NULL,
+          "GET", "publicRooms", NULL, NULL, NULL, NULL,
           FALSE, error);
 }
 
@@ -1066,7 +1083,7 @@ i_join_room(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "POST", path, NULL, NULL,
+          "POST", path, NULL, NULL, NULL, NULL,
           FALSE, error);
     g_free(path);
 }
@@ -1088,7 +1105,7 @@ i_get_presence_list(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "GET", path, NULL, NULL,
+          "GET", path, NULL, NULL, NULL, NULL,
           FALSE, error);
     g_free(path);
 }
@@ -1110,7 +1127,7 @@ i_get_user_presence(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_API,
-          "GET", path, NULL, NULL,
+          "GET", path, NULL, NULL, NULL, NULL,
           FALSE, error);
     g_free(path);
 }
@@ -1136,7 +1153,7 @@ i_media_download(MatrixAPI *api,
     _send(MATRIX_HTTP_API(api),
           callback, user_data,
           CALL_MEDIA,
-          "GET", path, NULL, NULL,
+          "GET", path, NULL, NULL, NULL, NULL,
           TRUE, error);
     g_free(path);
 }
@@ -1192,7 +1209,7 @@ i_media_thumbnail(MatrixAPI *api,
      _send(MATRIX_HTTP_API(api),
            callback, user_data,
            CALL_MEDIA,
-           "GET", path, params, NULL,
+           "GET", path, params, NULL, NULL, NULL,
            TRUE, error);
     g_free(path);
 }
