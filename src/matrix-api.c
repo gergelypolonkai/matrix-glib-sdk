@@ -1284,7 +1284,7 @@ matrix_api_list_room_messages(MatrixAPI *api,
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
  * @room_id: the room in which to send the event
- * @type: type of the receipt
+ * @receipt_type: type of the receipt
  * @event_id: the event ID to acknowledge up to
  * @receipt: extra receipt information to attach. Note that the server
  *           will automatically attach the <code>ts</code> field
@@ -1297,7 +1297,7 @@ matrix_api_send_event_receipt(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
                               const gchar *room_id,
-                              MatrixAPIReceiptType type,
+                              MatrixAPIReceiptType receipt_type,
                               const gchar *event_id,
                               JsonNode *receipt,
                               GError **error)
@@ -1307,7 +1307,7 @@ matrix_api_send_event_receipt(MatrixAPI *api,
     MATRIX_API_GET_IFACE(api)
         ->send_event_receipt(api,
                              callback, user_data,
-                             room_id, type, event_id, receipt,
+                             room_id, receipt_type, event_id, receipt,
                              error);
 }
 

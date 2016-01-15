@@ -280,7 +280,7 @@ struct _MatrixAPIInterface {
                                MatrixAPICallback callback,
                                gpointer user_data,
                                const gchar *room_id,
-                               MatrixAPIReceiptType type,
+                               MatrixAPIReceiptType receipt_type,
                                const gchar *event_id,
                                JsonNode *receipt,
                                GError **error);
@@ -697,7 +697,7 @@ void matrix_api_send_event_receipt(MatrixAPI *api,
                                    MatrixAPICallback callback,
                                    gpointer user_data,
                                    const gchar *room_id,
-                                   MatrixAPIReceiptType type,
+                                   MatrixAPIReceiptType receipt_type,
                                    const gchar *event_id,
                                    JsonNode *receipt,
                                    GError **error);
