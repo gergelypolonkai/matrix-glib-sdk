@@ -36,6 +36,7 @@
  *                                        (e.g. connection error)
  * @MATRIX_API_ERROR_INCOMPLETE: the passed/generated data is
  *                               incomplete
+ * @MATRIX_API_ERROR_BAD_REQUEST: the request is invalid
  * @MATRIX_API_ERROR_BAD_RESPONSE: malformed response, or the response
  *                                 is not a JSON object
  * @MATRIX_API_ERROR_INVALID_ROOM_ID: the provided string doesn’t
