@@ -298,7 +298,7 @@ struct _MatrixAPIInterface {
                                const gchar *room_id,
                                const gchar *event_type,
                                const gchar *txn_id,
-                               const JsonNode *content,
+                               JsonNode *content,
                                GError **error);
     void (*get_room_state)(MatrixAPI *api,
                            MatrixAPICallback callback,
@@ -715,7 +715,7 @@ void matrix_api_send_message_event(MatrixAPI *api,
                                    const gchar *room_id,
                                    const gchar *event_type,
                                    const gchar *txn_id,
-                                   const JsonNode *content,
+                                   JsonNode *content,
                                    GError **error);
 void matrix_api_get_room_state(MatrixAPI *api,
                                MatrixAPICallback callback,

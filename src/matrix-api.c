@@ -1365,7 +1365,7 @@ matrix_api_redact_event(MatrixAPI *api,
  * @txn_id: the transaction ID for this event. Clients should generate
  *          a unique ID; it will be used by the server to ensure
  *          idempotency of requests
- * @content: the content of the event as a #JsonNode
+ * @content: (transfer full): the content of the event as a #JsonNode
  * @error: return location for a #GError, or %NULL
  *
  * Send a message event to the room.
@@ -1377,7 +1377,7 @@ matrix_api_send_message_event(MatrixAPI *api,
                               const gchar *room_id,
                               const gchar *event_type,
                               const gchar *txn_id,
-                              const JsonNode *content,
+                              JsonNode *content,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
