@@ -1707,11 +1707,15 @@ matrix_api_login(MatrixAPI *api,
  *            finished
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
- * @refresh_token: the refresh token that was issued by the server
+ * @refresh_token: (allow-none): the refresh token that was issued by
+ *                 the server
  * @error: return location for a #GError, or %NULL
  *
  * Exchanges a refresh token for a new access token. This is intended
- * to be used if the access token has expired.
+ * to be used if the access token has expired. If @refresh_token is
+ * %NULL, iplementations MUST send the stored refresh token. If it is
+ * not pesent (e.g. because login hasn’t happened yet), this function
+ * MUST yield an error.
  */
 void
 matrix_api_token_refresh(MatrixAPI *api,
