@@ -2301,6 +2301,19 @@ i_get_3pids(MatrixAPI *api,
 }
 
 static void
+i_versions(MatrixAPI *api,
+               MatrixAPICallback callback,
+               gpointer user_data,
+               GError **error)
+{
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", "versions", NULL, NULL, NULL, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2370,7 +2383,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Server administration */
     iface->whois = i_whois;
-    iface->versions = NULL;
+    iface->versions = i_versions;
 
     /* Session management */
     iface->login = i_login;
