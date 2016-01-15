@@ -2116,6 +2116,67 @@ i_notify_room_typing(MatrixAPI *api,
 }
 
 static void
+i_sync(MatrixAPI *api,
+       MatrixAPICallback callback,
+       gpointer user_data,
+       const gchar *filter_id,
+       const MatrixAPIFilter *filter,
+       const gchar *since,
+       gboolean full_state,
+       gboolean set_presence,
+       gulong timeout,
+       GError **error)
+{
+    GHashTable *params;
+
+    params = create_query_params();
+
+    if (filter_id && filter) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_BAD_REQUEST,
+                    "Cannot set both filter_id and filter");
+
+        return;
+    }
+
+    if (filter_id) {
+        g_hash_table_replace(params, "filter", g_strdup(filter_id));
+    }
+
+    if (filter) {
+        g_hash_table_replace(params,
+                             "filter",
+                             matrix_api_filter_get_json_data(
+                                     (MatrixAPIFilter *)filter,
+                                     NULL));
+    }
+
+    if (since) {
+        g_hash_table_replace(params, "since", g_strdup(since));
+    }
+
+    g_hash_table_replace(params,
+                         "full_state",
+                         g_strdup((full_state) ? "true" : "false"));
+
+    if (!set_presence) {
+        g_hash_table_replace(params, "set_presence", g_strdup("offline"));
+    }
+
+    if (timeout != 0) {
+        g_hash_table_replace(params,
+                             "timeout",
+                             g_strdup_printf("%lu", timeout));
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", "sync", params, NULL, NULL, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2177,7 +2238,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_room_state = i_get_room_state;
     iface->send_room_event = i_send_room_event;
     iface->notify_room_typing = i_notify_room_typing;
-    iface->sync = NULL;
+    iface->sync = i_sync;
     iface->create_filter = NULL;
     iface->download_filter = NULL;
 
