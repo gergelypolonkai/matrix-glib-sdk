@@ -2288,6 +2288,19 @@ i_token_refresh(MatrixAPI *api,
 }
 
 static void
+i_get_3pids(MatrixAPI *api,
+            MatrixAPICallback callback,
+            gpointer user_data,
+            GError **error)
+{
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", "account/3pid", NULL, NULL, NULL, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2364,7 +2377,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->token_refresh = i_token_refresh;
 
     /* User data */
-    iface->get_3pids = NULL;
+    iface->get_3pids = i_get_3pids;
     iface->add_3pid = NULL;
     iface->change_password = NULL;
     iface->get_profile = NULL;
