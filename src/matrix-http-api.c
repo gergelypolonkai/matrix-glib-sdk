@@ -1142,6 +1142,62 @@ i_media_download(MatrixAPI *api,
 }
 
 static void
+i_media_thumbnail(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  const gchar *server_name,
+                  const gchar *media_id,
+                  guint width,
+                  guint height,
+                  MatrixAPIResizeMethod method,
+                  GError **error)
+{
+    gchar *encoded_server_name,
+          *encoded_media_id,
+          *path;
+    GHashTable *params;
+
+    encoded_server_name = soup_uri_encode(server_name, NULL);
+    encoded_media_id = soup_uri_encode(media_id, NULL);
+    path = g_strdup_printf("download/%s/%s",
+                           encoded_server_name,
+                           encoded_media_id);
+    g_free(encoded_server_name);
+    g_free(encoded_media_id);
+
+    params = create_query_params();
+
+    if (width > 0) {
+        g_hash_table_replace(params, "width", g_strdup_printf("%u", width));
+    }
+
+    if (height > 0) {
+        g_hash_table_replace(params, "height", g_strdup_printf("%u", height));
+    }
+
+    if (method != MATRIX_API_RESIZE_METHOD_DEFAULT) {
+        switch (method) {
+            case MATRIX_API_RESIZE_METHOD_CROP:
+                g_hash_table_replace(params, "method", g_strdup("crop"));
+
+                break;
+
+            case MATRIX_API_RESIZE_METHOD_SCALE:
+                g_hash_table_replace(params, "method", g_strdup("scale"));
+
+                break;
+        }
+    }
+
+     _send(MATRIX_HTTP_API(api),
+           callback, user_data,
+           CALL_MEDIA,
+           "GET", path, params, NULL,
+           TRUE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1153,7 +1209,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Media */
     iface->media_download = i_media_download;
-    iface->media_thumbnail = NULL;
+    iface->media_thumbnail = i_media_thumbnail;
     iface->media_upload = NULL;
 
     /* Presence */
