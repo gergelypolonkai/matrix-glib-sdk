@@ -19,6 +19,7 @@
 #include "config.h"
 #include "matrix-http-api.h"
 #include "matrix-enumtypes.h"
+#include "utils.h"
 
 #include <string.h>
 #include <libsoup/soup.h>
@@ -467,32 +468,6 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
     return priv->validate_certificate;
 }
 
-static gchar *
-enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
-{
-    GEnumClass *enum_class = g_type_class_ref(enum_type);
-    GEnumValue *enum_value = g_enum_get_value(enum_class, value);
-    gchar *nick = NULL;
-
-    if (value) {
-        nick = g_strdup(enum_value->value_nick);
-
-        if (convert_dashes) {
-            gchar *a;
-
-            for (a = nick; *a; a++) {
-                if (*a == '-') {
-                    *a = '_';
-                }
-            }
-        }
-    }
-
-    g_type_class_unref(enum_class);
-
-    return nick;
-}
-
 static void
 _response_callback(SoupSession *session,
                    SoupMessage *msg,
@@ -922,7 +897,7 @@ i_create_room(MatrixAPI *api,
     }
 
     if (preset != MATRIX_API_ROOM_PRESET_NONE) {
-        gchar *preset_string = enum_to_string(
+        gchar *preset_string = g_enum_to_string(
                 MATRIX_TYPE_API_ROOM_PRESET, preset, TRUE);
 
        if (preset_string) {
@@ -945,7 +920,7 @@ i_create_room(MatrixAPI *api,
     }
 
     if (visibility != MATRIX_API_ROOM_VISIBILITY_DEFAULT) {
-        gchar *visibility_string = enum_to_string(
+        gchar *visibility_string = g_enum_to_string(
                 MATRIX_TYPE_API_ROOM_VISIBILITY, visibility, TRUE);
 
         if (visibility_string) {
@@ -1299,7 +1274,7 @@ i_set_user_presence(MatrixAPI *api,
     json_builder_begin_object(builder);
 
     json_builder_set_member_name(builder, "presence");
-    presence_string = enum_to_string(MATRIX_TYPE_API_PRESENCE, presence, TRUE);
+    presence_string = g_enum_to_string(MATRIX_TYPE_API_PRESENCE, presence, TRUE);
     json_builder_add_string_value(builder, presence_string);
     g_free(presence_string);
 
@@ -1367,7 +1342,7 @@ i_delete_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1399,7 +1374,7 @@ i_get_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1422,7 +1397,7 @@ static void
 add_condition_kind_object(MatrixAPIPusherConditionKind kind,
                           JsonBuilder *builder)
 {
-    gchar *kind_string = enum_to_string(
+    gchar *kind_string = g_enum_to_string(
             MATRIX_TYPE_API_PUSHER_CONDITION_KIND, kind, TRUE);
 
     if (!kind_string) {
@@ -1458,7 +1433,7 @@ static void i_add_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1522,7 +1497,7 @@ i_toggle_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1919,7 +1894,7 @@ i_send_event_receipt(MatrixAPI *api,
 
     encoded_room_id = soup_uri_encode(room_id, NULL);
     encoded_event_id = soup_uri_encode(event_id, NULL);
-    receipt_type_string = enum_to_string(MATRIX_TYPE_API_RECEIPT_TYPE,
+    receipt_type_string = g_enum_to_string(MATRIX_TYPE_API_RECEIPT_TYPE,
                                          receipt_type,
                                          TRUE);
     path = g_strdup_printf("rooms/%s/receipt/%s/%s",

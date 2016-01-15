@@ -27,6 +27,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-api-types.c \
 	matrix-http-api.c \
 	matrix-enumtypes.c \
+	utils.c \
 	$(INST_H_SRC_FILES) \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)
