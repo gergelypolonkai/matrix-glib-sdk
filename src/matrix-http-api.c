@@ -108,6 +108,31 @@ matrix_http_api_finalize(GObject *gobject)
 }
 
 static void
+_set_url(SoupURI **uri, const gchar *base, const gchar *endpoint)
+{
+    gchar *url;
+    SoupURI *new_uri;
+
+    if (base[strlen(base) - 1] == '/') {
+        url = g_strdup_printf("%s%s", base, endpoint + 1);
+    } else {
+        url = g_strdup_printf("%s%s", base, endpoint);
+    }
+
+    new_uri = soup_uri_new(url);
+
+    if (new_uri && SOUP_URI_VALID_FOR_HTTP(new_uri)) {
+        *uri = new_uri;
+    } else {
+        if (new_uri) {
+            soup_uri_free(new_uri);
+        }
+
+        *uri = NULL;
+    }
+}
+
+static void
 matrix_http_api_set_property(GObject *gobject,
                              guint prop_id,
                              const GValue *value,
@@ -126,8 +151,7 @@ matrix_http_api_set_property(GObject *gobject,
         {
             const gchar *base_url;
             gchar *last_occurence;
-            gchar *url;
-            SoupURI *new_uri;
+            SoupURI *api_uri;
 
             base_url = g_value_get_string(value);
 
@@ -137,45 +161,27 @@ matrix_http_api_set_property(GObject *gobject,
                 return;
             }
 
-            last_occurence = g_strrstr(base_url, API_ENDPOINT);
-
             /* Check if the provided URL already ends with the API endpoint */
-            if (g_strcmp0(last_occurence, API_ENDPOINT) == 0) {
-                /* if so, just use it */
-                url = g_strdup(base_url);
-            } else {
-                /* if not, add the API endpoint */
+            if ((last_occurence = g_strrstr(base_url, API_ENDPOINT)) != NULL) {
+                g_warning("Provided URL (%s) already contains the API endpoint. Please use an URL without it!", base_url);
 
-                gchar *url_tmp;
-
-                /* If the provided URL already contains the API
-                 * endpoint, but it’s not at the end, print a message,
-                 * but still continue */
-                if (last_occurence != NULL) {
-                    g_info("Provided URL (%s) already contains the API endpoint but not at the end; appending anyway", base_url);
-                }
-
-                url_tmp = g_strdup(base_url);
-
-                /* Cut trailing slash, if present */
-                if (url_tmp[strlen(url_tmp) - 1] == '/') {
-                    url_tmp[strlen(url_tmp) - 1] = 0;
-                }
-
-                url = g_strdup_printf("%s%s", url_tmp, API_ENDPOINT);
-                g_free(url_tmp);
-
-                g_debug("Set base URL to %s", url);
+                return;
             }
 
-            new_uri = soup_uri_new(url);
+            _set_url(&api_uri, base_url, API_ENDPOINT);
 
-            if (new_uri && SOUP_URI_VALID_FOR_HTTP(new_uri)) {
+            if (api_uri) {
+                gchar *api_url;
+
                 if (priv->uri) {
                     soup_uri_free(priv->uri);
                 }
 
-                priv->uri = new_uri;
+
+                priv->uri = api_uri;
+
+                // Free all tokens and IDs, as they won’t be valid for
+                // the new server
                 g_free(priv->token);
                 priv->token = NULL;
                 g_free(priv->refresh_token);
@@ -184,15 +190,20 @@ matrix_http_api_set_property(GObject *gobject,
                 priv->homeserver = NULL;
                 g_free(priv->user_id);
                 priv->user_id = NULL;
+
+                api_url = soup_uri_to_string(api_uri, FALSE);
+
+                g_debug("API URL: %s", api_url);
+
+                g_free(api_url);
             } else {
-                if (new_uri) {
-                    soup_uri_free(new_uri);
+                if (api_uri) {
+                    soup_uri_free(api_uri);
                 }
 
-                g_warning("Invalid URL: %s", url);
-            }
 
-            g_free(url);
+                g_warning("Invalid URL: %s", base_url);
+            }
 
             break;
         }
