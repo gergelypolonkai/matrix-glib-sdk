@@ -1731,6 +1731,40 @@ i_invite_user_3rdparty(MatrixAPI *api,
 }
 
 static void
+i_invite_user(MatrixAPI *api,
+              MatrixAPICallback callback,
+              gpointer user_data,
+              const gchar *room_id,
+              const gchar *user_id,
+              GError **error)
+{
+    gchar *encoded_room_id, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_room_id = soup_uri_encode(encoded_room_id, NULL);
+    path = g_strdup_printf("rooms/%s/invite", encoded_room_id);
+    g_free(encoded_room_id);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "user_id");
+    json_builder_add_string_value(builder, user_id);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1774,7 +1808,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->ban_user = i_ban_user;
     iface->forget_room = i_forget_room;
     iface->invite_user_3rdparty = i_invite_user_3rdparty;
-    iface->invite_user = NULL;
+    iface->invite_user = i_invite_user;
     iface->join_room = i_join_room;
     iface->leave_room = i_leave_room;
 
