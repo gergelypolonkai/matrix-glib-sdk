@@ -1277,6 +1277,61 @@ i_update_presence_list(MatrixAPI *api,
 }
 
 static void
+i_set_user_presence(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *user_id,
+                    MatrixAPIPresence presence,
+                    const gchar *status_message,
+                    GError **error)
+{
+    gchar *encoded_user_id;
+    gchar *path, *presence_string, *a;
+    JsonBuilder *builder;
+    JsonNode *body;
+    GEnumClass *presence_class;
+    GEnumValue *value;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("presence/%s/status", encoded_user_id);
+    g_free(encoded_user_id);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "presence");
+    presence_class = g_type_class_ref(MATRIX_TYPE_API_PRESENCE);
+    value = g_enum_get_value(presence_class, presence);
+    presence_string = g_strdup(value->value_nick);
+    g_type_class_unref(presence_class);
+
+    for (a = presence_string; *a; a++) {
+        if (*a == '-') {
+            *a = '_';
+        }
+    }
+
+    json_builder_add_string_value(builder, presence_string);
+    g_free(presence_string);
+
+    if (status_message) {
+        json_builder_set_member_name(builder, "status_msg");
+        json_builder_add_string_value(builder, status_message);
+    }
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1295,7 +1350,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_presence_list = i_get_presence_list;
     iface->update_presence_list = i_update_presence_list;
     iface->get_user_presence = i_get_user_presence;
-    iface->set_user_presence = NULL;
+    iface->set_user_presence = i_set_user_presence;
 
     /* Push notifications */
     iface->modify_pusher = NULL;
