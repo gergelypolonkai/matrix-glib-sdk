@@ -1353,6 +1353,19 @@ i_update_pusher(MatrixAPI *api,
 }
 
 static void
+i_get_pushers(MatrixAPI *api,
+              MatrixAPICallback callback,
+              gpointer user_data,
+              GError **error)
+{
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", "pushrules/", NULL, NULL, NULL, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1375,7 +1388,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Push notifications */
     iface->update_pusher = i_update_pusher;
-    iface->get_pushers = NULL;
+    iface->get_pushers = i_get_pushers;
     iface->delete_pusher = NULL;
     iface->get_pusher = NULL;
     iface->add_pusher = NULL;
