@@ -2354,6 +2354,33 @@ i_add_3pid(MatrixAPI *api,
 }
 
 static void
+i_change_password(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  const gchar *new_password,
+                  GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "new_password");
+    json_builder_add_string_value(builder, new_password);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", "account/password", NULL, NULL, body, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2432,7 +2459,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     /* User data */
     iface->get_3pids = i_get_3pids;
     iface->add_3pid = i_add_3pid;
-    iface->change_password = NULL;
+    iface->change_password = i_change_password;
     iface->get_profile = NULL;
     iface->get_avatar_url = NULL;
     iface->set_avatar_url = NULL;
