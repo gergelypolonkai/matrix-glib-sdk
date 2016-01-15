@@ -1552,6 +1552,27 @@ i_toggle_pusher(MatrixAPI *api,
 }
 
 static void
+i_delete_room_alias(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *room_alias,
+                    GError **error)
+{
+    gchar *encoded_room_alias, *path;
+
+    encoded_room_alias = soup_uri_encode(room_alias, NULL);
+    path = g_strdup_printf("room/%s", encoded_room_alias);
+    g_free(encoded_room_alias);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "DELETE", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1584,7 +1605,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->create_room = i_create_room;
 
     /* Room directory */
-    iface->delete_room_alias = NULL;
+    iface->delete_room_alias = i_delete_room_alias;
     iface->get_room_id = NULL;
     iface->create_room_alias = NULL;
 
