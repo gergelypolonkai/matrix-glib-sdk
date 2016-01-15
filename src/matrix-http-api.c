@@ -1419,6 +1419,94 @@ i_get_pusher(MatrixAPI *api,
 }
 
 static void
+add_condition_kind_object(MatrixAPIPusherConditionKind kind,
+                          JsonBuilder *builder)
+{
+    gchar *kind_string = enum_to_string(
+            MATRIX_TYPE_API_PUSHER_CONDITION_KIND, kind, TRUE);
+
+    if (!kind_string) {
+        g_warning("Invalid condition kind");
+
+        return;
+    }
+
+    json_builder_begin_object(builder);
+    json_builder_set_member_name(builder, "kind");
+    json_builder_add_string_value(builder, kind_string);
+    json_builder_end_object(builder);
+
+    g_free(kind_string);
+}
+
+static void i_add_pusher(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         const gchar *scope,
+                         MatrixAPIPusherKind kind,
+                         const gchar *rule_id,
+                         const gchar *before,
+                         const gchar *after,
+                         GList *actions,
+                         GList *conditions,
+                         GError **error)
+{
+    gchar *encoded_scope, *encoded_rule_id, *kind_string, *path;
+    GHashTable *params;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_scope = soup_uri_encode(scope, NULL);
+    encoded_rule_id = soup_uri_encode(rule_id, NULL);
+    kind_string = enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+
+    path = g_strdup_printf("pushrules/%s/%s/%s",
+                           encoded_scope,
+                           kind_string,
+                           encoded_rule_id);
+
+    g_free(encoded_scope);
+    g_free(encoded_rule_id);
+    g_free(kind_string);
+
+    params = create_query_params();
+
+    if (before) {
+        g_hash_table_replace(params, "before", g_strdup(before));
+    }
+
+    if (after) {
+        g_hash_table_replace(params, "after", g_strdup(after));
+    }
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "actions");
+    json_builder_begin_array(builder);
+    g_list_foreach(actions, (GFunc)add_string, builder);
+    json_builder_end_array(builder);
+
+    if (conditions) {
+        json_builder_set_member_name(builder, "conditions");
+        json_builder_begin_array(builder);
+        g_list_foreach(conditions, (GFunc)add_condition_kind_object, builder);
+        json_builder_end_array(builder);
+    }
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, params, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1444,7 +1532,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_pushers = i_get_pushers;
     iface->delete_pusher = i_delete_pusher;
     iface->get_pusher = i_get_pusher;
-    iface->add_pusher = NULL;
+    iface->add_pusher = i_add_pusher;
     iface->toggle_pusher = NULL;
 
     /* Room creation */
