@@ -232,6 +232,11 @@ const gchar *matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *
 void matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
                                                   const gchar *client_secret);
 const gchar *matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential);
+JsonNode *matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
+                                                   GError **error);
+gchar *matrix_api_3pid_credential_get_json_data(MatrixAPI3PidCredential *credential,
+                                                gsize *datalen,
+                                                GError **error);
 
 typedef struct _MatrixAPIPusher MatrixAPIPusher;
 

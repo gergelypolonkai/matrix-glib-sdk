@@ -1760,6 +1760,92 @@ matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential
 }
 
 /**
+ * matrix_api_3pid_credential_get_json_node:
+ * @credential: a #MatrixAPI3PidCredential
+ * @error: return location for a #GError, or %NULL
+ *
+ * Get the JSON representation of @credential as a #JsonNode. If any
+ * fields of @credential are empty, it will yield an error, as all
+ * fields are mandatory. In this case, the return value is %NULL.
+ *
+ * Returns: (transfer full) (allow-none): the #JsonNode representation
+ *          of @credential
+ */
+JsonNode *
+matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
+                                         GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *node;
+
+    if (!credential->id_server
+        || !credential->session_id
+        || !credential->client_secret) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "All fields of the 3PID credential must be filled!");
+
+        return NULL;
+    }
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "id_server");
+    json_builder_add_string_value(builder, credential->id_server);
+
+    json_builder_set_member_name(builder, "session_id");
+    json_builder_add_string_value(builder, credential->session_id);
+
+    json_builder_set_member_name(builder, "client_secret");
+    json_builder_add_string_value(builder, credential->client_secret);
+
+    json_builder_end_object(builder);
+    node = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return node;
+}
+
+/**
+ * matrix_api_3pid_credential_get_json_data:
+ * @credential: a #MatrixAPI3PidCredential
+ * @datalen: (out): storage location for the length of the JSON data,
+ *           or %NULL
+ * @error: a #GError
+ *
+ * Get the JSON representation of @credential as a string. If any
+ * fields of @credential is %NULL, this function returns %NULL and
+ * fills @error wich %MATRIX_API_ERROR_INCOMPLETE.
+ *
+ * Returns: (transfer full) (allow-none): the JSON representation of
+ *          @credential, or %NULL
+ */
+gchar *
+matrix_api_3pid_credential_get_json_data(MatrixAPI3PidCredential *credential,
+                                         gsize *datalen,
+                                         GError **error)
+{
+    JsonGenerator *generator;
+    JsonNode *node;
+    gchar *data;
+
+    if ((node = matrix_api_3pid_credential_get_json_node(
+                 credential, error)) == NULL) {
+        return NULL;
+    }
+
+    generator = json_generator_new();
+    json_generator_set_root(generator, node);
+    json_node_free(node);
+
+    data = json_generator_to_data(generator, datalen);
+    g_object_unref(generator);
+
+    return data;
+}
+
+/**
  * MatrixAPIPusher:
  *
  * An opaque structure for pusher rulesets.
