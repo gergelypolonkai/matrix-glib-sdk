@@ -261,6 +261,7 @@ matrix_api_download_filter
 
 <SUBSECTION>
 matrix_api_whois
+matrix_api_versions
 
 <SUBSECTION>
 matrix_api_login
