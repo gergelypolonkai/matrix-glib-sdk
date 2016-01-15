@@ -467,6 +467,32 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
     return priv->validate_certificate;
 }
 
+static gchar *
+enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
+{
+    GEnumClass *enum_class = g_type_class_ref(enum_type);
+    GEnumValue *enum_value = g_enum_get_value(enum_class, value);
+    gchar *nick = NULL;
+
+    if (value) {
+        nick = g_strdup(enum_value->value_nick);
+
+        if (convert_dashes) {
+            gchar *a;
+
+            for (a = nick; *a; a++) {
+                if (*a == '-') {
+                    *a = '_';
+                }
+            }
+        }
+    }
+
+    g_type_class_unref(enum_class);
+
+    return nick;
+}
+
 static void
 _response_callback(SoupSession *session,
                    SoupMessage *msg,
@@ -896,29 +922,16 @@ i_create_room(MatrixAPI *api,
     }
 
     if (preset != MATRIX_API_ROOM_PRESET_NONE) {
-        GEnumClass *_enum_class = g_type_class_ref(MATRIX_TYPE_API_ROOM_PRESET);
-        GEnumValue *enum_value;
+        gchar *preset_string = enum_to_string(
+                MATRIX_TYPE_API_ROOM_PRESET, preset, TRUE);
 
-        if ((enum_value = g_enum_get_value(
-                     G_ENUM_CLASS(_enum_class),
-                     preset)) != NULL) {
-            gchar *i;
-            gchar *value_nick = g_strdup(enum_value->value_nick);
-
-            for (i = value_nick; *i; i++) {
-                if (*i == '-') {
-                    *i = '_';
-                }
-            }
-
+       if (preset_string) {
             json_builder_set_member_name(builder, "preset");
-            json_builder_add_string_value(builder, value_nick);
-            g_free(value_nick);
+            json_builder_add_string_value(builder, preset_string);
+            g_free(preset_string);
         } else {
             g_debug("Invalid room preset type");
         }
-
-        g_type_class_unref(_enum_class);
     }
 
     if (room_alias) {
@@ -932,30 +945,16 @@ i_create_room(MatrixAPI *api,
     }
 
     if (visibility != MATRIX_API_ROOM_VISIBILITY_DEFAULT) {
-        GEnumClass *_enum_class = g_type_class_ref(
-                MATRIX_TYPE_API_ROOM_VISIBILITY);
-        GEnumValue *enum_value;
+        gchar *visibility_string = enum_to_string(
+                MATRIX_TYPE_API_ROOM_VISIBILITY, visibility, TRUE);
 
-        if ((enum_value = g_enum_get_value(
-                     G_ENUM_CLASS(_enum_class),
-                     visibility)) != NULL) {
-            gchar *i;
-            gchar *value_nick = g_strdup(enum_value->value_nick);
-
-            for (i = value_nick; *i; i++) {
-                if (*i == '-') {
-                    *i = '_';
-                }
-            }
-
+        if (visibility_string) {
             json_builder_set_member_name(builder, "visibility");
-            json_builder_add_string_value(builder, value_nick);
-            g_free(value_nick);
+            json_builder_add_string_value(builder, visibility_string);
+            g_free(visibility_string);
         } else {
             g_debug("Invalid room visibility type");
         }
-
-        g_type_class_unref(_enum_class);
     }
 
     json_builder_end_object(builder);
@@ -1300,17 +1299,7 @@ i_set_user_presence(MatrixAPI *api,
     json_builder_begin_object(builder);
 
     json_builder_set_member_name(builder, "presence");
-    presence_class = g_type_class_ref(MATRIX_TYPE_API_PRESENCE);
-    value = g_enum_get_value(presence_class, presence);
-    presence_string = g_strdup(value->value_nick);
-    g_type_class_unref(presence_class);
-
-    for (a = presence_string; *a; a++) {
-        if (*a == '-') {
-            *a = '_';
-        }
-    }
-
+    presence_string = enum_to_string(MATRIX_TYPE_API_PRESENCE, presence, TRUE);
     json_builder_add_string_value(builder, presence_string);
     g_free(presence_string);
 
