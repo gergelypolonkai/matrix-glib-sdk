@@ -2177,6 +2177,29 @@ i_sync(MatrixAPI *api,
 }
 
 static void
+i_create_filter(MatrixAPI *api,
+                MatrixAPICallback callback,
+                gpointer user_data,
+                const gchar *user_id,
+                MatrixAPIFilter *filter,
+                GError **error)
+{
+    gchar *encoded_user_id, *path;
+    JsonNode *filter_node = matrix_api_filter_get_json_node(filter);
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("user/%s/filter", encoded_user_id);
+    g_free(encoded_user_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, filter_node, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2239,7 +2262,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->send_room_event = i_send_room_event;
     iface->notify_room_typing = i_notify_room_typing;
     iface->sync = i_sync;
-    iface->create_filter = NULL;
+    iface->create_filter = i_create_filter;
     iface->download_filter = NULL;
 
     /* Search */
