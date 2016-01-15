@@ -444,9 +444,9 @@ matrix_api_get_presence_list(MatrixAPI *api,
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
  * @user_id: the user whose presence list is being modified
- * @drop_ids: (element-type GString): a list of user IDs to remove
+ * @drop_ids: (element-type utf8): a list of user IDs to remove
  *            from the list
- * @invite_ids: (element-type GString): a list of user IDs to add to
+ * @invite_ids: (element-type utf8): a list of user IDs to add to
  *              the list
  * @error: return location for a #GError, or %NULL
  *
@@ -664,7 +664,7 @@ matrix_api_get_pusher(MatrixAPI *api,
  *          than this rule ID
  * @after: (allow-none): make the new rule the next-less important
  *         than this rule ID
- * @actions: (element-type GString): the actions to perform when the
+ * @actions: (element-type utf8): the actions to perform when the
  *           conditions for this rule are met
  * @conditions: (element-type MatrixAPIPusherConditionKind) (allow-none):
  *              the conditions that must hold true for an event for a
@@ -750,7 +750,7 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  *                    content of m.room.create
  * @initial_state: (element-type MatrixAPIStateEvent) (allow-none): A
  *                 list of state events to set in the new room
- * @invitees: (element-type GString) (allow-none): list of user IDs to
+ * @invitees: (element-type utf8) (allow-none): list of user IDs to
  *            invite to the new room
  * @error: return location for a #GError, or %NULL
  *
