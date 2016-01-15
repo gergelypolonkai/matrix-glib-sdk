@@ -1765,6 +1765,60 @@ i_invite_user(MatrixAPI *api,
 }
 
 static void
+i_get_event(MatrixAPI *api,
+            MatrixAPICallback callback,
+            gpointer user_data,
+            const gchar *event_id,
+            GError **error)
+{
+    gchar *encoded_event_id, *path;
+
+    encoded_event_id = soup_uri_encode(event_id, NULL);
+    path = g_strdup_printf("events/%s", encoded_event_id);
+    g_free(encoded_event_id);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
+i_get_event_context(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    const gchar *room_id,
+                    const gchar *event_id,
+                    guint limit,
+                    GError **error)
+{
+    gchar *encoded_room_id, *encoded_event_id, *path;
+    GHashTable *params = NULL;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    encoded_event_id = soup_uri_encode(event_id, NULL);
+    path = g_strdup_printf("rooms/%s/context/%s",
+                           encoded_room_id, encoded_event_id);
+    g_free(encoded_room_id);
+    g_free(encoded_event_id);
+
+    if (limit != 0) {
+        params = create_query_params();
+
+        g_hash_table_replace(params, "limit", g_strdup_printf("%u", limit));
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", path, params, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(params);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1814,9 +1868,9 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Room participation */
     iface->event_stream = i_event_stream;
-    iface->get_event = NULL;
+    iface->get_event = i_get_event;
     iface->initial_sync = i_initial_sync;
-    iface->get_event_context = NULL;
+    iface->get_event_context = i_get_event_context;
     iface->initial_sync_room = NULL;
     iface->list_room_members = NULL;
     iface->list_room_messages = NULL;
