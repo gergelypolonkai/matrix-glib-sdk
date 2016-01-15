@@ -358,6 +358,10 @@ struct _MatrixAPIInterface {
                   gpointer user_data,
                   const gchar *user_id,
                   GError **error);
+    void (*versions)(MatrixAPI *api,
+                     MatrixAPICallback callback,
+                     gpointer user_data,
+                     GError **error);
 
     /* Session management */
 
@@ -774,6 +778,10 @@ void matrix_api_whois(MatrixAPI *api,
                       gpointer user_data,
                       const gchar *user_id,
                       GError **error);
+void matrix_api_versions(MatrixAPI *api,
+                         MatrixAPICallback callback,
+                         gpointer user_data,
+                         GError **error);
 
 /* Session management */
 

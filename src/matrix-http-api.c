@@ -2246,6 +2246,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* Server administration */
     iface->whois = NULL;
+    iface->versions = NULL;
 
     /* Session management */
     iface->login = i_login;

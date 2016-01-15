@@ -83,6 +83,7 @@
  * @create_filter: virtual function for matrix_api_create_filter()
  * @download_filter: virtual function for matrix_api_download_filter()
  * @whois: virtual function for matrix_api_whois()
+ * @versions: virtual function for matrix_api_versions()
  * @login: virtual function for matrix_api_login()
  * @token_refresh: virtual function for matrix_api_token_refresh()
  * @get_3pids: virtual function for matrix_api_get_3pids()
@@ -1644,6 +1645,29 @@ matrix_api_whois(MatrixAPI *api,
 
     MATRIX_API_GET_IFACE(api)
         ->whois(api, callback, user_data, user_id, error);
+}
+
+/**
+ * matrix_api_versions:
+ * @api: a #MatrixAPI iplementation
+ * @callback: (scope async): the function to call when the request is
+ *            finished
+ * @user_data: (closure): user data to pass to the callback function
+ *             @callback
+ * @error: return location for a #GError, or %NULL
+ *
+ * Get the versions of the specification supported by the server.
+ */
+void
+matrix_api_versions(MatrixAPI *api,
+                    MatrixAPICallback callback,
+                    gpointer user_data,
+                    GError **error)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    MATRIX_API_GET_IFACE(api)
+        ->versions(api, callback, user_data, error);
 }
 
 /* Session management */
