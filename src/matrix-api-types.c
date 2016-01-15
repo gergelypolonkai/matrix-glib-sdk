@@ -17,6 +17,8 @@
  */
 
 #include "matrix-api-types.h"
+#include "matrix-enumtypes.h"
+#include "utils.h"
 
 /**
  * SECTION:matrix-api-types
@@ -1523,6 +1525,69 @@ MatrixAPIRoomFilter *
 matrix_api_filter_get_room_filter(MatrixAPIFilter *filter)
 {
     return filter->room;
+}
+
+/**
+ * matrix_api_filter_get_json_node:
+ * @filter: a #MatrixAPIFilter
+ *
+ * Get the JSON representation of @filter as a #JsonNode
+ *
+ * Returns: (transfer full): the JSON representation of @filter
+ */
+JsonNode *
+matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
+{
+    JsonBuilder *builder;
+    JsonNode *root, *tmp;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "event_fields");
+    json_builder_begin_array(builder);
+    g_list_foreach(filter->event_fields, (GFunc)json_add_string, builder);
+    json_builder_end_array(builder);
+
+    json_builder_set_member_name(builder, "event_format");
+    json_builder_add_string_value(builder,
+                                  g_enum_to_string(
+                                          MATRIX_TYPE_API_EVENT_FORMAT,
+                                          filter->event_format,
+                                          TRUE));
+
+    json_builder_set_member_name(builder, "presence");
+    tmp = matrix_api_filter_rules_get_json_node(filter->presence);
+    json_builder_add_value(builder, tmp);
+    json_node_free(tmp);
+
+    json_builder_set_member_name(builder, "room");
+    tmp = matrix_api_room_filter_get_json_node(filter->room);
+    json_builder_add_value(builder, tmp);
+    json_node_free(tmp);
+
+    json_builder_end_object(builder);
+    root = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return root;
+}
+
+gchar *
+matrix_api_filter_get_json_data(MatrixAPIFilter *filter, gsize *datalen)
+{
+    JsonGenerator *generator;
+    JsonNode *node = matrix_api_filter_get_json_node(filter);
+    gchar *data;
+
+    generator = json_generator_new();
+    json_generator_set_root(generator, node);
+    json_node_free(node);
+
+    data = json_generator_to_data(generator, datalen);
+    g_object_unref(generator);
+
+    return data;
 }
 
 /**

@@ -99,6 +99,8 @@ matrix_api_filter_set_presence_filter
 matrix_api_filter_get_presence_filter
 matrix_api_filter_set_room_filter
 matrix_api_filter_get_room_filter
+matrix_api_filter_get_json_node
+matrix_api_filter_get_json_data
 
 <SUBSECTION>
 MatrixAPI3PidCredential

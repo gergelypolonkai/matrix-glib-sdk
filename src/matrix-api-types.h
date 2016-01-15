@@ -212,6 +212,8 @@ MatrixAPIFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *fil
 void matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
                                        MatrixAPIRoomFilter *room_filter);
 MatrixAPIRoomFilter *matrix_api_filter_get_room_filter(MatrixAPIFilter *filter);
+JsonNode *matrix_api_filter_get_json_node(MatrixAPIFilter *filter);
+gchar *matrix_api_filter_get_json_data(MatrixAPIFilter *filter, gsize *datalen);
 
 typedef struct _MatrixAPI3PidCredential MatrixAPI3PidCredential;
 
