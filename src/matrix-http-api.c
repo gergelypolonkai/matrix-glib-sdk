@@ -1628,6 +1628,46 @@ i_create_room_alias(MatrixAPI *api,
 }
 
 static void
+i_ban_user(MatrixAPI *api,
+           MatrixAPICallback callback,
+           gpointer user_data,
+           const gchar *room_id,
+           const gchar *user_id,
+           const gchar *reason,
+           GError **error)
+{
+    gchar *encoded_room_id, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    path = g_strdup_printf("rooms/%s/ban", encoded_room_id);
+    g_free(encoded_room_id);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "user_id");
+    json_builder_add_string_value(builder, user_id);
+
+    if (reason) {
+        json_builder_set_member_name(builder, "reason");
+        json_builder_add_string_value(builder, reason);
+    }
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -1668,7 +1708,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->list_public_rooms = i_list_public_rooms;
 
     /* Room membership */
-    iface->ban_user = NULL;
+    iface->ban_user = i_ban_user;
     iface->forget_room = NULL;
     iface->invite_user_3rdparty = NULL;
     iface->invite_user = NULL;
