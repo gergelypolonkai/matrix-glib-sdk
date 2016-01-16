@@ -2622,6 +2622,34 @@ i_get_room_tags(MatrixAPI *api,
 }
 
 static void
+i_delete_room_tag(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  const gchar *user_id,
+                  const gchar *room_id,
+                  const gchar *tag,
+                  GError **error)
+{
+    gchar *encoded_user_id, *encoded_room_id, *encoded_tag, *path;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    encoded_room_id = soup_uri_encode(room_id, NULL);
+    encoded_tag = soup_uri_encode(tag, NULL);
+    path = g_strdup_printf("user/%s/rooms/%s/tags/%s",
+                           encoded_user_id, encoded_room_id, encoded_tag);
+    g_free(encoded_user_id);
+    g_free(encoded_room_id);
+    g_free(encoded_tag);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "DELETE", path, NULL, NULL, NULL, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2709,7 +2737,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->register_account = i_register_account;
     iface->set_account_data = i_set_account_data;
     iface->get_room_tags = i_get_room_tags;
-    iface->delete_room_tag = NULL;
+    iface->delete_room_tag = i_delete_room_tag;
     iface->add_room_tag = NULL;
 
     /* VoIP */
