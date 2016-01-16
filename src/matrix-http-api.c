@@ -2423,6 +2423,40 @@ i_get_avatar_url(MatrixAPI *api,
 }
 
 static void
+i_set_avatar_url(MatrixAPI *api,
+                 MatrixAPICallback callback,
+                 gpointer user_data,
+                 const gchar *user_id,
+                 const gchar *avatar_url,
+                 GError **error)
+{
+    gchar *encoded_user_id, *path;
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    path = g_strdup_printf("profile/%s/avatar_url", encoded_user_id);
+    g_free(encoded_user_id);
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "avatar_url");
+    json_builder_add_string_value(builder, avatar_url);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "PUT", path, NULL, NULL, body, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2504,7 +2538,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->change_password = i_change_password;
     iface->get_profile = i_get_profile;
     iface->get_avatar_url = i_get_avatar_url;
-    iface->set_avatar_url = NULL;
+    iface->set_avatar_url = i_set_avatar_url;
     iface->get_display_name = NULL;
     iface->set_display_name = NULL;
     iface->register_account = NULL;
