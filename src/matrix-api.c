@@ -1997,7 +1997,7 @@ matrix_api_register_account(MatrixAPI *api,
  *           the account data will be set globally
  * @type: the event type of the account data to set. Custom types
  *        should be namespaced to avoid clashes.
- * @content: the content of the account data
+ * @content: (transfer full): the content of the account data
  * @error: return location for a #GError, or %NULL
  *
  * Set some account data for the client. This config is only visible
@@ -2011,7 +2011,7 @@ matrix_api_set_account_data(MatrixAPI *api,
                             const gchar *user_id,
                             const gchar *room_id,
                             const gchar *type,
-                            const JsonNode *content,
+                            JsonNode *content,
                             GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

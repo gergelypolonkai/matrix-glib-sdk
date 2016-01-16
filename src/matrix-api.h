@@ -435,7 +435,7 @@ struct _MatrixAPIInterface {
                              const gchar *user_id,
                              const gchar *room_id,
                              const gchar *type,
-                             const JsonNode *content,
+                             JsonNode *content,
                              GError **error);
     void (*get_room_tags)(MatrixAPI *api,
                           MatrixAPICallback callback,
@@ -856,7 +856,7 @@ void matrix_api_set_account_data(MatrixAPI *api,
                                  const gchar *user_id,
                                  const gchar *room_id,
                                  const gchar *type,
-                                 const JsonNode *content,
+                                 JsonNode *content,
                                  GError **error);
 void matrix_api_get_room_tags(MatrixAPI *api,
                               MatrixAPICallback callback,
