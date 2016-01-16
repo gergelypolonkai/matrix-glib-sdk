@@ -1955,6 +1955,7 @@ matrix_api_set_display_name(MatrixAPI *api,
  *            finished
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
+ * @account_kind: the type of account to register
  * @bind_email: if %TRUE, the server binds the e-mail used for
  *              authentication to the Matrix ID with the ID server
  * @username: (allow-none): the local part of the desired Matrix
@@ -1969,6 +1970,7 @@ void
 matrix_api_register_account(MatrixAPI *api,
                             MatrixAPICallback callback,
                             gpointer user_data,
+                            MatrixAPIAccountKind account_kind,
                             gboolean bind_email,
                             const gchar *username,
                             const gchar *password,
@@ -1977,8 +1979,8 @@ matrix_api_register_account(MatrixAPI *api,
     g_return_if_fail(MATRIX_IS_API(api));
 
     MATRIX_API_GET_IFACE(api)
-        ->register_account(api, callback, user_data, bind_email,
-                           username, password, error);
+        ->register_account(api, callback, user_data, account_kind,
+                           bind_email, username, password, error);
 }
 
 /**
