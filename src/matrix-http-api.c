@@ -2512,6 +2512,54 @@ i_set_display_name(MatrixAPI *api,
 }
 
 static void
+i_register_account(MatrixAPI *api,
+                   MatrixAPICallback callback,
+                   gpointer user_data,
+                   MatrixAPIAccountKind account_kind,
+                   gboolean bind_email,
+                   const gchar *username,
+                   const gchar *password,
+                   GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *body;
+    GHashTable *params = NULL;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "bind_email");
+    json_builder_add_boolean_value(builder, bind_email);
+
+    if (username) {
+        json_builder_set_member_name(builder, "username");
+        json_builder_add_string_value(builder, username);
+    }
+
+    json_builder_set_member_name(builder, "password");
+    json_builder_add_string_value(builder, password);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    if (account_kind != MATRIX_API_ACCOUNT_KIND_DEFAULT) {
+        gchar *kind_string = g_enum_to_string(MATRIX_TYPE_API_ACCOUNT_KIND,
+                                              account_kind, TRUE);
+
+        params = create_query_params();
+
+        g_hash_table_replace(params, "kind", kind_string);
+    }
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "POST", "register", params, NULL, body, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2596,7 +2644,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->set_avatar_url = i_set_avatar_url;
     iface->get_display_name = i_get_display_name;
     iface->set_display_name = i_set_display_name;
-    iface->register_account = NULL;
+    iface->register_account = i_register_account;
     iface->set_account_data = NULL;
     iface->get_room_tags = NULL;
     iface->delete_room_tag = NULL;
