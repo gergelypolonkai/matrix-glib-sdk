@@ -367,15 +367,20 @@ matrix_http_api_init(MatrixHTTPAPI *api)
  *         requests that need authentication will fail
  *
  * Create a new #MatrixHTTPAPI object with the specified base URL, and
- * an optional authorization token
+ * an optional authorization token.
+ *
+ * Returns: (transfer full): a new #MatrixHTTPAPI object cast to
+ *          #MatrixAPI
  */
-MatrixHTTPAPI *
+MatrixAPI *
 matrix_http_api_new(const gchar *base_url, const gchar *token)
 {
-    return g_object_new(MATRIX_TYPE_HTTP_API,
-                        "base-url", base_url,
-                        "token", token,
-                        NULL);
+    MatrixHTTPAPI *api = g_object_new(MATRIX_TYPE_HTTP_API,
+                                      "base-url", base_url,
+                                      "token", token,
+                                      NULL);
+
+    return MATRIX_API(api);
 }
 
 static void

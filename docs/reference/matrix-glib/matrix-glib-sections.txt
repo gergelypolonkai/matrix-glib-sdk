@@ -308,8 +308,8 @@ matrix_api_error_quark
 <SECTION>
 <FILE>matrix-http-api</FILE>
 matrix_http_api_new
-matrix_http_api_get_validate_certificate
 matrix_http_api_set_validate_certificate
+matrix_http_api_get_validate_certificate
 matrix_http_api_get_base_url
 
 <SUBSECTION Standard>

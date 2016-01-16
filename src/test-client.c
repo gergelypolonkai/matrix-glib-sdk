@@ -46,7 +46,7 @@ initial_sync_finished(MatrixAPI *api,
 {
     g_printf("initialSync finished\n");
 
-    matrix_api_event_stream(MATRIX_API(api), NULL, NULL, NULL, 0, NULL);
+    matrix_api_event_stream(api, NULL, NULL, NULL, 0, NULL);
 }
 
 static void
@@ -131,7 +131,7 @@ login_finished(MatrixAPI *api,
 
         g_printf("Logged in as %s\n", user_id);
 
-        matrix_api_initial_sync(MATRIX_API(api),
+        matrix_api_initial_sync(api,
                                 initial_sync_finished,
                                 data, 10, TRUE,
                                 NULL);
@@ -154,7 +154,7 @@ login_finished(MatrixAPI *api,
 int
 main(int argc, char *argv[])
 {
-    MatrixHTTPAPI *api;
+    MatrixAPI *api;
     GHashTable *params;
     GMainLoop *loop = g_main_loop_new(NULL, FALSE);
     GOptionContext *opts;
@@ -183,7 +183,8 @@ main(int argc, char *argv[])
     g_info("Starting up: %s with %s:%s", *homeserver, user, password);
 
     api = matrix_http_api_new(*homeserver, NULL);
-    matrix_http_api_set_validate_certificate(api, !no_validate_certs);
+    matrix_http_api_set_validate_certificate(MATRIX_HTTP_API(api),
+                                             !no_validate_certs);
     builder = json_builder_new();
     json_builder_begin_object(builder);
     json_builder_set_member_name(builder, "user");
@@ -194,7 +195,7 @@ main(int argc, char *argv[])
     login_content = json_builder_get_root(builder);
 
     g_debug("Logging in");
-    matrix_api_login(MATRIX_API(api),
+    matrix_api_login(api,
                      login_finished, loop,
                      "m.login.password",
                      login_content,
