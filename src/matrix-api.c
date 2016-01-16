@@ -1995,8 +1995,8 @@ matrix_api_register_account(MatrixAPI *api,
  *           ID
  * @room_id: (allow-none): the room to set account data for. If %NULL,
  *           the account data will be set globally
- * @type: the event type of the account data to set. Custom types
- *        should be namespaced to avoid clashes.
+ * @event_type: the event type of the account data to set. Custom
+ *              types should be namespaced to avoid clashes
  * @content: (transfer full): the content of the account data
  * @error: return location for a #GError, or %NULL
  *
@@ -2010,7 +2010,7 @@ matrix_api_set_account_data(MatrixAPI *api,
                             gpointer user_data,
                             const gchar *user_id,
                             const gchar *room_id,
-                            const gchar *type,
+                            const gchar *event_type,
                             JsonNode *content,
                             GError **error)
 {
@@ -2019,7 +2019,7 @@ matrix_api_set_account_data(MatrixAPI *api,
     MATRIX_API_GET_IFACE(api)
         ->set_account_data(api,
                            callback, user_data,
-                           user_id, room_id, type, content, error);
+                           user_id, room_id, event_type, content, error);
 }
 
 /**
