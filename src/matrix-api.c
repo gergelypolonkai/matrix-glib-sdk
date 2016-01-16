@@ -2092,7 +2092,7 @@ matrix_api_delete_room_tag(MatrixAPI *api,
  * @user_id: the ID of the user to add the tag for
  * @room_id: the ID of the room to add the tag for
  * @tag: the tag to add
- * @content: extra data for the tag, e.g. ordering
+ * @content: (transfer full): extra data for the tag, e.g. ordering
  * @error: return location for a #GError, or %NULL
  *
  * Add a tag to the room.

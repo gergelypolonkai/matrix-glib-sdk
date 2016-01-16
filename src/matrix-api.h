@@ -456,7 +456,7 @@ struct _MatrixAPIInterface {
                          const gchar *user_id,
                          const gchar *room_id,
                          const gchar *tag,
-                         const JsonNode *content,
+                         JsonNode *content,
                          GError **error);
 
     /* VoIP */
