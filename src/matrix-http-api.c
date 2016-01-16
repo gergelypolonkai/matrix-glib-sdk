@@ -2560,6 +2560,43 @@ i_register_account(MatrixAPI *api,
 }
 
 static void
+i_set_account_data(MatrixAPI *api,
+                   MatrixAPICallback callback,
+                   gpointer user_data,
+                   const gchar *user_id,
+                   const gchar *room_id,
+                   const gchar *event_type,
+                   JsonNode *content,
+                   GError **error)
+{
+    gchar *encoded_user_id, *encoded_type, *path;
+
+    encoded_user_id = soup_uri_encode(user_id, NULL);
+    encoded_type = soup_uri_encode(event_type, NULL);
+
+    if (room_id) {
+        gchar *encoded_room_id = soup_uri_encode(room_id, NULL);
+
+        path = g_strdup_printf("user/%s/rooms/%s/account_data/%s",
+                               encoded_user_id, encoded_room_id, encoded_type);
+        g_free(encoded_room_id);
+    } else {
+        path = g_strdup_printf("user/%s/account_data/%s",
+                               encoded_user_id, encoded_type);
+    }
+
+    g_free(encoded_user_id);
+    g_free(encoded_type);
+
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "PUT", path, NULL, NULL, content, NULL,
+          FALSE, error);
+    g_free(path);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2645,7 +2682,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_display_name = i_get_display_name;
     iface->set_display_name = i_set_display_name;
     iface->register_account = i_register_account;
-    iface->set_account_data = NULL;
+    iface->set_account_data = i_set_account_data;
     iface->get_room_tags = NULL;
     iface->delete_room_tag = NULL;
     iface->add_room_tag = NULL;
