@@ -107,6 +107,12 @@ typedef enum {
     MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
 } MatrixAPIPusherConditionKind;
 
+typedef enum {
+    MATRIX_API_ACCOUNT_KIND_DEFAULT,
+    MATRIX_API_ACCOUNT_KIND_USER,
+    MATRIX_API_ACCOUNT_KIND_GUEST
+} MatrixAPIAccountKind;
+
 typedef struct _MatrixAPIFilterRules MatrixAPIFilterRules;
 
 GType matrix_api_filter_rules_get_type(void);

@@ -215,6 +215,16 @@ G_DEFINE_QUARK(matrix-api-error-quark, matrix_api_error);
  */
 
 /**
+ * MatrixAPIAccountKind:
+ * @MATRIX_API_ACCOUNT_KIND_DEFAULT: use the server default (usually
+ *                                   %MATRIX_API_ACCOUNT_KIND_USER)
+ * @MATRIX_API_ACCOUNT_KIND_USER: normal user
+ * @MATRIX_API_ACCOUNT_KIND_GUEST: guest user
+ *
+ * User account types.
+ */
+
+/**
  * MatrixAPIEventDirection:
  * @MATRIX_API_EVENT_DIRECTION_FORWARD: List events after the
  *                                      specified one

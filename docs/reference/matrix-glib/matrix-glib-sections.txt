@@ -33,6 +33,7 @@ MatrixAPIPusherKind
 MatrixAPIPusherConditionKind
 MatrixAPIEventDirection
 MatrixAPIReceiptType
+MatrixAPIAccountKind
 
 <SUBSECTION>
 MatrixAPIFilterRules
@@ -176,6 +177,8 @@ MATRIX_TYPE_API_EVENT_DIRECTION
 matrix_api_event_direction_get_type
 MATRIX_TYPE_API_RECEIPT_TYPE
 matrix_api_receipt_type_get_type
+MATRIX_TYPE_API_ACCOUNT_KIND
+matrix_api_account_kind_get_type
 MATRIX_TYPE_API_FILTER_RULES
 matrix_api_filter_rules_get_type
 MATRIX_TYPE_API_ROOM_FILTER
