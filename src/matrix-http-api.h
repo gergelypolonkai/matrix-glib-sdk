@@ -50,7 +50,8 @@ GType matrix_http_api_get_type(void) G_GNUC_CONST;
 void matrix_http_api_set_validate_certificate(MatrixHTTPAPI *api,
                                               gboolean validate_certificate);
 gboolean matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api);
-const gchar *matrix_http_api_get_base_url(MatrixHTTPAPI *api);
+void matrix_http_api_set_base_url(MatrixHTTPAPI *api, const gchar *base_url);
+gchar *matrix_http_api_get_base_url(MatrixHTTPAPI *api);
 
 MatrixAPI *matrix_http_api_new(const gchar *base_url, const gchar *token);
 

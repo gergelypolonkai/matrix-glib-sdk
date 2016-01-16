@@ -159,76 +159,9 @@ matrix_http_api_set_property(GObject *gobject,
             break;
 
         case PROP_BASE_URL:
-        {
-            const gchar *base_url;
-            gchar *last_occurence;
-            SoupURI *api_uri, *media_uri;
-
-            base_url = g_value_get_string(value);
-
-            if (!g_str_is_ascii(base_url)) {
-                g_warning("URL specified (%s) is not ASCII", base_url);
-
-                return;
-            }
-
-            /* Check if the provided URL already ends with the API endpoint */
-            if ((last_occurence = g_strrstr(base_url, API_ENDPOINT)) != NULL) {
-                g_warning("Provided URL (%s) already contains the API endpoint. Please use an URL without it!", base_url);
-
-                return;
-            }
-
-            _set_url(&api_uri, base_url, API_ENDPOINT);
-            _set_url(&media_uri, base_url, MEDIA_ENDPOINT);
-
-            if (api_uri && media_uri) {
-                gchar *api_url, *media_url;
-
-                if (priv->uri) {
-                    soup_uri_free(priv->uri);
-                }
-
-                if (priv->media_uri) {
-                    soup_uri_free(priv->media_uri);
-                }
-
-                priv->uri = api_uri;
-                priv->media_uri = media_uri;
-
-                // Free all tokens and IDs, as they won’t be valid for
-                // the new server
-                g_free(priv->token);
-                priv->token = NULL;
-                g_free(priv->refresh_token);
-                priv->refresh_token = NULL;
-                g_free(priv->homeserver);
-                priv->homeserver = NULL;
-                g_free(priv->user_id);
-                priv->user_id = NULL;
-
-                api_url = soup_uri_to_string(api_uri, FALSE);
-                media_url = soup_uri_to_string(media_uri, FALSE);
-
-                g_debug("API URL: %s", api_url);
-                g_debug("Media URL: %s", media_url);
-
-                g_free(api_url);
-                g_free(media_url);
-            } else {
-                if (api_uri) {
-                    soup_uri_free(api_uri);
-                }
-
-                if (media_uri) {
-                    soup_uri_free(media_uri);
-                }
-
-                g_warning("Invalid URL: %s", base_url);
-            }
+            matrix_http_api_set_base_url(api, g_value_get_string(value));
 
             break;
-        }
 
         case PROP_TOKEN:
             i_set_token(MATRIX_API(api), g_value_get_string(value));
@@ -262,13 +195,12 @@ matrix_http_api_get_property(GObject *gobject,
             break;
 
         case PROP_BASE_URL:
-            g_value_take_string(value, soup_uri_to_string(priv->uri, FALSE));
+            g_value_take_string(value, matrix_http_api_get_base_url(api));
 
             break;
 
         case PROP_TOKEN:
-            g_value_set_string(value,
-                               i_get_token(MATRIX_API(api)));
+            g_value_set_string(value, i_get_token(MATRIX_API(api)));
 
             break;
 
@@ -473,6 +405,104 @@ matrix_http_api_get_validate_certificate(MatrixHTTPAPI *api)
     return priv->validate_certificate;
 }
 
+/**
+ * matrix_http_api_set_base_url:
+ * @api: a #MatrixHTTPAPI
+ * @base_url: the new base URL without the API endpoint
+ *
+ * Set the base URL for @api. Authorization tokens will be reset with
+ * this call, so a new login becomes necessary.
+ */
+void
+matrix_http_api_set_base_url(MatrixHTTPAPI *api, const gchar *base_url)
+{
+    gchar *last_occurence;
+    SoupURI *api_uri, *media_uri;
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+
+    if (!g_str_is_ascii(base_url)) {
+        g_warning("URL specified (%s) is not ASCII", base_url);
+
+        return;
+    }
+
+    /* Check if the provided URL already ends with the API endpoint */
+    if ((last_occurence = g_strrstr(base_url, API_ENDPOINT)) != NULL) {
+        g_warning("Provided URL (%s) already contains the API endpoint. Please use an URL without it!", base_url);
+
+        return;
+    }
+
+    _set_url(&api_uri, base_url, API_ENDPOINT);
+    _set_url(&media_uri, base_url, MEDIA_ENDPOINT);
+
+    if (api_uri && media_uri) {
+        gchar *api_url, *media_url;
+
+        if (priv->uri) {
+            soup_uri_free(priv->uri);
+        }
+
+        if (priv->media_uri) {
+            soup_uri_free(priv->media_uri);
+        }
+
+        priv->uri = api_uri;
+        priv->media_uri = media_uri;
+
+        // Free all tokens and IDs, as they won’t be valid for
+        // the new server
+        g_free(priv->token);
+        priv->token = NULL;
+        g_free(priv->refresh_token);
+        priv->refresh_token = NULL;
+        g_free(priv->homeserver);
+        priv->homeserver = NULL;
+        g_free(priv->user_id);
+        priv->user_id = NULL;
+
+        api_url = soup_uri_to_string(api_uri, FALSE);
+        media_url = soup_uri_to_string(media_uri, FALSE);
+
+        g_debug("API URL: %s", api_url);
+        g_debug("Media URL: %s", media_url);
+
+        g_free(api_url);
+        g_free(media_url);
+    } else {
+        if (api_uri) {
+            soup_uri_free(api_uri);
+        }
+
+        if (media_uri) {
+            soup_uri_free(media_uri);
+        }
+
+        g_warning("Invalid URL: %s", base_url);
+    }
+}
+
+/**
+ * matrix_http_api_get_base_url:
+ * @api: a #MatrixHTTPAPI implementation
+ *
+ * Get the base URL set for @api.
+ *
+ * Returns: (transfer full): the base URL set for @api
+ */
+gchar *
+matrix_http_api_get_base_url(MatrixHTTPAPI *api)
+{
+    gchar *url, *api_occurence;
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
+
+    url = soup_uri_to_string(priv->uri, FALSE);
+    api_occurence = g_strrstr(url, API_ENDPOINT);
+    *api_occurence = 0;
+
+    return url;
+}
+
 static void
 _response_callback(SoupSession *session,
                    SoupMessage *msg,
@@ -673,22 +703,6 @@ _response_callback(SoupSession *session,
     }
 
     g_clear_error(&err);
-}
-
-/**
- * matrix_http_api_get_base_url:
- * @api: a #MatrixHTTPAPI implementation
- *
- * Get the base URL set for @api.
- *
- * Returns: (transfer full): the base URL set for @api
- */
-const gchar *
-matrix_http_api_get_base_url(MatrixHTTPAPI *api)
-{
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
-
-    return soup_uri_to_string(priv->uri, FALSE);
 }
 
 #define create_query_params() (g_hash_table_new_full(g_str_hash,        \
