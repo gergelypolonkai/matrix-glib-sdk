@@ -1583,6 +1583,15 @@ matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
     return root;
 }
 
+/**
+ * matrix_api_filter_get_json_data:
+ * @filter: a #MatrixAPIFilter
+ * @datalen: storage for the length of the JSON data, or %NULL
+ *
+ * Get the JSON representation of @filter as a string.
+ *
+ * Returns: (transfer full): the JSON representation of @filter
+ */
 gchar *
 matrix_api_filter_get_json_data(MatrixAPIFilter *filter, gsize *datalen)
 {
