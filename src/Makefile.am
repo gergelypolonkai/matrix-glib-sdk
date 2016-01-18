@@ -50,12 +50,12 @@ EXTRA_DIST = \
 	$(NULL)
 
 matrix-enumtypes.h: $(matrix_enum_headers) matrix-enumtypes.h.template
-	$(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > \
-		$@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) $(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > $@.tmp \
+	&& mv $@.tmp $@
 
 matrix-enumtypes.c: $(matrix_enum_headers) matrix-enumtypes.h matrix-enumtypes.c.template
-	$(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > \
-		$@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) $(GLIB_MKENUMS) --template $(filter %.template,$^) $(filter-out %.template,$^) > $@.tmp \
+	&& mv $@.tmp $@
 
 include $(INTROSPECTION_MAKEFILE)
 MatrixGlib-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
