@@ -1731,9 +1731,7 @@ i_invite_user_3rdparty(MatrixAPI *api,
                        MatrixAPICallback callback,
                        gpointer user_data,
                        const gchar *room_id,
-                       const gchar *address,
-                       const gchar *medium,
-                       const gchar *id_server,
+                       MatrixAPI3PidCredential *credential,
                        GError **error)
 {
     gchar *encoded_room_id, *path;
@@ -1744,21 +1742,10 @@ i_invite_user_3rdparty(MatrixAPI *api,
     path = g_strdup_printf("rooms/%s/invite", encoded_room_id);
     g_free(encoded_room_id);
 
-    builder = json_builder_new();
-    json_builder_begin_object(builder);
-
-    json_builder_set_member_name(builder, "id_server");
-    json_builder_add_string_value(builder, id_server);
-
-    json_builder_set_member_name(builder, "medium");
-    json_builder_add_string_value(builder, medium);
-
-    json_builder_set_member_name(builder, "address");
-    json_builder_add_string_value(builder, address);
-
-    json_builder_end_object(builder);
-    body = json_builder_get_root(builder);
-    g_object_unref(builder);
+    if ((body = matrix_api_3pid_credential_get_json_node(credential,
+                                                         error)) == NULL) {
+        return;
+    }
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,

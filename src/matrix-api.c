@@ -911,7 +911,9 @@ matrix_api_list_public_rooms(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Ban the specified user from the specified room. An optional reason
- * can be specified.
+ * can be specified. If @room_id or @user_id is %NULL, this
+ * function returns immediately, and fills @error with
+ * %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_ban_user(MatrixAPI *api,
@@ -923,6 +925,14 @@ matrix_api_ban_user(MatrixAPI *api,
                     GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id and user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->ban_user(api, callback, user_data, room_id, user_id, reason, error);
@@ -947,6 +957,9 @@ matrix_api_ban_user(MatrixAPI *api,
  *
  * If the user is currently joined to the room, they will implicitly
  * leave the room as part of this API call.
+ *
+ * If @room_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_forget_room(MatrixAPI *api,
@@ -956,6 +969,14 @@ matrix_api_forget_room(MatrixAPI *api,
                        GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->forget_room(api, callback, user_data, room_id, error);
@@ -969,11 +990,8 @@ matrix_api_forget_room(MatrixAPI *api,
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
  * @room_id: the room ID to which to invite the user
- * @address: the invitee's 3rd party identifier
- * @medium: the kind of address being passed in the address field,
- *          e.g. <code>email</code>
- * @id_server: the hostname+port of the identity server which should
- *             be used for 3rd party identifier lookups
+ * @credential: (transfer none): a #MatrixAPI3PidCredential that
+ *              identifies a user to invite
  * @error: return location for a #GError, or %NULL
  *
  * Invite a user to the room by a 3rd party identifier. They do not
@@ -988,9 +1006,7 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
                                      MatrixAPICallback callback,
                                      gpointer user_data,
                                      const gchar *room_id,
-                                     const gchar *address,
-                                     const gchar *medium,
-                                     const gchar *id_server,
+                                     MatrixAPI3PidCredential *credential,
                                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
@@ -998,7 +1014,7 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
     MATRIX_API_GET_IFACE(api)
         ->invite_user_3rdparty(api,
                                callback, user_data,
-                               room_id, address, medium, id_server,
+                               room_id, credential,
                                error);
 }
 
