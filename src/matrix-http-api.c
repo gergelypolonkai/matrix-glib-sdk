@@ -88,7 +88,7 @@ typedef struct {
     CallType call_type;
 } MatrixHTTPAPIRequest;
 
-GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
+static GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 
 static void matrix_http_api_matrix_api_init(MatrixAPIInterface *iface);
 static void i_set_token(MatrixAPI *api, const gchar *token);
@@ -102,6 +102,17 @@ G_DEFINE_TYPE_WITH_CODE(MatrixHTTPAPI, matrix_http_api, G_TYPE_OBJECT,
                         G_ADD_PRIVATE(MatrixHTTPAPI)
                         G_IMPLEMENT_INTERFACE(MATRIX_TYPE_API,
                                               matrix_http_api_matrix_api_init));
+
+static void
+matrix_http_api_dispose(GObject *gobject)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(gobject));
+
+    g_object_unref(priv->soup_session);
+
+    G_OBJECT_CLASS(matrix_http_api_parent_class)->dispose(gobject);
+}
 
 static void
 matrix_http_api_finalize(GObject *gobject)
@@ -232,6 +243,7 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
     gobject_class->set_property = matrix_http_api_set_property;
     gobject_class->get_property = matrix_http_api_get_property;
     gobject_class->finalize = matrix_http_api_finalize;
+    gobject_class->dispose = matrix_http_api_dispose;
 
     /**
      * MatrixHTTPAPI:validate-certificate:
