@@ -1,7 +1,7 @@
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Matrix-GLib\"
 
 lib_LTLIBRARIES = libmatrix-glib-0.0.la
-bin_PROGRAMS = test-client
+bin_PROGRAMS = test-api-client
 
 INST_H_SRC_FILES = \
 	matrix-client.h \
@@ -38,9 +38,9 @@ libmatrix_glib_0_0_la_DEPENDENCIES =
 
 BUILT_SOURCES = matrix-enumtypes.c matrix-enumtypes.h
 
-test_client_SOURCES = test-client.c $(libmatrix_glib_0_0_la_SOURCES)
-test_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS)
-test_client_LDADD = $(libmatrix_glib_0_0_la_LIBADD)
+test_api_client_SOURCES = test-api-client.c $(libmatrix_glib_0_0_la_SOURCES)
+test_api_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS)
+test_api_client_LDADD = $(libmatrix_glib_0_0_la_LIBADD)
 
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = \
