@@ -1960,7 +1960,7 @@ matrix_api_set_display_name(MatrixAPI *api,
  *              authentication to the Matrix ID with the ID server
  * @username: (allow-none): the local part of the desired Matrix
  *            ID. If omitted, the server will generate a local part
- * @password: (allow-none): the desired password for the account
+ * @password: the desired password for the account
  * @error: return location for a #GError, or %NULL
  *
  * Attempt to register with type @login_type. Implementations of this
