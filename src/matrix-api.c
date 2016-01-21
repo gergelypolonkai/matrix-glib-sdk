@@ -207,9 +207,11 @@ matrix_api_get_token(MatrixAPI *api)
 /**
  * matrix_api_set_token:
  * @api: a #MatrixAPI implementation
- * @token: the authorization token to set
+ * @token: (allow-none): the authorization token to set
  *
- * Set the authorization token to use in subsequent requests.
+ * Set the authorization token to use in subsequent requests. If
+ * @token is %NULL, the token will be unset, and a new login must take
+ * place to get a new authorization token.
  *
  * <warning><para>Some implementations, like #MatrixHTTPAPI, use
  * asynchronous requests. This means that pending requests will use
@@ -248,10 +250,12 @@ matrix_api_get_refresh_token(MatrixAPI *api)
 /**
  * matrix_api_set_refresh_token:
  * @api: a #MatrixAPI implementation
- * @refresh_token: the refresh token to set
+ * @refresh_token: (allow-none): the refresh token to set
  *
  * Set the refresh token to be used in subsequent requests. See
- * matrix_api_set_token() for limitations.
+ * matrix_api_set_token() for limitations. If @refresh_token is %NULL,
+ * the refresh token is unset, and a new login must take place to get
+ * a new one.
  */
 void
 matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token)
@@ -324,6 +328,9 @@ matrix_api_get_homeserver(MatrixAPI *api)
  * @error: return location for a #GError, or %NULL
  *
  * Download content from the content repository.
+ *
+ * If @server_name or @media_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_media_download(MatrixAPI *api,
@@ -334,6 +341,14 @@ matrix_api_media_download(MatrixAPI *api,
                           GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!server_name || !media_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "server_name and media_id must be specified.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->media_download(api,
@@ -359,7 +374,11 @@ matrix_api_media_download(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Download a thumbnail of the content from the content
- * repository. The actual thumbnail may not match the size specified.
+ * repository. The actual thumbnail may not match the size
+ * specified.
+ *
+ * If @server_name or @media_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_media_thumbnail(MatrixAPI *api,
@@ -373,6 +392,14 @@ matrix_api_media_thumbnail(MatrixAPI *api,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!server_name || !media_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "server_name and media_id must be specified.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->media_thumbnail(api,
@@ -395,6 +422,9 @@ matrix_api_media_thumbnail(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Upload some content to the content repository.
+ *
+ * If @content is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_media_upload(MatrixAPI *api,
@@ -405,6 +435,14 @@ matrix_api_media_upload(MatrixAPI *api,
                         GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!content) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "content must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->media_upload(api, callback, user_data, content_type, content, error);
@@ -423,6 +461,9 @@ matrix_api_media_upload(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Retrieve a list of presence events for every user on this list.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_presence_list(MatrixAPI *api,
@@ -432,6 +473,14 @@ matrix_api_get_presence_list(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_presence_list(api, callback, user_data, user_id, error);
@@ -452,6 +501,10 @@ matrix_api_get_presence_list(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Add or remove users from the specified user's presence list.
+ *
+ * If @user_id, or both @drop_ids and @invite_ids are %NULL, this
+ * function returns immediately, and fills @error with
+ * %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_update_presence_list(MatrixAPI *api,
@@ -463,6 +516,14 @@ matrix_api_update_presence_list(MatrixAPI *api,
                                 GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || (!drop_ids && !invite_ids)) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set, so as at least one of drop_ids or invite_ids");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->update_presence_list(api,
@@ -481,6 +542,9 @@ matrix_api_update_presence_list(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get the given user's presence state.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_user_presence(MatrixAPI *api,
@@ -490,6 +554,14 @@ matrix_api_get_user_presence(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_user_presence(api,
@@ -506,11 +578,15 @@ matrix_api_get_user_presence(MatrixAPI *api,
  *             @callback
  * @user_id: the user whose presence list is being modified
  * @presence: the new presence state
- * @status_message: a status message attached to this state
+ * @status_message: (allow-none): a status message attached to this
+ *                  state
  * @error: return location for a #GError, or %NULL
  *
  * Set the given user's presence. You cannot set the presence of
  * another user.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_set_user_presence(MatrixAPI *api,
@@ -522,6 +598,14 @@ matrix_api_set_user_presence(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->set_user_presence(api,
@@ -544,6 +628,9 @@ matrix_api_set_user_presence(MatrixAPI *api,
  *
  * Create, update or delete a pusher for the active user on this
  * homeserver.
+ *
+ * If @pusher is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_update_pusher(MatrixAPI *api,
@@ -553,6 +640,14 @@ matrix_api_update_pusher(MatrixAPI *api,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!pusher) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "pusher must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->update_pusher(api,
@@ -598,6 +693,9 @@ matrix_api_get_pushers(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Delete a push rule.
+ *
+ * If @scope or @rule_id is %NULL, this function returns immediately,
+ * and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_delete_pusher(MatrixAPI *api,
@@ -609,6 +707,14 @@ matrix_api_delete_pusher(MatrixAPI *api,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!scope || !rule_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "scope and rule_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->delete_pusher(api,
@@ -631,6 +737,9 @@ matrix_api_delete_pusher(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Retrieve a specific push rule.
+ *
+ * If @scope or @rule_id is %NULL, this function returns immediately,
+ * and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_pusher(MatrixAPI *api,
@@ -642,6 +751,14 @@ matrix_api_get_pusher(MatrixAPI *api,
                       GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!scope || !rule_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "scope and rule_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_pusher(api,
@@ -674,6 +791,10 @@ matrix_api_get_pusher(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Add or change a push rule.
+ *
+ * If either @scope, @rule_id or @actions are %NULL, this
+ * function returns immediately, and fills @error with
+ * %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_add_pusher(MatrixAPI *api,
@@ -689,6 +810,14 @@ matrix_api_add_pusher(MatrixAPI *api,
                       GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!scope || !rule_id || !actions) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "scope, rule_id and actions must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->add_pusher(api,
@@ -715,6 +844,9 @@ matrix_api_add_pusher(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Enable or disable the specified push rule.
+ *
+ * If @scope or @rule_id is %NULL, this function returns immediately,
+ * and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void matrix_api_toggle_pusher(MatrixAPI *api,
                               MatrixAPICallback callback,
@@ -726,6 +858,14 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!scope || !rule_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "scope and rule_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->toggle_pusher(api,
@@ -803,6 +943,9 @@ matrix_api_create_room(MatrixAPI *api,
  * Servers may choose to implement additional access control checks
  * here, for instance that room aliases can only be deleted by their
  * creator or a server administrator.
+ *
+ * If @room_alias is %NULL, this function returns immediately, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_delete_room_alias(MatrixAPI *api,
@@ -813,6 +956,14 @@ matrix_api_delete_room_alias(MatrixAPI *api,
 {
     g_return_if_fail(MATRIX_IS_API(api));
 
+    if (!room_alias) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_alias must be set.");
+
+        return;
+    }
+
     MATRIX_API_GET_IFACE(api)
         ->delete_room_alias(api, callback, user_data, room_alias, error);
 }
@@ -822,11 +973,15 @@ matrix_api_delete_room_alias(MatrixAPI *api,
  * @api: a #MatrixAPI implementation
  * @callback: (scope async) (allow-none): the function to call when
  *            the request is finished
- * @user_data: (closure) (allow-none): user data to pass to the callback function
+ * @user_data: (closure) (allow-none): user data to pass to the
+ *             callback function
  * @room_alias: the room alias
  * @error: return location for a #GError, or %NULL
  *
  * Get the room ID corresponding to this room alias.
+ *
+ * If @room_alias is %NULL, this function returns immediately, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_room_id(MatrixAPI *api,
@@ -836,6 +991,14 @@ matrix_api_get_room_id(MatrixAPI *api,
                        GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_alias) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_alias must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_room_id(api, callback, user_data, room_alias, error);
@@ -853,6 +1016,9 @@ matrix_api_get_room_id(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Create a new mapping from room alias to room ID.
+ *
+ * If @room_alias or @room_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_create_room_alias(MatrixAPI *api,
@@ -863,6 +1029,14 @@ matrix_api_create_room_alias(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_alias || !room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_alias and room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->create_room_alias(api,
@@ -911,9 +1085,10 @@ matrix_api_list_public_rooms(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Ban the specified user from the specified room. An optional reason
- * can be specified. If @room_id or @user_id is %NULL, this
- * function returns immediately, and fills @error with
- * %MATRIX_API_ERROR_INCOMPLETE.
+ * can be specified.
+ *
+ * If @room_id or @user_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_ban_user(MatrixAPI *api,
@@ -1001,6 +1176,9 @@ matrix_api_forget_room(MatrixAPI *api,
  * the passed third party identifier, the homeserver will issue an
  * invitation which can be accepted upon providing proof of ownership
  * of the third party identifier.
+ *
+ * If @credential is %NULL, this function immediately returns, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void matrix_api_invite_user_3rdparty(MatrixAPI *api,
                                      MatrixAPICallback callback,
@@ -1010,6 +1188,14 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
                                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!credential) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "credential must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->invite_user_3rdparty(api,
@@ -1030,6 +1216,9 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Invite a user to a room.
+ *
+ * If @room_id or @user_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_invite_user(MatrixAPI *api,
@@ -1040,6 +1229,14 @@ matrix_api_invite_user(MatrixAPI *api,
                        GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id and user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->invite_user(api, callback, user_data, room_id, user_id, error);
@@ -1056,6 +1253,9 @@ matrix_api_invite_user(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Join a room.
+ *
+ * If @room_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_join_room(MatrixAPI *api,
@@ -1065,6 +1265,14 @@ matrix_api_join_room(MatrixAPI *api,
                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->join_room(api, callback, user_data, room_id, error);
@@ -1080,7 +1288,10 @@ matrix_api_join_room(MatrixAPI *api,
  * @room_id: the room ID to kick the user from
  * @error: return location for a #GError, or %NULL
  *
- * Leave a room
+ * Leave a room.
+ *
+ * If @room_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_leave_room(MatrixAPI *api,
@@ -1090,6 +1301,14 @@ matrix_api_leave_room(MatrixAPI *api,
                       GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->leave_room(api, callback, user_data, room_id, error);
@@ -1135,6 +1354,9 @@ matrix_api_event_stream(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get a single event by event ID.
+ *
+ * If @event_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_event(MatrixAPI *api,
@@ -1144,6 +1366,14 @@ matrix_api_get_event(MatrixAPI *api,
                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!event_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "event_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_event(api, callback, user_data, event_id, error);
@@ -1191,6 +1421,9 @@ matrix_api_initial_sync(MatrixAPI *api,
  *
  * Gets a number of events that happened just before and after the
  * specified event.
+ *
+ * If @room_id or @event_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_event_context(MatrixAPI *api,
@@ -1202,6 +1435,14 @@ matrix_api_get_event_context(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !event_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id and event_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_event_context(api,
@@ -1221,6 +1462,9 @@ matrix_api_get_event_context(MatrixAPI *api,
  *
  * Get a copy of the current state and the most recent messages in a
  * room.
+ *
+ * If @room_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_initial_sync_room(MatrixAPI *api,
@@ -1230,6 +1474,14 @@ matrix_api_initial_sync_room(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->initial_sync_room(api, callback, user_data, room_id, error);
@@ -1246,6 +1498,9 @@ matrix_api_initial_sync_room(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get the list of members for a room.
+ *
+ * If @room_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_list_room_members(MatrixAPI *api,
@@ -1255,6 +1510,14 @@ matrix_api_list_room_members(MatrixAPI *api,
                              GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->list_room_members(api, callback, user_data, room_id, error);
@@ -1277,6 +1540,9 @@ matrix_api_list_room_members(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get a list of message and state events for a room.
+ *
+ * If @room_id or @from_token is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_list_room_messages(MatrixAPI *api,
@@ -1289,6 +1555,14 @@ matrix_api_list_room_messages(MatrixAPI *api,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !from_token) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id and from_token must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->list_room_messages(api,
@@ -1311,7 +1585,11 @@ matrix_api_list_room_messages(MatrixAPI *api,
  *           will automatically attach the <code>ts</code> field
  * @error: return location for a #GError, or %NULL
  *
- * Update the marker for the given receipt type to the event ID specified.
+ * Update the marker for the given receipt type to the event ID
+ * specified.
+ *
+ * If @room_id, @event_id or @receipt is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_send_event_receipt(MatrixAPI *api,
@@ -1324,6 +1602,14 @@ matrix_api_send_event_receipt(MatrixAPI *api,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !event_id || !receipt) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id, event_id and receipt must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->send_event_receipt(api,
@@ -1354,6 +1640,9 @@ matrix_api_send_event_receipt(MatrixAPI *api,
  * Users may redact their own events, and any user with a power level
  * greater than or equal to <code>redact</code> power level of the
  * room may redact events there.
+ *
+ * If @room_id, @event_id or @txn_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_redact_event(MatrixAPI *api,
@@ -1366,6 +1655,14 @@ matrix_api_redact_event(MatrixAPI *api,
                         GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !event_id || !txn_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id, event_id and txn_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->redact_event(api,
@@ -1390,6 +1687,10 @@ matrix_api_redact_event(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Send a message event to the room.
+ *
+ * If @room_id, @event_type, @txn_id or @content is %NULL, this
+ * function returns immediately, and fills @error with
+ * %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_send_message_event(MatrixAPI *api,
@@ -1402,6 +1703,14 @@ matrix_api_send_message_event(MatrixAPI *api,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || !event_type || !txn_id || !content) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id, event_type, txn_id and content must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->send_message_event(api,
@@ -1427,6 +1736,10 @@ matrix_api_send_message_event(MatrixAPI *api,
  * Look up the contents of a state event in a room. If both
  * @event_type and @state_key are empty, get a list of state events
  * for that room.
+ *
+ * If @room_id is %NULL, or if @state_key is set with @event_type
+ * being %NULL, this function returns immediately, and fills @error
+ * with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_room_state(MatrixAPI *api,
@@ -1438,6 +1751,14 @@ matrix_api_get_room_state(MatrixAPI *api,
                           GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || (state_key && !event_type)) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set, and event_type must be set if state_key is set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_room_state(api,
@@ -1466,6 +1787,10 @@ matrix_api_get_room_state(MatrixAPI *api,
  *
  * The required fields in the body of the request (@content) vary
  * depending on the type of the event.
+ *
+ * If @room_id or @content is %NULL, or if @state_key is set with
+ * @event_type being %NULL, this function returns immediately, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_send_room_event(MatrixAPI *api,
@@ -1478,6 +1803,14 @@ matrix_api_send_room_event(MatrixAPI *api,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!room_id || (state_key && !event_type) || !content) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "room_id must be set, and event_type must be set if state_key is set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->send_room_event(api,
@@ -1504,6 +1837,9 @@ matrix_api_send_room_event(MatrixAPI *api,
  * Tell the server the user is typing for the next @timeout
  * milliseconds. If @typing is %FALSE, it tells the server that the
  * user stopped typing.
+ *
+ * If @user_id or @room_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_notify_room_typing(MatrixAPI *api,
@@ -1516,6 +1852,14 @@ matrix_api_notify_room_typing(MatrixAPI *api,
                               GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->notify_room_typing(api,
@@ -1591,6 +1935,9 @@ matrix_api_sync(MatrixAPI *api,
  *
  * Upload a new filter definition to the homeserver. It will return a
  * filter ID that may be used in future requests.
+ *
+ * If @user_id or @filter is %NULL, this function returns immediately,
+ * and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_create_filter(MatrixAPI *api,
@@ -1601,6 +1948,14 @@ matrix_api_create_filter(MatrixAPI *api,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !filter) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and filter must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->create_filter(api,
@@ -1621,6 +1976,9 @@ matrix_api_create_filter(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Download a filter.
+ *
+ * If @user_id or @filter_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_download_filter(MatrixAPI *api,
@@ -1631,6 +1989,14 @@ matrix_api_download_filter(MatrixAPI *api,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !filter_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and filter_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->download_filter(api,
@@ -1653,6 +2019,9 @@ matrix_api_download_filter(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get information about a particular user.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_whois(MatrixAPI *api,
@@ -1662,6 +2031,14 @@ matrix_api_whois(MatrixAPI *api,
                  GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->whois(api, callback, user_data, user_id, error);
@@ -1705,6 +2082,9 @@ matrix_api_versions(MatrixAPI *api,
  *
  * Attempt to login with type @type. Implementations of this method
  * must set the token property on a successful login.
+ *
+ * If @login_type or @content is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_login(MatrixAPI *api,
@@ -1715,6 +2095,14 @@ matrix_api_login(MatrixAPI *api,
                  GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!login_type || !content) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "login_type and content must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->login(api, callback, user_data, login_type, content, error);
@@ -1797,6 +2185,9 @@ matrix_api_get_3pids(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Add contact information to the user's account.
+ *
+ * If @threepid_creds is %NULL, this function returns immediately, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_add_3pid(MatrixAPI *api,
@@ -1807,6 +2198,14 @@ matrix_api_add_3pid(MatrixAPI *api,
                     GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!threepid_creds) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "threepid_creds must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->add_3pid(api, callback, user_data, bind_creds, threepid_creds, error);
@@ -1823,6 +2222,9 @@ matrix_api_add_3pid(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Change the active user's password.
+ *
+ * If @new_password is %NULL, this function returns immediately, and
+ * fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_change_password(MatrixAPI *api,
@@ -1832,6 +2234,14 @@ matrix_api_change_password(MatrixAPI *api,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!new_password) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "new_password must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->change_password(api, callback, user_data, new_password, error);
@@ -1848,6 +2258,9 @@ matrix_api_change_password(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get a user's profile.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_profile(MatrixAPI *api,
@@ -1857,6 +2270,14 @@ matrix_api_get_profile(MatrixAPI *api,
                        GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_profile(api, callback, user_data, user_id, error);
@@ -1873,6 +2294,9 @@ matrix_api_get_profile(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get the URL of the specified user's avatar.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_avatar_url(MatrixAPI *api,
@@ -1882,6 +2306,14 @@ matrix_api_get_avatar_url(MatrixAPI *api,
                           GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_avatar_url(api, callback, user_data, user_id, error);
@@ -1899,6 +2331,9 @@ matrix_api_get_avatar_url(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Set the user's avatar URL.
+ *
+ * If @user_id or @avatar_url is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_set_avatar_url(MatrixAPI *api,
@@ -1909,6 +2344,14 @@ matrix_api_set_avatar_url(MatrixAPI *api,
                           GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !avatar_url) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and avatar_url must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->set_avatar_url(api, callback, user_data, user_id, avatar_url, error);
@@ -1925,6 +2368,9 @@ matrix_api_set_avatar_url(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Get the user's display name.
+ *
+ * If @user_id is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_display_name(MatrixAPI *api,
@@ -1934,6 +2380,14 @@ matrix_api_get_display_name(MatrixAPI *api,
                             GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_display_name(api, callback, user_data, user_id, error);
@@ -1951,6 +2405,9 @@ matrix_api_get_display_name(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Set the user's display name.
+ *
+ * If @user_id or @display_name is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_set_display_name(MatrixAPI *api,
@@ -1961,6 +2418,14 @@ matrix_api_set_display_name(MatrixAPI *api,
                             GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !display_name) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and display_name must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->set_display_name(api,
@@ -1985,6 +2450,9 @@ matrix_api_set_display_name(MatrixAPI *api,
  *
  * Attempt to register with type @login_type. Implementations of this
  * method must set the token property on a successful login.
+ *
+ * If @password is %NULL, this function returns immediately, and fills
+ * @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_register_account(MatrixAPI *api,
@@ -1997,6 +2465,14 @@ matrix_api_register_account(MatrixAPI *api,
                             GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!password) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "password must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->register_account(api, callback, user_data, account_kind,
@@ -2023,6 +2499,10 @@ matrix_api_register_account(MatrixAPI *api,
  * Set some account data for the client. This config is only visible
  * to the user who set the account data. The config will be synced to
  * clients in the top-level account data.
+ *
+ * If @user_id, @event_type or @content is %NULL, this
+ * function returns immediately, and fills @error with
+ * %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_set_account_data(MatrixAPI *api,
@@ -2035,6 +2515,14 @@ matrix_api_set_account_data(MatrixAPI *api,
                             GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !event_type || !content) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id2 event_type and content must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->set_account_data(api,
@@ -2056,6 +2544,9 @@ matrix_api_set_account_data(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * List the tags set by a user on a room.
+ *
+ * If @user_id or @room_id is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_get_room_tags(MatrixAPI *api,
@@ -2066,6 +2557,14 @@ matrix_api_get_room_tags(MatrixAPI *api,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !room_id) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id and room_id must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->get_room_tags(api, callback, user_data, user_id, room_id, error);
@@ -2084,6 +2583,9 @@ matrix_api_get_room_tags(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Remove a tag from the room.
+ *
+ * If @user_id, @room_id or @tag is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_delete_room_tag(MatrixAPI *api,
@@ -2095,6 +2597,14 @@ matrix_api_delete_room_tag(MatrixAPI *api,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !room_id || !tag) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id, room_id and tag must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->delete_room_tag(api,
@@ -2117,6 +2627,9 @@ matrix_api_delete_room_tag(MatrixAPI *api,
  * @error: return location for a #GError, or %NULL
  *
  * Add a tag to the room.
+ *
+ * If @user_id, @room_id or @tag is %NULL, this function returns
+ * immediately, and fills @error with %MATRIX_API_ERROR_INCOMPLETE.
  */
 void
 matrix_api_add_room_tag(MatrixAPI *api,
@@ -2129,6 +2642,14 @@ matrix_api_add_room_tag(MatrixAPI *api,
                         GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
+
+    if (!user_id || !room_id || !tag) {
+        g_set_error(error,
+                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    "user_id, room_id and tag must be set.");
+
+        return;
+    }
 
     MATRIX_API_GET_IFACE(api)
         ->add_room_tag(api,
