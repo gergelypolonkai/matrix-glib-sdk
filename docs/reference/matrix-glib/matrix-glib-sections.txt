@@ -1,17 +1,21 @@
 <SECTION>
 <FILE>matrix-client</FILE>
 <TITLE>MatrixClient</TITLE>
-matrix_client_new
-<SUBSECTION Standard>
 MatrixClient
-MatrixClientClass
-MATRIX_IS_CLIENT
-MATRIX_IS_CLIENT_CLASS
+MatrixClientInterface
+matrix_client_register_with_password
+matrix_client_login_with_password
+matrix_client_logout
+matrix_client_refresh_token
+matrix_client_begin_polling
+matrix_client_stop_polling
+matrix_client_get_room
+matrix_client_get_user
+<SUBSECTION Standard>
+MATRIX_CLIENT_GET_IFACE
 MATRIX_CLIENT
-MATRIX_CLIENT_CLASS
-MATRIX_CLIENT_GET_CLASS
+MATRIX_IS_CLIENT
 MATRIX_TYPE_CLIENT
-MatrixClientPrivate
 matrix_client_get_type
 </SECTION>
 

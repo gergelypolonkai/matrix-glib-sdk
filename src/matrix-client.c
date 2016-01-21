@@ -17,161 +17,149 @@
  */
 
 #include "matrix-client.h"
-#include "matrix-api.h"
+#include "matrix-marshalers.h"
 
 /**
  * SECTION:matrix-client
- * @short_description: Base class for communication with a Matrix.org server
+ * @short_description: Base interface for communication with a Matrix.org server
  * @title: MatrixClient
  * @stability: Unstable
- * @include: matrix-glib/matrix.h
+ * @include: matrix-glib/matrix-client.h
  *
- * This is the base class for client communication with a Matrix.org server.
+ * This is the base interface for client communication with a
+ * Matrix.org server.
+ */
+
+/**
+ * MatrixClientInterface:
+ * @login_with_password: virtual function for
+ *                       matrix_client_login_with_password()
+ * @register_with_password: virtual function for
+ *                          matrix_client_register_with_password()
+ * @logout: virtual function for matrix_client_logout()
+ * @refresh_token: virtual function for matrix_client_refresh_token()
+ * @begin_polling: virtual function for matrix_client_begin_polling()
+ * @stop_polling: virtual function for matrix_client_stop_polling()
+ * @get_room: virtual function for matrix_client_get_room()
+ * @get_user: virtual function for matrix_client_get_user()
+ *
+ * The interface vtable for #MatrixClient
  */
 
 /**
  * MatrixClient:
  *
- * The MatrixClient object’s instance definition.
+ * The MatrixClient object’s interface definition.
  */
 
-/**
- * MatrixClientClass:
- * @parent_class: the parent class structure (#GObjectClass)
- *
- * The MatrixClient object’s class definition.
- */
-
-typedef struct _MatrixClientPrivate {
-    MatrixAPI *api;
-} MatrixClientPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(MatrixClient, matrix_client, G_TYPE_OBJECT);
-
-enum {
-    PROP_HOMESERVER = 1,
-    PROP_TOKEN,
-    N_PROPERTIES
-};
-
-static GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
+G_DEFINE_INTERFACE(MatrixClient, matrix_client, G_TYPE_OBJECT);
 
 static void
-matrix_client_finalize(GObject *gobject)
+matrix_client_default_init(MatrixClientInterface *iface)
 {
-    g_signal_handlers_destroy(gobject);
-    G_OBJECT_CLASS(matrix_client_parent_class)->finalize(gobject);
-}
-
-static void
-matrix_client_dispose(GObject *gobject)
-{
-    MatrixClientPrivate *priv = matrix_client_get_instance_private(
-            MATRIX_CLIENT(gobject));
-
-    g_clear_object(&priv->api);
-
-    G_OBJECT_CLASS(matrix_client_parent_class)->dispose(gobject);
-}
-
-static void
-matrix_client_set_property(GObject *gobject,
-                           guint prop_id,
-                           const GValue *value,
-                           GParamSpec *pspec)
-{
-    switch (prop_id) {
-        case PROP_HOMESERVER:
-            break;
-
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
-
-            break;
-    }
-}
-
-static void
-matrix_client_get_property(GObject *gobject,
-                           guint prop_id,
-                           GValue *value,
-                           GParamSpec *pspec)
-{
-    switch (prop_id) {
-        case PROP_HOMESERVER:
-            break;
-
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, pspec);
-
-            break;
-    }
-}
-
-static void
-matrix_client_class_init(MatrixClientClass *klass)
-{
-    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
-
-    gobject_class->set_property = matrix_client_set_property;
-    gobject_class->get_property = matrix_client_get_property;
-    gobject_class->finalize = matrix_client_finalize;
-    gobject_class->dispose = matrix_client_dispose;
-
-    /**
-     * MatrixClient:homeserver:
-     *
-     * The address of the home server to connect to.
-     */
-    obj_properties[PROP_HOMESERVER] = g_param_spec_string(
-            "homeserver", "Home server",
-            "Matrix.org home server to connect to",
-            NULL,
-            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-    /**
-     * MatrixClient:token:
-     *
-     * The token to use for authorization.
-     */
-    obj_properties[PROP_TOKEN] = g_param_spec_string(
-            "token", "Token",
-            "Authentication token to use",
-            NULL,
-            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-
-    g_object_class_install_properties(gobject_class,
-                                      N_PROPERTIES,
-                                      obj_properties);
-}
-
-static void
-matrix_client_init(MatrixClient *client)
-{
-    MatrixClientPrivate *priv = matrix_client_get_instance_private(client);
-
-    priv->api = NULL;
 }
 
 /**
- * matrix_client_new:
- * @homeserver: the home server to connect to
- * @token: (allow-none): the authentication token to use
+ * matrix_client_login_with_password:
+ * @client: a #MatrixClient
+ * @username: the username to login with
+ * @password: the password to use
  *
- * Creates a new #MatrixClient instance for the specified home
- * server. The token, if specified, will be used for authorization
- * throughout communication with that server. The token gets
- * autogenerated by matrix_client_login_password() and
- * matrix_client_register_password(). No other communication is
- * allowed with the server before the token is set.
- *
- * Returns: (transfer full): a new #MatrixClient instance
+ * Authenticate with the Matrix.org server with a username and
+ * password.
  */
-MatrixClient *
-matrix_client_new(const gchar *homeserver, const gchar *token)
+void
+matrix_client_login_with_password(MatrixClient *client,
+                                  const gchar *username,
+                                  const gchar *password)
 {
-    return g_object_new(MATRIX_TYPE_CLIENT,
-                        "homeserver", homeserver,
-                        "token", token,
-                        NULL);
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->login_with_password(client, username, password);
+}
+
+/**
+ * matrix_client_register_with_password:
+ * @client: a #MatrixClient
+ * @username: (allow-none): the username to register. If omitted, the
+ *            server will generate one
+ * @password: the password to use with the registration
+ *
+ * Register @username with the homeserver.
+ */
+void
+matrix_client_register_with_password(MatrixClient *client,
+                                     const gchar *username,
+                                     const gchar *password)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->register_with_password(client, username, password);
+}
+
+/**
+ * matrix_client_logout:
+ * @client: a #MatrixClient
+ *
+ * Logout from the homeserver. As Matrix.org doesn’t have such an
+ * option, this cancels all ongoing requests and clears the
+ * authentication data (e.g. tokens).
+ */
+void
+matrix_client_logout(MatrixClient *client)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->logout(client);
+}
+
+/**
+ * matrix_client_refresh_token:
+ * @client: a #MatrixClient
+ *
+ * Request a new authentication token from the server.
+ */
+void
+matrix_client_refresh_token(MatrixClient *client)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->refresh_token(client);
+}
+
+/**
+ * matrix_client_begin_polling:
+ * @client: a #MatrixClient
+ *
+ * Begin polling the event stream. For each incoming event,
+ * MatrixClient:live-event is fired.
+ */
+void
+matrix_client_begin_polling(MatrixClient *client)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->begin_polling(client);
+}
+
+/**
+ * matrix_client_stop_polling:
+ * @client: a #MatrixClient
+ * @cancel_ongoing: if %TRUE, ongoing requests will be cancelled, too
+ *
+ * Stop polling the event stream. If @cancel_ongoing is %TRUE, ongoing
+ * requests will be cancelled, too.
+ */
+void
+matrix_client_stop_polling(MatrixClient *client, gboolean cancel_ongoing)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    MATRIX_CLIENT_GET_IFACE(client)
+        ->stop_polling(client, cancel_ongoing);
 }

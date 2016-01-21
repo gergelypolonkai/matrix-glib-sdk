@@ -25,19 +25,35 @@ G_BEGIN_DECLS
 
 #define MATRIX_TYPE_CLIENT         (matrix_client_get_type())
 #define MATRIX_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST((o), MATRIX_TYPE_CLIENT, MatrixClient))
-#define MATRIX_CLIENT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), MATRIX_TYPE_CLIENT, MatrixClientClass))
 #define MATRIX_IS_CLIENT(o)        (G_TYPE_CHECK_INSTANCE_TYPE((o), MATRIX_TYPE_CLIENT))
-#define MATRIX_IS_CLIENT_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE((k), MATRIX_TYPE_CLIENT))
-#define MATRIX_CLIENT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS((o), MATRIX_TYPE_CLIENT, MatrixClientClass))
+#define MATRIX_CLIENT_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE((o), MATRIX_TYPE_CLIENT, MatrixClientInterface))
 
-typedef struct _MatrixClient      MatrixClient;
-typedef struct _MatrixClientClass MatrixClientClass;
+typedef struct _MatrixClientInterface MatrixClientInterface;
+typedef struct _MatrixClient          MatrixClient;
 
-struct _MatrixClient {
+struct _MatrixClientInterface {
+    /*< private >*/
     /* Parent instance structure */
-    GObject parent_instance;
+    GTypeInterface g_iface;
 
+    /*< public >*/
     /* Instance members */
+
+    /* Virtual table */
+    void (*login_with_password)(MatrixClient *client,
+                                const gchar *username,
+                                const gchar *password);
+    void (*register_with_password)(MatrixClient *client,
+                                   const gchar *username,
+                                   const gchar *password);
+    void (*logout)(MatrixClient *client);
+    void (*refresh_token)(MatrixClient *client);
+
+    void (*begin_polling)(MatrixClient *client);
+    void (*stop_polling)(MatrixClient *client, gboolean cancel_ongoing);
+
+    void (*get_room)(MatrixClient *client, const gchar *room_id_or_alias);
+    void (*get_user)(MatrixClient *client, const gchar *user_id);
 };
 
 struct _MatrixClientClass {
@@ -46,7 +62,22 @@ struct _MatrixClientClass {
 };
 
 GType matrix_client_get_type(void) G_GNUC_CONST;
-MatrixClient *matrix_client_new(const gchar *homeserver, const gchar *token);
+
+void matrix_client_login_with_password(MatrixClient *client,
+                                       const gchar *username,
+                                       const gchar *password);
+void matrix_client_register_with_password(MatrixClient *client,
+                                          const gchar *username,
+                                          const gchar *password);
+void matrix_client_logout(MatrixClient *client);
+void matrix_client_refresh_token(MatrixClient *client);
+
+void matrix_client_begin_polling(MatrixClient *client);
+void matrix_client_stop_polling(MatrixClient *client, gboolean cancel_ongoing);
+
+void matrix_client_get_room(MatrixClient *client,
+                            const gchar *room_id_or_alias);
+void matrix_client_get_user(MatrixClient *client, const gchar *user_id);
 
 G_END_DECLS
 
