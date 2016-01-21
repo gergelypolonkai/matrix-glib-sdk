@@ -837,7 +837,7 @@ static void
 i_login(MatrixAPI *api,
         MatrixAPICallback callback,
         gpointer user_data,
-        const gchar *type,
+        const gchar *login_type,
         const JsonNode *content,
         GError **error)
 {
@@ -846,7 +846,7 @@ i_login(MatrixAPI *api,
 
     body = json_node_copy((JsonNode *)content);
     root_object = json_node_get_object(body);
-    json_object_set_string_member(root_object, "type", type);
+    json_object_set_string_member(root_object, "type", login_type);
 
     _send(MATRIX_HTTP_API(api),
           callback, user_data,

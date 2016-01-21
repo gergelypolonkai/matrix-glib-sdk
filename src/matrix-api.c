@@ -1679,7 +1679,7 @@ matrix_api_versions(MatrixAPI *api,
  *            finished
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
- * @type: the login type to use
+ * @login_type: the login type to use
  * @content: (allow-none): parameters to pass for the login request
  * @error: return location for a #GError, or %NULL
  *
@@ -1690,14 +1690,14 @@ void
 matrix_api_login(MatrixAPI *api,
                  MatrixAPICallback callback,
                  gpointer user_data,
-                 const gchar *type,
+                 const gchar *login_type,
                  const JsonNode *content,
                  GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
 
     MATRIX_API_GET_IFACE(api)
-        ->login(api, callback, user_data, type, content, error);
+        ->login(api, callback, user_data, login_type, content, error);
 }
 
 /**

@@ -368,7 +368,7 @@ struct _MatrixAPIInterface {
     void (*login)(MatrixAPI *api,
                   MatrixAPICallback callback,
                   gpointer user_data,
-                  const gchar *type,
+                  const gchar *login_type,
                   const JsonNode *content,
                   GError **error);
     void (*token_refresh)(MatrixAPI *api,
@@ -789,7 +789,7 @@ void matrix_api_versions(MatrixAPI *api,
 void matrix_api_login(MatrixAPI *api,
                       MatrixAPICallback callback,
                       gpointer user_data,
-                      const gchar *type,
+                      const gchar *login_type,
                       const JsonNode *content,
                       GError **error);
 void matrix_api_token_refresh(MatrixAPI *api,
