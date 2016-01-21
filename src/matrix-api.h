@@ -167,6 +167,7 @@ struct _MatrixAPIInterface {
                         JsonNode *creation_content,
                         GList *initial_state,
                         GList *invitees,
+                        GList *invite_3pids,
                         GError **error);
 
     /* Room directory */
@@ -589,6 +590,7 @@ void matrix_api_create_room(MatrixAPI *api,
                             JsonNode *creation_content,
                             GList *initial_state,
                             GList *invitees,
+                            GList *invite_3pids,
                             GError **error);
 
 /* Room directory */

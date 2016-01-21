@@ -870,6 +870,28 @@ add_string(gchar *str, JsonBuilder *builder)
     json_builder_add_string_value(builder, str);
 }
 
+typedef struct {
+    JsonBuilder *builder;
+    GError *error;
+} Add3PidCredData;
+
+static void
+add_3pidcred(MatrixAPI3PidCredential *credential, Add3PidCredData *data)
+{
+    JsonNode *node;
+
+    // If there is already an error set, return immediately
+    if (data->error) {
+        return;
+    }
+
+    // Get the credentials’ JSON representation
+    node = matrix_api_3pid_credential_get_json_node(credential, &(data->error));
+
+    // Add it to the builder
+    json_builder_add_value(data->builder, node);
+}
+
 static void
 i_create_room(MatrixAPI *api,
               MatrixAPICallback callback,
@@ -882,6 +904,7 @@ i_create_room(MatrixAPI *api,
               JsonNode *creation_content,
               GList *initial_state,
               GList *invitees,
+              GList *invite_3pids,
               GError **error)
 {
     JsonNode *body;
@@ -907,6 +930,27 @@ i_create_room(MatrixAPI *api,
         json_builder_set_member_name(builder, "invite");
         json_builder_begin_array(builder);
         g_list_foreach(invitees, (GFunc)add_string, builder);
+        json_builder_end_array(builder);
+    }
+
+    if (invite_3pids) {
+        Add3PidCredData add_data;
+
+        add_data.builder = builder;
+        add_data.error = NULL;
+
+        json_builder_set_member_name(builder, "invite_3pid");
+        json_builder_begin_array(builder);
+        g_list_foreach(invite_3pids, (GFunc)add_3pidcred, &add_data);
+
+        if (add_data.error) {
+            g_propagate_error(error, add_data.error);
+
+            g_object_unref(builder);
+
+            return;
+        }
+
         json_builder_end_array(builder);
     }
 

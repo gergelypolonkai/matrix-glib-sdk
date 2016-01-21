@@ -753,6 +753,9 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  *                 list of state events to set in the new room
  * @invitees: (element-type utf8) (allow-none): list of user IDs to
  *            invite to the new room
+ * @invite_3pids: (element-type MatrixAPI3PidCredential) (allow-none):
+ *                 a list of 3rd party credentials to invite to the
+ *                 new room
  * @error: return location for a #GError, or %NULL
  *
  * Create a new room with the given name and invite the users in
@@ -770,6 +773,7 @@ matrix_api_create_room(MatrixAPI *api,
                        JsonNode *creation_content,
                        GList *initial_state,
                        GList *invitees,
+                       GList *invite_3pids,
                        GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
@@ -778,7 +782,7 @@ matrix_api_create_room(MatrixAPI *api,
         ->create_room(api, callback, user_data,
                       preset, room_name, room_alias, topic,
                       visibility, creation_content,
-                      initial_state, invitees,
+                      initial_state, invitees, invite_3pids,
                       error);
 }
 
