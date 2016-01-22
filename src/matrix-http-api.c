@@ -567,7 +567,6 @@ _response_callback(SoupSession *session,
             if (JSON_NODE_HOLDS_OBJECT(content)) {
                 JsonObject *root_object;
                 JsonNode *node;
-                GError *err = NULL;
 
                 root_object = json_node_get_object(content);
 
