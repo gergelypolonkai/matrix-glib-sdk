@@ -55,9 +55,48 @@ G_DEFINE_TYPE_WITH_CODE(MatrixHTTPClient, matrix_http_client, MATRIX_TYPE_HTTP_A
                                               matrix_http_client_matrix_client_init));
 
 static void
+cb_login(MatrixAPI *api,
+         const gchar *content_type,
+         JsonNode *json_content,
+         GByteArray *raw_content,
+         gpointer user_data,
+         GError *error)
+{
+    matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
+}
+
+static void
+i_login_with_password(MatrixClient *client,
+                      const gchar *username,
+                      const gchar *password,
+                      GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *body;
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "user");
+    json_builder_add_string_value(builder, username);
+
+    json_builder_set_member_name(builder, "password");
+    json_builder_add_string_value(builder, password);
+
+    json_builder_end_object(builder);
+    body = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    matrix_api_login(MATRIX_API(client),
+                     cb_login, NULL,
+                     "m.login.password", body,
+                     error);
+}
+
+static void
 matrix_http_client_matrix_client_init(MatrixClientInterface *iface)
 {
-    iface->login_with_password = NULL;
+    iface->login_with_password = i_login_with_password;
     iface->register_with_password = NULL;
     iface->logout = NULL;
     iface->begin_polling = NULL;
