@@ -2449,8 +2449,11 @@ matrix_api_set_display_name(MatrixAPI *api,
  * @password: the desired password for the account
  * @error: return location for a #GError, or %NULL
  *
- * Attempt to register with type @login_type. Implementations of this
- * method must set the token property on a successful login.
+ * Attempt to register an account with the homeserver using @username
+ * and @password.
+ *
+ * Implementations of this method must set the token property on a
+ * successful login.
  *
  * If @password is %NULL, this function returns immediately, and fills
  * @error with %MATRIX_API_ERROR_INCOMPLETE.
