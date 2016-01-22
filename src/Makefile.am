@@ -79,7 +79,7 @@ $(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c): vala-stamp
 	fi
 
 # Binaries to create
-bin_PROGRAMS = test-api-client
+bin_PROGRAMS = test-api-client test-client
 
 INST_H_SRC_FILES = \
 	$(NULL)
@@ -134,6 +134,13 @@ BUILT_SOURCES += \
 test_api_client_SOURCES = test-api-client.c
 test_api_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS) $(AM_CFLAGS)
 test_api_client_LDADD = \
+	$(libmatrix_glib_0_0_la_LIBADD) \
+	libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la \
+	$(NULL)
+
+test_client_SOURCES = test-client.c
+test_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS) $(AM_CFLAGS)
+test_client_LDADD = \
 	$(libmatrix_glib_0_0_la_LIBADD) \
 	libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la \
 	$(NULL)
