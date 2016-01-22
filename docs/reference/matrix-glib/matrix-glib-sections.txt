@@ -6,7 +6,6 @@ MatrixClientInterface
 matrix_client_register_with_password
 matrix_client_login_with_password
 matrix_client_logout
-matrix_client_refresh_token
 matrix_client_begin_polling
 matrix_client_stop_polling
 <SUBSECTION Standard>
