@@ -119,11 +119,19 @@ i_register_with_password(MatrixClient *client,
 }
 
 static void
+i_logout(MatrixClient *client, GError **error)
+{
+    matrix_api_set_token(MATRIX_API(client), NULL);
+    matrix_api_set_refresh_token(MATRIX_API(client), NULL);
+    matrix_api_abort_pending(MATRIX_API(client));
+}
+
+static void
 matrix_http_client_matrix_client_init(MatrixClientInterface *iface)
 {
     iface->login_with_password = i_login_with_password;
     iface->register_with_password = i_register_with_password;
-    iface->logout = NULL;
+    iface->logout = i_logout;
     iface->begin_polling = NULL;
     iface->stop_polling = NULL;
 }
