@@ -85,7 +85,15 @@ matrix_client_login_with_password(MatrixClient *client,
  * @password: the password to use with the registration
  * @error: a location for a #GError, or %NULL
  *
- * Register @username with the homeserver.
+ * Register @username with the homeserver as a normal user.
+ *
+ * Upon success, the user is registered and authenticated.
+ *
+ * Implementations of #MatrixClient must emit
+ * MatrixClient::login-finished when a response arrives.
+ *
+ * If you want to register a different kind of user, use
+ * matrix_api_register_account().
  */
 void
 matrix_client_register_with_password(MatrixClient *client,
