@@ -2318,7 +2318,7 @@ i_token_refresh(MatrixAPI *api,
     JsonBuilder *builder;
     JsonNode *body;
 
-    if (!refresh_token && !priv->token) {
+    if (!refresh_token && !priv->refresh_token) {
         g_set_error(error,
                     MATRIX_API_ERROR, MATRIX_API_ERROR_MISSING_TOKEN,
                     "No token available");
