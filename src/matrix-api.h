@@ -465,6 +465,10 @@ struct _MatrixAPIInterface {
                             gpointer user_data,
                             GError **error);
 
+    /* Non-spec methods */
+
+    void (*abort_pending)(MatrixAPI *api);
+
     /*< private >*/
     /* Leave room for endpoint expansion */
     void *padding[50];
@@ -884,6 +888,10 @@ void matrix_api_get_turn_server(MatrixAPI *api,
                                 MatrixAPICallback callback,
                                 gpointer user_data,
                                 GError **error);
+
+/* Non-spec methods */
+
+void matrix_api_abort_pending(MatrixAPI *api);
 
 G_END_DECLS
 

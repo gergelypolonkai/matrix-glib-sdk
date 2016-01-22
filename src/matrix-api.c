@@ -100,6 +100,7 @@
  * @delete_room_tag: virtual function for matrix_api_delete_room_tag()
  * @add_room_tag: virtual function for matrix_api_add_room_tag()
  * @get_turn_server: virtual function for matrix_api_get_turn_server()
+ * @abort_pending: virtual function for matrix_api_abort_pending()
  *
  * The interface vtable for #MatrixAPI
  */
@@ -2680,4 +2681,26 @@ matrix_api_get_turn_server(MatrixAPI *api,
 
     MATRIX_API_GET_IFACE(api)
         ->get_turn_server(api, callback, user_data, error);
+}
+
+/* Non-spec methods */
+
+/**
+ * matrix_api_abort_pending:
+ * @api: a #MatrixAPI implementation
+ *
+ * Abort all pending requests toward the Matrix server. Be aware that
+ * this may leave requests in an incosistent state.
+ *
+ * Implementations that provide only synchronous requests can choose
+ * not to implement this function.
+ */
+void
+matrix_api_abort_pending(MatrixAPI *api)
+{
+    g_return_if_fail(MATRIX_IS_API(api));
+
+    if (MATRIX_API_GET_IFACE(api)->abort_pending) {
+        MATRIX_API_GET_IFACE(api)->abort_pending(api);
+    }
 }

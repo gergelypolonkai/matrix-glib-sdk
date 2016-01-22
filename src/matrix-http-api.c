@@ -2832,4 +2832,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 
     /* VoIP */
     iface->get_turn_server = NULL;
+
+    /* Non-spec methods */
+    iface->abort_pending = NULL;
 }

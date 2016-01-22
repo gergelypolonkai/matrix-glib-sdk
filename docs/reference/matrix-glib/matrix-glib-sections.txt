@@ -292,6 +292,9 @@ matrix_api_add_room_tag
 <SUBSECTION>
 matrix_api_get_turn_server
 
+<SUBSECTION>
+matrix_api_abort_pending
+
 <SUBSECTION Standard>
 MatrixAPI
 MATRIX_TYPE_API_ERROR
