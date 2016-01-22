@@ -94,10 +94,35 @@ i_login_with_password(MatrixClient *client,
 }
 
 static void
+cb_register_account(MatrixAPI *api,
+                    const gchar *content_type,
+                    JsonNode *json_content,
+                    GByteArray *raw_content,
+                    gpointer user_data,
+                    GError *error)
+{
+    matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
+}
+
+static void
+i_register_with_password(MatrixClient *client,
+                         const gchar *username,
+                         const gchar *password,
+                         GError **error)
+{
+    matrix_api_register_account(MATRIX_API(client),
+                                cb_register_account, NULL,
+                                MATRIX_ACCOUNT_KIND_USER,
+                                FALSE,
+                                username, password,
+                                error);
+}
+
+static void
 matrix_http_client_matrix_client_init(MatrixClientInterface *iface)
 {
     iface->login_with_password = i_login_with_password;
-    iface->register_with_password = NULL;
+    iface->register_with_password = i_register_with_password;
     iface->logout = NULL;
     iface->begin_polling = NULL;
     iface->stop_polling = NULL;
