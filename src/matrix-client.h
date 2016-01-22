@@ -42,18 +42,19 @@ struct _MatrixClientInterface {
     /* Virtual table */
     void (*login_with_password)(MatrixClient *client,
                                 const gchar *username,
-                                const gchar *password);
+                                const gchar *password,
+                                GError **error);
     void (*register_with_password)(MatrixClient *client,
                                    const gchar *username,
-                                   const gchar *password);
-    void (*logout)(MatrixClient *client);
-    void (*refresh_token)(MatrixClient *client);
+                                   const gchar *password,
+                                   GError **error);
+    void (*logout)(MatrixClient *client, GError **error);
+    void (*refresh_token)(MatrixClient *client, GError **error);
 
-    void (*begin_polling)(MatrixClient *client);
-    void (*stop_polling)(MatrixClient *client, gboolean cancel_ongoing);
-
-    void (*get_room)(MatrixClient *client, const gchar *room_id_or_alias);
-    void (*get_user)(MatrixClient *client, const gchar *user_id);
+    void (*begin_polling)(MatrixClient *client, GError **error);
+    void (*stop_polling)(MatrixClient *client,
+                         gboolean cancel_ongoing,
+                         GError **error);
 };
 
 struct _MatrixClientClass {
@@ -65,15 +66,19 @@ GType matrix_client_get_type(void) G_GNUC_CONST;
 
 void matrix_client_login_with_password(MatrixClient *client,
                                        const gchar *username,
-                                       const gchar *password);
+                                       const gchar *password,
+                                       GError **error);
 void matrix_client_register_with_password(MatrixClient *client,
                                           const gchar *username,
-                                          const gchar *password);
-void matrix_client_logout(MatrixClient *client);
-void matrix_client_refresh_token(MatrixClient *client);
+                                          const gchar *password,
+                                          GError **error);
+void matrix_client_logout(MatrixClient *client, GError **error);
+void matrix_client_refresh_token(MatrixClient *client, GError **error);
 
-void matrix_client_begin_polling(MatrixClient *client);
-void matrix_client_stop_polling(MatrixClient *client, gboolean cancel_ongoing);
+void matrix_client_begin_polling(MatrixClient *client, GError **error);
+void matrix_client_stop_polling(MatrixClient *client,
+                                gboolean cancel_ongoing,
+                                GError **error);
 
 G_END_DECLS
 

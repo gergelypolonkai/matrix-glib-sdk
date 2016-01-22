@@ -61,6 +61,7 @@ matrix_client_default_init(MatrixClientInterface *iface)
  * @client: a #MatrixClient
  * @username: the username to login with
  * @password: the password to use
+ * @error: a location for a #GError, or %NULL
  *
  * Authenticate with the Matrix.org server with a username and
  * password.
@@ -68,12 +69,13 @@ matrix_client_default_init(MatrixClientInterface *iface)
 void
 matrix_client_login_with_password(MatrixClient *client,
                                   const gchar *username,
-                                  const gchar *password)
+                                  const gchar *password,
+                                  GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->login_with_password(client, username, password);
+        ->login_with_password(client, username, password, error);
 }
 
 /**
@@ -82,80 +84,88 @@ matrix_client_login_with_password(MatrixClient *client,
  * @username: (allow-none): the username to register. If omitted, the
  *            server will generate one
  * @password: the password to use with the registration
+ * @error: a location for a #GError, or %NULL
  *
  * Register @username with the homeserver.
  */
 void
 matrix_client_register_with_password(MatrixClient *client,
                                      const gchar *username,
-                                     const gchar *password)
+                                     const gchar *password,
+                                     GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->register_with_password(client, username, password);
+        ->register_with_password(client, username, password, error);
 }
 
 /**
  * matrix_client_logout:
  * @client: a #MatrixClient
+ * @error: a location for a #GError, or %NULL
  *
  * Logout from the homeserver. As Matrix.org doesn’t have such an
  * option, this cancels all ongoing requests and clears the
  * authentication data (e.g. tokens).
  */
 void
-matrix_client_logout(MatrixClient *client)
+matrix_client_logout(MatrixClient *client, GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->logout(client);
+        ->logout(client, error);
 }
 
 /**
  * matrix_client_refresh_token:
  * @client: a #MatrixClient
+ * @error: a location for a #GError, or %NULL
  *
  * Request a new authentication token from the server.
  */
 void
-matrix_client_refresh_token(MatrixClient *client)
+matrix_client_refresh_token(MatrixClient *client, GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->refresh_token(client);
+        ->refresh_token(client, error);
 }
 
 /**
  * matrix_client_begin_polling:
  * @client: a #MatrixClient
+ * @error: a location for a #GError, or %NULL
  *
  * Begin polling the event stream.
  */
 void
-matrix_client_begin_polling(MatrixClient *client)
+matrix_client_begin_polling(MatrixClient *client, GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->begin_polling(client);
+        ->begin_polling(client, error);
 }
 
 /**
  * matrix_client_stop_polling:
  * @client: a #MatrixClient
  * @cancel_ongoing: if %TRUE, ongoing requests will be cancelled, too
+ * @error: a location for a #GError, or %NULL
  *
  * Stop polling the event stream. If @cancel_ongoing is %TRUE, ongoing
  * requests will be cancelled, too.
  */
 void
-matrix_client_stop_polling(MatrixClient *client, gboolean cancel_ongoing)
+matrix_client_stop_polling(MatrixClient *client,
+                           gboolean cancel_ongoing,
+                           GError **error)
 {
     g_return_if_fail(MATRIX_IS_CLIENT(client));
 
     MATRIX_CLIENT_GET_IFACE(client)
-        ->stop_polling(client, cancel_ongoing);
+        ->stop_polling(client, cancel_ongoing, error);
 }
