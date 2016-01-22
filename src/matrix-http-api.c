@@ -2753,6 +2753,15 @@ i_get_turn_server(MatrixAPI *api,
 }
 
 static void
+i_abort_pending(MatrixAPI *api)
+{
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(
+            MATRIX_HTTP_API(api));
+
+    soup_session_abort(priv->soup_session);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2847,5 +2856,5 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->get_turn_server = i_get_turn_server;
 
     /* Non-spec methods */
-    iface->abort_pending = NULL;
+    iface->abort_pending = i_abort_pending;
 }
