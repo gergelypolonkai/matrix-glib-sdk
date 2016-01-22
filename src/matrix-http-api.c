@@ -2740,6 +2740,19 @@ i_add_room_tag(MatrixAPI *api,
 }
 
 static void
+i_get_turn_server(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  GError **error)
+{
+    _send(MATRIX_HTTP_API(api),
+          callback, user_data,
+          CALL_API,
+          "GET", "void/turnServer", NULL, NULL, NULL, NULL,
+          FALSE, error);
+}
+
+static void
 matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
 {
     iface->set_token = i_set_token;
@@ -2831,7 +2844,7 @@ matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
     iface->add_room_tag = i_add_room_tag;
 
     /* VoIP */
-    iface->get_turn_server = NULL;
+    iface->get_turn_server = i_get_turn_server;
 
     /* Non-spec methods */
     iface->abort_pending = NULL;
