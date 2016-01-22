@@ -17,7 +17,6 @@
  */
 
 #include "matrix-client.h"
-#include "matrix-marshalers.h"
 
 /**
  * SECTION:matrix-client
@@ -40,8 +39,6 @@
  * @refresh_token: virtual function for matrix_client_refresh_token()
  * @begin_polling: virtual function for matrix_client_begin_polling()
  * @stop_polling: virtual function for matrix_client_stop_polling()
- * @get_room: virtual function for matrix_client_get_room()
- * @get_user: virtual function for matrix_client_get_user()
  *
  * The interface vtable for #MatrixClient
  */
@@ -135,8 +132,7 @@ matrix_client_refresh_token(MatrixClient *client)
  * matrix_client_begin_polling:
  * @client: a #MatrixClient
  *
- * Begin polling the event stream. For each incoming event,
- * MatrixClient:live-event is fired.
+ * Begin polling the event stream.
  */
 void
 matrix_client_begin_polling(MatrixClient *client)

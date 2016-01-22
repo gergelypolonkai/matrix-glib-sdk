@@ -75,10 +75,6 @@ void matrix_client_refresh_token(MatrixClient *client);
 void matrix_client_begin_polling(MatrixClient *client);
 void matrix_client_stop_polling(MatrixClient *client, gboolean cancel_ongoing);
 
-void matrix_client_get_room(MatrixClient *client,
-                            const gchar *room_id_or_alias);
-void matrix_client_get_user(MatrixClient *client, const gchar *user_id);
-
 G_END_DECLS
 
 #endif /* __MATRIX_CLIENT_H__ */
