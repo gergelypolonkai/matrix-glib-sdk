@@ -8,6 +8,7 @@ INST_H_SRC_FILES = \
 	matrix-api.h \
 	matrix-http-api.h \
 	matrix-client.h \
+	matrix-http-client.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
@@ -29,6 +30,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	utils.c \
 	matrix-marshalers.c \
 	matrix-client.c \
+	matrix-http-client.c \
 	$(INST_H_SRC_FILES) \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)

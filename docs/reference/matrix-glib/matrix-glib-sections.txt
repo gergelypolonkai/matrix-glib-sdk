@@ -18,6 +18,23 @@ matrix_client_get_type
 </SECTION>
 
 <SECTION>
+<FILE>matrix-http-client</FILE>
+<TITLE>MatrixHTTPClient</TITLE>
+MatrixHTTPClient
+matrix_http_client_new
+
+<SUBSECTION Standard>
+MATRIX_HTTP_CLIENT
+MATRIX_HTTP_CLIENT_CLASS
+MATRIX_HTTP_CLIENT_GET_CLASS
+MATRIX_IS_HTTP_CLIENT
+MATRIX_IS_HTTP_CLIENT_CLASS
+MATRIX_TYPE_HTTP_CLIENT
+MatrixHTTPClientClass
+matrix_http_client_get_type
+</SECTION>
+
+<SECTION>
 <FILE>matrix-types</FILE>
 <TITLE>Fundamental types for the Matrix GLib SDK</TITLE>
 
