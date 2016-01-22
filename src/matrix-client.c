@@ -17,6 +17,7 @@
  */
 
 #include "matrix-client.h"
+#include "matrix-marshalers.h"
 
 /**
  * SECTION:matrix-client
@@ -31,6 +32,7 @@
 
 /**
  * MatrixClientInterface:
+ * @login_finished: signal is a sign of a finished login request
  * @login_with_password: virtual function for
  *                       matrix_client_login_with_password()
  * @register_with_password: virtual function for
@@ -53,6 +55,25 @@ G_DEFINE_INTERFACE(MatrixClient, matrix_client, G_TYPE_OBJECT);
 static void
 matrix_client_default_init(MatrixClientInterface *iface)
 {
+    /**
+     * MatrixClient::login-finished:
+     * @client: a #MatrixClient
+     * @success: if %TRUE, login was successful
+     *
+     * This signal is a sign for a finished login request.
+     *
+     * Implementations of #MatrixClient are responsible for emitting
+     * this signal when they get a response for a login request.
+     *
+     * matrix_client_login_finished() is a convenience function for
+     * emitting #MatrixClient::login-finished.
+     */
+    g_signal_new("login-finished",
+                 MATRIX_TYPE_CLIENT,
+                 G_SIGNAL_RUN_LAST,
+                 G_STRUCT_OFFSET(MatrixClientInterface, login_finished),
+                 NULL, NULL, _matrix_marshal_VOID__BOOLEAN,
+                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 /**
@@ -159,4 +180,19 @@ matrix_client_stop_polling(MatrixClient *client,
 
     MATRIX_CLIENT_GET_IFACE(client)
         ->stop_polling(client, cancel_ongoing, error);
+}
+
+/**
+ * matrix_client_login_finished:
+ * @client: a #MatrixClient
+ * @success: if %TRUE, login was successful
+ *
+ * Emits the #MatrixClient::login-finished signal.
+ */
+void
+matrix_client_login_finished(MatrixClient *client, gboolean success)
+{
+    g_return_if_fail(MATRIX_IS_CLIENT(client));
+
+    g_signal_emit_by_name(client, "login-finished", success);
 }

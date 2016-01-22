@@ -54,6 +54,8 @@ struct _MatrixClientInterface {
     void (*stop_polling)(MatrixClient *client,
                          gboolean cancel_ongoing,
                          GError **error);
+
+    void (*login_finished)(MatrixClient *client, gboolean success);
 };
 
 struct _MatrixClientClass {
@@ -62,6 +64,8 @@ struct _MatrixClientClass {
 };
 
 GType matrix_client_get_type(void) G_GNUC_CONST;
+
+void matrix_client_login_finished(MatrixClient *client, gboolean success);
 
 void matrix_client_login_with_password(MatrixClient *client,
                                        const gchar *username,

@@ -3,6 +3,7 @@
 <TITLE>MatrixClient</TITLE>
 MatrixClient
 MatrixClientInterface
+matrix_client_login_finished
 matrix_client_register_with_password
 matrix_client_login_with_password
 matrix_client_logout

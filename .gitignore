@@ -34,6 +34,7 @@ Makefile.in
 /GTAGS
 /src/matrix-version.h
 /src/matrix-enumtypes.[ch]
+/src/matrix-marshalers.[ch]
 /docs/reference/matrix-glib/version.xml
 /docs/reference/matrix-glib/html/
 /docs/reference/matrix-glib/xml/
