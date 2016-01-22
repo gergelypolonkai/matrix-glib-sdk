@@ -49,7 +49,6 @@ struct _MatrixClientInterface {
                                    const gchar *password,
                                    GError **error);
     void (*logout)(MatrixClient *client, GError **error);
-    void (*refresh_token)(MatrixClient *client, GError **error);
 
     void (*begin_polling)(MatrixClient *client, GError **error);
     void (*stop_polling)(MatrixClient *client,
@@ -73,7 +72,6 @@ void matrix_client_register_with_password(MatrixClient *client,
                                           const gchar *password,
                                           GError **error);
 void matrix_client_logout(MatrixClient *client, GError **error);
-void matrix_client_refresh_token(MatrixClient *client, GError **error);
 
 void matrix_client_begin_polling(MatrixClient *client, GError **error);
 void matrix_client_stop_polling(MatrixClient *client,

@@ -36,7 +36,6 @@
  * @register_with_password: virtual function for
  *                          matrix_client_register_with_password()
  * @logout: virtual function for matrix_client_logout()
- * @refresh_token: virtual function for matrix_client_refresh_token()
  * @begin_polling: virtual function for matrix_client_begin_polling()
  * @stop_polling: virtual function for matrix_client_stop_polling()
  *
@@ -116,22 +115,6 @@ matrix_client_logout(MatrixClient *client, GError **error)
 
     MATRIX_CLIENT_GET_IFACE(client)
         ->logout(client, error);
-}
-
-/**
- * matrix_client_refresh_token:
- * @client: a #MatrixClient
- * @error: a location for a #GError, or %NULL
- *
- * Request a new authentication token from the server.
- */
-void
-matrix_client_refresh_token(MatrixClient *client, GError **error)
-{
-    g_return_if_fail(MATRIX_IS_CLIENT(client));
-
-    MATRIX_CLIENT_GET_IFACE(client)
-        ->refresh_token(client, error);
 }
 
 /**
