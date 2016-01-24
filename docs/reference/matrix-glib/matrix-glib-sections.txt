@@ -192,7 +192,6 @@ MATRIX_TYPE_API_PUSHER
 matrix_api_pusher_get_type
 MATRIX_TYPE_API_STATE_EVENT
 matrix_api_state_event_get_type
-g_enum_to_string
 </SECTION>
 
 <SECTION>

@@ -22,6 +22,6 @@
 #include <glib.h>
 #include <glib-object.h>
 
-gchar *g_enum_to_string(GType enum_type, gint value, gboolean convert_dash);
+gchar *_g_enum_to_string(GType enum_type, gint value, gboolean convert_dash);
 
 #endif /* __MATRIX_UTILS_H__ */

@@ -18,19 +18,8 @@
 
 #include "utils.h"
 
-/**
- * g_enum_to_string: (skip)
- * @type: a #GEnumType
- * @value: a value from @type
- * @convert_dashes: convert dashes to underscores
- *
- * Get the value nick for @value, optionally converting dashes to
- * underscores.
- *
- * Returns: (transfer full): :the value nick
- */
 gchar *
-g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
+_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
 {
     GEnumClass *enum_class = g_type_class_ref(enum_type);
     GEnumValue *enum_value = g_enum_get_value(enum_class, value);

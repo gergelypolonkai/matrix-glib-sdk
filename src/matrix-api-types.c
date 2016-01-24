@@ -43,6 +43,11 @@
  *                                 is not a JSON object
  * @MATRIX_API_ERROR_INVALID_ROOM_ID: the provided string doesn’t
  *                                    contain a valid room ID
+ * @MATRIX_API_ERROR_UNKNOWN_VALUE: the response from the Matrix.org
+ *                                  server contains a value unknown to
+ *                                  this library. These should be
+ *                                  reported to the Matrix GLib SDK
+ *                                  developers
  * @MATRIX_API_ERROR_MISSING_TOKEN: authorization token is missing
  *                                  from the request
  * @MATRIX_API_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
@@ -1561,7 +1566,7 @@ matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
 
     json_builder_set_member_name(builder, "event_format");
     json_builder_add_string_value(builder,
-                                  g_enum_to_string(
+                                  _g_enum_to_string(
                                           MATRIX_TYPE_API_EVENT_FORMAT,
                                           filter->event_format,
                                           TRUE));
