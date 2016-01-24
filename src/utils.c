@@ -77,3 +77,69 @@ _g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error)
 
     return ret;
 }
+
+static void
+deep_copy_object(JsonObject *object,
+                 const gchar *member_name,
+                 JsonNode *member_node,
+                 JsonObject *new_obj)
+{
+    json_object_set_member(new_obj,
+                           member_name,
+                           _json_node_deep_copy((const JsonNode *)member_node));
+}
+
+static void
+deep_copy_array(JsonArray *array,
+                guint idx,
+                JsonNode *element_node,
+                JsonArray *new_array)
+{
+    json_array_add_element(new_array,
+                           _json_node_deep_copy((const JsonNode *)element_node));
+}
+
+JsonNode *
+_json_node_deep_copy(const JsonNode *node)
+{
+    JsonNode *ret;
+
+    if (node == NULL) {
+        return NULL;
+    }
+
+    ret = json_node_new(JSON_NODE_TYPE((JsonNode *)node));
+
+    switch (JSON_NODE_TYPE((JsonNode *)node)) {
+        case JSON_NODE_OBJECT:
+            json_object_foreach_member(json_node_get_object((JsonNode *)node),
+                                       (JsonObjectForeach)deep_copy_object,
+                                       json_node_get_object(ret));
+
+            break;
+
+        case JSON_NODE_ARRAY:
+            json_array_foreach_element(json_node_get_array((JsonNode *)node),
+                                      (JsonArrayForeach)deep_copy_array,
+                                      json_node_get_array(ret));
+
+            break;
+
+        case JSON_NODE_VALUE:
+        {
+            GValue val = G_VALUE_INIT;
+
+            json_node_get_value((JsonNode *)node, &val);
+            json_node_set_value(ret, &val);
+
+            g_value_unset(&val);
+
+            break;
+        }
+
+        case JSON_NODE_NULL:
+            break;
+    }
+
+    return ret;
+}
