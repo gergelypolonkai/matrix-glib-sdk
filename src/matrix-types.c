@@ -50,8 +50,7 @@
  * @MATRIX_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
  *                          missing/invalid token, or using a bad
  *                          password during login)
- * @MATRIX_ERROR_UNKNOWN: an error unknown to the Matrix server the
- *                        homeserver
+ * @MATRIX_ERROR_UNKNOWN: an error unknown to the Matrix homeserver
  * @MATRIX_ERROR_UNKNOWN_TOKEN: the token provided is not known for
  *                              the homeserver
  * @MATRIX_ERROR_NOT_JSON: illegal request, the content is not valid
@@ -130,6 +129,7 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
  * MatrixPresence:
+ * @MATRIX_PRESENCE_UNKNOWN: user's presence is unknown
  * @MATRIX_PRESENCE_ONLINE: user is online
  * @MATRIX_PRESENCE_OFFLINE: user is offline
  * @MATRIX_PRESENCE_UNAVAILABLE: user is unavailable (i.e. busy)

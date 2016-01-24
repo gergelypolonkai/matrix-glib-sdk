@@ -65,6 +65,7 @@ typedef enum {
 } MatrixResizeMethod;
 
 typedef enum {
+    MATRIX_PRESENCE_UNKNOWN,
     MATRIX_PRESENCE_ONLINE,
     MATRIX_PRESENCE_OFFLINE,
     MATRIX_PRESENCE_UNAVAILABLE,
