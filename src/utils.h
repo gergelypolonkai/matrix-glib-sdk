@@ -23,5 +23,6 @@
 #include <glib-object.h>
 
 gchar *_g_enum_to_string(GType enum_type, gint value, gboolean convert_dash);
+gint _g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error);
 
 #endif /* __MATRIX_UTILS_H__ */
