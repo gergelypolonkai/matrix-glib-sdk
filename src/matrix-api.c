@@ -894,7 +894,7 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  *                 list of state events to set in the new room
  * @invitees: (element-type utf8) (allow-none): list of user IDs to
  *            invite to the new room
- * @invite_3pids: (element-type MatrixAPI3PidCredential) (allow-none):
+ * @invite_3pids: (element-type Matrix3PidCredential) (allow-none):
  *                 a list of 3rd party credentials to invite to the
  *                 new room
  * @error: return location for a #GError, or %NULL
@@ -1166,7 +1166,7 @@ matrix_api_forget_room(MatrixAPI *api,
  * @user_data: (closure): user data to pass to the callback function
  *             @callback
  * @room_id: the room ID to which to invite the user
- * @credential: (transfer none): a #MatrixAPI3PidCredential that
+ * @credential: (transfer none): a #Matrix3PidCredential that
  *              identifies a user to invite
  * @error: return location for a #GError, or %NULL
  *
@@ -1185,7 +1185,7 @@ void matrix_api_invite_user_3rdparty(MatrixAPI *api,
                                      MatrixAPICallback callback,
                                      gpointer user_data,
                                      const gchar *room_id,
-                                     MatrixAPI3PidCredential *credential,
+                                     Matrix3PidCredential *credential,
                                      GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
@@ -2195,7 +2195,7 @@ matrix_api_add_3pid(MatrixAPI *api,
                     MatrixAPICallback callback,
                     gpointer user_data,
                     gboolean bind_creds,
-                    MatrixAPI3PidCredential *threepid_creds,
+                    Matrix3PidCredential *threepid_creds,
                     GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

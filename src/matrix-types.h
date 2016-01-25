@@ -215,28 +215,28 @@ MatrixRoomFilter *matrix_filter_get_room_filter(MatrixFilter *filter);
 JsonNode *matrix_filter_get_json_node(MatrixFilter *filter);
 gchar *matrix_filter_get_json_data(MatrixFilter *filter, gsize *datalen);
 
-typedef struct _MatrixAPI3PidCredential MatrixAPI3PidCredential;
+typedef struct _Matrix3PidCredential Matrix3PidCredential;
 
-GType matrix_api_3pid_credential_get_type(void);
-#define MATRIX_TYPE_API_3PID_CREDENTIAL (matrix_api_3pid_credential_get_type())
+GType matrix_3pid_credential_get_type(void);
+#define MATRIX_TYPE_3PID_CREDENTIAL (matrix_3pid_credential_get_type())
 
-MatrixAPI3PidCredential *matrix_api_3pid_credential_new(void);
-MatrixAPI3PidCredential *matrix_api_3pid_credential_ref(MatrixAPI3PidCredential *credential);
-void matrix_api_3pid_credential_unref(MatrixAPI3PidCredential *credential);
-void matrix_api_3pid_credential_set_id_server(MatrixAPI3PidCredential *credential,
-                                              const gchar *id_server);
-const gchar *matrix_api_3pid_credential_get_id_server(MatrixAPI3PidCredential *credential);
-void matrix_api_3pid_credential_set_session_id(MatrixAPI3PidCredential *credential,
-                                               const gchar *session_id);
-const gchar *matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *credential);
-void matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
-                                                  const gchar *client_secret);
-const gchar *matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential);
-JsonNode *matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
-                                                   GError **error);
-gchar *matrix_api_3pid_credential_get_json_data(MatrixAPI3PidCredential *credential,
-                                                gsize *datalen,
-                                                GError **error);
+Matrix3PidCredential *matrix_3pid_credential_new(void);
+Matrix3PidCredential *matrix_3pid_credential_ref(Matrix3PidCredential *credential);
+void matrix_3pid_credential_unref(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_id_server(Matrix3PidCredential *credential,
+                                          const gchar *id_server);
+const gchar *matrix_3pid_credential_get_id_server(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_session_id(Matrix3PidCredential *credential,
+                                           const gchar *session_id);
+const gchar *matrix_3pid_credential_get_session_id(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_client_secret(Matrix3PidCredential *credential,
+                                              const gchar *client_secret);
+const gchar *matrix_3pid_credential_get_client_secret(Matrix3PidCredential *credential);
+JsonNode *matrix_3pid_credential_get_json_node(Matrix3PidCredential *credential,
+                                               GError **error);
+gchar *matrix_3pid_credential_get_json_data(Matrix3PidCredential *credential,
+                                            gsize *datalen,
+                                            GError **error);
 
 typedef struct _MatrixAPIPusher MatrixAPIPusher;
 

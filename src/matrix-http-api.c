@@ -883,7 +883,7 @@ typedef struct {
 } Add3PidCredData;
 
 static void
-add_3pidcred(MatrixAPI3PidCredential *credential, Add3PidCredData *data)
+add_3pidcred(Matrix3PidCredential *credential, Add3PidCredData *data)
 {
     JsonNode *node;
 
@@ -893,7 +893,7 @@ add_3pidcred(MatrixAPI3PidCredential *credential, Add3PidCredData *data)
     }
 
     // Get the credentials’ JSON representation
-    node = matrix_api_3pid_credential_get_json_node(credential, &(data->error));
+    node = matrix_3pid_credential_get_json_node(credential, &(data->error));
 
     // Add it to the builder
     json_builder_add_value(data->builder, node);
@@ -1738,7 +1738,7 @@ i_invite_user_3rdparty(MatrixAPI *api,
                        MatrixAPICallback callback,
                        gpointer user_data,
                        const gchar *room_id,
-                       MatrixAPI3PidCredential *credential,
+                       Matrix3PidCredential *credential,
                        GError **error)
 {
     gchar *encoded_room_id, *path;
@@ -1749,8 +1749,8 @@ i_invite_user_3rdparty(MatrixAPI *api,
     path = g_strdup_printf("rooms/%s/invite", encoded_room_id);
     g_free(encoded_room_id);
 
-    if ((body = matrix_api_3pid_credential_get_json_node(credential,
-                                                         error)) == NULL) {
+    if ((body = matrix_3pid_credential_get_json_node(credential,
+                                                     error)) == NULL) {
         return;
     }
 
@@ -2375,13 +2375,13 @@ i_add_3pid(MatrixAPI *api,
            MatrixAPICallback callback,
            gpointer user_data,
            gboolean bind_creds,
-           MatrixAPI3PidCredential *threepid_creds,
+           Matrix3PidCredential *threepid_creds,
            GError **error)
 {
     JsonBuilder *builder;
     JsonNode *body, *id_node;
 
-    if ((id_node = matrix_api_3pid_credential_get_json_node(
+    if ((id_node = matrix_3pid_credential_get_json_node(
                  threepid_creds, error)) == NULL) {
         g_set_error(error,
                     MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,

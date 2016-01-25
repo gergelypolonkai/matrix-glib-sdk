@@ -1584,43 +1584,43 @@ matrix_filter_get_json_data(MatrixFilter *filter, gsize *datalen)
 }
 
 /**
- * MatrixAPI3PidCredential:
+ * Matrix3PidCredential:
  *
  * An opaque structure to store credentials to use with Identity
  * Server communication.
  */
-struct _MatrixAPI3PidCredential {
+struct _Matrix3PidCredential {
     gchar *id_server;
     gchar *session_id;
     gchar *client_secret;
     guint refcount;
 };
 
-G_DEFINE_BOXED_TYPE(MatrixAPI3PidCredential, matrix_api_3pid_credential,
-                    (GBoxedCopyFunc)matrix_api_3pid_credential_ref,
-                    (GBoxedFreeFunc)matrix_api_3pid_credential_unref);
+G_DEFINE_BOXED_TYPE(Matrix3PidCredential, matrix_3pid_credential,
+                    (GBoxedCopyFunc)matrix_3pid_credential_ref,
+                    (GBoxedFreeFunc)matrix_3pid_credential_unref);
 
 /**
- * matrix_api_3pid_credential_new:
+ * matrix_3pid_credential_new:
  *
- * Create a new #MatrixAPI3PidCredential object with reference count
+ * Create a new #Matrix3PidCredential object with reference count
  * of 1.
  *
- * Returns: (transfer full): a new #MatrixAPI3PidCredential
+ * Returns: (transfer full): a new #Matrix3PidCredential
  */
-MatrixAPI3PidCredential *
-matrix_api_3pid_credential_new(void)
+Matrix3PidCredential *
+matrix_3pid_credential_new(void)
 {
-    MatrixAPI3PidCredential *credential;
+    Matrix3PidCredential *credential;
 
-    credential = g_new0(MatrixAPI3PidCredential, 1);
+    credential = g_new0(Matrix3PidCredential, 1);
     credential->refcount = 1;
 
     return credential;
 }
 
 static void
-matrix_api_3pid_credential_free(MatrixAPI3PidCredential *credential)
+matrix_3pid_credential_free(Matrix3PidCredential *credential)
 {
     g_free(credential->id_server);
     g_free(credential->session_id);
@@ -1629,15 +1629,15 @@ matrix_api_3pid_credential_free(MatrixAPI3PidCredential *credential)
 }
 
 /**
- * matrix_api_3pid_credential_ref:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_ref:
+ * @credential: a #Matrix3PidCredential
  *
  * Increase reference count of @credential by one.
  *
- * Returns: (transfer none): the same #MatrixAPI3PidCredential
+ * Returns: (transfer none): the same #Matrix3PidCredential
  */
-MatrixAPI3PidCredential *
-matrix_api_3pid_credential_ref(MatrixAPI3PidCredential *credential)
+Matrix3PidCredential *
+matrix_3pid_credential_ref(Matrix3PidCredential *credential)
 {
     credential->refcount++;
 
@@ -1645,38 +1645,38 @@ matrix_api_3pid_credential_ref(MatrixAPI3PidCredential *credential)
 }
 
 /**
- * matrix_api_3pid_credential_unref:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_unref:
+ * @credential: a #Matrix3PidCredential
  *
  * Decrease reference count of @credential by one. If reference count
  * reaches zero, @credential gets freed.
  */
 void
-matrix_api_3pid_credential_unref(MatrixAPI3PidCredential *credential)
+matrix_3pid_credential_unref(Matrix3PidCredential *credential)
 {
     if (--credential->refcount == 0) {
-        matrix_api_3pid_credential_free(credential);
+        matrix_3pid_credential_free(credential);
     }
 }
 
 /**
- * matrix_api_3pid_credential_set_id_server:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_set_id_server:
+ * @credential: a #Matrix3PidCredential
  * @id_server: the Identity Server to use
  *
  * Set the Identity Server to use for this credential.
  */
 void
-matrix_api_3pid_credential_set_id_server(MatrixAPI3PidCredential *credential,
-                                         const gchar *id_server)
+matrix_3pid_credential_set_id_server(Matrix3PidCredential *credential,
+                                     const gchar *id_server)
 {
     g_free(credential->id_server);
     credential->id_server = g_strdup(id_server);
 }
 
 /**
- * matrix_api_3pid_credential_get_id_server:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_get_id_server:
+ * @credential: a #Matrix3PidCredential
  *
  * Get the Identity Server used for this credential.
  *
@@ -1684,29 +1684,29 @@ matrix_api_3pid_credential_set_id_server(MatrixAPI3PidCredential *credential,
  *          @credential and should not be freed nor modified
  */
 const gchar *
-matrix_api_3pid_credential_get_id_server(MatrixAPI3PidCredential *credential)
+matrix_3pid_credential_get_id_server(Matrix3PidCredential *credential)
 {
     return credential->id_server;
 }
 
 /**
- * matrix_api_3pid_credential_set_session_id:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_set_session_id:
+ * @credential: a #Matrix3PidCredential
  * @session_id: the session identifier given by the Identity Server
  *
  * Set the session identifier got from the Identity Server.
  */
 void
-matrix_api_3pid_credential_set_session_id(MatrixAPI3PidCredential *credential,
-                                          const gchar *session_id)
+matrix_3pid_credential_set_session_id(Matrix3PidCredential *credential,
+                                      const gchar *session_id)
 {
     g_free(credential->session_id);
     credential->session_id = g_strdup(session_id);
 }
 
 /**
- * matrix_api_3pid_credential_get_session_id:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_get_session_id:
+ * @credential: a #Matrix3PidCredential
  *
  * Get the session identifier for this credential.
  *
@@ -1714,14 +1714,14 @@ matrix_api_3pid_credential_set_session_id(MatrixAPI3PidCredential *credential,
  *          @credential and should not be freed nor modified.
  */
 const gchar *
-matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *credential)
+matrix_3pid_credential_get_session_id(Matrix3PidCredential *credential)
 {
     return credential->session_id;
 }
 
 /**
- * matrix_api_3pid_credential_set_client_secret:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_set_client_secret:
+ * @credential: a #Matrix3PidCredential
  * @client_secret: the client secret used in the session with the
  *                 Identity Server
  *
@@ -1729,16 +1729,16 @@ matrix_api_3pid_credential_get_session_id(MatrixAPI3PidCredential *credential)
  * Identity Server.
  */
 void
-matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential,
-                                             const gchar *client_secret)
+matrix_3pid_credential_set_client_secret(Matrix3PidCredential *credential,
+                                         const gchar *client_secret)
 {
     g_free(credential->client_secret);
     credential->client_secret = g_strdup(client_secret);
 }
 
 /**
- * matrix_api_3pid_credential_get_client_secret:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_get_client_secret:
+ * @credential: a #Matrix3PidCredential
  *
  * Get the client secret that was used in the session with the
  * Identity Server.
@@ -1747,14 +1747,14 @@ matrix_api_3pid_credential_set_client_secret(MatrixAPI3PidCredential *credential
  *          @credential and should not be freed nor modified.
  */
 const gchar *
-matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential)
+matrix_3pid_credential_get_client_secret(Matrix3PidCredential *credential)
 {
     return credential->client_secret;
 }
 
 /**
- * matrix_api_3pid_credential_get_json_node:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_get_json_node:
+ * @credential: a #Matrix3PidCredential
  * @error: return location for a #GError, or %NULL
  *
  * Get the JSON representation of @credential as a #JsonNode. If any
@@ -1765,8 +1765,8 @@ matrix_api_3pid_credential_get_client_secret(MatrixAPI3PidCredential *credential
  *          of @credential
  */
 JsonNode *
-matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
-                                         GError **error)
+matrix_3pid_credential_get_json_node(Matrix3PidCredential *credential,
+                                     GError **error)
 {
     JsonBuilder *builder;
     JsonNode *node;
@@ -1801,8 +1801,8 @@ matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
 }
 
 /**
- * matrix_api_3pid_credential_get_json_data:
- * @credential: a #MatrixAPI3PidCredential
+ * matrix_3pid_credential_get_json_data:
+ * @credential: a #Matrix3PidCredential
  * @datalen: (out): storage location for the length of the JSON data,
  *           or %NULL
  * @error: a #GError
@@ -1815,15 +1815,15 @@ matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
  *          @credential, or %NULL
  */
 gchar *
-matrix_api_3pid_credential_get_json_data(MatrixAPI3PidCredential *credential,
-                                         gsize *datalen,
-                                         GError **error)
+matrix_3pid_credential_get_json_data(Matrix3PidCredential *credential,
+                                     gsize *datalen,
+                                     GError **error)
 {
     JsonGenerator *generator;
     JsonNode *node;
     gchar *data;
 
-    if ((node = matrix_api_3pid_credential_get_json_node(
+    if ((node = matrix_3pid_credential_get_json_node(
                  credential, error)) == NULL) {
         return NULL;
     }
