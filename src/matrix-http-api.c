@@ -863,9 +863,9 @@ i_login(MatrixAPI *api,
 }
 
 static void
-add_state_event(MatrixAPIStateEvent *event, JsonBuilder *builder)
+add_state_event(MatrixStateEvent *event, JsonBuilder *builder)
 {
-    JsonNode *node = matrix_api_state_event_get_json_node(event);
+    JsonNode *node = matrix_state_event_get_json_node(event);
 
     json_builder_add_value(builder, node);
     json_node_free(node);

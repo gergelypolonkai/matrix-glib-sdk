@@ -273,26 +273,26 @@ gchar *matrix_pusher_get_json_data(MatrixPusher *pusher,
                                    gsize *datalen,
                                    GError **err);
 
-typedef struct _MatrixAPIStateEvent MatrixAPIStateEvent;
+typedef struct _MatrixStateEvent MatrixStateEvent;
 
-GType matrix_api_state_event_get_type(void);
-#define MATRIX_TYPE_API_STATE_EVENT (matrix_api_state_event_get_type())
+GType matrix_state_event_get_type(void);
+#define MATRIX_TYPE_STATE_EVENT (matrix_state_event_get_type())
 
-MatrixAPIStateEvent *matrix_api_state_event_new(void);
-MatrixAPIStateEvent *matrix_api_state_event_ref(MatrixAPIStateEvent *event);
-void matrix_api_state_event_unref(MatrixAPIStateEvent *event);
-void matrix_api_state_event_set_event_type(MatrixAPIStateEvent *event,
-                                           const gchar *event_type);
-const gchar *matrix_api_state_event_get_event_type(MatrixAPIStateEvent *event);
-void matrix_api_state_event_set_state_key(MatrixAPIStateEvent *event,
-                                          const gchar *state_key);
-const gchar *matrix_api_state_event_get_state_key(MatrixAPIStateEvent *event);
-void matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
-                                        const JsonNode *content);
-const JsonNode *matrix_api_state_event_get_content(MatrixAPIStateEvent *event);
-JsonNode *matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event);
-gchar *matrix_api_state_event_get_json_data(MatrixAPIStateEvent *event,
-                                            gsize *datalen);
+MatrixStateEvent *matrix_state_event_new(void);
+MatrixStateEvent *matrix_state_event_ref(MatrixStateEvent *event);
+void matrix_state_event_unref(MatrixStateEvent *event);
+void matrix_state_event_set_event_type(MatrixStateEvent *event,
+                                       const gchar *event_type);
+const gchar *matrix_state_event_get_event_type(MatrixStateEvent *event);
+void matrix_state_event_set_state_key(MatrixStateEvent *event,
+                                      const gchar *state_key);
+const gchar *matrix_state_event_get_state_key(MatrixStateEvent *event);
+void matrix_state_event_set_content(MatrixStateEvent *event,
+                                    const JsonNode *content);
+const JsonNode *matrix_state_event_get_content(MatrixStateEvent *event);
+JsonNode *matrix_state_event_get_json_node(MatrixStateEvent *event);
+gchar *matrix_state_event_get_json_data(MatrixStateEvent *event,
+                                        gsize *datalen);
 
 G_END_DECLS
 

@@ -2351,41 +2351,41 @@ gchar *matrix_pusher_get_json_data(MatrixPusher *pusher,
 }
 
 /**
- * MatrixAPIStateEvent:
+ * MatrixStateEvent:
  *
  * An opaque structure to hold a state event filter.
  */
-struct _MatrixAPIStateEvent {
+struct _MatrixStateEvent {
     gchar *type;
     gchar *state_key;
     JsonNode *content;
     guint refcount;
 };
 
-G_DEFINE_BOXED_TYPE(MatrixAPIStateEvent, matrix_api_state_event,
-                    (GBoxedCopyFunc)matrix_api_state_event_ref,
-                    (GBoxedFreeFunc)matrix_api_state_event_unref);
+G_DEFINE_BOXED_TYPE(MatrixStateEvent, matrix_state_event,
+                    (GBoxedCopyFunc)matrix_state_event_ref,
+                    (GBoxedFreeFunc)matrix_state_event_unref);
 
 /**
- * matrix_api_state_event_new:
+ * matrix_state_event_new:
  *
- * Create a new #MatrixAPIStateEvent object with reference count of 1.
+ * Create a new #MatrixStateEvent object with reference count of 1.
  *
- * Returns: (transfer full): a new #MatrixAPIStateEvent
+ * Returns: (transfer full): a new #MatrixStateEvent
  */
-MatrixAPIStateEvent *
-matrix_api_state_event_new(void)
+MatrixStateEvent *
+matrix_state_event_new(void)
 {
-    MatrixAPIStateEvent *event;
+    MatrixStateEvent *event;
 
-    event = g_new0(MatrixAPIStateEvent, 1);
+    event = g_new0(MatrixStateEvent, 1);
     event->refcount = 1;
 
     return event;
 }
 
 static void
-matrix_api_state_event_free(MatrixAPIStateEvent *event)
+matrix_state_event_free(MatrixStateEvent *event)
 {
     g_free(event->type);
     g_free(event->state_key);
@@ -2398,15 +2398,15 @@ matrix_api_state_event_free(MatrixAPIStateEvent *event)
 }
 
 /**
- * matrix_api_state_event_ref:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_ref:
+ * @event: a #MatrixStateEvent
  *
  * Increase reference count of @event by one.
  *
- * Returns: (transfer none): the same #MatrixAPIStateEvent
+ * Returns: (transfer none): the same #MatrixStateEvent
  */
-MatrixAPIStateEvent *
-matrix_api_state_event_ref(MatrixAPIStateEvent *event)
+MatrixStateEvent *
+matrix_state_event_ref(MatrixStateEvent *event)
 {
     event->refcount++;
 
@@ -2414,38 +2414,38 @@ matrix_api_state_event_ref(MatrixAPIStateEvent *event)
 }
 
 /**
- * matrix_api_state_event_unref:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_unref:
+ * @event: a #MatrixStateEvent
  *
  * Decrease reference count of @event by one. If reference count
  * reaches zero, @event is freed.
  */
 void
-matrix_api_state_event_unref(MatrixAPIStateEvent *event)
+matrix_state_event_unref(MatrixStateEvent *event)
 {
     if (--event->refcount == 0) {
-        matrix_api_state_event_free(event);
+        matrix_state_event_free(event);
     }
 }
 
 /**
- * matrix_api_state_event_set_event_type:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_set_event_type:
+ * @event: a #MatrixStateEvent
  * @event_type: the type of the state event
  *
  * Set the type of the state event in @event.
  */
 void
-matrix_api_state_event_set_event_type(MatrixAPIStateEvent *event,
-                                      const gchar *event_type)
+matrix_state_event_set_event_type(MatrixStateEvent *event,
+                                  const gchar *event_type)
 {
     g_free(event->type);
     event->type = g_strdup(event_type);
 }
 
 /**
- * matrix_api_state_event_get_event_type:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_get_event_type:
+ * @event: a #MatrixStateEvent
  *
  * Get the type of the state event in @event.
  *
@@ -2453,29 +2453,29 @@ matrix_api_state_event_set_event_type(MatrixAPIStateEvent *event,
  *          owned by @event and should not be freed nor modified.
  */
 const gchar *
-matrix_api_state_event_get_event_type(MatrixAPIStateEvent *event)
+matrix_state_event_get_event_type(MatrixStateEvent *event)
 {
     return event->type;
 }
 
 /**
- * matrix_api_state_event_set_state_key:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_set_state_key:
+ * @event: a #MatrixStateEvent
  * @state_key: the key of the state event
  *
  * Set the state key for the state event @event.
  */
 void
-matrix_api_state_event_set_state_key(MatrixAPIStateEvent *event,
-                                     const gchar *state_key)
+matrix_state_event_set_state_key(MatrixStateEvent *event,
+                                 const gchar *state_key)
 {
     g_free(event->state_key);
     event->state_key = g_strdup(state_key);
 }
 
 /**
- * matrix_api_state_event_get_state_key:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_get_state_key:
+ * @event: a #MatrixStateEvent
  *
  * Get the state key of @event.
  *
@@ -2483,21 +2483,20 @@ matrix_api_state_event_set_state_key(MatrixAPIStateEvent *event,
  *          owned by @event and should not be freed nor modified
  */
 const gchar *
-matrix_api_state_event_get_state_key(MatrixAPIStateEvent *event)
+matrix_state_event_get_state_key(MatrixStateEvent *event)
 {
     return event->state_key;
 }
 
 /**
- * matrix_api_state_event_set_content:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_set_content:
+ * @event: a #MatrixStateEvent
  * @content: the desired content of the state event
  *
  * Set the content of the state event.
  */
 void
-matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
-                                   const JsonNode *content)
+matrix_state_event_set_content(MatrixStateEvent *event, const JsonNode *content)
 {
     if (event->content) {
         json_node_free(event->content);
@@ -2507,8 +2506,8 @@ matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
 }
 
 /**
- * matrix_api_state_event_get_content:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_get_content:
+ * @event: a #MatrixStateEvent
  *
  * Get the contents of the state event.
  *
@@ -2517,14 +2516,14 @@ matrix_api_state_event_set_content(MatrixAPIStateEvent *event,
  *          nor modified
  */
 const JsonNode *
-matrix_api_state_event_get_content(MatrixAPIStateEvent *event)
+matrix_state_event_get_content(MatrixStateEvent *event)
 {
     return event->content;
 }
 
 /**
- * matrix_api_state_event_get_json_node:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_get_json_node:
+ * @event: a #MatrixStateEvent
  *
  * Get the JSON representation of the state event as a #JsonNode
  * object.
@@ -2533,7 +2532,7 @@ matrix_api_state_event_get_content(MatrixAPIStateEvent *event)
  *          event
  */
 JsonNode *
-matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event)
+matrix_state_event_get_json_node(MatrixStateEvent *event)
 {
     JsonBuilder *builder;
     JsonNode *node;
@@ -2559,8 +2558,8 @@ matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event)
 }
 
 /**
- * matrix_api_state_event_get_json_data:
- * @event: a #MatrixAPIStateEvent
+ * matrix_state_event_get_json_data:
+ * @event: a #MatrixStateEvent
  * @datalen: (out): storage for the the length of the JSON data or
  *           %NULL
  *
@@ -2570,10 +2569,10 @@ matrix_api_state_event_get_json_node(MatrixAPIStateEvent *event)
  *          event
  */
 gchar *
-matrix_api_state_event_get_json_data(MatrixAPIStateEvent *event, gsize *datalen)
+matrix_state_event_get_json_data(MatrixStateEvent *event, gsize *datalen)
 {
     JsonGenerator *generator;
-    JsonNode *node = matrix_api_state_event_get_json_node(event);
+    JsonNode *node = matrix_state_event_get_json_node(event);
     gchar *data;
 
     generator = json_generator_new();

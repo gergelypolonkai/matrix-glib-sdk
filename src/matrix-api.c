@@ -890,7 +890,7 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
  * @visibility: the initial visibility of the room
  * @creation_content: (allow-none): extra keys to be added to the
  *                    content of m.room.create
- * @initial_state: (element-type MatrixAPIStateEvent) (allow-none): A
+ * @initial_state: (element-type MatrixStateEvent) (allow-none): A
  *                 list of state events to set in the new room
  * @invitees: (element-type utf8) (allow-none): list of user IDs to
  *            invite to the new room
