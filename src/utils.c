@@ -112,18 +112,30 @@ _json_node_deep_copy(const JsonNode *node)
 
     switch (JSON_NODE_TYPE((JsonNode *)node)) {
         case JSON_NODE_OBJECT:
+        {
+            JsonObject *new_obj = json_object_new();
+
             json_object_foreach_member(json_node_get_object((JsonNode *)node),
                                        (JsonObjectForeach)deep_copy_object,
-                                       json_node_get_object(ret));
+                                       new_obj);
+
+            json_node_set_object(ret, new_obj);
 
             break;
+        }
 
         case JSON_NODE_ARRAY:
+        {
+            JsonArray *new_ary = json_array_new();
+
             json_array_foreach_element(json_node_get_array((JsonNode *)node),
-                                      (JsonArrayForeach)deep_copy_array,
-                                      json_node_get_array(ret));
+                                       (JsonArrayForeach)deep_copy_array,
+                                       new_ary);
+
+            json_node_set_array(ret, new_ary);
 
             break;
+        }
 
         case JSON_NODE_VALUE:
         {
