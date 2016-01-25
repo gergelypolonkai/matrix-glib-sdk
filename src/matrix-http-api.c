@@ -527,8 +527,7 @@ _response_callback(SoupSession *session,
     GByteArray *raw_content = NULL;
 
     if (msg->status_code < SOUP_STATUS_CONTINUE) {
-        err = g_error_new(MATRIX_API_ERROR,
-                          MATRIX_API_ERROR_COMMUNICATION_ERROR,
+        err = g_error_new(MATRIX_ERROR, MATRIX_ERROR_COMMUNICATION_ERROR,
                           "%s %d: %s",
                           (msg->status_code < 100) ? "Network error" : "HTTP",
                           msg->status_code, msg->reason_phrase);
@@ -629,7 +628,7 @@ _response_callback(SoupSession *session,
                         gchar *message;
                         const gchar *errcode = NULL;
                         const gchar *error = NULL;
-                        MatrixAPIError error_code = MATRIX_API_ERROR_UNKNOWN_ERROR;
+                        MatrixError error_code = MATRIX_ERROR_UNKNOWN_ERROR;
 
                         if (errcode_node) {
                             GEnumClass *error_class;
@@ -639,10 +638,10 @@ _response_callback(SoupSession *session,
 
                             if (strncmp("M_", errcode, 2) == 0) {
                                 gchar *matrix_error_code = g_strdup_printf(
-                                        "MATRIX_API_ERROR_%s", errcode + 2);
+                                        "MATRIX_ERROR_%s", errcode + 2);
 
                                 error_class = g_type_class_ref(
-                                        MATRIX_TYPE_API_ERROR);
+                                        MATRIX_TYPE_ERROR);
                                 value = g_enum_get_value_by_name(
                                         error_class, matrix_error_code);
                                 g_free(matrix_error_code);
@@ -656,7 +655,7 @@ _response_callback(SoupSession *session,
                             }
                         } else {
                             g_info("An error was sent by the homeserver, but no error code was specified. You may want to report this to the homeserver administrators.");
-                            error_code = MATRIX_API_ERROR_UNSPECIFIED;
+                            error_code = MATRIX_ERROR_UNSPECIFIED;
                         }
 
                         if (error_node) {
@@ -672,15 +671,13 @@ _response_callback(SoupSession *session,
                                     "(No errcode given) %s", error);
                         }
 
-                        err = g_error_new_literal(MATRIX_API_ERROR,
-                                                  error_code,
+                        err = g_error_new_literal(MATRIX_ERROR, error_code,
                                                   message);
                     }
                 }
             } else if (!JSON_NODE_HOLDS_ARRAY(content)) {
                 // Not a JSON object, neither an array
-                err = g_error_new(MATRIX_API_ERROR,
-                                  MATRIX_API_ERROR_BAD_RESPONSE,
+                err = g_error_new(MATRIX_ERROR, MATRIX_ERROR_BAD_RESPONSE,
                                   "Bad response (not a JSON object)");
                 g_debug("Bad response: %s", data);
             }
@@ -692,8 +689,7 @@ _response_callback(SoupSession *session,
                         request_url,
                         datalen);
             } else {
-                err = g_error_new(MATRIX_API_ERROR,
-                                  MATRIX_API_ERROR_BAD_RESPONSE,
+                err = g_error_new(MATRIX_ERROR, MATRIX_ERROR_BAD_RESPONSE,
                                   "Malformed response (invalid JSON)");
                 g_debug("Malformed response (%s): %s", request_url, data);
             }
@@ -745,7 +741,7 @@ _send(MatrixHTTPAPI *api,
 
     if (!priv->uri) {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_COMMUNICATION_ERROR,
+                    MATRIX_ERROR, MATRIX_ERROR_COMMUNICATION_ERROR,
                     "No valid base URL");
 
         return;
@@ -1118,7 +1114,7 @@ i_join_room(MatrixAPI *api,
     // TODO: a more thorough check should be used here
     if (*room_id != '!') {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_INVALID_ROOM_ID,
+                    MATRIX_ERROR, MATRIX_ERROR_INVALID_ROOM_ID,
                     "Invalid room ID");
 
         return;
@@ -2194,7 +2190,7 @@ i_sync(MatrixAPI *api,
 
     if (filter_id && filter) {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_BAD_REQUEST,
+                    MATRIX_ERROR, MATRIX_ERROR_BAD_REQUEST,
                     "Cannot set both filter_id and filter");
 
         return;
@@ -2320,7 +2316,7 @@ i_token_refresh(MatrixAPI *api,
 
     if (!refresh_token && !priv->refresh_token) {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_MISSING_TOKEN,
+                    MATRIX_ERROR, MATRIX_ERROR_MISSING_TOKEN,
                     "No token available");
 
         return;
@@ -2388,7 +2384,7 @@ i_add_3pid(MatrixAPI *api,
     if ((id_node = matrix_api_3pid_credential_get_json_node(
                  threepid_creds, error)) == NULL) {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
                     "Incomplete credential");
 
         return;

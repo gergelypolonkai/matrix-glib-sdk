@@ -22,8 +22,8 @@ matrix_client_get_type
 <TITLE>Fundamental types for the Matrix GLib SDK</TITLE>
 
 <SUBSECTION>
-MatrixAPIError
-MATRIX_API_ERROR
+MatrixError
+MATRIX_ERROR
 
 <SUBSECTION>
 MatrixAPIEventFormat
@@ -296,8 +296,8 @@ matrix_api_abort_pending
 
 <SUBSECTION Standard>
 MatrixAPI
-MATRIX_TYPE_API_ERROR
-matrix_api_error_get_type
+MATRIX_TYPE_ERROR
+matrix_error_get_type
 MATRIX_TYPE_API
 MATRIX_API
 MATRIX_IS_API
@@ -306,7 +306,7 @@ MatrixApiPrivate
 matrix_api_get_type
 
 <SUBSECTION Private>
-matrix_api_error_quark
+matrix_error_quark
 </SECTION>
 
 <SECTION>

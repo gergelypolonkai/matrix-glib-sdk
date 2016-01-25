@@ -30,38 +30,36 @@
  */
 
 /**
- * MatrixAPIError:
- * @MATRIX_API_ERROR_NONE: no error
- * @MATRIX_API_ERROR_COMMUNICATION_ERROR: there was a problem in
- *                                        communication
- *                                        (e.g. connection error)
- * @MATRIX_API_ERROR_INCOMPLETE: the passed/generated data is
- *                               incomplete
- * @MATRIX_API_ERROR_BAD_REQUEST: the request is invalid
- * @MATRIX_API_ERROR_BAD_RESPONSE: malformed response, or the response
- *                                 is not a JSON object
- * @MATRIX_API_ERROR_INVALID_ROOM_ID: the provided string doesn’t
- *                                    contain a valid room ID
- * @MATRIX_API_ERROR_UNKNOWN_VALUE: the response from the Matrix.org
- *                                  server contains a value unknown to
- *                                  this library. These should be
- *                                  reported to the Matrix GLib SDK
- *                                  developers
- * @MATRIX_API_ERROR_MISSING_TOKEN: authorization token is missing
- *                                  from the request
- * @MATRIX_API_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
- *                              missing/invalid token, or using a bad
- *                              password during login)
- * @MATRIX_API_ERROR_UNKNOWN: an error unknown to the Matrix server
- * @MATRIX_API_ERROR_UNKNOWN_TOKEN: the token provided is not known
- *                                  for the homeserver
- * @MATRIX_API_ERROR_NOT_JSON: illegal request, the content is not
- *                             valid JSON
- * @MATRIX_API_ERROR_UNRECOGNIZED: the homeserver didn't understand
- *                                 the request
- * @MATRIX_API_ERROR_UNSPECIFIED: no error code was sent by the
- *                                homeserver
- * @MATRIX_API_ERROR_UNKNOWN_ERROR: an error unknown to this library
+ * MatrixError:
+ * @MATRIX_ERROR_NONE: no error
+ * @MATRIX_ERROR_COMMUNICATION_ERROR: there was a problem in
+ *                                    communication (e.g. connection
+ *                                    error)
+ * @MATRIX_ERROR_INCOMPLETE: the passed/generated data is incomplete
+ * @MATRIX_ERROR_BAD_REQUEST: the request is invalid
+ * @MATRIX_ERROR_BAD_RESPONSE: malformed response, or the response is
+ *                             not a JSON object
+ * @MATRIX_ERROR_INVALID_ROOM_ID: the provided string doesn’t contain
+ *                                a valid room ID
+ * @MATRIX_ERROR_UNKNOWN_VALUE: the response from the Matrix.org
+ *                              server contains a value unknown to
+ *                              this library. These should be reported
+ *                              to the Matrix GLib SDK developers
+ * @MATRIX_ERROR_MISSING_TOKEN: authorization token is missing from
+ *                              the request
+ * @MATRIX_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
+ *                          missing/invalid token, or using a bad
+ *                          password during login)
+ * @MATRIX_ERROR_UNKNOWN: an error unknown to the Matrix server the
+ *                        homeserver
+ * @MATRIX_ERROR_UNKNOWN_TOKEN: the token provided is not known for
+ *                              the homeserver
+ * @MATRIX_ERROR_NOT_JSON: illegal request, the content is not valid
+ *                         JSON
+ * @MATRIX_ERROR_UNRECOGNIZED: the homeserver didn't understand the
+ *                             request
+ * @MATRIX_ERROR_UNSPECIFIED: no error code was sent by the homeserver
+ * @MATRIX_ERROR_UNKNOWN_ERROR: an error unknown to this library
  *
  * Value mappings from Matrix.org API error codes
  * (e.g. <code>M_MISSING_TOKEN</code>). They should be set
@@ -69,18 +67,18 @@
  */
 
 /**
- * MATRIX_API_ERROR:
+ * MATRIX_ERROR:
  *
- * Error domain for Matrix GLib SDK API. See #GError for more
- * information on error domains.
+ * Error domain for Matrix GLib SDK. See #GError for more information
+ * on error domains.
  */
 
 /**
- * matrix_api_error_quark:
+ * matrix_error_quark:
  *
- * Gets the Matrix API error #GQuark
+ * Gets the Matrix error #GQuark
  */
-G_DEFINE_QUARK(matrix-api-error-quark, matrix_api_error);
+G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
  * MatrixAPIEventFormat:
@@ -1805,7 +1803,7 @@ matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
         || !credential->session_id
         || !credential->client_secret) {
         g_set_error(error,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
                     "All fields of the 3PID credential must be filled!");
 
         return NULL;
@@ -1839,7 +1837,7 @@ matrix_api_3pid_credential_get_json_node(MatrixAPI3PidCredential *credential,
  *
  * Get the JSON representation of @credential as a string. If any
  * fields of @credential is %NULL, this function returns %NULL and
- * fills @error wich %MATRIX_API_ERROR_INCOMPLETE.
+ * fills @error wich %MATRIX_ERROR_INCOMPLETE.
  *
  * Returns: (transfer full) (allow-none): the JSON representation of
  *          @credential, or %NULL
@@ -2281,7 +2279,7 @@ matrix_api_pusher_get_data(MatrixAPIPusher *pusher)
  * Get the JSON representation of the pusher data as a #JsonNode
  * object. As in the pusher object all fields are mandatory, if any of
  * them is %NULL, this function returns %NULL, and fills @err with
- * %MATRIX_API_ERROR_INCOMPLETE.
+ * %MATRIX_ERROR_INCOMPLETE.
  *
  * Returns: (transfer full): the JSON representation of the pusher
  *          data.
@@ -2301,7 +2299,7 @@ matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher, GError **err)
         || !pusher->profile_tag
         || !pusher->pushkey) {
         g_set_error(err,
-                    MATRIX_API_ERROR, MATRIX_API_ERROR_INCOMPLETE,
+                    MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
                     "Pusher data incomplete");
 
         return NULL;
@@ -2355,7 +2353,7 @@ matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher, GError **err)
  * Get the JSON representation of the pusher data as a string. As in
  * the pusher object all fields are mandatory, if any of them is
  * %NULL, this function returns %NULL, and fills @err with
- * %MATRIX_API_ERROR_INCOMPLETE.
+ * %MATRIX_ERROR_INCOMPLETE.
  *
  * Returns: (transfer full): the JSON representation of the pusher
  *          data.
