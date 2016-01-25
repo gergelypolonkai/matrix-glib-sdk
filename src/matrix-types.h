@@ -238,46 +238,40 @@ gchar *matrix_3pid_credential_get_json_data(Matrix3PidCredential *credential,
                                             gsize *datalen,
                                             GError **error);
 
-typedef struct _MatrixAPIPusher MatrixAPIPusher;
+typedef struct _MatrixPusher MatrixPusher;
 
-GType matrix_api_pusher_get_type(void);
-#define MATRIX_TYPE_API_PUSHER (matrix_api_pusher_get_type())
+GType matrix_pusher_get_type(void);
+#define MATRIX_TYPE_PUSHER (matrix_pusher_get_type())
 
-MatrixAPIPusher *matrix_api_pusher_new(void);
-MatrixAPIPusher *matrix_api_pusher_ref(MatrixAPIPusher *pusher);
-void matrix_api_pusher_unref(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_device_display_name(MatrixAPIPusher *pusher,
-                                               const gchar *device_display_name);
-const gchar *matrix_api_pusher_get_device_display_name(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_app_display_name(MatrixAPIPusher *pusher,
-                                            const gchar *app_display_name);
-const gchar *matrix_api_pusher_get_app_display_name(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_app_id(MatrixAPIPusher *pusher,
-                                  const gchar *app_id);
-const gchar *matrix_api_pusher_get_app_id(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_append(MatrixAPIPusher *pusher,
-                                  gboolean append);
-gboolean matrix_api_pusher_get_append(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_kind(MatrixAPIPusher *pusher,
-                                const gchar *kind);
-const gchar *matrix_api_pusher_get_kind(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_lang(MatrixAPIPusher *pusher,
-                                const gchar *lang);
-const gchar *matrix_api_pusher_get_lang(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_profile_tag(MatrixAPIPusher *pusher,
-                                       const gchar *profile_tag);
-const gchar *matrix_api_pusher_get_profile_tag(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_pushkey(MatrixAPIPusher *pusher,
-                                   const gchar *pushkey);
-const gchar *matrix_api_pusher_get_pushkey(MatrixAPIPusher *pusher);
-void matrix_api_pusher_set_data(MatrixAPIPusher *pusher, const JsonNode *data);
-void matrix_api_pusher_take_data(MatrixAPIPusher *pusher, JsonNode *data);
-const JsonNode *matrix_api_pusher_get_data(MatrixAPIPusher *pusher);
-JsonNode *matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher,
-                                          GError **err);
-gchar *matrix_api_pusher_get_json_data(MatrixAPIPusher *pusher,
-                                       gsize *datalen,
-                                       GError **err);
+MatrixPusher *matrix_pusher_new(void);
+MatrixPusher *matrix_pusher_ref(MatrixPusher *pusher);
+void matrix_pusher_unref(MatrixPusher *pusher);
+void matrix_pusher_set_device_display_name(MatrixPusher *pusher,
+                                           const gchar *device_display_name);
+const gchar *matrix_pusher_get_device_display_name(MatrixPusher *pusher);
+void matrix_pusher_set_app_display_name(MatrixPusher *pusher,
+                                        const gchar *app_display_name);
+const gchar *matrix_pusher_get_app_display_name(MatrixPusher *pusher);
+void matrix_pusher_set_app_id(MatrixPusher *pusher, const gchar *app_id);
+const gchar *matrix_pusher_get_app_id(MatrixPusher *pusher);
+void matrix_pusher_set_append(MatrixPusher *pusher, gboolean append);
+gboolean matrix_pusher_get_append(MatrixPusher *pusher);
+void matrix_pusher_set_kind(MatrixPusher *pusher, const gchar *kind);
+const gchar *matrix_pusher_get_kind(MatrixPusher *pusher);
+void matrix_pusher_set_lang(MatrixPusher *pusher, const gchar *lang);
+const gchar *matrix_pusher_get_lang(MatrixPusher *pusher);
+void matrix_pusher_set_profile_tag(MatrixPusher *pusher,
+                                   const gchar *profile_tag);
+const gchar *matrix_pusher_get_profile_tag(MatrixPusher *pusher);
+void matrix_pusher_set_pushkey(MatrixPusher *pusher, const gchar *pushkey);
+const gchar *matrix_pusher_get_pushkey(MatrixPusher *pusher);
+void matrix_pusher_set_data(MatrixPusher *pusher, const JsonNode *data);
+void matrix_pusher_take_data(MatrixPusher *pusher, JsonNode *data);
+const JsonNode *matrix_pusher_get_data(MatrixPusher *pusher);
+JsonNode *matrix_pusher_get_json_node(MatrixPusher *pusher, GError **err);
+gchar *matrix_pusher_get_json_data(MatrixPusher *pusher,
+                                   gsize *datalen,
+                                   GError **err);
 
 typedef struct _MatrixAPIStateEvent MatrixAPIStateEvent;
 

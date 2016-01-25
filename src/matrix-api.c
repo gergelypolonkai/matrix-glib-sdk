@@ -637,7 +637,7 @@ void
 matrix_api_update_pusher(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
-                         MatrixAPIPusher *pusher,
+                         MatrixPusher *pusher,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

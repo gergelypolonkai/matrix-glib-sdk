@@ -1839,11 +1839,11 @@ matrix_3pid_credential_get_json_data(Matrix3PidCredential *credential,
 }
 
 /**
- * MatrixAPIPusher:
+ * MatrixPusher:
  *
  * An opaque structure for pusher rulesets.
  */
-typedef struct _MatrixAPIPusher {
+struct _MatrixPusher {
     gchar *device_display_name;
     gchar *app_display_name;
     gchar *app_id;
@@ -1854,32 +1854,32 @@ typedef struct _MatrixAPIPusher {
     gchar *pushkey;
     JsonNode *data;
     guint refcount;
-} MatrixAPIPusher;
+};
 
-G_DEFINE_BOXED_TYPE(MatrixAPIPusher, matrix_api_pusher,
-                    (GBoxedCopyFunc)matrix_api_pusher_ref,
-                    (GBoxedFreeFunc)matrix_api_pusher_unref);
+G_DEFINE_BOXED_TYPE(MatrixPusher, matrix_pusher,
+                    (GBoxedCopyFunc)matrix_pusher_ref,
+                    (GBoxedFreeFunc)matrix_pusher_unref);
 
 /**
- * matrix_api_pusher_new:
+ * matrix_pusher_new:
  *
- * Create a new #MatrixAPIPusher object with reference count of 1.
+ * Create a new #MatrixPusher object with reference count of 1.
  *
- * Returns: (transfer full): a new #MatrixAPIPusher
+ * Returns: (transfer full): a new #MatrixPusher
  */
-MatrixAPIPusher *
-matrix_api_pusher_new(void)
+MatrixPusher *
+matrix_pusher_new(void)
 {
-    MatrixAPIPusher *pusher;
+    MatrixPusher *pusher;
 
-    pusher = g_new0(MatrixAPIPusher, 1);
+    pusher = g_new0(MatrixPusher, 1);
     pusher->refcount = 1;
 
     return pusher;
 }
 
 static void
-matrix_api_pusher_free(MatrixAPIPusher *pusher)
+matrix_pusher_free(MatrixPusher *pusher)
 {
     g_free(pusher->device_display_name);
     g_free(pusher->app_display_name);
@@ -1894,15 +1894,15 @@ matrix_api_pusher_free(MatrixAPIPusher *pusher)
 }
 
 /**
- * matrix_api_pusher_ref:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_ref:
+ * @pusher: a #MatrixPusher
  *
  * Increase reference count of @pusher by one.
  *
- * Returns: (transfer none): the same #MatrixAPIPusher
+ * Returns: (transfer none): the same #MatrixPusher
  */
-MatrixAPIPusher *
-matrix_api_pusher_ref(MatrixAPIPusher *pusher)
+MatrixPusher *
+matrix_pusher_ref(MatrixPusher *pusher)
 {
     pusher->refcount++;
 
@@ -1910,39 +1910,39 @@ matrix_api_pusher_ref(MatrixAPIPusher *pusher)
 }
 
 /**
- * matrix_api_pusher_unref:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_unref:
+ * @pusher: a #MatrixPusher
  *
  * Decrease reference count of @pusher by one. If reference count
  * reaches zero, @pusher is freed.
  */
 void
-matrix_api_pusher_unref(MatrixAPIPusher *pusher)
+matrix_pusher_unref(MatrixPusher *pusher)
 {
     if (--pusher->refcount == 0) {
-        matrix_api_pusher_free(pusher);
+        matrix_pusher_free(pusher);
     }
 }
 
 /**
- * matrix_api_pusher_set_device_display_name:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_device_display_name:
+ * @pusher: a #MatrixPusher
  * @device_display_name: a string that will allow the user to identify
  *                       what device owns this pusher
  *
  * Set the device display name for @pusher.
  */
 void
-matrix_api_pusher_set_device_display_name(MatrixAPIPusher *pusher,
-                                          const gchar *device_display_name)
+matrix_pusher_set_device_display_name(MatrixPusher *pusher,
+                                      const gchar *device_display_name)
 {
     g_free(pusher->device_display_name);
     pusher->device_display_name = g_strdup(device_display_name);
 }
 
 /**
- * matrix_api_pusher_get_device_display_name:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_device_display_name:
+ * @pusher: a #MatrixPusher
  *
  * Get the device display name from pusher.
  *
@@ -1950,30 +1950,30 @@ matrix_api_pusher_set_device_display_name(MatrixAPIPusher *pusher,
  *          @pusher and should not be freed nor modified.
  */
 const gchar *
-matrix_api_pusher_get_device_display_name(MatrixAPIPusher *pusher)
+matrix_pusher_get_device_display_name(MatrixPusher *pusher)
 {
     return pusher->device_display_name;
 }
 
 /**
- * matrix_api_pusher_set_app_display_name:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_app_display_name:
+ * @pusher: a #MatrixPusher
  * @app_display_name: a string that will allow the user to identify
  *                    what application owns the pusher
  *
  * Sets the app display name for the pusher.
  */
 void
-matrix_api_pusher_set_app_display_name(MatrixAPIPusher *pusher,
-                                       const gchar *app_display_name)
+matrix_pusher_set_app_display_name(MatrixPusher *pusher,
+                                   const gchar *app_display_name)
 {
     g_free(pusher->app_display_name);
     pusher->app_display_name = g_strdup(app_display_name);
 }
 
 /**
- * matrix_api_pusher_get_app_display_name:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_app_display_name:
+ * @pusher: a #MatrixPusher
  *
  * Get the app display name for this pusher.
  *
@@ -1981,14 +1981,14 @@ matrix_api_pusher_set_app_display_name(MatrixAPIPusher *pusher,
  *          @pusher and should not be freed nor modified.
  */
 const gchar *
-matrix_api_pusher_get_app_display_name(MatrixAPIPusher *pusher)
+matrix_pusher_get_app_display_name(MatrixPusher *pusher)
 {
     return pusher->app_display_name;
 }
 
 /**
- * matrix_api_pusher_set_app_id:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_app_id:
+ * @pusher: a #MatrixPusher
  * @app_id: a reverse DNS style identifier for the application. It is
  *          recommended that this ends with the platform, such that
  *          different platform versions get different app
@@ -1998,16 +1998,15 @@ matrix_api_pusher_get_app_display_name(MatrixAPIPusher *pusher)
  * Sets the application ID for this pusher.
  */
 void
-matrix_api_pusher_set_app_id(MatrixAPIPusher *pusher,
-                             const gchar *app_id)
+matrix_pusher_set_app_id(MatrixPusher *pusher, const gchar *app_id)
 {
     g_free(pusher->app_id);
     pusher->app_id = g_strndup(app_id, 64);
 }
 
 /**
- * matrix_api_pusher_get_app_id:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_app_id:
+ * @pusher: a #MatrixPusher
  *
  * Get the application ID for this pusher.
  *
@@ -2015,14 +2014,14 @@ matrix_api_pusher_set_app_id(MatrixAPIPusher *pusher,
  *          and should not be freed nor modified.
  */
 const gchar *
-matrix_api_pusher_get_app_id(MatrixAPIPusher *pusher)
+matrix_pusher_get_app_id(MatrixPusher *pusher)
 {
     return pusher->app_id;
 }
 
 /**
- * matrix_api_pusher_set_append:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_append:
+ * @pusher: a #MatrixPusher
  * @append: if %TRUE, the homeserver should add another pusher with
  *          the given push key and app ID in addition to any others
  *          with different user IDs. Otherwise, the homeserver must
@@ -2032,44 +2031,44 @@ matrix_api_pusher_get_app_id(MatrixAPIPusher *pusher)
  * Set the appending rule for this pusher.
  */
 void
-matrix_api_pusher_set_append(MatrixAPIPusher *pusher, gboolean append)
+matrix_pusher_set_append(MatrixPusher *pusher, gboolean append)
 {
     pusher->append = append;
 }
 
 /**
- * matrix_api_pusher_get_append:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_append:
+ * @pusher: a #MatrixPusher
  *
  * Get the appending rule for this pusher. See
- * matrix_api_pusher_set_append() for details.
+ * matrix_pusher_set_append() for details.
  *
  * Returns: the append rule
  */
 gboolean
-matrix_api_pusher_get_append(MatrixAPIPusher *pusher)
+matrix_pusher_get_append(MatrixPusher *pusher)
 {
     return pusher->append;
 }
 
 /**
- * matrix_api_pusher_set_kind:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_kind:
+ * @pusher: a #MatrixPusher
  * @kind: the kind of pusher to configure. "http" makes a pusher that
  *        sends HTTP pokes. %NULL deletes the pusher.
  *
  * Set the kind of pusher to configure.
  */
 void
-matrix_api_pusher_set_kind(MatrixAPIPusher *pusher, const gchar *kind)
+matrix_pusher_set_kind(MatrixPusher *pusher, const gchar *kind)
 {
     g_free(pusher->kind);
     pusher->kind = g_strdup(kind);
 }
 
 /**
- * matrix_api_pusher_get_kind:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_kind:
+ * @pusher: a #MatrixPusher
  *
  * Get the kind of pusher in @pusher.
  *
@@ -2077,29 +2076,29 @@ matrix_api_pusher_set_kind(MatrixAPIPusher *pusher, const gchar *kind)
  *          @pusher and should not be freed nor modified
  */
 const gchar *
-matrix_api_pusher_get_kind(MatrixAPIPusher *pusher)
+matrix_pusher_get_kind(MatrixPusher *pusher)
 {
     return pusher->kind;
 }
 
 /**
- * matrix_api_pusher_set_lang:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_lang:
+ * @pusher: a #MatrixPusher
  * @lang: the preferred language for receiving notifications,
  *        e.g. "en" or "en-US"
  *
  * Set the preferred language for receiving notifications.
  */
 void
-matrix_api_pusher_set_lang(MatrixAPIPusher *pusher, const gchar *lang)
+matrix_pusher_set_lang(MatrixPusher *pusher, const gchar *lang)
 {
     g_free(pusher->lang);
     pusher->lang = g_strdup(lang);
 }
 
 /**
- * matrix_api_pusher_get_lang:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_lang:
+ * @pusher: a #MatrixPusher
  *
  * Get the preferred language for receiving notifications.
  *
@@ -2107,14 +2106,14 @@ matrix_api_pusher_set_lang(MatrixAPIPusher *pusher, const gchar *lang)
  *          @pusher and should not be modified nor freed
  */
 const gchar *
-matrix_api_pusher_get_lang(MatrixAPIPusher *pusher)
+matrix_pusher_get_lang(MatrixPusher *pusher)
 {
     return pusher->lang;
 }
 
 /**
- * matrix_api_pusher_set_profile_tag:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_profile_tag:
+ * @pusher: a #MatrixPusher
  * @profile_tag: a string that determines what set of device rules
  *               will be matched when evaluating push rules for this
  *               pusher. It is an arbitrary string. Multiple devices
@@ -2130,16 +2129,15 @@ matrix_api_pusher_get_lang(MatrixAPIPusher *pusher)
  * Set the profile tag of this pusher.
  */
 void
-matrix_api_pusher_set_profile_tag(MatrixAPIPusher *pusher,
-                                  const gchar *profile_tag)
+matrix_pusher_set_profile_tag(MatrixPusher *pusher, const gchar *profile_tag)
 {
     g_free(pusher->profile_tag);
     pusher->profile_tag = g_strndup(profile_tag, 32);
 }
 
 /**
- * matrix_api_pusher_get_profile_tag:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_profile_tag:
+ * @pusher: a #MatrixPusher
  *
  * Get the profile tag of this pusher.
  *
@@ -2147,14 +2145,14 @@ matrix_api_pusher_set_profile_tag(MatrixAPIPusher *pusher,
  *          and should not be freed nor modified
  */
 const gchar *
-matrix_api_pusher_get_profile_tag(MatrixAPIPusher *pusher)
+matrix_pusher_get_profile_tag(MatrixPusher *pusher)
 {
     return pusher->profile_tag;
 }
 
 /**
- * matrix_api_pusher_set_pushkey:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_pushkey:
+ * @pusher: a #MatrixPusher
  * @pushkey: a unique identifier for this pusher. The value you should
  *           use for this is the routing or destination address
  *           information for the notification, for example, the APNS
@@ -2166,15 +2164,15 @@ matrix_api_pusher_get_profile_tag(MatrixAPIPusher *pusher)
  * Set the pushkey for this pusher.
  */
 void
-matrix_api_pusher_set_pushkey(MatrixAPIPusher *pusher, const gchar *pushkey)
+matrix_pusher_set_pushkey(MatrixPusher *pusher, const gchar *pushkey)
 {
     g_free(pusher->pushkey);
     pusher->pushkey = g_strndup(pushkey, 512);
 }
 
 /**
- * matrix_api_pusher_get_pushkey:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_pushkey:
+ * @pusher: a #MatrixPusher
  *
  * Get the pushkey for this pusher.
  *
@@ -2182,14 +2180,14 @@ matrix_api_pusher_set_pushkey(MatrixAPIPusher *pusher, const gchar *pushkey)
  *          should not be freed nor modified
  */
 const gchar *
-matrix_api_pusher_get_pushkey(MatrixAPIPusher *pusher)
+matrix_pusher_get_pushkey(MatrixPusher *pusher)
 {
     return pusher->pushkey;
 }
 
 /**
- * matrix_api_pusher_set_data:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_set_data:
+ * @pusher: a #MatrixPusher
  * @data: (transfer none): a dictionary of information for the pusher
  *        implementation itself. For example, if kind is "http", this
  *        should contain an "url" member, which is the URL to use to
@@ -2199,7 +2197,7 @@ matrix_api_pusher_get_pushkey(MatrixAPIPusher *pusher)
  * Set some extra data for the pusher.
  */
 void
-matrix_api_pusher_set_data(MatrixAPIPusher *pusher, const JsonNode *data)
+matrix_pusher_set_data(MatrixPusher *pusher, const JsonNode *data)
 {
     if (pusher->data) {
         json_node_free(pusher->data);
@@ -2209,17 +2207,17 @@ matrix_api_pusher_set_data(MatrixAPIPusher *pusher, const JsonNode *data)
 }
 
 /**
- * matrix_api_pusher_take_data:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_take_data:
+ * @pusher: a #MatrixPusher
  * @data: (transfer full): extra data for the pusher. See
- *        matrix_api_pusher_set_data() for details.
+ *        matrix_pusher_set_data() for details.
  *
  * Set some extra data for the pusher. It differs from
- * matrix_api_pusher_set_data() that this call assumes ownership over
+ * matrix_pusher_set_data() that this call assumes ownership over
  * @data, so it should not be freed by the caller.
  */
 void
-matrix_api_pusher_take_data(MatrixAPIPusher *pusher, JsonNode *data)
+matrix_pusher_take_data(MatrixPusher *pusher, JsonNode *data)
 {
     if (pusher->data) {
         json_node_free(pusher->data);
@@ -2229,8 +2227,8 @@ matrix_api_pusher_take_data(MatrixAPIPusher *pusher, JsonNode *data)
 }
 
 /**
- * matrix_api_pusher_get_data:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_data:
+ * @pusher: a #MatrixPusher
  *
  * Get the extra data of this pusher.
  *
@@ -2238,14 +2236,14 @@ matrix_api_pusher_take_data(MatrixAPIPusher *pusher, JsonNode *data)
  *          owned by @pusher and should not be freed nor modified
  */
 const JsonNode *
-matrix_api_pusher_get_data(MatrixAPIPusher *pusher)
+matrix_pusher_get_data(MatrixPusher *pusher)
 {
     return pusher->data;
 }
 
 /**
- * matrix_api_pusher_get_json_node:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_json_node:
+ * @pusher: a #MatrixPusher
  * @err: a #GError
  *
  * Get the JSON representation of the pusher data as a #JsonNode
@@ -2257,7 +2255,7 @@ matrix_api_pusher_get_data(MatrixAPIPusher *pusher)
  *          data.
  */
 JsonNode *
-matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher, GError **err)
+matrix_pusher_get_json_node(MatrixPusher *pusher, GError **err)
 {
     JsonBuilder *builder;
     JsonNode *node;
@@ -2316,8 +2314,8 @@ matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher, GError **err)
 }
 
 /**
- * matrix_api_pusher_get_json_data:
- * @pusher: a #MatrixAPIPusher
+ * matrix_pusher_get_json_data:
+ * @pusher: a #MatrixPusher
  * @datalen: (out): storage for the the length of the JSON data or
  *           %NULL
  * @err: a #GError
@@ -2330,15 +2328,15 @@ matrix_api_pusher_get_json_node(MatrixAPIPusher *pusher, GError **err)
  * Returns: (transfer full): the JSON representation of the pusher
  *          data.
  */
-gchar *matrix_api_pusher_get_json_data(MatrixAPIPusher *pusher,
-                                       gsize *datalen,
-                                       GError **err)
+gchar *matrix_pusher_get_json_data(MatrixPusher *pusher,
+                                   gsize *datalen,
+                                   GError **err)
 {
     JsonGenerator *generator;
     JsonNode *node;
     gchar *data;
 
-    if ((node = matrix_api_pusher_get_json_node(pusher, err)) == NULL) {
+    if ((node = matrix_pusher_get_json_node(pusher, err)) == NULL) {
         return NULL;
     }
 

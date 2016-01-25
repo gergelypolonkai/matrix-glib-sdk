@@ -1369,12 +1369,12 @@ static void
 i_update_pusher(MatrixAPI *api,
                 MatrixAPICallback callback,
                 gpointer user_data,
-                MatrixAPIPusher *pusher,
+                MatrixPusher *pusher,
                 GError **error)
 {
     JsonNode *pusher_node;
 
-    if ((pusher_node = matrix_api_pusher_get_json_node(
+    if ((pusher_node = matrix_pusher_get_json_node(
                  pusher, error)) == NULL) {
         return;
     }

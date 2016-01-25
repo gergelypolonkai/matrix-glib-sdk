@@ -115,7 +115,7 @@ struct _MatrixAPIInterface {
     void (*update_pusher)(MatrixAPI *api,
                           MatrixAPICallback callback,
                           gpointer user_data,
-                          MatrixAPIPusher *pusher,
+                          MatrixPusher *pusher,
                           GError **error);
     void (*get_pushers)(MatrixAPI *api,
                         MatrixAPICallback callback,
@@ -540,7 +540,7 @@ void matrix_api_set_user_presence(MatrixAPI *api,
 void matrix_api_update_pusher(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
-                              MatrixAPIPusher *pusher,
+                              MatrixPusher *pusher,
                               GError **error);
 void matrix_api_get_pushers(MatrixAPI *api,
                             MatrixAPICallback callback,
