@@ -53,66 +53,66 @@ typedef enum {
 GQuark matrix_error_quark(void);
 
 typedef enum {
-    MATRIX_API_EVENT_FORMAT_DEFAULT,
-    MATRIX_API_EVENT_FORMAT_CLIENT,
-    MATRIX_API_EVENT_FORMAT_FEDERATION
-} MatrixAPIEventFormat;
+    MATRIX_EVENT_FORMAT_DEFAULT,
+    MATRIX_EVENT_FORMAT_CLIENT,
+    MATRIX_EVENT_FORMAT_FEDERATION
+} MatrixEventFormat;
 
 typedef enum {
-    MATRIX_API_RESIZE_METHOD_DEFAULT,
-    MATRIX_API_RESIZE_METHOD_CROP,
-    MATRIX_API_RESIZE_METHOD_SCALE
-} MatrixAPIResizeMethod;
+    MATRIX_RESIZE_METHOD_DEFAULT,
+    MATRIX_RESIZE_METHOD_CROP,
+    MATRIX_RESIZE_METHOD_SCALE
+} MatrixResizeMethod;
 
 typedef enum {
-    MATRIX_API_PRESENCE_ONLINE,
-    MATRIX_API_PRESENCE_OFFLINE,
-    MATRIX_API_PRESENCE_UNAVAILABLE,
-    MATRIX_API_PRESENCE_FREE_FOR_CHAT
-} MatrixAPIPresence;
+    MATRIX_PRESENCE_ONLINE,
+    MATRIX_PRESENCE_OFFLINE,
+    MATRIX_PRESENCE_UNAVAILABLE,
+    MATRIX_PRESENCE_FREE_FOR_CHAT
+} MatrixPresence;
 
 typedef enum {
-    MATRIX_API_ROOM_PRESET_NONE,
-    MATRIX_API_ROOM_PRESET_PRIVATE,
-    MATRIX_API_ROOM_PRESET_TRUSTED_PRIVATE,
-    MATRIX_API_ROOM_PRESET_PUBLIC
-} MatrixAPIRoomPreset;
+    MATRIX_ROOM_PRESET_NONE,
+    MATRIX_ROOM_PRESET_PRIVATE,
+    MATRIX_ROOM_PRESET_TRUSTED_PRIVATE,
+    MATRIX_ROOM_PRESET_PUBLIC
+} MatrixRoomPreset;
 
 typedef enum {
-    MATRIX_API_ROOM_VISIBILITY_DEFAULT,
-    MATRIX_API_ROOM_VISIBILITY_PUBLIC,
-    MATRIX_API_ROOM_VISIBILITY_PRIVATE
-} MatrixAPIRoomVisibility;
+    MATRIX_ROOM_VISIBILITY_DEFAULT,
+    MATRIX_ROOM_VISIBILITY_PUBLIC,
+    MATRIX_ROOM_VISIBILITY_PRIVATE
+} MatrixRoomVisibility;
 
 typedef enum {
-    MATRIX_API_EVENT_DIRECTION_FORWARD,
-    MATRIX_API_EVENT_DIRECTION_BACKWARD
-} MatrixAPIEventDirection;
+    MATRIX_EVENT_DIRECTION_FORWARD,
+    MATRIX_EVENT_DIRECTION_BACKWARD
+} MatrixEventDirection;
 
 typedef enum {
-    MATRIX_API_RECEIPT_TYPE_READ
-} MatrixAPIReceiptType;
+    MATRIX_RECEIPT_TYPE_READ
+} MatrixReceiptType;
 
 typedef enum {
-    MATRIX_API_PUSHER_KIND_OVERRIDE,
-    MATRIX_API_PUSHER_KIND_SENDER,
-    MATRIX_API_PUSHER_KIND_ROOM,
-    MATRIX_API_PUSHER_KIND_CONTENT,
-    MATRIX_API_PUSHER_KIND_UNDERRIDE
-} MatrixAPIPusherKind;
+    MATRIX_PUSHER_KIND_OVERRIDE,
+    MATRIX_PUSHER_KIND_SENDER,
+    MATRIX_PUSHER_KIND_ROOM,
+    MATRIX_PUSHER_KIND_CONTENT,
+    MATRIX_PUSHER_KIND_UNDERRIDE
+} MatrixPusherKind;
 
 typedef enum {
-    MATRIX_API_PUSHER_CONDITION_KIND_EVENT_MATCH,
-    MATRIX_API_PUSHER_CONDITION_KIND_PROFILE_TAG,
-    MATRIX_API_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME,
-    MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
-} MatrixAPIPusherConditionKind;
+    MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH,
+    MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG,
+    MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME,
+    MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
+} MatrixPusherConditionKind;
 
 typedef enum {
-    MATRIX_API_ACCOUNT_KIND_DEFAULT,
-    MATRIX_API_ACCOUNT_KIND_USER,
-    MATRIX_API_ACCOUNT_KIND_GUEST
-} MatrixAPIAccountKind;
+    MATRIX_ACCOUNT_KIND_DEFAULT,
+    MATRIX_ACCOUNT_KIND_USER,
+    MATRIX_ACCOUNT_KIND_GUEST
+} MatrixAccountKind;
 
 typedef struct _MatrixAPIFilterRules MatrixAPIFilterRules;
 
@@ -211,8 +211,8 @@ void matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
                                           const gchar *event_field);
 const GList *matrix_api_filter_get_event_fields(MatrixAPIFilter *filter);
 void matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
-                                        MatrixAPIEventFormat event_format);
-MatrixAPIEventFormat matrix_api_filter_get_event_format(MatrixAPIFilter *filter);
+                                        MatrixEventFormat event_format);
+MatrixEventFormat matrix_api_filter_get_event_format(MatrixAPIFilter *filter);
 void matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
                                            MatrixAPIFilterRules *presence_filter);
 MatrixAPIFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter);

@@ -389,7 +389,7 @@ matrix_api_media_thumbnail(MatrixAPI *api,
                            const gchar *media_id,
                            guint width,
                            guint height,
-                           MatrixAPIResizeMethod method,
+                           MatrixResizeMethod method,
                            GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));
@@ -594,7 +594,7 @@ matrix_api_set_user_presence(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,
                              const gchar *user_id,
-                             MatrixAPIPresence presence,
+                             MatrixPresence presence,
                              const gchar *status_message,
                              GError **error)
 {
@@ -703,7 +703,7 @@ matrix_api_delete_pusher(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
                          const gchar *scope,
-                         MatrixAPIPusherKind kind,
+                         MatrixPusherKind kind,
                          const gchar *rule_id,
                          GError **error)
 {
@@ -747,7 +747,7 @@ matrix_api_get_pusher(MatrixAPI *api,
                       MatrixAPICallback callback,
                       gpointer user_data,
                       const gchar *scope,
-                      MatrixAPIPusherKind kind,
+                      MatrixPusherKind kind,
                       const gchar *rule_id,
                       GError **error)
 {
@@ -785,7 +785,7 @@ matrix_api_get_pusher(MatrixAPI *api,
  *         than this rule ID
  * @actions: (element-type utf8): the actions to perform when the
  *           conditions for this rule are met
- * @conditions: (element-type MatrixAPIPusherConditionKind) (allow-none):
+ * @conditions: (element-type MatrixPusherConditionKind) (allow-none):
  *              the conditions that must hold true for an event for a
  *              rule to be applied. A rule with no conditions always
  *              matches
@@ -802,7 +802,7 @@ matrix_api_add_pusher(MatrixAPI *api,
                       MatrixAPICallback callback,
                       gpointer user_data,
                       const gchar *scope,
-                      MatrixAPIPusherKind kind,
+                      MatrixPusherKind kind,
                       const gchar *rule_id,
                       const gchar *before,
                       const gchar *after,
@@ -853,7 +853,7 @@ void matrix_api_toggle_pusher(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
                               const gchar *scope,
-                              MatrixAPIPusherKind kind,
+                              MatrixPusherKind kind,
                               const gchar *rule_id,
                               gboolean enabled,
                               GError **error)
@@ -906,11 +906,11 @@ void
 matrix_api_create_room(MatrixAPI *api,
                        MatrixAPICallback callback,
                        gpointer user_data,
-                       MatrixAPIRoomPreset preset,
+                       MatrixRoomPreset preset,
                        const gchar *room_name,
                        const gchar *room_alias,
                        const gchar *topic,
-                       MatrixAPIRoomVisibility visibility,
+                       MatrixRoomVisibility visibility,
                        JsonNode *creation_content,
                        GList *initial_state,
                        GList *invitees,
@@ -1551,7 +1551,7 @@ matrix_api_list_room_messages(MatrixAPI *api,
                               gpointer user_data,
                               const gchar *room_id,
                               const gchar *from_token,
-                              MatrixAPIEventDirection direction,
+                              MatrixEventDirection direction,
                               guint limit,
                               GError **error)
 {
@@ -1597,7 +1597,7 @@ matrix_api_send_event_receipt(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
                               const gchar *room_id,
-                              MatrixAPIReceiptType receipt_type,
+                              MatrixReceiptType receipt_type,
                               const gchar *event_id,
                               JsonNode *receipt,
                               GError **error)
@@ -2462,7 +2462,7 @@ void
 matrix_api_register_account(MatrixAPI *api,
                             MatrixAPICallback callback,
                             gpointer user_data,
-                            MatrixAPIAccountKind account_kind,
+                            MatrixAccountKind account_kind,
                             gboolean bind_email,
                             const gchar *username,
                             const gchar *password,

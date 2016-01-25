@@ -903,11 +903,11 @@ static void
 i_create_room(MatrixAPI *api,
               MatrixAPICallback callback,
               gpointer user_data,
-              MatrixAPIRoomPreset preset,
+              MatrixRoomPreset preset,
               const gchar *room_name,
               const gchar *room_alias,
               const gchar *topic,
-              MatrixAPIRoomVisibility visibility,
+              MatrixRoomVisibility visibility,
               JsonNode *creation_content,
               GList *initial_state,
               GList *invitees,
@@ -966,9 +966,9 @@ i_create_room(MatrixAPI *api,
         json_builder_add_string_value(builder, room_name);
     }
 
-    if (preset != MATRIX_API_ROOM_PRESET_NONE) {
+    if (preset != MATRIX_ROOM_PRESET_NONE) {
         gchar *preset_string = _g_enum_to_string(
-                MATRIX_TYPE_API_ROOM_PRESET, preset, TRUE);
+                MATRIX_TYPE_ROOM_PRESET, preset, TRUE);
 
        if (preset_string) {
             json_builder_set_member_name(builder, "preset");
@@ -989,9 +989,9 @@ i_create_room(MatrixAPI *api,
         json_builder_add_string_value(builder, topic);
     }
 
-    if (visibility != MATRIX_API_ROOM_VISIBILITY_DEFAULT) {
+    if (visibility != MATRIX_ROOM_VISIBILITY_DEFAULT) {
         gchar *visibility_string = _g_enum_to_string(
-                MATRIX_TYPE_API_ROOM_VISIBILITY, visibility, TRUE);
+                MATRIX_TYPE_ROOM_VISIBILITY, visibility, TRUE);
 
         if (visibility_string) {
             json_builder_set_member_name(builder, "visibility");
@@ -1210,7 +1210,7 @@ i_media_thumbnail(MatrixAPI *api,
                   const gchar *media_id,
                   guint width,
                   guint height,
-                  MatrixAPIResizeMethod method,
+                  MatrixResizeMethod method,
                   GError **error)
 {
     gchar *encoded_server_name,
@@ -1236,14 +1236,14 @@ i_media_thumbnail(MatrixAPI *api,
         g_hash_table_replace(params, "height", g_strdup_printf("%u", height));
     }
 
-    if (method != MATRIX_API_RESIZE_METHOD_DEFAULT) {
+    if (method != MATRIX_RESIZE_METHOD_DEFAULT) {
         switch (method) {
-            case MATRIX_API_RESIZE_METHOD_CROP:
+            case MATRIX_RESIZE_METHOD_CROP:
                 g_hash_table_replace(params, "method", g_strdup("crop"));
 
                 break;
 
-            case MATRIX_API_RESIZE_METHOD_SCALE:
+            case MATRIX_RESIZE_METHOD_SCALE:
                 g_hash_table_replace(params, "method", g_strdup("scale"));
 
                 break;
@@ -1325,7 +1325,7 @@ i_set_user_presence(MatrixAPI *api,
                     MatrixAPICallback callback,
                     gpointer user_data,
                     const gchar *user_id,
-                    MatrixAPIPresence presence,
+                    MatrixPresence presence,
                     const gchar *status_message,
                     GError **error)
 {
@@ -1344,7 +1344,7 @@ i_set_user_presence(MatrixAPI *api,
     json_builder_begin_object(builder);
 
     json_builder_set_member_name(builder, "presence");
-    presence_string = _g_enum_to_string(MATRIX_TYPE_API_PRESENCE, presence, TRUE);
+    presence_string = _g_enum_to_string(MATRIX_TYPE_PRESENCE, presence, TRUE);
     json_builder_add_string_value(builder, presence_string);
     g_free(presence_string);
 
@@ -1404,7 +1404,7 @@ i_delete_pusher(MatrixAPI *api,
                 MatrixAPICallback callback,
                 gpointer user_data,
                 const gchar *scope,
-                MatrixAPIPusherKind kind,
+                MatrixPusherKind kind,
                 const gchar *rule_id,
                 GError **error)
 {
@@ -1412,7 +1412,7 @@ i_delete_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = _g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = _g_enum_to_string(MATRIX_TYPE_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1436,7 +1436,7 @@ i_get_pusher(MatrixAPI *api,
              MatrixAPICallback callback,
              gpointer user_data,
              const gchar *scope,
-             MatrixAPIPusherKind kind,
+             MatrixPusherKind kind,
              const gchar *rule_id,
              GError **error)
 {
@@ -1444,7 +1444,7 @@ i_get_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = _g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = _g_enum_to_string(MATRIX_TYPE_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1464,11 +1464,11 @@ i_get_pusher(MatrixAPI *api,
 }
 
 static void
-add_condition_kind_object(MatrixAPIPusherConditionKind kind,
+add_condition_kind_object(MatrixPusherConditionKind kind,
                           JsonBuilder *builder)
 {
     gchar *kind_string = _g_enum_to_string(
-            MATRIX_TYPE_API_PUSHER_CONDITION_KIND, kind, TRUE);
+            MATRIX_TYPE_PUSHER_CONDITION_KIND, kind, TRUE);
 
     if (!kind_string) {
         g_warning("Invalid condition kind");
@@ -1488,7 +1488,7 @@ static void i_add_pusher(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
                          const gchar *scope,
-                         MatrixAPIPusherKind kind,
+                         MatrixPusherKind kind,
                          const gchar *rule_id,
                          const gchar *before,
                          const gchar *after,
@@ -1503,7 +1503,7 @@ static void i_add_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = _g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = _g_enum_to_string(MATRIX_TYPE_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1556,7 +1556,7 @@ i_toggle_pusher(MatrixAPI *api,
                 MatrixAPICallback callback,
                 gpointer user_data,
                 const gchar *scope,
-                MatrixAPIPusherKind kind,
+                MatrixPusherKind kind,
                 const gchar *rule_id,
                 gboolean enabled,
                 GError **error)
@@ -1567,7 +1567,7 @@ i_toggle_pusher(MatrixAPI *api,
 
     encoded_scope = soup_uri_encode(scope, NULL);
     encoded_rule_id = soup_uri_encode(rule_id, NULL);
-    kind_string = _g_enum_to_string(MATRIX_TYPE_API_PUSHER_KIND, kind, TRUE);
+    kind_string = _g_enum_to_string(MATRIX_TYPE_PUSHER_KIND, kind, TRUE);
 
     path = g_strdup_printf("pushrules/%s/%s/%s",
                            encoded_scope,
@@ -1898,7 +1898,7 @@ i_list_room_messages(MatrixAPI *api,
                      gpointer user_data,
                      const gchar *room_id,
                      const gchar *from_token,
-                     MatrixAPIEventDirection direction,
+                     MatrixEventDirection direction,
                      guint limit,
                      GError **error)
 {
@@ -1914,12 +1914,12 @@ i_list_room_messages(MatrixAPI *api,
     g_hash_table_replace(params, "from", g_strdup(from_token));
 
     switch (direction) {
-        case MATRIX_API_EVENT_DIRECTION_BACKWARD:
+        case MATRIX_EVENT_DIRECTION_BACKWARD:
             g_hash_table_replace(params, "dir", g_strdup("b"));
 
             break;
 
-        case MATRIX_API_EVENT_DIRECTION_FORWARD:
+        case MATRIX_EVENT_DIRECTION_FORWARD:
             g_hash_table_replace(params, "dir", g_strdup("f"));
 
             break;
@@ -1942,7 +1942,7 @@ i_send_event_receipt(MatrixAPI *api,
                      MatrixAPICallback callback,
                      gpointer user_data,
                      const gchar *room_id,
-                     MatrixAPIReceiptType receipt_type,
+                     MatrixReceiptType receipt_type,
                      const gchar *event_id,
                      JsonNode *receipt,
                      GError **error)
@@ -1951,7 +1951,7 @@ i_send_event_receipt(MatrixAPI *api,
 
     encoded_room_id = soup_uri_encode(room_id, NULL);
     encoded_event_id = soup_uri_encode(event_id, NULL);
-    receipt_type_string = _g_enum_to_string(MATRIX_TYPE_API_RECEIPT_TYPE,
+    receipt_type_string = _g_enum_to_string(MATRIX_TYPE_RECEIPT_TYPE,
                                          receipt_type,
                                          TRUE);
     path = g_strdup_printf("rooms/%s/receipt/%s/%s",
@@ -2572,7 +2572,7 @@ static void
 i_register_account(MatrixAPI *api,
                    MatrixAPICallback callback,
                    gpointer user_data,
-                   MatrixAPIAccountKind account_kind,
+                   MatrixAccountKind account_kind,
                    gboolean bind_email,
                    const gchar *username,
                    const gchar *password,
@@ -2600,8 +2600,8 @@ i_register_account(MatrixAPI *api,
     body = json_builder_get_root(builder);
     g_object_unref(builder);
 
-    if (account_kind != MATRIX_API_ACCOUNT_KIND_DEFAULT) {
-        gchar *kind_string = _g_enum_to_string(MATRIX_TYPE_API_ACCOUNT_KIND,
+    if (account_kind != MATRIX_ACCOUNT_KIND_DEFAULT) {
+        gchar *kind_string = _g_enum_to_string(MATRIX_TYPE_ACCOUNT_KIND,
                                               account_kind, TRUE);
 
         params = create_query_params();

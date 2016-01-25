@@ -137,10 +137,10 @@ login_finished(MatrixAPI *api,
                                 NULL);
         matrix_api_create_room(api,
                                create_room_finished, NULL,
-                               MATRIX_API_ROOM_PRESET_PUBLIC,
+                               MATRIX_ROOM_PRESET_PUBLIC,
                                "GLib SDK test room", "matrix-glib-sdk-test",
                                "GLib SDK test room",
-                               MATRIX_API_ROOM_VISIBILITY_DEFAULT,
+                               MATRIX_ROOM_VISIBILITY_DEFAULT,
                                NULL, NULL, NULL, NULL, NULL);
         matrix_api_get_presence_list(api, NULL, NULL, user_id, NULL);
         matrix_api_get_user_presence(api,

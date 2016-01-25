@@ -81,165 +81,150 @@
 G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
- * MatrixAPIEventFormat:
- * @MATRIX_API_EVENT_FORMAT_DEFAULT: event format will be omitted from
- *                                   the filter, so the server will
- *                                   use its default (usually
- *                                   @MATRIX_API_EVENT_FORMAT_FEDERATION)
- * @MATRIX_API_EVENT_FORMAT_CLIENT: return the events in a format
- *                                  suitable for clients
- * @MATRIX_API_EVENT_FORMAT_FEDERATION: return the raw event as
- *                                      receieved over federation
+ * MatrixEventFormat:
+ * @MATRIX_EVENT_FORMAT_DEFAULT: event format will be omitted from the
+ *                               filter, so the server will use its
+ *                               default (usually
+ *                               @MATRIX_EVENT_FORMAT_FEDERATION)
+ * @MATRIX_EVENT_FORMAT_CLIENT: return the events in a format suitable
+ *                              for clients
+ * @MATRIX_EVENT_FORMAT_FEDERATION: return the raw event as receieved
+ *                                  over federation
  *
  * Event format received when synchronizing.
  */
 
 /**
- * MatrixAPIRoomPreset:
- * @MATRIX_API_ROOM_PRESET_NONE: no preset
- * @MATRIX_API_ROOM_PRESET_PRIVATE: preset for private rooms
- * @MATRIX_API_ROOM_PRESET_TRUSTED_PRIVATE: same as private rooms, but
- *                                          all users get the same
- *                                          power level as the room
- *                                          creator
- * @MATRIX_API_ROOM_PRESET_PUBLIC: preset for public rooms
+ * MatrixRoomPreset:
+ * @MATRIX_ROOM_PRESET_NONE: no preset
+ * @MATRIX_ROOM_PRESET_PRIVATE: preset for private rooms
+ * @MATRIX_ROOM_PRESET_TRUSTED_PRIVATE: same as private rooms, but all
+ *                                      users get the same power level
+ *                                      as the room creator
+ * @MATRIX_ROOM_PRESET_PUBLIC: preset for public rooms
  *
  * Preset values for matrix_api_create_room() calls.
  */
 
 /**
- * MatrixAPIRoomVisibility:
- * @MATRIX_API_ROOM_VISIBILITY_DEFAULT: use a server-assigned value
- *                                      (usually <code>private</code>
- * @MATRIX_API_ROOM_VISIBILITY_PUBLIC: make the room visible in the
- *                                     public room list
- * @MATRIX_API_ROOM_VISIBILITY_PRIVATE: hide the room from the public
- *                                      room list
+ * MatrixRoomVisibility:
+ * @MATRIX_ROOM_VISIBILITY_DEFAULT: use a server-assigned value
+ *                                  (usually <code>private</code>
+ * @MATRIX_ROOM_VISIBILITY_PUBLIC: make the room visible in the public
+ *                                 room list
+ * @MATRIX_ROOM_VISIBILITY_PRIVATE: hide the room from the public room
+ *                                  list
  *
  * Visibility values for room creation. Not to be confused with join
  * rules.
  */
 
 /**
- * MatrixAPIResizeMethod:
- * @MATRIX_API_RESIZE_METHOD_DEFAULT: use the server default value
- * @MATRIX_API_RESIZE_METHOD_CROP: crop thumbnail to the requested
- *                                 size
- * @MATRIX_API_RESIZE_METHOD_SCALE: scale thumbnail to the requested
- *                                  size
+ * MatrixResizeMethod:
+ * @MATRIX_RESIZE_METHOD_DEFAULT: use the server default value
+ * @MATRIX_RESIZE_METHOD_CROP: crop thumbnail to the requested size
+ * @MATRIX_RESIZE_METHOD_SCALE: scale thumbnail to the requested size
  *
  * Resizing methods for matrix_api_media_thumbnail().
  */
 
 /**
- * MatrixAPIPresence:
- * @MATRIX_API_PRESENCE_ONLINE: user is online
- * @MATRIX_API_PRESENCE_OFFLINE: user is offline
- * @MATRIX_API_PRESENCE_UNAVAILABLE: user is unavailable (i.e. busy)
- * @MATRIX_API_PRESENCE_FREE_FOR_CHAT: user is free for chat
+ * MatrixPresence:
+ * @MATRIX_PRESENCE_ONLINE: user is online
+ * @MATRIX_PRESENCE_OFFLINE: user is offline
+ * @MATRIX_PRESENCE_UNAVAILABLE: user is unavailable (i.e. busy)
+ * @MATRIX_PRESENCE_FREE_FOR_CHAT: user is free for chat
  *
  * Presence values for matrix_api_set_user_presence() and other
  * presence related queries.
  */
 
 /**
- * MatrixAPIPusherKind:
- * @MATRIX_API_PUSHER_KIND_OVERRIDE: highest priority rules
- * @MATRIX_API_PUSHER_KIND_SENDER: for (unencrypted) messages that
- *                                 match certain patterns
- * @MATRIX_API_PUSHER_KIND_ROOM: for all messages for a given
- *                               room. The rule ID of a room rule is
- *                               always the ID of the room that it
- *                               affects
- * @MATRIX_API_PUSHER_KIND_CONTENT: for messages from a specific
- *                                  Matrix user ID. The rule ID of
- *                                  such rules is always the Matrix ID
- *                                  of the user whose messages they'd
- *                                  apply to
- * @MATRIX_API_PUSHER_KIND_UNDERRIDE: lowest priority rules
+ * MatrixPusherKind:
+ * @MATRIX_PUSHER_KIND_OVERRIDE: highest priority rules
+ * @MATRIX_PUSHER_KIND_SENDER: for (unencrypted) messages that match
+ *                             certain patterns
+ * @MATRIX_PUSHER_KIND_ROOM: for all messages for a given room. The
+ *                           rule ID of a room rule is always the ID
+ *                           of the room that it affects
+ * @MATRIX_PUSHER_KIND_CONTENT: for messages from a specific Matrix
+ *                              user ID. The rule ID of such rules is
+ *                              always the Matrix ID of the user whose
+ *                              messages they'd apply to
+ * @MATRIX_PUSHER_KIND_UNDERRIDE: lowest priority rules
  *
  * Pusher types.
  */
 
 /**
- * MatrixAPIPusherConditionKind:
- * @MATRIX_API_PUSHER_CONDITION_KIND_EVENT_MATCH: glob pattern match
- *                                                on a field of the
- *                                                event. Requires a
- *                                                <code>key</code> and
- *                                                a
- *                                                <code>pattern</code>
- *                                                parameter
- * @MATRIX_API_PUSHER_CONDITION_KIND_PROFILE_TAG: matches the profile
- *                                                tag of the device
- *                                                that the
- *                                                notification would
- *                                                be delivered
- *                                                to. Requires a
- *                                                <code>profile_tag</code>
- *                                                parameter
- * @MATRIX_API_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME: matches
- *                                                          unencrypted
- *                                                          messages
- *                                                          where the
- *                                                          content's
- *                                                          body
- *                                                          contains
- *                                                          the
- *                                                          owner's
- *                                                          display
- *                                                          name in
- *                                                          that room.
- * @MATRIX_API_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT: matches the
- *                                                      current number
- *                                                      of members in
- *                                                      the
- *                                                      room. Requires
- *                                                      an
- *                                                      <code>is</code>
- *                                                      parameter,
- *                                                      which must be
- *                                                      an integer,
- *                                                      optionally
- *                                                      prefixed by
- *                                                      <code>==</code>,
- *                                                      <code>&lt;</code>,
- *                                                      <code>&gt;</code>,
- *                                                      <code>&lt;=</code>
- *                                                      or
- *                                                      <code>&gt;=</code>. If
- *                                                      the prefix is
- *                                                      omitted, it
- *                                                      defaults to
- *                                                      <code>==</code>
+ * MatrixPusherConditionKind:
+ * @MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH: glob pattern match on a
+ *                                            field of the
+ *                                            event. Requires a
+ *                                            <code>key</code> and a
+ *                                            <code>pattern</code>
+ *                                            parameter
+ * @MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG: matches the profile tag
+ *                                            of the device that the
+ *                                            notification would be
+ *                                            delivered to. Requires a
+ *                                            <code>profile_tag</code>
+ *                                            parameter
+ * @MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME: matches
+ *                                                      unencrypted
+ *                                                      messages where
+ *                                                      the content's
+ *                                                      body contains
+ *                                                      the owner's
+ *                                                      display name
+ *                                                      in that room.
+ * @MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT: matches the
+ *                                                  current number of
+ *                                                  members in the
+ *                                                  room. Requires an
+ *                                                  <code>is</code>
+ *                                                  parameter, which
+ *                                                  must be an
+ *                                                  integer,
+ *                                                  optionally
+ *                                                  prefixed by
+ *                                                  <code>==</code>,
+ *                                                  <code>&lt;</code>,
+ *                                                  <code>&gt;</code>,
+ *                                                  <code>&lt;=</code>
+ *                                                  or
+ *                                                  <code>&gt;=</code>. If
+ *                                                  the prefix is
+ *                                                  omitted, it
+ *                                                  defaults to
+ *                                                  <code>==</code>
  *
  * Condition types for pushers.
  */
 
 /**
- * MatrixAPIAccountKind:
- * @MATRIX_API_ACCOUNT_KIND_DEFAULT: use the server default (usually
- *                                   %MATRIX_API_ACCOUNT_KIND_USER)
- * @MATRIX_API_ACCOUNT_KIND_USER: normal user
- * @MATRIX_API_ACCOUNT_KIND_GUEST: guest user
+ * MatrixAccountKind:
+ * @MATRIX_ACCOUNT_KIND_DEFAULT: use the server default (usually
+ *                               %MATRIX_ACCOUNT_KIND_USER)
+ * @MATRIX_ACCOUNT_KIND_USER: normal user
+ * @MATRIX_ACCOUNT_KIND_GUEST: guest user
  *
  * User account types.
  */
 
 /**
- * MatrixAPIEventDirection:
- * @MATRIX_API_EVENT_DIRECTION_FORWARD: List events after the
- *                                      specified one
- * @MATRIX_API_EVENT_DIRECTION_BACKWARD: List events before the
- *                                       specified one
+ * MatrixEventDirection:
+ * @MATRIX_EVENT_DIRECTION_FORWARD: List events after the specified
+ *                                  one
+ * @MATRIX_EVENT_DIRECTION_BACKWARD: List events before the specified
+ *                                   one
  *
  * Direction of events when requesting an event context.
  */
 
 /**
- * MatrixAPIReceiptType:
- * @MATRIX_API_RECEIPT_TYPE_READ: indicate that the message has been
- *                                read
+ * MatrixReceiptType:
+ * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
  *
  * Receipt types of acknowledgment.
  */
@@ -1281,7 +1266,7 @@ matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
  */
 struct _MatrixAPIFilter {
     GList *event_fields;
-    MatrixAPIEventFormat event_format;
+    MatrixEventFormat event_format;
     MatrixAPIFilterRules *presence;
     MatrixAPIRoomFilter *room;
     guint refcount;
@@ -1453,7 +1438,7 @@ matrix_api_filter_get_event_fields(MatrixAPIFilter *filter)
  */
 void
 matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
-                                   MatrixAPIEventFormat event_format)
+                                   MatrixEventFormat event_format)
 {
     filter->event_format = event_format;
 }
@@ -1466,7 +1451,7 @@ matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
  *
  * Returns: the event format currently set
  */
-MatrixAPIEventFormat
+MatrixEventFormat
 matrix_api_filter_get_event_format(MatrixAPIFilter *filter)
 {
     return filter->event_format;
@@ -1564,7 +1549,7 @@ matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
     json_builder_set_member_name(builder, "event_format");
     json_builder_add_string_value(builder,
                                   _g_enum_to_string(
-                                          MATRIX_TYPE_API_EVENT_FORMAT,
+                                          MATRIX_TYPE_EVENT_FORMAT,
                                           filter->event_format,
                                           TRUE));
 
