@@ -114,62 +114,56 @@ typedef enum {
     MATRIX_ACCOUNT_KIND_GUEST
 } MatrixAccountKind;
 
-typedef struct _MatrixAPIFilterRules MatrixAPIFilterRules;
+typedef struct _MatrixFilterRules MatrixFilterRules;
 
-GType matrix_api_filter_rules_get_type(void);
-#define MATRIX_TYPE_API_FILTER_RULES (matrix_api_filter_rules_get_type())
+GType matrix_filter_rules_get_type(void);
+#define MATRIX_TYPE_FILTER_RULES (matrix_filter_rules_get_type())
 
-MatrixAPIFilterRules *matrix_api_filter_rules_new(void);
-MatrixAPIFilterRules *matrix_api_filter_rules_ref(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_unref(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_limit(MatrixAPIFilterRules *rules,
-                                       guint limit);
-guint matrix_api_filter_rules_get_limit(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_rooms(MatrixAPIFilterRules *rules,
-                                       GList *rooms);
-void matrix_api_filter_rules_add_room(MatrixAPIFilterRules *rules,
-                                      const gchar *room);
-void matrix_api_filter_rules_delete_room(MatrixAPIFilterRules *rules,
-                                         const gchar *room);
-const GList *matrix_api_filter_rules_get_rooms(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_excluded_rooms(MatrixAPIFilterRules *rules,
-                                                GList *rooms);
-void matrix_api_filter_rules_add_excluded_room(MatrixAPIFilterRules *rules,
-                                               const gchar *room);
-void matrix_api_filter_rules_delete_excluded_room(MatrixAPIFilterRules *rules,
-                                                  const gchar *room);
-const GList *matrix_api_filter_rules_get_excluded_rooms(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_senders(MatrixAPIFilterRules *rules,
-                                         GList *senders);
-void matrix_api_filter_rules_add_sender(MatrixAPIFilterRules *rules,
-                                        const gchar *sender);
-void matrix_api_filter_rules_delete_sender(MatrixAPIFilterRules *rules,
-                                           const gchar *sender);
-const GList *matrix_api_filter_rules_get_senders(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_excluded_senders(MatrixAPIFilterRules *rules,
-                                                  GList *senders);
-void matrix_api_filter_rules_add_excluded_sender(MatrixAPIFilterRules *rules,
-                                                 const gchar *sender);
-void matrix_api_filter_rules_delete_excluded_sender(MatrixAPIFilterRules *rules,
-                                                    const gchar *sender);
-const GList *matrix_api_filter_rules_get_excluded_senders(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_types(MatrixAPIFilterRules *rules,
-                                       GList *types);
-void matrix_api_filter_rules_add_type(MatrixAPIFilterRules *rules,
-                                      const gchar *type);
-void matrix_api_filter_rules_delete_type(MatrixAPIFilterRules *rules,
-                                         const gchar *type);
-const GList *matrix_api_filter_rules_get_types(MatrixAPIFilterRules *rules);
-void matrix_api_filter_rules_set_excluded_types(MatrixAPIFilterRules *rules,
-                                                GList *types);
-void matrix_api_filter_rules_add_excluded_type(MatrixAPIFilterRules *rules,
-                                               const gchar *type);
-void matrix_api_filter_rules_delete_excluded_type(MatrixAPIFilterRules *rules,
-                                                  const gchar *type);
-const GList *matrix_api_filter_rules_get_excluded_types(MatrixAPIFilterRules *rules);
-JsonNode *matrix_api_filter_rules_get_json_node(MatrixAPIFilterRules *rules);
-gchar *matrix_api_filter_rules_get_json_data(MatrixAPIFilterRules *rules,
-                                             gsize *datalen);
+MatrixFilterRules *matrix_filter_rules_new(void);
+MatrixFilterRules *matrix_filter_rules_ref(MatrixFilterRules *rules);
+void matrix_filter_rules_unref(MatrixFilterRules *rules);
+void matrix_filter_rules_set_limit(MatrixFilterRules *rules, guint limit);
+guint matrix_filter_rules_get_limit(MatrixFilterRules *rules);
+void matrix_filter_rules_set_rooms(MatrixFilterRules *rules, GList *rooms);
+void matrix_filter_rules_add_room(MatrixFilterRules *rules, const gchar *room);
+void matrix_filter_rules_delete_room(MatrixFilterRules *rules,
+                                     const gchar *room);
+const GList *matrix_filter_rules_get_rooms(MatrixFilterRules *rules);
+void matrix_filter_rules_set_excluded_rooms(MatrixFilterRules *rules,
+                                            GList *rooms);
+void matrix_filter_rules_add_excluded_room(MatrixFilterRules *rules,
+                                           const gchar *room);
+void matrix_filter_rules_delete_excluded_room(MatrixFilterRules *rules,
+                                              const gchar *room);
+const GList *matrix_filter_rules_get_excluded_rooms(MatrixFilterRules *rules);
+void matrix_filter_rules_set_senders(MatrixFilterRules *rules, GList *senders);
+void matrix_filter_rules_add_sender(MatrixFilterRules *rules,
+                                    const gchar *sender);
+void matrix_filter_rules_delete_sender(MatrixFilterRules *rules,
+                                       const gchar *sender);
+const GList *matrix_filter_rules_get_senders(MatrixFilterRules *rules);
+void matrix_filter_rules_set_excluded_senders(MatrixFilterRules *rules,
+                                              GList *senders);
+void matrix_filter_rules_add_excluded_sender(MatrixFilterRules *rules,
+                                             const gchar *sender);
+void matrix_filter_rules_delete_excluded_sender(MatrixFilterRules *rules,
+                                                const gchar *sender);
+const GList *matrix_filter_rules_get_excluded_senders(MatrixFilterRules *rules);
+void matrix_filter_rules_set_types(MatrixFilterRules *rules, GList *types);
+void matrix_filter_rules_add_type(MatrixFilterRules *rules, const gchar *type);
+void matrix_filter_rules_delete_type(MatrixFilterRules *rules,
+                                     const gchar *type);
+const GList *matrix_filter_rules_get_types(MatrixFilterRules *rules);
+void matrix_filter_rules_set_excluded_types(MatrixFilterRules *rules,
+                                            GList *types);
+void matrix_filter_rules_add_excluded_type(MatrixFilterRules *rules,
+                                           const gchar *type);
+void matrix_filter_rules_delete_excluded_type(MatrixFilterRules *rules,
+                                              const gchar *type);
+const GList *matrix_filter_rules_get_excluded_types(MatrixFilterRules *rules);
+JsonNode *matrix_filter_rules_get_json_node(MatrixFilterRules *rules);
+gchar *matrix_filter_rules_get_json_data(MatrixFilterRules *rules,
+                                         gsize *datalen);
 
 typedef struct _MatrixAPIRoomFilter MatrixAPIRoomFilter;
 
@@ -183,14 +177,14 @@ void matrix_api_room_filter_set_include_leave(MatrixAPIRoomFilter *filter,
                                               gboolean include_leave);
 gboolean matrix_api_room_filter_get_include_leave(MatrixAPIRoomFilter *filter);
 void matrix_api_room_filter_set_ephemeral(MatrixAPIRoomFilter *filter,
-                                          MatrixAPIFilterRules *rules);
-MatrixAPIFilterRules *matrix_api_room_filter_get_ephemeral(MatrixAPIRoomFilter *filter);
+                                          MatrixFilterRules *rules);
+MatrixFilterRules *matrix_api_room_filter_get_ephemeral(MatrixAPIRoomFilter *filter);
 void matrix_api_room_filter_set_state(MatrixAPIRoomFilter *filter,
-                                      MatrixAPIFilterRules *rules);
-MatrixAPIFilterRules *matrix_api_room_filter_get_state(MatrixAPIRoomFilter *filter);
+                                      MatrixFilterRules *rules);
+MatrixFilterRules *matrix_api_room_filter_get_state(MatrixAPIRoomFilter *filter);
 void matrix_api_room_filter_set_timeline(MatrixAPIRoomFilter *filter,
-                                         MatrixAPIFilterRules *rules);
-MatrixAPIFilterRules *matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter);
+                                         MatrixFilterRules *rules);
+MatrixFilterRules *matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter);
 JsonNode *matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter);
 gchar *matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
                                             gsize *datalen);
@@ -214,8 +208,8 @@ void matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
                                         MatrixEventFormat event_format);
 MatrixEventFormat matrix_api_filter_get_event_format(MatrixAPIFilter *filter);
 void matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
-                                           MatrixAPIFilterRules *presence_filter);
-MatrixAPIFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter);
+                                           MatrixFilterRules *presence_filter);
+MatrixFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter);
 void matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
                                        MatrixAPIRoomFilter *room_filter);
 MatrixAPIRoomFilter *matrix_api_filter_get_room_filter(MatrixAPIFilter *filter);
