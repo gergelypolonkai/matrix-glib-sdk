@@ -956,11 +956,11 @@ matrix_filter_rules_get_json_data(MatrixFilterRules *rules, gsize *datalen)
 }
 
 /**
- * MatrixAPIRoomFilter:
+ * MatrixRoomFilter:
  *
  * An opaque structure to hold room filters.
  */
-struct _MatrixAPIRoomFilter {
+struct _MatrixRoomFilter {
     gboolean include_leave;
     MatrixFilterRules *ephemeral;
     MatrixFilterRules *state;
@@ -968,30 +968,30 @@ struct _MatrixAPIRoomFilter {
     guint refcount;
 };
 
-G_DEFINE_BOXED_TYPE(MatrixAPIRoomFilter, matrix_api_room_filter,
-                    (GBoxedCopyFunc)matrix_api_room_filter_ref,
-                    (GBoxedFreeFunc)matrix_api_room_filter_unref);
+G_DEFINE_BOXED_TYPE(MatrixRoomFilter, matrix_room_filter,
+                    (GBoxedCopyFunc)matrix_room_filter_ref,
+                    (GBoxedFreeFunc)matrix_room_filter_unref);
 
 /**
- * matrix_api_room_filter_new:
+ * matrix_room_filter_new:
  *
- * Create a new #MatrixAPIRoomFilter object with reference count of 1.
+ * Create a new #MatrixRoomFilter object with reference count of 1.
  *
- * Returns: (transfer full): a new #MatrixAPIRoomFilter
+ * Returns: (transfer full): a new #MatrixRoomFilter
  */
-MatrixAPIRoomFilter *
-matrix_api_room_filter_new(void)
+MatrixRoomFilter *
+matrix_room_filter_new(void)
 {
-    MatrixAPIRoomFilter *filter;
+    MatrixRoomFilter *filter;
 
-    filter = g_new0(MatrixAPIRoomFilter, 1);
+    filter = g_new0(MatrixRoomFilter, 1);
     filter->refcount = 1;
 
     return filter;
 }
 
 static void
-matrix_api_room_filter_free(MatrixAPIRoomFilter *filter)
+matrix_room_filter_free(MatrixRoomFilter *filter)
 {
     if (filter->ephemeral) {
         matrix_filter_rules_unref(filter->ephemeral);
@@ -1009,15 +1009,15 @@ matrix_api_room_filter_free(MatrixAPIRoomFilter *filter)
 }
 
 /**
- * matrix_api_room_filter_ref:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_ref:
+ * @filter: a #MatrixRoomFilter
  *
  * Increase reference count of @filter by one.
  *
- * Returns: (transfer none): the same #MatrixAPIRoomFilter
+ * Returns: (transfer none): the same #MatrixRoomFilter
  */
-MatrixAPIRoomFilter *
-matrix_api_room_filter_ref(MatrixAPIRoomFilter *filter)
+MatrixRoomFilter *
+matrix_room_filter_ref(MatrixRoomFilter *filter)
 {
     filter->refcount++;
 
@@ -1025,38 +1025,38 @@ matrix_api_room_filter_ref(MatrixAPIRoomFilter *filter)
 }
 
 /**
- * matrix_api_room_filter_unref:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_unref:
+ * @filter: a #MatrixRoomFilter
  *
  * Decrease reference count of @filter by one. If reference count
  * reaches zero, @filter is freed.
  */
 void
-matrix_api_room_filter_unref(MatrixAPIRoomFilter *filter)
+matrix_room_filter_unref(MatrixRoomFilter *filter)
 {
     if (--filter->refcount == 0) {
-        matrix_api_room_filter_free(filter);
+        matrix_room_filter_free(filter);
     }
 }
 
 /**
- * matrix_api_room_filter_set_include_leave:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_set_include_leave:
+ * @filter: a #MatrixRoomFilter
  * @include_leave: %TRUE if events from left rooms should be included
  *
  * Sets if events for rooms that the user has left should be included
  * in the filtered event list.
  */
 void
-matrix_api_room_filter_set_include_leave(MatrixAPIRoomFilter *filter,
+matrix_room_filter_set_include_leave(MatrixRoomFilter *filter,
                                          gboolean include_leave)
 {
     filter->include_leave = include_leave;
 }
 
 /**
- * matrix_api_room_filter_get_include_leave:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_include_leave:
+ * @filter: a #MatrixRoomFilter
  *
  * If %TRUE, events from rooms that the user has left will be included
  * in the filtered event list.
@@ -1064,14 +1064,14 @@ matrix_api_room_filter_set_include_leave(MatrixAPIRoomFilter *filter,
  * Returns: the value of <code>include_leave</code>
  */
 gboolean
-matrix_api_room_filter_get_include_leave(MatrixAPIRoomFilter *filter)
+matrix_room_filter_get_include_leave(MatrixRoomFilter *filter)
 {
     return filter->include_leave;
 }
 
 /**
- * matrix_api_room_filter_set_ephemeral:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_set_ephemeral:
+ * @filter: a #MatrixRoomFilter
  * @rules: (transfer none): filtering rules for ephemeral events
  *
  * Set filtering rules for ephemeral events, i.e. events that are not
@@ -1079,8 +1079,8 @@ matrix_api_room_filter_get_include_leave(MatrixAPIRoomFilter *filter)
  * @filter gets a reference on @rules, so the caller may unref it.
  */
 void
-matrix_api_room_filter_set_ephemeral(MatrixAPIRoomFilter *filter,
-                                     MatrixFilterRules *rules)
+matrix_room_filter_set_ephemeral(MatrixRoomFilter *filter,
+                                 MatrixFilterRules *rules)
 {
     if (filter->ephemeral) {
         matrix_filter_rules_unref(filter->ephemeral);
@@ -1090,31 +1090,30 @@ matrix_api_room_filter_set_ephemeral(MatrixAPIRoomFilter *filter,
 }
 
 /**
- * matrix_api_room_filter_get_ephemeral:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_ephemeral:
+ * @filter: a #MatrixRoomFilter
  *
  * Gets the filtering rules for ephemeral events. See
- * matrix_api_room_filter_set_ephemeral() for details.
+ * matrix_room_filter_set_ephemeral() for details.
  *
  * Returns: (transfer none): the filtering rules for ephemeral events.
  */
 MatrixFilterRules *
-matrix_api_room_filter_get_ephemeral(MatrixAPIRoomFilter *filter)
+matrix_room_filter_get_ephemeral(MatrixRoomFilter *filter)
 {
     return filter->ephemeral;
 }
 
 /**
- * matrix_api_room_filter_set_state:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_set_state:
+ * @filter: a #MatrixRoomFilter
  * @rules: (transfer none): filtering rules for state events
  *
  * Sets filtering rules for state events. @filter obtains a reference
  * on @rules, so the caller may unref it safely.
  */
 void
-matrix_api_room_filter_set_state(MatrixAPIRoomFilter *filter,
-                                 MatrixFilterRules *rules)
+matrix_room_filter_set_state(MatrixRoomFilter *filter, MatrixFilterRules *rules)
 {
     if (filter->state) {
         matrix_filter_rules_unref(filter->state);
@@ -1124,30 +1123,30 @@ matrix_api_room_filter_set_state(MatrixAPIRoomFilter *filter,
 }
 
 /**
- * matrix_api_room_filter_get_state:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_state:
+ * @filter: a #MatrixRoomFilter
  *
  * Gets the filtering rules for state events.
  *
  * Returns: (transfer none): the filtering rules for state events
  */
 MatrixFilterRules *
-matrix_api_room_filter_get_state(MatrixAPIRoomFilter *filter)
+matrix_room_filter_get_state(MatrixRoomFilter *filter)
 {
     return filter->state;
 }
 
 /**
- * matrix_api_room_filter_set_timeline:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_set_timeline:
+ * @filter: a #MatrixRoomFilter
  * @rules: (transfer none): filtering rules for timeline events
  *         (messages and state events from rooms)
  *
  * Set filtering rules for timeline events.
  */
 void
-matrix_api_room_filter_set_timeline(MatrixAPIRoomFilter *filter,
-                                    MatrixFilterRules *rules)
+matrix_room_filter_set_timeline(MatrixRoomFilter *filter,
+                                MatrixFilterRules *rules)
 {
     if (filter->timeline) {
         matrix_filter_rules_unref(filter->timeline);
@@ -1157,23 +1156,23 @@ matrix_api_room_filter_set_timeline(MatrixAPIRoomFilter *filter,
 }
 
 /**
- * matrix_api_room_filter_get_timeline:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_timeline:
+ * @filter: a #MatrixRoomFilter
  *
  * Gets filtering rules for timeline events (see
- * matrix_api_room_filter_set_timeline() for details.
+ * matrix_room_filter_set_timeline() for details.
  *
  * Returns: (transfer none): the filtering rules for timeline events
  */
 MatrixFilterRules *
-matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter)
+matrix_room_filter_get_timeline(MatrixRoomFilter *filter)
 {
     return filter->timeline;
 }
 
 /**
- * matrix_api_room_filter_get_json_node:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_json_node:
+ * @filter: a #MatrixRoomFilter
  *
  * Gets the #JsonNode representation of the filtering ruleset.
  *
@@ -1181,7 +1180,7 @@ matrix_api_room_filter_get_timeline(MatrixAPIRoomFilter *filter)
  *          ruleset as a #JsonNode
  */
 JsonNode *
-matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter)
+matrix_room_filter_get_json_node(MatrixRoomFilter *filter)
 {
     JsonBuilder *builder;
     JsonNode *node;
@@ -1222,8 +1221,8 @@ matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter)
 }
 
 /**
- * matrix_api_room_filter_get_json_data:
- * @filter: a #MatrixAPIRoomFilter
+ * matrix_room_filter_get_json_data:
+ * @filter: a #MatrixRoomFilter
  * @datalen: (out) (allow-none): storage for the length of the JSON
  *           data, or %NULL
  *
@@ -1234,11 +1233,10 @@ matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter)
  *          data as a string
  */
 gchar *
-matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
-                                     gsize *datalen)
+matrix_room_filter_get_json_data(MatrixRoomFilter *filter, gsize *datalen)
 {
     JsonGenerator *generator;
-    JsonNode *node = matrix_api_room_filter_get_json_node(filter);
+    JsonNode *node = matrix_room_filter_get_json_node(filter);
     gchar *data;
 
     generator = json_generator_new();
@@ -1260,7 +1258,7 @@ struct _MatrixFilter {
     GList *event_fields;
     MatrixEventFormat event_format;
     MatrixFilterRules *presence;
-    MatrixAPIRoomFilter *room;
+    MatrixRoomFilter *room;
     guint refcount;
 };
 
@@ -1296,7 +1294,7 @@ matrix_filter_free(MatrixFilter *filter)
     }
 
     if (filter->room) {
-        matrix_api_room_filter_unref(filter->room);
+        matrix_room_filter_unref(filter->room);
     }
 
     g_free(filter);
@@ -1489,13 +1487,13 @@ matrix_filter_get_presence_filter(MatrixFilter *filter)
  */
 void
 matrix_filter_set_room_filter(MatrixFilter *filter,
-                              MatrixAPIRoomFilter *room_filter)
+                              MatrixRoomFilter *room_filter)
 {
     if (filter->room) {
-        matrix_api_room_filter_unref(filter->room);
+        matrix_room_filter_unref(filter->room);
     }
 
-    filter->room = matrix_api_room_filter_ref(room_filter);
+    filter->room = matrix_room_filter_ref(room_filter);
 }
 
 /**
@@ -1507,7 +1505,7 @@ matrix_filter_set_room_filter(MatrixFilter *filter,
  * Returns: (transfer none): the current filtering ruleset for room
  * events
  */
-MatrixAPIRoomFilter *
+MatrixRoomFilter *
 matrix_filter_get_room_filter(MatrixFilter *filter)
 {
     return filter->room;
@@ -1548,7 +1546,7 @@ matrix_filter_get_json_node(MatrixFilter *filter)
     json_node_free(tmp);
 
     json_builder_set_member_name(builder, "room");
-    tmp = matrix_api_room_filter_get_json_node(filter->room);
+    tmp = matrix_room_filter_get_json_node(filter->room);
     json_builder_add_value(builder, tmp);
     json_node_free(tmp);
 
