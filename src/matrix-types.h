@@ -16,8 +16,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MATRIX_API_TYPES_H__
-#define __MATRIX_API_TYPES_H__
+#ifndef __MATRIX_TYPES_H__
+#define __MATRIX_TYPES_H__
 
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
@@ -309,4 +309,4 @@ gchar *matrix_api_state_event_get_json_data(MatrixAPIStateEvent *event,
 
 G_END_DECLS
 
-#endif /* __MATRIX_API_TYPES_H__ */
+#endif /* __MATRIX_TYPES_H__ */

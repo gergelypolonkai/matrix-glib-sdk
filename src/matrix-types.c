@@ -16,17 +16,16 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "matrix-api-types.h"
+#include "matrix-types.h"
 #include "matrix-enumtypes.h"
 #include "utils.h"
 
 /**
- * SECTION:matrix-api-types
+ * SECTION:matrix-types
  * @title: Generic types
- * @short_description: Generic types for all #MatrixAPI
- *                     implementations
+ * @short_description: Generic types for Matrix GLib SDK calls
  *
- * These are the types used by all #MatrixAPI implementations for
+ * These are the generic types used by many SDK calls for
  * communication with the homeserver.
  */
 

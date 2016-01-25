@@ -22,7 +22,7 @@
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 
-#include "matrix-api-types.h"
+#include "matrix-types.h"
 
 G_BEGIN_DECLS
 

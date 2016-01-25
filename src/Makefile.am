@@ -4,8 +4,8 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 bin_PROGRAMS = test-api-client
 
 INST_H_SRC_FILES = \
+	matrix-types.h \
 	matrix-api.h \
-	matrix-api-types.h \
 	matrix-http-api.h \
 	matrix-client.h \
 	$(NULL)
@@ -16,14 +16,14 @@ INST_H_BUILT_FILES = \
 	$(NULL)
 
 matrix_enum_headers = \
+	matrix-types.h \
 	matrix-api.h \
-	matrix-api-types.h \
 	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
 	matrix-version.c \
+	matrix-types.c \
 	matrix-api.c \
-	matrix-api-types.c \
 	matrix-http-api.c \
 	matrix-enumtypes.c \
 	utils.c \

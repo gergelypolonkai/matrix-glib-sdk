@@ -18,8 +18,8 @@ matrix_client_get_type
 </SECTION>
 
 <SECTION>
-<FILE>matrix-api-types</FILE>
-<TITLE>Fundamental types for MatrixAPI</TITLE>
+<FILE>matrix-types</FILE>
+<TITLE>Fundamental types for the Matrix GLib SDK</TITLE>
 
 <SUBSECTION>
 MatrixAPIError
