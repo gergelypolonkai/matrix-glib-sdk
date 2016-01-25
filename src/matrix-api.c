@@ -1903,7 +1903,7 @@ matrix_api_sync(MatrixAPI *api,
                 MatrixAPICallback callback,
                 gpointer user_data,
                 const gchar *filter_id,
-                const MatrixAPIFilter *filter,
+                const MatrixFilter *filter,
                 const gchar *since,
                 gboolean full_state,
                 gboolean set_presence,
@@ -1945,7 +1945,7 @@ matrix_api_create_filter(MatrixAPI *api,
                          MatrixAPICallback callback,
                          gpointer user_data,
                          const gchar *user_id,
-                         MatrixAPIFilter *filter,
+                         MatrixFilter *filter,
                          GError **error)
 {
     g_return_if_fail(MATRIX_IS_API(api));

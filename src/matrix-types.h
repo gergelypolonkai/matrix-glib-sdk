@@ -189,32 +189,31 @@ JsonNode *matrix_api_room_filter_get_json_node(MatrixAPIRoomFilter *filter);
 gchar *matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
                                             gsize *datalen);
 
-typedef struct _MatrixAPIFilter MatrixAPIFilter;
+typedef struct _MatrixFilter MatrixFilter;
 
-GType matrix_api_filter_get_type(void);
-#define MATRIX_TYPE_API_FILTER (matrix_api_filter_get_type())
+GType matrix_filter_get_type(void);
+#define MATRIX_TYPE_FILTER (matrix_filter_get_type())
 
-MatrixAPIFilter *matrix_api_filter_new(void);
-MatrixAPIFilter *matrix_api_filter_ref(MatrixAPIFilter *filter);
-void matrix_api_filter_unref(MatrixAPIFilter *filter);
-void matrix_api_filter_set_event_fields(MatrixAPIFilter *filter,
-                                        GList *event_fields);
-void matrix_api_filter_add_event_field(MatrixAPIFilter *filter,
-                                       const gchar *event_field);
-void matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
-                                          const gchar *event_field);
-const GList *matrix_api_filter_get_event_fields(MatrixAPIFilter *filter);
-void matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
-                                        MatrixEventFormat event_format);
-MatrixEventFormat matrix_api_filter_get_event_format(MatrixAPIFilter *filter);
-void matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
-                                           MatrixFilterRules *presence_filter);
-MatrixFilterRules *matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter);
-void matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
-                                       MatrixAPIRoomFilter *room_filter);
-MatrixAPIRoomFilter *matrix_api_filter_get_room_filter(MatrixAPIFilter *filter);
-JsonNode *matrix_api_filter_get_json_node(MatrixAPIFilter *filter);
-gchar *matrix_api_filter_get_json_data(MatrixAPIFilter *filter, gsize *datalen);
+MatrixFilter *matrix_filter_new(void);
+MatrixFilter *matrix_filter_ref(MatrixFilter *filter);
+void matrix_filter_unref(MatrixFilter *filter);
+void matrix_filter_set_event_fields(MatrixFilter *filter, GList *event_fields);
+void matrix_filter_add_event_field(MatrixFilter *filter,
+                                   const gchar *event_field);
+void matrix_filter_delete_event_field(MatrixFilter *filter,
+                                      const gchar *event_field);
+const GList *matrix_filter_get_event_fields(MatrixFilter *filter);
+void matrix_filter_set_event_format(MatrixFilter *filter,
+                                    MatrixEventFormat event_format);
+MatrixEventFormat matrix_filter_get_event_format(MatrixFilter *filter);
+void matrix_filter_set_presence_filter(MatrixFilter *filter,
+                                       MatrixFilterRules *presence_filter);
+MatrixFilterRules *matrix_filter_get_presence_filter(MatrixFilter *filter);
+void matrix_filter_set_room_filter(MatrixFilter *filter,
+                                   MatrixAPIRoomFilter *room_filter);
+MatrixAPIRoomFilter *matrix_filter_get_room_filter(MatrixFilter *filter);
+JsonNode *matrix_filter_get_json_node(MatrixFilter *filter);
+gchar *matrix_filter_get_json_data(MatrixFilter *filter, gsize *datalen);
 
 typedef struct _MatrixAPI3PidCredential MatrixAPI3PidCredential;
 

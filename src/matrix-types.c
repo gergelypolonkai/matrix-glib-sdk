@@ -1252,11 +1252,11 @@ matrix_api_room_filter_get_json_data(MatrixAPIRoomFilter *filter,
 }
 
 /**
- * MatrixAPIFilter:
+ * MatrixFilter:
  *
  * An opaque structure to hold an event filter.
  */
-struct _MatrixAPIFilter {
+struct _MatrixFilter {
     GList *event_fields;
     MatrixEventFormat event_format;
     MatrixFilterRules *presence;
@@ -1264,30 +1264,30 @@ struct _MatrixAPIFilter {
     guint refcount;
 };
 
-G_DEFINE_BOXED_TYPE(MatrixAPIFilter, matrix_api_filter,
-                    (GBoxedCopyFunc)matrix_api_filter_ref,
-                    (GBoxedFreeFunc)matrix_api_filter_unref);
+G_DEFINE_BOXED_TYPE(MatrixFilter, matrix_filter,
+                    (GBoxedCopyFunc)matrix_filter_ref,
+                    (GBoxedFreeFunc)matrix_filter_unref);
 
 /**
- * matrix_api_filter_new:
+ * matrix_filter_new:
  *
- * Create a new #MatrixAPIFilter object with reference count of 1.
+ * Create a new #MatrixFilter object with reference count of 1.
  *
- * Returns: (transfer full): a new #MatrixAPIFilter
+ * Returns: (transfer full): a new #MatrixFilter
  */
-MatrixAPIFilter *
-matrix_api_filter_new(void)
+MatrixFilter *
+matrix_filter_new(void)
 {
-    MatrixAPIFilter *filter;
+    MatrixFilter *filter;
 
-    filter = g_new0(MatrixAPIFilter, 1);
+    filter = g_new0(MatrixFilter, 1);
     filter->refcount = 1;
 
     return filter;
 }
 
 static void
-matrix_api_filter_free(MatrixAPIFilter *filter)
+matrix_filter_free(MatrixFilter *filter)
 {
     g_list_free_full(filter->event_fields, g_free);
 
@@ -1303,15 +1303,15 @@ matrix_api_filter_free(MatrixAPIFilter *filter)
 }
 
 /**
- * matrix_api_filter_ref:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_ref:
+ * @filter: a #MatrixFilter
  *
  * Increase reference count of @filter by one.
  *
- * Returns: (transfer none): the same #MatrixAPIFilter
+ * Returns: (transfer none): the same #MatrixFilter
  */
-MatrixAPIFilter *
-matrix_api_filter_ref(MatrixAPIFilter *filter)
+MatrixFilter *
+matrix_filter_ref(MatrixFilter *filter)
 {
     filter->refcount++;
 
@@ -1319,23 +1319,23 @@ matrix_api_filter_ref(MatrixAPIFilter *filter)
 }
 
 /**
- * matrix_api_filter_unref:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_unref:
+ * @filter: a #MatrixFilter
  *
  * Decrease reference count of @filter by one. If reference count
  * reaches zero, @filter is freed.
  */
 void
-matrix_api_filter_unref(MatrixAPIFilter *filter)
+matrix_filter_unref(MatrixFilter *filter)
 {
     if (--filter->refcount == 0) {
-        matrix_api_filter_free(filter);
+        matrix_filter_free(filter);
     }
 }
 
 /**
- * matrix_api_filter_set_event_fields:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_set_event_fields:
+ * @filter: a #MatrixFilter
  * @event_fields: (in) (element-type utf8) (transfer full) (allow-none):
  *                a list of event fields to include. If %NULL then all
  *                fields are included. The entries may include
@@ -1349,25 +1349,23 @@ matrix_api_filter_unref(MatrixAPIFilter *filter)
  * Set the event fields to include in the filtered events.
  */
 void
-matrix_api_filter_set_event_fields(MatrixAPIFilter *filter,
-                                   GList *event_fields)
+matrix_filter_set_event_fields(MatrixFilter *filter, GList *event_fields)
 {
     g_list_free_full(filter->event_fields, g_free);
     filter->event_fields = event_fields;
 }
 
 /**
- * matrix_api_filter_add_event_field:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_add_event_field:
+ * @filter: a #MatrixFilter
  * @event_field: an event field to add to the list. See
- *               matrix_api_filter_set_event_fields() for details
+ *               matrix_filter_set_event_fields() for details
  *
  * Add an event field to the list of fields that will be present in
  * the filtered events.
  */
 void
-matrix_api_filter_add_event_field(MatrixAPIFilter *filter,
-                                  const gchar *event_field)
+matrix_filter_add_event_field(MatrixFilter *filter, const gchar *event_field)
 {
     g_return_if_fail(event_field != NULL);
 
@@ -1379,16 +1377,15 @@ matrix_api_filter_add_event_field(MatrixAPIFilter *filter,
 }
 
 /**
- * matrix_api_filter_delete_event_field:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_delete_event_field:
+ * @filter: a #MatrixFilter
  * @event_field: an event field to remove from the list
  *
  * Remove @event_field from the list of fields that will be present in
  * the filtered events.
  */
 void
-matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
-                                     const gchar *event_field)
+matrix_filter_delete_event_field(MatrixFilter *filter, const gchar *event_field)
 {
     GList *event_field_element;
 
@@ -1404,8 +1401,8 @@ matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
 }
 
 /**
- * matrix_api_filter_get_event_fields:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_event_fields:
+ * @filter: a #MatrixFilter
  *
  * Get the list of event fields that will be present in the filtered
  * events.
@@ -1415,50 +1412,50 @@ matrix_api_filter_delete_event_field(MatrixAPIFilter *filter,
  *          and should not be freed nor modified.
  */
 const GList *
-matrix_api_filter_get_event_fields(MatrixAPIFilter *filter)
+matrix_filter_get_event_fields(MatrixFilter *filter)
 {
     return filter->event_fields;
 }
 
 /**
- * matrix_api_filter_set_event_format:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_set_event_format:
+ * @filter: a #MatrixFilter
  * @event_format: the desired event format for filtered events
  *
  * Set the desired event format for the filtered events (e.g. for
  * matrix_api_sync())
  */
 void
-matrix_api_filter_set_event_format(MatrixAPIFilter *filter,
-                                   MatrixEventFormat event_format)
+matrix_filter_set_event_format(MatrixFilter *filter,
+                               MatrixEventFormat event_format)
 {
     filter->event_format = event_format;
 }
 
 /**
- * matrix_api_filter_get_event_format:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_event_format:
+ * @filter: a #MatrixFilter
  *
  * Get the desired event format set in @filter.
  *
  * Returns: the event format currently set
  */
 MatrixEventFormat
-matrix_api_filter_get_event_format(MatrixAPIFilter *filter)
+matrix_filter_get_event_format(MatrixFilter *filter)
 {
     return filter->event_format;
 }
 
 /**
- * matrix_api_filter_set_presence_filter:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_set_presence_filter:
+ * @filter: a #MatrixFilter
  * @presence_filter: (transfer none): the desired filters to use
  *
  * Set a filtering ruleset for presence events.
  */
 void
-matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
-                                      MatrixFilterRules *presence_filter)
+matrix_filter_set_presence_filter(MatrixFilter *filter,
+                                  MatrixFilterRules *presence_filter)
 {
     if (filter->presence) {
         matrix_filter_rules_unref(filter->presence);
@@ -1468,8 +1465,8 @@ matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
 }
 
 /**
- * matrix_api_filter_get_presence_filter:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_presence_filter:
+ * @filter: a #MatrixFilter
  *
  * Get the current filtering ruleset for presence events.
  *
@@ -1478,21 +1475,21 @@ matrix_api_filter_set_presence_filter(MatrixAPIFilter *filter,
  *          separately, it should create a reference for it
  */
 MatrixFilterRules *
-matrix_api_filter_get_presence_filter(MatrixAPIFilter *filter)
+matrix_filter_get_presence_filter(MatrixFilter *filter)
 {
     return filter->presence;
 }
 
 /**
- * matrix_api_filter_set_room_filter:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_set_room_filter:
+ * @filter: a #MatrixFilter
  * @room_filter: the desired room filters to use in @filter
  *
  * Set a new filtering ruleset for room events in @filter.
  */
 void
-matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
-                                  MatrixAPIRoomFilter *room_filter)
+matrix_filter_set_room_filter(MatrixFilter *filter,
+                              MatrixAPIRoomFilter *room_filter)
 {
     if (filter->room) {
         matrix_api_room_filter_unref(filter->room);
@@ -1502,8 +1499,8 @@ matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
 }
 
 /**
- * matrix_api_filter_get_room_filter:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_room_filter:
+ * @filter: a #MatrixFilter
  *
  * Get the filtering ruleset for room events in @filter.
  *
@@ -1511,21 +1508,21 @@ matrix_api_filter_set_room_filter(MatrixAPIFilter *filter,
  * events
  */
 MatrixAPIRoomFilter *
-matrix_api_filter_get_room_filter(MatrixAPIFilter *filter)
+matrix_filter_get_room_filter(MatrixFilter *filter)
 {
     return filter->room;
 }
 
 /**
- * matrix_api_filter_get_json_node:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_json_node:
+ * @filter: a #MatrixFilter
  *
  * Get the JSON representation of @filter as a #JsonNode
  *
  * Returns: (transfer full): the JSON representation of @filter
  */
 JsonNode *
-matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
+matrix_filter_get_json_node(MatrixFilter *filter)
 {
     JsonBuilder *builder;
     JsonNode *root, *tmp;
@@ -1563,8 +1560,8 @@ matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
 }
 
 /**
- * matrix_api_filter_get_json_data:
- * @filter: a #MatrixAPIFilter
+ * matrix_filter_get_json_data:
+ * @filter: a #MatrixFilter
  * @datalen: storage for the length of the JSON data, or %NULL
  *
  * Get the JSON representation of @filter as a string.
@@ -1572,10 +1569,10 @@ matrix_api_filter_get_json_node(MatrixAPIFilter *filter)
  * Returns: (transfer full): the JSON representation of @filter
  */
 gchar *
-matrix_api_filter_get_json_data(MatrixAPIFilter *filter, gsize *datalen)
+matrix_filter_get_json_data(MatrixFilter *filter, gsize *datalen)
 {
     JsonGenerator *generator;
-    JsonNode *node = matrix_api_filter_get_json_node(filter);
+    JsonNode *node = matrix_filter_get_json_node(filter);
     gchar *data;
 
     generator = json_generator_new();

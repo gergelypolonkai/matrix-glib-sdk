@@ -2177,7 +2177,7 @@ i_sync(MatrixAPI *api,
        MatrixAPICallback callback,
        gpointer user_data,
        const gchar *filter_id,
-       const MatrixAPIFilter *filter,
+       const MatrixFilter *filter,
        const gchar *since,
        gboolean full_state,
        gboolean set_presence,
@@ -2203,8 +2203,8 @@ i_sync(MatrixAPI *api,
     if (filter) {
         g_hash_table_replace(params,
                              "filter",
-                             matrix_api_filter_get_json_data(
-                                     (MatrixAPIFilter *)filter,
+                             matrix_filter_get_json_data(
+                                     (MatrixFilter *)filter,
                                      NULL));
     }
 
@@ -2238,11 +2238,11 @@ i_create_filter(MatrixAPI *api,
                 MatrixAPICallback callback,
                 gpointer user_data,
                 const gchar *user_id,
-                MatrixAPIFilter *filter,
+                MatrixFilter *filter,
                 GError **error)
 {
     gchar *encoded_user_id, *path;
-    JsonNode *filter_node = matrix_api_filter_get_json_node(filter);
+    JsonNode *filter_node = matrix_filter_get_json_node(filter);
 
     encoded_user_id = soup_uri_encode(user_id, NULL);
     path = g_strdup_printf("user/%s/filter", encoded_user_id);
