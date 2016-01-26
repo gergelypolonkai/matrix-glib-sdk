@@ -40,6 +40,11 @@
  * Class definition for #MatrixHTTPClient.
  */
 
+typedef struct _MatrixHTTPClientPrivate {
+    gboolean polling;
+    guint event_timeout;
+} MatrixHTTPClientPrivate;
+
 enum {
     PROP_BASE_URL = 1,
     PROP_VALIDATE_CERTIFICATE,
@@ -49,8 +54,10 @@ enum {
 static GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 
 static void matrix_http_client_matrix_client_init(MatrixClientInterface *iface);
+static void i_begin_polling(MatrixClient *client, GError **error);
 
 G_DEFINE_TYPE_WITH_CODE(MatrixHTTPClient, matrix_http_client, MATRIX_TYPE_HTTP_API,
+                        G_ADD_PRIVATE(MatrixHTTPClient)
                         G_IMPLEMENT_INTERFACE(MATRIX_TYPE_CLIENT,
                                               matrix_http_client_matrix_client_init));
 
@@ -127,18 +134,109 @@ i_logout(MatrixClient *client, GError **error)
 }
 
 static void
+process_event(JsonArray *array,
+              guint idx,
+              JsonNode *event,
+              MatrixClient *client)
+{}
+
+static void
+cb_event_stream(MatrixAPI *api,
+                const gchar *content_type,
+                JsonNode *json_content,
+                GByteArray *raw_content,
+                gpointer user_data,
+                GError *error)
+{
+    MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(
+            MATRIX_HTTP_CLIENT(api));
+    const gchar *end_token = NULL;
+
+    if (!error) {
+        JsonObject *root_obj;
+        JsonNode *node;
+
+        root_obj = json_node_get_object(json_content);
+
+        if ((node = json_object_get_member(root_obj, "chunk")) != NULL) {
+            JsonArray *chunks = json_node_get_array(node);
+
+            json_array_foreach_element(chunks,
+                                       (JsonArrayForeach)process_event,
+                                       api);
+        }
+
+        if ((node = json_object_get_member(root_obj, "end")) != NULL) {
+            end_token = json_node_get_string(node);
+        }
+    }
+
+    // Only continue polling if polling is still enabled, and there
+    // was no communication error during the last call
+    if (priv->polling
+        && (!error || error->code <= MATRIX_ERROR_MISSING_TOKEN)) {
+        priv->polling = FALSE;
+
+        matrix_api_event_stream(api,
+                                cb_event_stream, NULL,
+                                end_token, priv->event_timeout,
+                                NULL);
+    }
+}
+
+static void
+i_begin_polling(MatrixClient *client, GError **error)
+{
+    MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(
+            MATRIX_HTTP_CLIENT(client));
+    GError *err = NULL;
+
+    matrix_api_event_stream(MATRIX_API(client),
+                            cb_event_stream, NULL,
+                            NULL, priv->event_timeout,
+                            &err);
+
+    if (err) {
+        g_propagate_error(error, err);
+
+        return;
+    }
+
+    priv->polling = TRUE;
+}
+
+static void
+i_stop_polling(MatrixClient *client, gboolean cancel_ongoing, GError **error)
+{
+    MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(
+            MATRIX_HTTP_CLIENT(client));
+
+    priv->polling = FALSE;
+
+    if (cancel_ongoing) {
+        matrix_api_abort_pending(MATRIX_API(client));
+    }
+}
+
+static void
 matrix_http_client_matrix_client_init(MatrixClientInterface *iface)
 {
     iface->login_with_password = i_login_with_password;
     iface->register_with_password = i_register_with_password;
     iface->logout = i_logout;
-    iface->begin_polling = NULL;
-    iface->stop_polling = NULL;
+    iface->begin_polling = i_begin_polling;
+    iface->stop_polling = i_stop_polling;
 }
 
 static void
 matrix_http_client_init(MatrixHTTPClient *client)
-{}
+{
+    MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(
+            client);
+
+    priv->polling = FALSE;
+    priv->event_timeout = 30000;
+}
 
 static void
 matrix_http_client_class_init(MatrixHTTPClientClass *klass)
