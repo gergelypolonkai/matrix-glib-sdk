@@ -75,6 +75,45 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     }
 
     private void
+    process_event(Json.Array ary, uint idx, Json.Node member_node)
+    {
+        var root_obj = member_node.get_object();
+        Json.Node? node;
+        string? event_type = null;
+        string? event_id = null;
+        string? room_id = null;
+        string? sender_id = null;
+        UnsignedEventData? unsigned_data = null;
+
+        if ((node = root_obj.get_member("type")) != null) {
+            event_type = node.get_string();
+        }
+
+        if ((node = root_obj.get_member("event_id")) != null) {
+            event_id = node.get_string();
+        }
+
+        if ((node = root_obj.get_member("room_id")) != null) {
+            room_id = node.get_string();
+        }
+
+        if ((node = root_obj.get_member("sender")) != null) {
+            sender_id = node.get_string();
+        }
+
+        if ((node = root_obj.get_member("unsigned")) != null) {
+            unsigned_data = new UnsignedEventData.from_json(node);
+        }
+
+        try {
+            incoming_event(room_id, member_node,
+                           Event.new_from_json(event_type,
+                                               room_id,
+                                               member_node));
+        } catch (GLib.Error e) {}
+    }
+
+    private void
     cb_event_stream(string content_type,
                     Json.Node? json_content,
                     ByteArray? raw_content,
@@ -89,7 +128,8 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             if ((node = root_obj.get_member("chunk")) != null) {
                 var chunks = node.get_array();
 
-                chunks.foreach_element((ary, idx, member_node) => {});
+                chunks.foreach_element(
+                        (ary, idx, member_node) => process_event(ary, idx, member_node));
             }
 
             if ((node = root_obj.get_member("end")) != null) {
@@ -108,6 +148,11 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                         (API.Callback)cb_event_stream,
                         end_token,
                         _event_timeout);
+            } catch (Matrix.Error e) {}
+        } else if ((error != null) && (error.code < 500)) {
+            info("Communication error while reading the event stream. Polling stopped.");
+            try {
+                stop_polling(false);
             } catch (Matrix.Error e) {}
         }
     }
