@@ -177,6 +177,23 @@ matrix_state_event_get_content
 matrix_state_event_get_json_node
 matrix_state_event_get_json_data
 
+<SUBSECTION>
+MatrixPresenceEvent
+matrix_presence_event_new
+matrix_presence_event_new_from_json
+matrix_presence_event_ref
+matrix_presence_event_unref
+matrix_presence_event_set_user_id
+matrix_presence_event_get_user_id
+matrix_presence_event_set_display_name
+matrix_presence_event_get_display_name
+matrix_presence_event_set_avatar_url
+matrix_presence_event_get_avatar_url
+matrix_presence_event_set_presence
+matrix_presence_event_get_presence
+matrix_presence_event_set_last_active_ago
+matrix_presence_event_get_last_active_ago
+
 <SUBSECTION Standard>
 MATRIX_TYPE_EVENT_FORMAT
 matrix_event_format_get_type
@@ -210,6 +227,8 @@ MATRIX_TYPE_PUSHER
 matrix_pusher_get_type
 MATRIX_TYPE_STATE_EVENT
 matrix_state_event_get_type
+MATRIX_TYPE_PRESENCE_EVENT
+matrix_presence_event_get_type
 </SECTION>
 
 <SECTION>

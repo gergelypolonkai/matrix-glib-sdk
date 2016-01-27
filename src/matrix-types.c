@@ -2584,3 +2584,286 @@ matrix_state_event_get_json_data(MatrixStateEvent *event, gsize *datalen)
 
     return data;
 }
+
+/**
+ * MatrixPresenceEvent:
+ *
+ * An opaque structure to hold a presence event.
+ */
+struct _MatrixPresenceEvent {
+    gchar *user_id;
+    gchar *display_name;
+    gchar *avatar_url;
+    gulong last_active_ago;
+    MatrixPresence presence;
+    guint refcount;
+};
+
+G_DEFINE_BOXED_TYPE(MatrixPresenceEvent, matrix_presence_event,
+                    (GBoxedCopyFunc)matrix_presence_event_ref,
+                    (GBoxedFreeFunc)matrix_presence_event_unref);
+
+/**
+ * matrix_presence_event_new:
+ *
+ * Create a new #MatrixPresenceEvent object with reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixPresenceEvent
+ */
+MatrixPresenceEvent *
+matrix_presence_event_new(void)
+{
+    MatrixPresenceEvent *event;
+
+    event = g_new0(MatrixPresenceEvent, 1);
+    event->refcount = 1;
+
+    return event;
+}
+
+#define try_get_string_member(evt, nd, obj, m_n, s_m)           \
+    if ((nd = json_object_get_member(obj, (m_n))) != NULL) {    \
+        g_free(evt->s_m);                                       \
+        evt->s_m = g_strdup(json_node_get_string (nd));         \
+        json_object_remove_member(obj, m_n);                    \
+    }
+
+#define try_get_member(evt, nd, obj, m_n, typ, s_m)             \
+    if ((nd = json_object_get_member(obj, (m_n))) != NULL) {    \
+        evt->s_m = json_node_get_##typ (nd);                    \
+        json_object_remove_member(obj, m_n);                    \
+    }
+
+/**
+ * matrix_presence_event_new_from_json: (constructor)
+ * @json_data: a #JsonNode to convert to #MatrixPresenceEvent
+ *
+ * Converts a #JsonNode (usually from the response from a homeserver)
+ * to a #MatrixPresenceEvent.
+ *
+ * Returns: (transfer full): a new #MatrixPresenceEvent with all
+ *          values from #JsonNode
+ */
+MatrixPresenceEvent *
+matrix_presence_event_new_from_json(JsonNode *json_data)
+{
+    JsonNode *node, *copied_data;
+    JsonObject *root;
+    MatrixPresenceEvent *event;
+    GError *err = NULL;
+
+    g_return_val_if_fail(JSON_NODE_HOLDS_OBJECT(json_data), NULL);
+
+    copied_data = _json_node_deep_copy(json_data);
+
+    event = matrix_presence_event_new();
+    root = json_node_get_object(copied_data);
+
+    try_get_string_member(event, node, root, "user_id", user_id);
+    try_get_string_member(event, node, root, "displayname", display_name);
+    try_get_string_member(event, node, root, "avatar_url", avatar_url);
+    try_get_member(event, node, root, "last_active_ago", int, last_active_ago);
+
+    if ((node = json_object_get_member(root, "presence")) != NULL) {
+        int val;
+        const gchar *value = json_node_get_string(node);
+
+        val = _g_enum_nick_to_value(MATRIX_TYPE_PRESENCE, value, &err);
+
+        if (!err) {
+            event->presence = val;
+        } else {
+            g_warning("Unknown presence value '%s'. Please report it to the Matrix.org GLib SDK project.", value);
+        }
+
+        json_object_remove_member(root, "presence");
+    }
+
+    // By now, root_object should be empty.
+    if (json_object_get_size(root) > 0) {
+        g_warning("Some members remained in the received presence event. This may be a bug in Matrix GLib");
+    }
+
+    return event;
+}
+
+static void
+matrix_presence_event_free(MatrixPresenceEvent *event)
+{
+    g_free(event);
+}
+
+/**
+ * matrix_presence_event_ref:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Increase reference count of @event by one.
+ *
+ * Returns: (transfer none): the same #MatrixPresenceEvent
+ */
+MatrixPresenceEvent *
+matrix_presence_event_ref(MatrixPresenceEvent *event)
+{
+    event->refcount++;
+
+    return event;
+}
+
+/**
+ * matrix_presence_event_unref:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Decrease reference count of @event by one. If reference count drops
+ * to zero, @event is freed.
+ */
+void
+matrix_presence_event_unref(MatrixPresenceEvent *event)
+{
+    if (--event->refcount == 0) {
+        matrix_presence_event_free(event);
+    }
+}
+
+/**
+ * matrix_presence_event_set_user_id:
+ * @event: a #MatrixPresenceEvent
+ * @user_id: (transfer none): a Matrix.org user ID
+ *
+ * Set the user ID in the presence event.
+ */
+void
+matrix_presence_event_set_user_id(MatrixPresenceEvent *event,
+                                  const gchar *user_id)
+{
+    g_free(event->user_id);
+    event->user_id = g_strdup(user_id);
+}
+
+/**
+ * matrix_presence_event_get_user_id:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Get the user ID from the presence event.
+ *
+ * Returns: (transfer none): a user ID
+ */
+const gchar *
+matrix_presence_event_get_user_id(MatrixPresenceEvent *event)
+{
+    return event->user_id;
+}
+
+/**
+ * matrix_presence_event_set_display_name:
+ * @event: a #MatrixPresenceEvent
+ * @display_name: a display name to set
+ *
+ * Set the display name in the presence event.
+ */
+void
+matrix_presence_event_set_display_name(MatrixPresenceEvent *event,
+                                       const gchar *display_name)
+{
+    g_free(event->display_name);
+    event->display_name = g_strdup(display_name);
+}
+
+/**
+ * matrix_presence_event_get_display_name:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Get the display name from the presence event.
+ *
+ * Returns: (transfer none) (allow-none): the display name
+ */
+const gchar *
+matrix_presence_event_get_display_name(MatrixPresenceEvent *event)
+{
+    return event->display_name;
+}
+
+/**
+ * matrix_presence_event_set_avatar_url:
+ * @event: a #MatrixPresenceEvent
+ * @avatar_url: (allow-none): the avatar URL to set
+ *
+ * Set the avatar URL in the presence event.
+ */
+void
+matrix_presence_event_set_avatar_url(MatrixPresenceEvent *event,
+                                     const gchar *avatar_url)
+{
+    g_free(event->avatar_url);
+    event->avatar_url = g_strdup(avatar_url);
+}
+
+/**
+ * matrix_presence_event_get_avatar_url:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Gets the avatar URL from the presence event.
+ *
+ * Returns: (transfer none) (allow-none): the avatar URL
+ */
+const gchar *
+matrix_presence_event_get_avatar_url(MatrixPresenceEvent *event)
+{
+    return event->avatar_url;
+}
+
+/**
+ * matrix_presence_event_set_last_active_ago:
+ * @event: a #MatrixPresenceEvent
+ * @last_active_ago: the amount of time, in seconds
+ *
+ * Set the amount of time when the user in the presence event was last
+ * active.
+ */
+void
+matrix_presence_event_set_last_active_ago(MatrixPresenceEvent *event,
+                                          gulong last_active_ago)
+{
+    event->last_active_ago = last_active_ago;
+}
+
+/**
+ * matrix_presence_event_get_last_active_ago:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Get the amount of time since the user was last active, in seconds.
+ *
+ * Returns: count of seconds
+ */
+gulong
+matrix_presence_event_get_last_active_ago(MatrixPresenceEvent *event)
+{
+    return event->last_active_ago;
+}
+
+/**
+ * matrix_presence_event_set_presence:
+ * @event: a #MatrixPresenceEvent
+ * @presence: the new presence
+ *
+ * Set the new presence state of the user in the presence event.
+ */
+void
+matrix_presence_event_set_presence(MatrixPresenceEvent *event,
+                                   MatrixPresence presence)
+{
+    event->presence = presence;
+}
+
+/**
+ * matrix_presence_event_get_presence:
+ * @event: a #MatrixPresenceEvent
+ *
+ * Get the new presence of the user from the presence event.
+ *
+ * Returns: the new presence state of the user
+ */
+MatrixPresence
+matrix_presence_event_get_presence(MatrixPresenceEvent *event)
+{
+    return event->presence;
+}
