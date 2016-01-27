@@ -35,6 +35,7 @@ matrix_event_get_type
 MatrixClient
 MatrixClientInterface
 matrix_client_login_finished
+matrix_client_incoming_event
 matrix_client_register_with_password
 matrix_client_login_with_password
 matrix_client_logout

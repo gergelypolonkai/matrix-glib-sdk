@@ -153,3 +153,39 @@ static void
 matrix_event_types_ctor(void)
 {
 }
+
+void
+matrix_client_connect_event(MatrixClient *client,
+                            GType event_gtype,
+                            MatrixClientEventCallback callback,
+                            gpointer user_data,
+                            GDestroyNotify destroy_notify)
+{
+    GClosure *closure;
+    GQuark equark;
+    MatrixEventClass *event_class = MATRIX_EVENT_CLASS(
+            g_type_class_ref(event_gtype));
+    guint event_signal_id = g_signal_lookup("event", MATRIX_TYPE_CLIENT);
+
+    if (!MATRIX_IS_EVENT_CLASS(event_class)) {
+        g_warning("Trying to connect to a type that is not derived from MatrixEvent");
+        g_type_class_unref(event_class);
+
+        return;
+    }
+
+    g_type_class_unref(event_class);
+    equark = g_type_qname(event_gtype);
+
+    closure = g_closure_ref(g_cclosure_new(G_CALLBACK(callback),
+                                           user_data,
+                                           (GClosureNotify)destroy_notify));
+    g_closure_set_marshal(closure,
+                          _matrix_marshal_VOID__STRING_BOXED_OBJECT);
+    g_closure_sink(closure);
+
+    g_signal_connect_closure_by_id(client,
+                                   event_signal_id, equark,
+                                   closure, FALSE);
+
+}

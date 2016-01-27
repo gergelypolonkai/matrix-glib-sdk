@@ -34,6 +34,36 @@ public interface Matrix.Client : GLib.Object {
     {}
 
     /**
+     * This signal is a sign of an incoming event. It gets emitted for
+     * every signal, regardless if it is handled by other event
+     * signals, before other signals.
+     *
+     * Implementations are responsible for emitting this signal when
+     * any kind of event arrives from the event stream or the history.
+     *
+     * @param room_id the ID of the room associated with this event
+     * @param raw_event the raw event as a JSON object
+     * @param matrix_event the event as a {@link Matrix.Event}
+     */
+    [Signal (detailed=true)]
+    public virtual signal void
+    @event(string? room_id, Json.Node raw_event, Matrix.Event matrix_event)
+    {}
+
+    /**
+     * Callback function delegate for the event signal.
+     *
+     * @param room_id the room the event associated with
+     * @param raw_event the event as a raw JSON object
+     * @param matrix_event the event as a Matrix.Event object
+     */
+    public delegate void
+    EventCallback(Matrix.Client client,
+                  string? room_id,
+                  Json.Node raw_event,
+                  Matrix.Event matrix_event);
+
+    /**
      * Authenticate with the Matrix.org server with a username and
      * password.
      *
@@ -103,4 +133,37 @@ public interface Matrix.Client : GLib.Object {
     {
         login_finished(success);
     }
+
+    /**
+     * Emits the #MatrixClient::event signal.
+     *
+     * @param room_id the room this event is associated with
+     * @param raw_event the raw event
+     * @param matrix_event the event as a Matrix.Event
+     */
+    public void
+    incoming_event(string? room_id,
+                   Json.Node raw_event,
+                   Matrix.Event matrix_event)
+    {
+        Quark equark = matrix_event.get_type().qname();
+
+        this.@event[equark.to_string()](room_id, raw_event, matrix_event);
+    }
+
+    /**
+     * Connect a handler for events. If @param event_gtype is
+     * Matrix.Event, all events will be sent to the callback function,
+     * otherwise only events that match the specified event type.
+     *
+     * If @event_gtype is not derived from
+     * {@link Matrix.Event}, @param callback won’t get connected.
+     *
+     * @param event_gtype the {@link GLib.Type} of a
+     *                    {@link Matrix.Event} derivative
+     * @param callback the allback function to connect
+     */
+    public extern void
+    connect_event(GLib.Type event_gtype,
+                  owned EventCallback event_callback);
 }

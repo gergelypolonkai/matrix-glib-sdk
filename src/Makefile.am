@@ -81,11 +81,14 @@ INST_H_SRC_FILES = \
 
 INST_H_BUILT_FILES = \
 	matrix-version.h \
+	matrix-marshalers.h \
 	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
 	$(INST_H_BUILT_FILES) \
+	matrix-marshalers.c \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
+	matrix-event-types.c \
 	matrix-version.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
@@ -119,6 +122,8 @@ dist_vapi_DATA = \
 	$(NULL)
 
 BUILT_SOURCES += \
+	matrix-marshalers.c \
+	matrix-marshalers.h \
 	$(NULL)
 
 test_api_client_SOURCES = test-api-client.c
@@ -130,8 +135,34 @@ test_api_client_LDADD = \
 
 CLEANFILES += $(BUILT_SOURCES)
 EXTRA_DIST += \
+	matrix-marshalers.list \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
+
+matrix-marshalers.h: stamp-matrix-marshalers
+	@true
+
+stamp-matrix-marshalers: matrix-marshalers.list
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
+	                               $(srcdir)/matrix-marshalers.list \
+	                               --header \
+	                               --valist-marshallers >> xgen-gmlh \
+	&& (cmp -s xgen-gmlh matrix-marshalers.h \
+	    || cp xgen-gmlh matrix-marshalers.h) \
+	&& rm -f xgen-gmlh \
+	&& echo timestamp > $(@F)
+
+matrix-marshalers.c: matrix-marshalers.h
+	$(AM_V_GEN) (echo "#include \"matrix-marshalers.h\""; \
+	             echo "#undef G_ENABLE_DEBUG"; \
+	             $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
+	                                $(srcdir)/matrix-marshalers.list \
+	                                --body \
+	                                --valist-marshallers) >> xgen-gmlc \
+	&& cp xgen-gmlc matrix-marshalers.c \
+	&& rm -f xgen-gmlc
+
+CLEANFILES += stamp-matrix-marshalers
 
 include $(INTROSPECTION_MAKEFILE)
 Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
