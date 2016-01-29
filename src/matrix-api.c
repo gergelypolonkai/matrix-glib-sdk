@@ -120,6 +120,26 @@
  * @raw_content will be set.
  */
 
+/**
+ * MATRIX_API_CALLBACK_PROTO:
+ * @name: the name of the function
+ *
+ * Convenience macro to define a #MatrixAPICallback function. The
+ * parameter names in the defined function will be the same as defined
+ * in #MatrixAPICallback.
+ *
+ * |[<!-- language="C" -->
+ * // Use it for prototypes…
+ * MATRIX_API_CALLBACK_PROTO(my_fancy_callback);
+ *
+ * // …or for the implementation.
+ * MATRIX_API_CALLBACK_PROTO(my_fancy_callback)
+ * {
+ *     do_callback_stuff(api, json_content);
+ * }
+ * ]|
+ */
+
 G_DEFINE_INTERFACE(MatrixAPI, matrix_api, G_TYPE_OBJECT);
 
 static void

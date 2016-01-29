@@ -41,6 +41,14 @@ typedef void (*MatrixAPICallback)(MatrixAPI *api,
                                   gpointer user_data,
                                   GError *err);
 
+#define MATRIX_API_CALLBACK_PROTO(name) static void \
+    name (MatrixAPI *api,                           \
+          const gchar *content_type,                \
+          JsonNode *json_content,                   \
+          GByteArray *raw_content,                  \
+          gpointer user_data,                       \
+          GError *error)
+
 struct _MatrixAPIInterface {
     /*< private >*/
     GTypeInterface g_iface;
