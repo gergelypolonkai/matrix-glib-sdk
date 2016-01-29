@@ -49,8 +49,8 @@
  * The MatrixHTTPAPI object’s class definition.
  */
 
-#define API_ENDPOINT "/_matrix/client/api/v1/"
-#define MEDIA_ENDPOINT "/_matrix/media/v1/"
+#define API_ENDPOINT "/_matrix/client/r0/"
+#define MEDIA_ENDPOINT "/_matrix/media/r0/"
 
 typedef struct _MatrixHTTPAPIPrivate {
     SoupSession *soup_session;
