@@ -41,6 +41,8 @@ typedef void (*MatrixAPICallback)(MatrixAPI *api,
                                   gpointer user_data,
                                   GError *err);
 
+#define MATRIX_API_CALLBACK(f) ((MatrixAPICallback) (f)
+
 #define MATRIX_API_CALLBACK_PROTO(name) static void \
     name (MatrixAPI *api,                           \
           const gchar *content_type,                \

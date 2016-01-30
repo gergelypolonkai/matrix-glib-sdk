@@ -236,6 +236,7 @@ matrix_presence_event_get_type
 <TITLE>MatrixAPI</TITLE>
 MatrixAPIInterface
 MatrixAPICallback
+MATRIX_API_CALLBACK
 MATRIX_API_CALLBACK_PROTO
 
 <SUBSECTION>

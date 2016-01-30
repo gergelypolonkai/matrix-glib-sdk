@@ -121,6 +121,13 @@
  */
 
 /**
+ * MATRIX_API_CALLBACK:
+ * @f: a function pointer
+ *
+ * Cast a function pointer to a #MatrixAPICallback.
+ */
+
+/**
  * MATRIX_API_CALLBACK_PROTO:
  * @name: the name of the function
  *
