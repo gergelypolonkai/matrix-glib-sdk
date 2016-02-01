@@ -22,6 +22,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
 	matrix-compacts.vala \
+	matrix-event.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -33,6 +34,7 @@ AM_CPPFLAGS += \
 	$(GOBJECT_CFLAGS) \
 	$(SOUP_CFLAGS) \
 	$(JSON_CFLAGS) \
+	$(GEE_CFLAGS) \
 	$(VALA_CFLAGS) \
 	$(NULL)
 
@@ -93,6 +95,7 @@ libmatrix_glib_0_0_la_CFLAGS = \
 	$(GOBJECT_CFLAGS) \
 	$(SOUP_CFLAGS) \
 	$(JSON_CFLAGS) \
+	$(GEE_CFLAGS) \
 	$(NULL)
 
 libmatrix_glib_0_0_la_LIBADD = \
@@ -100,6 +103,7 @@ libmatrix_glib_0_0_la_LIBADD = \
 	$(GOBJECT_LIBS) \
 	$(SOUP_LIBS) \
 	$(JSON_LIBS) \
+	$(GEE_LIBS) \
 	$(NULL)
 
 libmatrix_glib_0_0_la_LDFLAGS = \
