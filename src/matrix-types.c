@@ -41,6 +41,11 @@
  *                             not a JSON object
  * @MATRIX_ERROR_INVALID_ROOM_ID: the provided string doesn’t contain
  *                                a valid room ID
+ * @MATRIX_ERROR_INVALID_TYPE: the provided type is invalid
+ * @MATRIX_ERROR_UNSUPPORTED: the operation is unsupported
+ * @MATRIX_ERROR_INVALID_FORMAT: the format of the JSON node is
+ *                               invalid (e.g. it is an array instead
+ *                               of an object)
  * @MATRIX_ERROR_UNKNOWN_VALUE: the response from the Matrix.org
  *                              server contains a value unknown to
  *                              this library. These should be reported
@@ -57,6 +62,30 @@
  *                           JSON
  * @MATRIX_ERROR_M_UNRECOGNIZED: the homeserver didn't understand the
  *                               request
+ * @MATRIX_ERROR_M_UNAUTHORIZED: the request is unauthorized
+ * @MATRIX_ERROR_M_BAD_JSON: the JSON data is not in the required
+ *                           format
+ * @MATRIX_ERROR_M_USER_IN_USE: the specified username is in use
+ * @MATRIX_ERROR_M_ROOM_IN_USE: the specified room is in use
+ * @MATRIX_ERROR_M_BAD_PAGINATION: invalid pagination parameters
+ * @MATRIX_ERROR_M_BAD_STATE: invalid state event
+ * @MATRIX_ERROR_M_NOT_FOUND: the requested resource is not found
+ * @MATRIX_ERROR_M_GUEST_ACCESS_FORBIDDEN: guest access was requested,
+ *                                         but it is forbidden
+ * @MATRIX_ERROR_M_LIMIT_EXCEEDED: the request was rate limited
+ * @MATRIX_ERROR_M_CAPTCHA_NEEDED: a captcha is needed to continue
+ * @MATRIX_ERROR_M_CAPTCHA_INVALID: the provided captcha is invalid
+ * @MATRIX_ERROR_M_MISSING_PARAM: a parameter is missing from the
+ *                                request
+ * @MATRIX_ERROR_M_TOO_LARGE: the request data is too large
+ * @MATRIX_ERROR_M_EXCLUSIVE: the desired user ID is in an exclusive
+ *                            namespace claimed by an application
+ *                            server
+ * @MATRIX_ERROR_M_THREEPID_AUTH_FAILED: 3rd party authentication
+ *                                       failed
+ * @MATRIX_ERROR_M_THREEPID_IN_USE: the provided 3rd party ID is
+ *                                  already in use
+ * @MATRIX_ERROR_M_INVALID_USERNAME: the given username is invalid
  * @MATRIX_ERROR_UNSPECIFIED: no error code was sent by the
  *                            homeserver. If you see this error, that
  *                            usually indicates a homeserver bug
