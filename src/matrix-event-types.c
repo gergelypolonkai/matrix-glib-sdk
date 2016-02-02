@@ -155,6 +155,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.member",
                                MATRIX_TYPE_ROOM_MEMBER_EVENT,
                                NULL);
+    matrix_event_register_type("m.presence",
+                               MATRIX_TYPE_PRESENCE_EVENT,
+                               NULL);
 }
 
 void

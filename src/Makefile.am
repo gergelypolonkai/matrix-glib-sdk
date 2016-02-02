@@ -23,6 +23,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-http-client.vala \
 	matrix-compacts.vala \
 	matrix-event.vala \
+	matrix-presence-event.vala \
 	matrix-room-event.vala \
 	matrix-room-member-event.vala \
 	$(NULL)

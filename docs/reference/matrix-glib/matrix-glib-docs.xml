@@ -22,6 +22,7 @@
       <title>Types</title>
       <xi:include href="xml/matrix-types.xml"/>
       <xi:include href="xml/matrix-event.xml"/>
+      <xi:include href="xml/matrix-presence-event.xml"/>
       <xi:include href="xml/matrix-room-member-event.xml"/>
     </section>
 
