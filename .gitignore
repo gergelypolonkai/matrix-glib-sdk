@@ -68,3 +68,4 @@ Makefile.in
 /src/matrix-compacts.c
 /src/matrix-event.c
 /src/matrix-room-event.c
+/src/matrix-room-member-event.c

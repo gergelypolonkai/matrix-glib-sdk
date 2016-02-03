@@ -152,6 +152,9 @@ G_DEFINE_CONSTRUCTOR(matrix_event_types_ctor);
 static void
 matrix_event_types_ctor(void)
 {
+    matrix_event_register_type("m.room.member",
+                               MATRIX_TYPE_ROOM_MEMBER_EVENT,
+                               NULL);
 }
 
 void
