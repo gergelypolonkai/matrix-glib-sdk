@@ -45,19 +45,21 @@
  *                              server contains a value unknown to
  *                              this library. These should be reported
  *                              to the Matrix GLib SDK developers
- * @MATRIX_ERROR_MISSING_TOKEN: authorization token is missing from
- *                              the request
- * @MATRIX_ERROR_FORBIDDEN: access was forbidden (e.g. due to a
- *                          missing/invalid token, or using a bad
- *                          password during login)
- * @MATRIX_ERROR_UNKNOWN: an error unknown to the Matrix homeserver
- * @MATRIX_ERROR_UNKNOWN_TOKEN: the token provided is not known for
- *                              the homeserver
- * @MATRIX_ERROR_NOT_JSON: illegal request, the content is not valid
- *                         JSON
- * @MATRIX_ERROR_UNRECOGNIZED: the homeserver didn't understand the
- *                             request
- * @MATRIX_ERROR_UNSPECIFIED: no error code was sent by the homeserver
+ * @MATRIX_ERROR_M_MISSING_TOKEN: authorization token is missing from
+ *                                the request
+ * @MATRIX_ERROR_M_FORBIDDEN: access was forbidden (e.g. due to a
+ *                            missing/invalid token, or using a bad
+ *                            password during login)
+ * @MATRIX_ERROR_M_UNKNOWN: an error unknown to the Matrix homeserver
+ * @MATRIX_ERROR_M_UNKNOWN_TOKEN: the token provided is not known for
+ *                                the homeserver
+ * @MATRIX_ERROR_M_NOT_JSON: illegal request, the content is not valid
+ *                           JSON
+ * @MATRIX_ERROR_M_UNRECOGNIZED: the homeserver didn't understand the
+ *                               request
+ * @MATRIX_ERROR_UNSPECIFIED: no error code was sent by the
+ *                            homeserver. If you see this error, that
+ *                            usually indicates a homeserver bug
  * @MATRIX_ERROR_UNKNOWN_ERROR: an error unknown to this library
  *
  * Value mappings from Matrix.org API error codes

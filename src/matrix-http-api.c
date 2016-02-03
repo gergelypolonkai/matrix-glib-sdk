@@ -637,7 +637,7 @@ _response_callback(SoupSession *session,
 
                             if (strncmp("M_", errcode, 2) == 0) {
                                 gchar *matrix_error_code = g_strdup_printf(
-                                        "MATRIX_ERROR_%s", errcode + 2);
+                                        "MATRIX_ERROR_%s", errcode);
 
                                 error_class = g_type_class_ref(
                                         MATRIX_TYPE_ERROR);
@@ -2314,7 +2314,7 @@ i_token_refresh(MatrixAPI *api,
 
     if (!refresh_token && !priv->refresh_token) {
         g_set_error(error,
-                    MATRIX_ERROR, MATRIX_ERROR_MISSING_TOKEN,
+                    MATRIX_ERROR, MATRIX_ERROR_M_MISSING_TOKEN,
                     "No token available");
 
         return;

@@ -33,15 +33,15 @@ typedef enum {
     MATRIX_ERROR_INVALID_ROOM_ID,
     MATRIX_ERROR_UNKNOWN_VALUE,
 
-    /* Add Matrix-defined error codes under here, changing `M_` to
-     * `MATRIX_ERROR`, i.e. `M_FORBIDDEN` =>
-     * `MATRIX_ERROR_FORBIDDEN` */
-    MATRIX_ERROR_MISSING_TOKEN = 500,
-    MATRIX_ERROR_FORBIDDEN,
-    MATRIX_ERROR_UNKNOWN,
-    MATRIX_ERROR_UNKNOWN_TOKEN,
-    MATRIX_ERROR_NOT_JSON,
-    MATRIX_ERROR_UNRECOGNIZED,
+    /* Add Matrix-defined error codes under here, prefixing them with
+     * `MATRIX_ERROR_`, i.e. `M_FORBIDDEN` =>
+     * `MATRIX_ERROR_M_FORBIDDEN` */
+    MATRIX_ERROR_M_MISSING_TOKEN = 500,
+    MATRIX_ERROR_M_FORBIDDEN,
+    MATRIX_ERROR_M_UNKNOWN,
+    MATRIX_ERROR_M_UNKNOWN_TOKEN,
+    MATRIX_ERROR_M_NOT_JSON,
+    MATRIX_ERROR_M_UNRECOGNIZED,
 
     /* Allow for a lot of Matrix.org defined codes
        Do not define error codes after this! */

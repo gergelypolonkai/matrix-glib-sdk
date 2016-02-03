@@ -166,7 +166,7 @@ cb_event_stream(MatrixAPI *api,
     // Only continue polling if polling is still enabled, and there
     // was no communication error during the last call
     if (priv->polling
-        && (!error || error->code <= MATRIX_ERROR_MISSING_TOKEN)) {
+        && (!error || error->code <= MATRIX_ERROR_M_MISSING_TOKEN)) {
         priv->polling = FALSE;
 
         matrix_api_event_stream(api,
