@@ -85,6 +85,7 @@ MatrixPusherConditionKind
 MatrixEventDirection
 MatrixReceiptType
 MatrixAccountKind
+MatrixRoomMembership
 
 <SUBSECTION>
 MatrixFilterRules
@@ -261,6 +262,8 @@ MATRIX_TYPE_RECEIPT_TYPE
 matrix_receipt_type_get_type
 MATRIX_TYPE_ACCOUNT_KIND
 matrix_account_kind_get_type
+MATRIX_TYPE_ROOM_MEMBERSHIP
+matrix_room_membership_get_type
 MATRIX_TYPE_FILTER_RULES
 matrix_filter_rules_get_type
 MATRIX_TYPE_ROOM_FILTER

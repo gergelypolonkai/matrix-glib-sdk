@@ -144,6 +144,18 @@ namespace Matrix {
     }
 
     /**
+     * Room membership types.
+     */
+    public enum RoomMembership {
+        UNKNOWN, /// the membership sent by the server is unknown to this SDK
+        INVITE,  /// the user has been invited to join a room, but has not yet joined it. They may not participate in the room until they join
+        JOIN,    /// the user has joined the room (possibly after accepting an invite), and may participate in it
+        LEAVE,   /// the user was once joined to the room, but has since left (possibly by choice, or possibly by being kicked)
+        BAN,     /// the user has been banned from the room, and is no longer allowed to join it until they are un-banned from the room (by having their membership state set to a value other than {{{BAN}}})
+        KNOCK;   /// this is a reserved word, which currently has no meaning
+    }
+
+    /**
      * Preset values for matrix_api_create_room() calls.
      */
     public enum RoomPreset {
