@@ -92,6 +92,8 @@ matrix_client_login_with_password
 matrix_client_logout
 matrix_client_begin_polling
 matrix_client_stop_polling
+matrix_client_connect_event
+
 <SUBSECTION Standard>
 MATRIX_CLIENT_GET_IFACE
 MATRIX_CLIENT
