@@ -798,4 +798,38 @@ namespace Matrix {
             return builder.get_root();
         }
     }
+
+    private Json.Node?
+    _json_object_node_ensure_field(Json.Node node,
+                                   string field_name,
+                                   Json.NodeType field_type)
+        requires(node.get_node_type() == Json.NodeType.OBJECT)
+    {
+        var root = node.get_object();
+        Json.Node? new_node;
+
+        if ((new_node = root.get_member(field_name)) == null) {
+            new_node = new Json.Node(field_type);
+
+            switch (field_type) {
+                case Json.NodeType.OBJECT:
+                    new_node.set_object(new Json.Object());
+
+                    break;
+
+                case Json.NodeType.ARRAY:
+                    new_node.set_array(new Json.Array());
+
+                    break;
+
+                // Other node types don’t need special treatment
+                default:
+                    break;
+            }
+
+            root.set_member(field_name, new_node);
+        }
+
+        return new_node;
+    }
 }
