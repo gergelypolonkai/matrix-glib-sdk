@@ -161,7 +161,6 @@ matrix_http_api_set_property(GObject *gobject,
                              GParamSpec *pspec)
 {
     MatrixHTTPAPI *api = MATRIX_HTTP_API(gobject);
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
 
     switch (prop_id) {
         case PROP_VALIDATE_CERTIFICATE:
@@ -807,7 +806,7 @@ _send(MatrixHTTPAPI *api,
         json_generator_set_root(generator, (JsonNode *)json_content);
         data = json_generator_to_data(generator, &datalen);
     } else if (raw_content) {
-        data = raw_content->data;
+        data = (gchar *)raw_content->data;
         datalen = raw_content->len;
     } else {
         data = g_strdup("{}");
@@ -915,7 +914,6 @@ i_create_room(MatrixAPI *api,
               GError **error)
 {
     JsonNode *body;
-    JsonObject *root_object;
     JsonBuilder *builder;
 
     builder = json_builder_new();
@@ -1247,6 +1245,9 @@ i_media_thumbnail(MatrixAPI *api,
                 g_hash_table_replace(params, "method", g_strdup("scale"));
 
                 break;
+
+            // This is here to prevent compiler warnings
+            case MATRIX_RESIZE_METHOD_DEFAULT: break;
         }
     }
 
@@ -1330,11 +1331,9 @@ i_set_user_presence(MatrixAPI *api,
                     GError **error)
 {
     gchar *encoded_user_id;
-    gchar *path, *presence_string, *a;
+    gchar *path, *presence_string;
     JsonBuilder *builder;
     JsonNode *body;
-    GEnumClass *presence_class;
-    GEnumValue *value;
 
     encoded_user_id = soup_uri_encode(user_id, NULL);
     path = g_strdup_printf("presence/%s/status", encoded_user_id);
@@ -1742,7 +1741,6 @@ i_invite_user_3rdparty(MatrixAPI *api,
                        GError **error)
 {
     gchar *encoded_room_id, *path;
-    JsonBuilder *builder;
     JsonNode *body;
 
     encoded_room_id = soup_uri_encode(room_id, NULL);

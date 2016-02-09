@@ -45,14 +45,6 @@ typedef struct _MatrixHTTPClientPrivate {
     guint event_timeout;
 } MatrixHTTPClientPrivate;
 
-enum {
-    PROP_BASE_URL = 1,
-    PROP_VALIDATE_CERTIFICATE,
-    N_PROPERTIES
-};
-
-static GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
-
 static void matrix_http_client_matrix_client_init(MatrixClientInterface *iface);
 static void i_begin_polling(MatrixClient *client, GError **error);
 

@@ -400,8 +400,8 @@ matrix_filter_rules_delete_sender(MatrixFilterRules *rules, const gchar *sender)
 
     g_return_if_fail(sender != NULL);
 
-    while (sender_element = g_list_find_custom(rules->senders, sender,
-                                               (GCompareFunc)g_strcmp0)) {
+    while ((sender_element = g_list_find_custom(rules->senders, sender,
+                                                (GCompareFunc)g_strcmp0))) {
         rules->senders = g_list_remove_link(rules->senders, sender_element);
         g_list_free_full(sender_element, g_free);
     }
@@ -490,8 +490,8 @@ matrix_filter_rules_delete_excluded_sender(MatrixFilterRules *rules,
 
     g_return_if_fail(sender != NULL);
 
-    while (sender_element = g_list_find_custom(rules->excluded_senders, sender,
-                                               (GCompareFunc)g_strcmp0)) {
+    while ((sender_element = g_list_find_custom(rules->excluded_senders, sender,
+                                                (GCompareFunc)g_strcmp0))) {
         rules->excluded_senders = g_list_remove_link(rules->excluded_senders,
                                                      sender_element);
         g_list_free_full(sender_element, g_free);
@@ -571,8 +571,8 @@ matrix_filter_rules_delete_room(MatrixFilterRules *rules, const gchar *room)
 
     g_return_if_fail(room != NULL);
 
-    while (room_element = g_list_find_custom(rules->rooms, room,
-                                             (GCompareFunc)g_strcmp0)) {
+    while ((room_element = g_list_find_custom(rules->rooms, room,
+                                              (GCompareFunc)g_strcmp0))) {
         rules->rooms = g_list_remove_link(rules->rooms, room_element);
         g_list_free_full(room_element, g_free);
     }
@@ -657,8 +657,8 @@ matrix_filter_rules_delete_excluded_room(MatrixFilterRules *rules,
 
     g_return_if_fail(room != NULL);
 
-    while (room_element = g_list_find_custom(rules->excluded_rooms, room,
-                                             (GCompareFunc)g_strcmp0)) {
+    while ((room_element = g_list_find_custom(rules->excluded_rooms, room,
+                                              (GCompareFunc)g_strcmp0))) {
         rules->excluded_rooms = g_list_remove_link(rules->excluded_rooms,
                                                    room_element);
         g_list_free_full(room_element, g_free);
@@ -738,8 +738,8 @@ matrix_filter_rules_delete_type(MatrixFilterRules *rules,
 
     g_return_if_fail(event_type != NULL);
 
-    while (type_element = g_list_find_custom(rules->types, event_type,
-                                             (GCompareFunc)g_strcmp0)) {
+    while ((type_element = g_list_find_custom(rules->types, event_type,
+                                              (GCompareFunc)g_strcmp0))) {
         rules->types = g_list_remove_link(rules->types, type_element);
         g_list_free_full(type_element, g_free);
     }
@@ -823,8 +823,8 @@ matrix_filter_rules_delete_excluded_type(MatrixFilterRules *rules,
 
     g_return_if_fail(event_type != NULL);
 
-    while (type_element = g_list_find_custom(rules->excluded_types, event_type,
-                                             (GCompareFunc)g_strcmp0)) {
+    while ((type_element = g_list_find_custom(rules->excluded_types, event_type,
+                                              (GCompareFunc)g_strcmp0))) {
         rules->excluded_types = g_list_remove_link(rules->excluded_types,
                                                    type_element);
         g_list_free_full(type_element, g_free);
@@ -1389,9 +1389,9 @@ matrix_filter_delete_event_field(MatrixFilter *filter, const gchar *event_field)
 
     g_return_if_fail(event_field != NULL);
 
-    while (event_field_element = g_list_find_custom(filter->event_fields,
-                                                    event_field,
-                                                    (GCompareFunc)g_strcmp0)) {
+    while ((event_field_element = g_list_find_custom(filter->event_fields,
+                                                     event_field,
+                                                     (GCompareFunc)g_strcmp0))) {
         filter->event_fields = g_list_remove_link(filter->event_fields,
                                                   event_field_element);
         g_list_free_full(event_field_element, g_free);

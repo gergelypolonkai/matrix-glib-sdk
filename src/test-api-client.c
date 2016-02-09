@@ -155,7 +155,6 @@ int
 main(int argc, char *argv[])
 {
     MatrixAPI *api;
-    GHashTable *params;
     GMainLoop *loop = g_main_loop_new(NULL, FALSE);
     GOptionContext *opts;
     GError *err = NULL;
