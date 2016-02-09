@@ -1774,7 +1774,7 @@ i_invite_user(MatrixAPI *api,
     JsonBuilder *builder;
     JsonNode *body;
 
-    encoded_room_id = soup_uri_encode(encoded_room_id, NULL);
+    encoded_room_id = soup_uri_encode(room_id, NULL);
     path = g_strdup_printf("rooms/%s/invite", encoded_room_id);
     g_free(encoded_room_id);
 
