@@ -78,7 +78,7 @@ matrix-marshalers.c: matrix-marshalers.list
 	&& rm -f xgen-gmlc
 
 include $(INTROSPECTION_MAKEFILE)
-MatrixGlib-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
+Matrix-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
 Matrix_@MATRIX_GLIB_API_VERSION_U@_gir_FILES = $(INST_H_SRC_FILES) $(INST_H_BUILT_FILES) $(filter %.c,$(libmatrix_glib_0_0_la_SOURCES))
 Matrix_@MATRIX_GLIB_API_VERSION_U@_gir_LIBS = libmatrix-glib-0.0.la
 Matrix_@MATRIX_GLIB_API_VERSION_U@_gir_SCANNERFLAGS = --identifier-prefix=Matrix --symbol-prefix=matrix --warn-all
