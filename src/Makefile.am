@@ -46,9 +46,9 @@ BUILT_SOURCES = \
 	matrix-marshalers.h \
 	$(NULL)
 
-test_api_client_SOURCES = test-api-client.c $(libmatrix_glib_0_0_la_SOURCES)
+test_api_client_SOURCES = test-api-client.c
 test_api_client_CFLAGS = $(libmatrix_glib_0_0_la_CFLAGS)
-test_api_client_LDADD = $(libmatrix_glib_0_0_la_LIBADD)
+test_api_client_LDADD = $(libmatrix_glib_0_0_la_LIBADD) libmatrix-glib-0.0.la
 
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = \
