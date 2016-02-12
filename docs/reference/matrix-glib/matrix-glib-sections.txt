@@ -54,6 +54,7 @@ matrix_room_member_event_construct
 MatrixEventClass
 matrix_event_register_type
 matrix_event_unregister_type
+matrix_event_get_handler
 matrix_event_new
 matrix_event_get_event_type
 matrix_event_set_room_id
