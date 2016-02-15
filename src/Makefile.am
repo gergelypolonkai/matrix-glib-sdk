@@ -20,6 +20,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-enums.vala \
 	matrix-http-api.vala \
+	matrix-http-client.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -74,7 +75,6 @@ bin_PROGRAMS = test-api-client
 
 INST_H_SRC_FILES = \
 	matrix-types.h \
-	matrix-http-client.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
@@ -93,7 +93,6 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-types.c \
 	matrix-enumtypes.c \
 	utils.c \
-	matrix-http-client.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
 

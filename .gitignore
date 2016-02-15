@@ -65,3 +65,4 @@ Makefile.in
 /src/matrix-client.c
 /src/matrix-enums.c
 /src/matrix-http-api.c
+/src/matrix-http-client.c
