@@ -23,6 +23,7 @@
 public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     private bool _polling = false;
     private ulong _event_timeout = 30000;
+    private string? _last_sync_token;
 
     public
     HTTPClient(string base_url)
@@ -48,8 +49,8 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         login((i, content_type, json_content, raw_content, error) => {
                 login_finished((error == null) || (error is Matrix.Error.NONE));
-            }
-            ,"m.login.password",
+            },
+            "m.login.password",
             builder.get_root());
     }
 
@@ -75,84 +76,174 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     }
 
     private void
-    process_event(Json.Array ary, uint idx, Json.Node member_node)
+    process_event(Json.Node event_node, string? room_id)
     {
-        var root_obj = member_node.get_object();
-        Json.Node? node;
-        string? event_type = null;
-        string? event_id = null;
-        string? room_id = null;
-        string? sender_id = null;
-        UnsignedEventData? unsigned_data = null;
+        Json.Object root_obj;
+        Json.Node node;
+        string event_type;
+        Matrix.Event evt;
 
-        if ((node = root_obj.get_member("type")) != null) {
-            event_type = node.get_string();
+        if (event_node.get_node_type() != Json.NodeType.OBJECT) {
+            warning("Received event that is not an object.");
+
+            return;
         }
 
-        if ((node = root_obj.get_member("event_id")) != null) {
-            event_id = node.get_string();
+        root_obj = event_node.get_object();
+
+        if ((node = root_obj.get_member("type")) == null) {
+            warning("Received event without type.");
+
+            return;
         }
 
-        if ((node = root_obj.get_member("room_id")) != null) {
-            room_id = node.get_string();
-        }
-
-        if ((node = root_obj.get_member("sender")) != null) {
-            sender_id = node.get_string();
-        }
-
-        if ((node = root_obj.get_member("unsigned")) != null) {
-            unsigned_data = new UnsignedEventData.from_json(node);
-        }
+        event_type = node.get_string();
 
         try {
-            incoming_event(room_id, member_node,
-                           Event.new_from_json(event_type,
-                                               room_id,
-                                               member_node));
-        } catch (GLib.Error e) {}
+            evt = Matrix.Event.new_from_json(event_type, room_id, event_node);
+        } catch (Matrix.Error e) {
+            warning("Error during event creation: %s", e.message);
+
+            return;
+        } catch (GLib.Error e) {
+            warning("Error during event creation: %s", e.message);
+
+            return;
+        }
+
+        incoming_event(room_id, event_node, evt);
     }
 
     private void
-    cb_event_stream(string content_type,
-                    Json.Node? json_content,
-                    ByteArray? raw_content,
-                    Matrix.Error? error)
+    _process_event_list_obj(Json.Node node, string? room_id)
+        requires(node.get_node_type() == Json.NodeType.OBJECT)
     {
-        string? end_token = null;
+        Json.Object node_obj;
+        Json.Node events_node;
 
+        node_obj = node.get_object();
+
+        if ((events_node = node_obj.get_member("events")) != null) {
+            if (events_node.get_node_type() == Json.NodeType.ARRAY) {
+                events_node.get_array().foreach_element(
+                        (array, idx, event_node) => {
+                            process_event(event_node, room_id);
+                        });
+            }
+        }
+    }
+
+    private void
+    cb_sync(string content_type,
+            Json.Node? json_content,
+            ByteArray? raw_content,
+            Matrix.Error? error)
+    {
         if (error == null) {
             var root_obj = json_content.get_object();
             Json.Node? node;
 
-            if ((node = root_obj.get_member("chunk")) != null) {
-                var chunks = node.get_array();
+            debug("Processing account data");
+            _process_event_list_obj(root_obj.get_member("account_data"),
+                                    null);
 
-                chunks.foreach_element(
-                        (ary, idx, member_node) => process_event(ary, idx, member_node));
+            debug("Processing presence");
+            _process_event_list_obj(root_obj.get_member("presence"),
+                                    null);
+
+            if ((node = root_obj.get_member("rooms")) != null) {
+                if (node.get_node_type() == Json.NodeType.OBJECT) {
+                    Json.Object rooms_object = node.get_object();
+                    Json.Node rooms_node;
+
+                    debug("Processing rooms");
+
+                    if ((rooms_node = rooms_object.get_member(
+                                 "invite")) != null) {
+                        rooms_node.get_object().foreach_member(
+                                (obj, room_id, room_node) => {
+                                    if (room_node.get_node_type() != Json.NodeType.OBJECT) {
+                                        return;
+                                    }
+
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("invite_state"),
+                                            room_id);
+                                });
+                    }
+
+                    if ((rooms_node = rooms_object.get_member(
+                                 "join")) != null) {
+                        rooms_node.get_object().foreach_member(
+                                (obj, room_id, room_node) => {
+                                    if (room_node.get_node_type() != Json.NodeType.OBJECT) {
+                                        return;
+                                    }
+
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("timeline"),
+                                            room_id);
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("state"),
+                                            room_id);
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("account_data"),
+                                            room_id);
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("ephemeral"),
+                                            room_id);
+                                });
+                    }
+
+                    if ((rooms_node = rooms_object.get_member(
+                                 "leave")) != null) {
+                        rooms_node.get_object().foreach_member(
+                                (obj, room_id, room_node) => {
+                                    if (room_node.get_node_type() != Json.NodeType.OBJECT) {
+                                        return;
+                                    }
+
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("timeline"),
+                                            room_id);
+                                    _process_event_list_obj(
+                                            room_node
+                                                .get_object()
+                                                .get_member("state"),
+                                            room_id);
+                                });
+                    }
+                }
             }
 
-            if ((node = root_obj.get_member("end")) != null) {
-                end_token = node.get_string();
+            if ((node = root_obj.get_member("next_batch")) != null) {
+                _last_sync_token = node.get_string();
             }
         }
 
-        // Only continue polling if polling is still enabled, and
-        // there was no communication error during the last call
-
-        if (_polling && ((error == null) || (error.code <= 500))) {
-            _polling = false;
-
+        // It is possible that polling has been disabled while we were
+        // processing events. Don’t continue polling if that is the
+        // case.
+        if (_polling) {
+            // This `500` should be changed to M_MISSING_TOKEN somehow
             try {
-                event_stream(
-                        (API.Callback)cb_event_stream,
-                        end_token,
-                        _event_timeout);
-            } catch (Matrix.Error e) {}
-        } else if ((error != null) && (error.code < 500)) {
-            info("Communication error while reading the event stream. Polling stopped.");
-            try {
-                stop_polling(false);
+                if ((error == null) || (error.code < 500)) {
+                    begin_polling();
+                } else if ((error != null) && error.code >= 500) {
+                    stop_polling(false);
+                }
             } catch (Matrix.Error e) {}
         }
     }
@@ -162,11 +253,16 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         throws Matrix.Error
     {
         try {
-            event_stream((API.Callback)cb_event_stream, null, _event_timeout);
+            sync((API.Callback)cb_sync,
+                 null, null, _last_sync_token,
+                 false, false, _event_timeout);
+
             _polling = true;
         } catch (Matrix.Error e) {
             throw e;
         }
+
+        _polling = true;
     }
 
     public void
