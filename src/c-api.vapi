@@ -108,14 +108,29 @@ namespace Matrix {
     }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class Pusher {}
+    public class Pusher {
+        public Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class StateEvent {}
+    public class StateEvent {
+        public Json.Node? get_json_node();
+    }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class @3PidCredential {}
+    public class @3PidCredential {
+        public Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class Filter {}
+    public class Filter {
+        public Json.Node? get_json_node();
+        public string? get_json_data(out size_t datalen);
+    }
+
+    [CCode (cheader_filename = "utils.h", cname = "_json_node_deep_copy")]
+    public Json.Node?
+    _json_node_deep_copy(Json.Node? node);
 }

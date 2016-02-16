@@ -20,7 +20,7 @@
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 
-#include "matrix-http-api.h"
+#include "matrix-glib.h"
 
 #define LOG_DOMAIN "Matrix-Test-Client"
 
@@ -183,7 +183,7 @@ main(int argc, char *argv[])
 
     g_info("Starting up: %s with %s:%s", *homeserver, user, password);
 
-    api = matrix_http_api_new(*homeserver, NULL);
+    api = MATRIX_API(matrix_http_api_new(*homeserver, NULL));
     matrix_http_api_set_validate_certificate(MATRIX_HTTP_API(api),
                                              !no_validate_certs);
     builder = json_builder_new();
