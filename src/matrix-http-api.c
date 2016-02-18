@@ -90,7 +90,7 @@ typedef struct {
 
 static GParamSpec *obj_properties[N_PROPERTIES] = {NULL,};
 
-static void matrix_http_api_matrix_api_init(MatrixAPIInterface *iface);
+static void matrix_http_api_matrix_api_init(MatrixAPIIface *iface);
 static void i_set_token(MatrixAPI *api, const gchar *token);
 static const gchar *i_get_token(MatrixAPI *api);
 static void i_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
@@ -844,7 +844,7 @@ i_login(MatrixAPI *api,
         MatrixAPICallback callback,
         gpointer user_data,
         const gchar *login_type,
-        const JsonNode *content,
+        JsonNode *content,
         GError **error)
 {
     JsonNode *body;
@@ -2175,7 +2175,7 @@ i_sync(MatrixAPI *api,
        MatrixAPICallback callback,
        gpointer user_data,
        const gchar *filter_id,
-       const MatrixFilter *filter,
+       MatrixFilter *filter,
        const gchar *since,
        gboolean full_state,
        gboolean set_presence,
@@ -2756,7 +2756,7 @@ i_abort_pending(MatrixAPI *api)
 }
 
 static void
-matrix_http_api_matrix_api_init(MatrixAPIInterface *iface)
+matrix_http_api_matrix_api_init(MatrixAPIIface *iface)
 {
     iface->set_token = i_set_token;
     iface->get_token = i_get_token;

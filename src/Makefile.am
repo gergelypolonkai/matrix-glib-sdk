@@ -16,6 +16,7 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 
 # Vala source files
 libmatrix_glib_0_0_la_VALA_SOURCES = \
+	matrix-api.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -38,6 +39,7 @@ AM_VALAFLAGS += \
 	-C \
 	--use-header \
 	--gir=Matrix-$(MATRIX_GLIB_API_VERSION).gir \
+	$(top_srcdir)/src/c-api.vapi \
 	$(NULL)
 
 vala-stamp: $(libmatrix_glib_0_0_la_VALA_SOURCES)
@@ -69,7 +71,6 @@ bin_PROGRAMS = test-api-client
 
 INST_H_SRC_FILES = \
 	matrix-types.h \
-	matrix-api.h \
 	matrix-http-api.h \
 	matrix-client.h \
 	matrix-http-client.h \
@@ -82,7 +83,6 @@ INST_H_BUILT_FILES = \
 
 matrix_enum_headers = \
 	matrix-types.h \
-	matrix-api.h \
 	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
@@ -91,7 +91,6 @@ libmatrix_glib_0_0_la_SOURCES = \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-version.c \
 	matrix-types.c \
-	matrix-api.c \
 	matrix-http-api.c \
 	matrix-enumtypes.c \
 	utils.c \

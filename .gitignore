@@ -61,3 +61,4 @@ Makefile.in
 /src/vala-temp
 /src/vala-stamp
 /src/matrix-glib.h
+/src/matrix-api.c

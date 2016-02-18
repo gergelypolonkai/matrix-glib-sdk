@@ -41,8 +41,8 @@ initial_sync_finished(MatrixAPI *api,
                       const gchar *content_type,
                       JsonNode *json_content,
                       GByteArray *raw_content,
-                      gpointer user_data,
-                      GError *err)
+                      GError *err,
+                      gpointer user_data)
 {
     g_printf("initialSync finished\n");
 
@@ -54,8 +54,8 @@ create_room_finished(MatrixAPI *api,
                      const gchar *content_type,
                      JsonNode *json_content,
                      GByteArray *raw_content,
-                     gpointer data,
-                     GError *err)
+                     GError *err,
+                     gpointer data)
 {
     if (err) {
         g_debug("Error: %s", err->message);
@@ -72,8 +72,8 @@ get_user_presence_finished(MatrixAPI *api,
                            const gchar *content_type,
                            JsonNode *json_content,
                            GByteArray *raw_content,
-                           gpointer data,
-                           GError *err)
+                           GError *err,
+                           gpointer data)
 {
     JsonObject *root_obj;
     const gchar *avatar_url;
@@ -102,8 +102,8 @@ login_finished(MatrixAPI *api,
                const gchar *content_type,
                JsonNode *json_content,
                GByteArray *raw_content,
-               gpointer data,
-               GError *err)
+               GError *err,
+               gpointer data)
 {
     JsonPath *path = json_path_new();
     JsonNode *result;

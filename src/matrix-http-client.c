@@ -58,8 +58,8 @@ cb_login(MatrixAPI *api,
          const gchar *content_type,
          JsonNode *json_content,
          GByteArray *raw_content,
-         gpointer user_data,
-         GError *error)
+         GError *error,
+         gpointer user_data)
 {
     matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
 }
@@ -97,8 +97,8 @@ cb_register_account(MatrixAPI *api,
                     const gchar *content_type,
                     JsonNode *json_content,
                     GByteArray *raw_content,
-                    gpointer user_data,
-                    GError *error)
+                    GError *error,
+                    gpointer user_data)
 {
     matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
 }
@@ -137,8 +137,8 @@ cb_event_stream(MatrixAPI *api,
                 const gchar *content_type,
                 JsonNode *json_content,
                 GByteArray *raw_content,
-                gpointer user_data,
-                GError *error)
+                GError *error,
+                gpointer user_data)
 {
     MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(
             MATRIX_HTTP_CLIENT(api));

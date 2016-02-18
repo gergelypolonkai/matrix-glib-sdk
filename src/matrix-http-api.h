@@ -21,7 +21,7 @@
 
 #include <glib-object.h>
 
-#include "matrix-api.h"
+#include "matrix-glib.h"
 
 G_BEGIN_DECLS
 
