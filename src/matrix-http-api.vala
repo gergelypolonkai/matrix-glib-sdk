@@ -797,9 +797,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             builder.begin_array();
             initial_state.foreach(
                     (entry) => {
-                        try {
-                            builder.add_value(entry.get_json_node());
-                        } catch (Matrix.Error e) {}
+                        builder.add_value(entry.json);
                     });
             builder.end_array();
         }

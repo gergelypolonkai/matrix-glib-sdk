@@ -70,3 +70,4 @@ Makefile.in
 /src/matrix-presence-event.c
 /src/matrix-room-event.c
 /src/matrix-room-member-event.c
+/src/matrix-state-event.c
