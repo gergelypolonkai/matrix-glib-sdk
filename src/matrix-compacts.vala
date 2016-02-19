@@ -111,4 +111,66 @@ namespace Matrix {
             return builder.get_root();
         }
     }
+
+    /**
+     * Class to hold room filters.
+     */
+    public class RoomFilter : JsonCompact {
+        /**
+         * If {{{true}}}, events for rooms that the user has left will
+         * be included in the filtered event list.
+         */
+        public bool include_leave { get; set; default=true; }
+
+        /**
+         * Filtering rules for ephemeral events, i.e. events that are
+         * not recorded in the room history (typing notifications,
+         * receipts, etc.)
+         */
+        public FilterRules? ephemeral { get; set; default = null; }
+
+        /**
+         * Filtering rules for state events.
+         */
+        public FilterRules? state { get; set; default = null; }
+
+        /**
+         * Filtering rules for timeline events.
+         */
+        public FilterRules? timeline { get; set; default = null; }
+
+        /**
+         * Get the room filters as a JSON node.
+         */
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("include_leave");
+            builder.add_boolean_value(include_leave);
+
+            if (ephemeral != null) {
+                builder.set_member_name("ephemeral");
+                builder.add_value(ephemeral.get_json_node());
+            }
+
+            if (state != null) {
+                builder.set_member_name("state");
+                builder.add_value(state.get_json_node());
+            }
+
+            if (timeline != null) {
+                builder.set_member_name("timeline");
+                builder.add_value(timeline.get_json_node());
+            }
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
 }

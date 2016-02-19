@@ -180,30 +180,6 @@ JsonNode *matrix_filter_rules_get_json_node(MatrixFilterRules *rules);
 gchar *matrix_filter_rules_get_json_data(MatrixFilterRules *rules,
                                          gsize *datalen);
 
-typedef struct _MatrixRoomFilter MatrixRoomFilter;
-
-GType matrix_room_filter_get_type(void);
-#define MATRIX_TYPE_ROOM_FILTER (matrix_room_filter_get_type())
-
-MatrixRoomFilter *matrix_room_filter_new(void);
-MatrixRoomFilter *matrix_room_filter_ref(MatrixRoomFilter *filter);
-void matrix_room_filter_unref(MatrixRoomFilter *filter);
-void matrix_room_filter_set_include_leave(MatrixRoomFilter *filter,
-                                          gboolean include_leave);
-gboolean matrix_room_filter_get_include_leave(MatrixRoomFilter *filter);
-void matrix_room_filter_set_ephemeral(MatrixRoomFilter *filter,
-                                      MatrixFilterRules *rules);
-MatrixFilterRules *matrix_room_filter_get_ephemeral(MatrixRoomFilter *filter);
-void matrix_room_filter_set_state(MatrixRoomFilter *filter,
-                                  MatrixFilterRules *rules);
-MatrixFilterRules *matrix_room_filter_get_state(MatrixRoomFilter *filter);
-void matrix_room_filter_set_timeline(MatrixRoomFilter *filter,
-                                     MatrixFilterRules *rules);
-MatrixFilterRules *matrix_room_filter_get_timeline(MatrixRoomFilter *filter);
-JsonNode *matrix_room_filter_get_json_node(MatrixRoomFilter *filter);
-gchar *matrix_room_filter_get_json_data(MatrixRoomFilter *filter,
-                                        gsize *datalen);
-
 typedef struct _Matrix3PidCredential Matrix3PidCredential;
 
 GType matrix_3pid_credential_get_type(void);

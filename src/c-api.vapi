@@ -125,11 +125,6 @@ namespace Matrix {
     }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class RoomFilter {
-        public Json.Node? get_json_node();
-    }
-
-    [CCode (cheader_filename = "matrix-types.h")]
     public class FilterRules {
         public Json.Node? get_json_node();
     }
