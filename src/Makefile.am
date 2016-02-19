@@ -75,24 +75,16 @@ $(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c): vala-stamp
 bin_PROGRAMS = test-api-client
 
 INST_H_SRC_FILES = \
-	matrix-types.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
 	matrix-version.h \
-	matrix-enumtypes.h \
-	$(NULL)
-
-matrix_enum_headers = \
-	matrix-types.h \
 	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
 	$(INST_H_BUILT_FILES) \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-version.c \
-	matrix-types.c \
-	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
 
@@ -116,8 +108,6 @@ libmatrix_glib_0_0_la_LDFLAGS = \
 $(PUBLIC_HEADER): vala-stamp
 
 BUILT_SOURCES += \
-	matrix-enumtypes.c \
-	matrix-enumtypes.h \
 	$(NULL)
 
 test_api_client_SOURCES = test-api-client.c
@@ -129,20 +119,8 @@ test_api_client_LDADD = \
 
 CLEANFILES += $(BUILT_SOURCES)
 EXTRA_DIST += \
-	matrix-enumtypes.h.template \
-	matrix-enumtypes.c.template \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
-
-matrix-enumtypes.h: $(matrix_enum_headers) matrix-enumtypes.h.template
-	$(AM_V_GEN) $(GLIB_MKENUMS) --template $(filter %.template,$^) \
-	                            $(filter-out %.template,$^) > $@.tmp \
-	&& mv $@.tmp $@
-
-matrix-enumtypes.c: $(matrix_enum_headers) matrix-enumtypes.h matrix-enumtypes.c.template
-	$(AM_V_GEN) $(GLIB_MKENUMS) --template $(filter %.template,$^) \
-	                            $(filter-out %.template,$^) > $@.tmp \
-	&& mv $@.tmp $@
 
 include $(INTROSPECTION_MAKEFILE)
 Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la

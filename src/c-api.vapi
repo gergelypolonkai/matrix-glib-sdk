@@ -18,26 +18,4 @@
 
 [CCode (cprefix = "Matrix", gir_namespace = "Matrix", gir_version = "0.0", lower_case_cprefix = "matrix_")]
 namespace Matrix {
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ERROR_")]
-    public errordomain Error {
-        NONE,
-        COMMUNICATION_ERROR,
-        INCOMPLETE,
-        BAD_REQUEST,
-        BAD_RESPONSE,
-        INVALID_ROOM_ID,
-        UNKNOWN_VALUE,
-        INVALID_TYPE,
-        UNSUPPORTED,
-        INVALID_FORMAT,
-        M_MISSING_TOKEN,
-        M_FORBIDDEN,
-        M_UNKNOWN,
-        M_UNKNOWN_TOKEN,
-        M_NOT_JSON,
-        M_UNRECOGNIZED,
-        UNSPECIFIED,
-        UNKNOWN_ERROR;
-        public static GLib.Quark quark ();
-    }
 }
