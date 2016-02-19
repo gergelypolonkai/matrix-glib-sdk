@@ -210,32 +210,6 @@ JsonNode *matrix_room_filter_get_json_node(MatrixRoomFilter *filter);
 gchar *matrix_room_filter_get_json_data(MatrixRoomFilter *filter,
                                         gsize *datalen);
 
-typedef struct _MatrixFilter MatrixFilter;
-
-GType matrix_filter_get_type(void);
-#define MATRIX_TYPE_FILTER (matrix_filter_get_type())
-
-MatrixFilter *matrix_filter_new(void);
-MatrixFilter *matrix_filter_ref(MatrixFilter *filter);
-void matrix_filter_unref(MatrixFilter *filter);
-void matrix_filter_set_event_fields(MatrixFilter *filter, GList *event_fields);
-void matrix_filter_add_event_field(MatrixFilter *filter,
-                                   const gchar *event_field);
-void matrix_filter_delete_event_field(MatrixFilter *filter,
-                                      const gchar *event_field);
-const GList *matrix_filter_get_event_fields(MatrixFilter *filter);
-void matrix_filter_set_event_format(MatrixFilter *filter,
-                                    MatrixEventFormat event_format);
-MatrixEventFormat matrix_filter_get_event_format(MatrixFilter *filter);
-void matrix_filter_set_presence_filter(MatrixFilter *filter,
-                                       MatrixFilterRules *presence_filter);
-MatrixFilterRules *matrix_filter_get_presence_filter(MatrixFilter *filter);
-void matrix_filter_set_room_filter(MatrixFilter *filter,
-                                   MatrixRoomFilter *room_filter);
-MatrixRoomFilter *matrix_filter_get_room_filter(MatrixFilter *filter);
-JsonNode *matrix_filter_get_json_node(MatrixFilter *filter);
-gchar *matrix_filter_get_json_data(MatrixFilter *filter, gsize *datalen);
-
 typedef struct _Matrix3PidCredential Matrix3PidCredential;
 
 GType matrix_3pid_credential_get_type(void);
