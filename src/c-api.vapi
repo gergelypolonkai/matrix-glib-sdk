@@ -108,12 +108,6 @@ namespace Matrix {
     }
 
     [CCode (cheader_filename = "matrix-types.h")]
-    public class Pusher {
-        public Json.Node? get_json_node()
-            throws Matrix.Error;
-    }
-
-    [CCode (cheader_filename = "matrix-types.h")]
     public class StateEvent {
         public Json.Node? get_json_node();
     }

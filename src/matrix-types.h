@@ -129,41 +129,6 @@ typedef enum {
     MATRIX_ACCOUNT_KIND_GUEST
 } MatrixAccountKind;
 
-typedef struct _MatrixPusher MatrixPusher;
-
-GType matrix_pusher_get_type(void);
-#define MATRIX_TYPE_PUSHER (matrix_pusher_get_type())
-
-MatrixPusher *matrix_pusher_new(void);
-MatrixPusher *matrix_pusher_ref(MatrixPusher *pusher);
-void matrix_pusher_unref(MatrixPusher *pusher);
-void matrix_pusher_set_device_display_name(MatrixPusher *pusher,
-                                           const gchar *device_display_name);
-const gchar *matrix_pusher_get_device_display_name(MatrixPusher *pusher);
-void matrix_pusher_set_app_display_name(MatrixPusher *pusher,
-                                        const gchar *app_display_name);
-const gchar *matrix_pusher_get_app_display_name(MatrixPusher *pusher);
-void matrix_pusher_set_app_id(MatrixPusher *pusher, const gchar *app_id);
-const gchar *matrix_pusher_get_app_id(MatrixPusher *pusher);
-void matrix_pusher_set_append(MatrixPusher *pusher, gboolean append);
-gboolean matrix_pusher_get_append(MatrixPusher *pusher);
-void matrix_pusher_set_kind(MatrixPusher *pusher, const gchar *kind);
-const gchar *matrix_pusher_get_kind(MatrixPusher *pusher);
-void matrix_pusher_set_lang(MatrixPusher *pusher, const gchar *lang);
-const gchar *matrix_pusher_get_lang(MatrixPusher *pusher);
-void matrix_pusher_set_profile_tag(MatrixPusher *pusher,
-                                   const gchar *profile_tag);
-const gchar *matrix_pusher_get_profile_tag(MatrixPusher *pusher);
-void matrix_pusher_set_pushkey(MatrixPusher *pusher, const gchar *pushkey);
-const gchar *matrix_pusher_get_pushkey(MatrixPusher *pusher);
-void matrix_pusher_set_data(MatrixPusher *pusher, const JsonNode *data);
-void matrix_pusher_take_data(MatrixPusher *pusher, JsonNode *data);
-const JsonNode *matrix_pusher_get_data(MatrixPusher *pusher);
-JsonNode *matrix_pusher_get_json_node(MatrixPusher *pusher, GError **err);
-gchar *matrix_pusher_get_json_data(MatrixPusher *pusher,
-                                   gsize *datalen,
-                                   GError **err);
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);
