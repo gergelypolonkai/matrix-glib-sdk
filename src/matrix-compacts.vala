@@ -173,4 +173,189 @@ namespace Matrix {
             return builder.get_root();
         }
     }
+
+    /**
+     * Class to hold filtering rules.
+     */
+    public class FilterRules : JsonCompact {
+        private List<string>? _types;
+        private List<string>? _excluded_types;
+        private List<string>? _senders;
+        private List<string>? _excluded_senders;
+        private List<string>? _rooms;
+        private List<string>? _excluded_rooms;
+
+        /**
+         * The limit of the count of returned events.
+         */
+        public uint limit { get; set; }
+
+        /**
+         * List of message types to include in the filtered result.
+         */
+        public List<string>? types {
+            get {
+                return _types;
+            }
+
+            set {
+                _types = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * List of message types to exclude from the filtered
+         * result. A matching type will be excluded from the result
+         * even if it is listed in the types to include.
+         */
+        public List<string>? excluded_types {
+            get {
+                return _excluded_types;
+            }
+
+            set {
+                _excluded_types = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * List of senders to include in the filtered results.
+         */
+        public List<string>? senders {
+            get {
+                return _senders;
+            }
+
+            set {
+                _senders = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * List of senders to exclude from the filtered result. A
+         * matching sender will be excluded from the result even if it
+         * is listed in the senders to include.
+         */
+        public List<string>? excluded_senders {
+            get {
+                return _excluded_senders;
+            }
+
+            set {
+                _excluded_senders = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * List of rooms to include in the filtered results.
+         */
+        public List<string>? rooms {
+            get {
+                return _rooms;
+            }
+
+            set {
+                _rooms = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * List of rooms to exclude from the filtered result. A
+         * matching room will be excluded from the result even if it
+         * is listed in the rooms to include.
+         */
+        public List<string>? excluded_rooms {
+            get {
+                return _excluded_rooms;
+            }
+
+            set {
+                _excluded_rooms = value.copy();
+            }
+
+            default = null;
+        }
+
+        /**
+         * Get the filtering rules as a JSON node.
+         */
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            var builder = new Json.Builder();
+            builder.begin_object();
+
+            builder.set_member_name("limit");
+            builder.add_int_value(limit);
+
+            if (rooms != null) {
+                builder.set_member_name("rooms");
+                builder.begin_array();
+                foreach (var entry in rooms) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            if (excluded_rooms != null) {
+                builder.set_member_name("not_rooms");
+                builder.begin_array();
+                foreach (var entry in excluded_rooms) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            if (senders != null) {
+                builder.set_member_name("senders");
+                builder.begin_array();
+                foreach (var entry in senders) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            if (excluded_senders != null) {
+                builder.set_member_name("not_senders");
+                builder.begin_array();
+                foreach (var entry in excluded_senders) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            if (types != null) {
+                builder.set_member_name("types");
+                builder.begin_array();
+                foreach (var entry in types) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            if (excluded_types != null) {
+                builder.set_member_name("not_types");
+                builder.begin_array();
+                foreach(var entry in types) {
+                    builder.add_string_value(entry);
+                }
+                builder.end_array();
+            }
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
 }

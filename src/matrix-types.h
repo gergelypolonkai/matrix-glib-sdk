@@ -129,57 +129,6 @@ typedef enum {
     MATRIX_ACCOUNT_KIND_GUEST
 } MatrixAccountKind;
 
-typedef struct _MatrixFilterRules MatrixFilterRules;
-
-GType matrix_filter_rules_get_type(void);
-#define MATRIX_TYPE_FILTER_RULES (matrix_filter_rules_get_type())
-
-MatrixFilterRules *matrix_filter_rules_new(void);
-MatrixFilterRules *matrix_filter_rules_ref(MatrixFilterRules *rules);
-void matrix_filter_rules_unref(MatrixFilterRules *rules);
-void matrix_filter_rules_set_limit(MatrixFilterRules *rules, guint limit);
-guint matrix_filter_rules_get_limit(MatrixFilterRules *rules);
-void matrix_filter_rules_set_rooms(MatrixFilterRules *rules, GList *rooms);
-void matrix_filter_rules_add_room(MatrixFilterRules *rules, const gchar *room);
-void matrix_filter_rules_delete_room(MatrixFilterRules *rules,
-                                     const gchar *room);
-const GList *matrix_filter_rules_get_rooms(MatrixFilterRules *rules);
-void matrix_filter_rules_set_excluded_rooms(MatrixFilterRules *rules,
-                                            GList *rooms);
-void matrix_filter_rules_add_excluded_room(MatrixFilterRules *rules,
-                                           const gchar *room);
-void matrix_filter_rules_delete_excluded_room(MatrixFilterRules *rules,
-                                              const gchar *room);
-const GList *matrix_filter_rules_get_excluded_rooms(MatrixFilterRules *rules);
-void matrix_filter_rules_set_senders(MatrixFilterRules *rules, GList *senders);
-void matrix_filter_rules_add_sender(MatrixFilterRules *rules,
-                                    const gchar *sender);
-void matrix_filter_rules_delete_sender(MatrixFilterRules *rules,
-                                       const gchar *sender);
-const GList *matrix_filter_rules_get_senders(MatrixFilterRules *rules);
-void matrix_filter_rules_set_excluded_senders(MatrixFilterRules *rules,
-                                              GList *senders);
-void matrix_filter_rules_add_excluded_sender(MatrixFilterRules *rules,
-                                             const gchar *sender);
-void matrix_filter_rules_delete_excluded_sender(MatrixFilterRules *rules,
-                                                const gchar *sender);
-const GList *matrix_filter_rules_get_excluded_senders(MatrixFilterRules *rules);
-void matrix_filter_rules_set_types(MatrixFilterRules *rules, GList *types);
-void matrix_filter_rules_add_type(MatrixFilterRules *rules, const gchar *type);
-void matrix_filter_rules_delete_type(MatrixFilterRules *rules,
-                                     const gchar *type);
-const GList *matrix_filter_rules_get_types(MatrixFilterRules *rules);
-void matrix_filter_rules_set_excluded_types(MatrixFilterRules *rules,
-                                            GList *types);
-void matrix_filter_rules_add_excluded_type(MatrixFilterRules *rules,
-                                           const gchar *type);
-void matrix_filter_rules_delete_excluded_type(MatrixFilterRules *rules,
-                                              const gchar *type);
-const GList *matrix_filter_rules_get_excluded_types(MatrixFilterRules *rules);
-JsonNode *matrix_filter_rules_get_json_node(MatrixFilterRules *rules);
-gchar *matrix_filter_rules_get_json_data(MatrixFilterRules *rules,
-                                         gsize *datalen);
-
 typedef struct _Matrix3PidCredential Matrix3PidCredential;
 
 GType matrix_3pid_credential_get_type(void);

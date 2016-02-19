@@ -124,11 +124,6 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-types.h")]
-    public class FilterRules {
-        public Json.Node? get_json_node();
-    }
-
     [CCode (cheader_filename = "utils.h", cname = "_json_node_deep_copy")]
     public Json.Node?
     _json_node_deep_copy(Json.Node? node);
