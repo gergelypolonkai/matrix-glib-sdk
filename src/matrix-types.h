@@ -129,29 +129,6 @@ typedef enum {
     MATRIX_ACCOUNT_KIND_GUEST
 } MatrixAccountKind;
 
-typedef struct _Matrix3PidCredential Matrix3PidCredential;
-
-GType matrix_3pid_credential_get_type(void);
-#define MATRIX_TYPE_3PID_CREDENTIAL (matrix_3pid_credential_get_type())
-
-Matrix3PidCredential *matrix_3pid_credential_new(void);
-Matrix3PidCredential *matrix_3pid_credential_ref(Matrix3PidCredential *credential);
-void matrix_3pid_credential_unref(Matrix3PidCredential *credential);
-void matrix_3pid_credential_set_id_server(Matrix3PidCredential *credential,
-                                          const gchar *id_server);
-const gchar *matrix_3pid_credential_get_id_server(Matrix3PidCredential *credential);
-void matrix_3pid_credential_set_session_id(Matrix3PidCredential *credential,
-                                           const gchar *session_id);
-const gchar *matrix_3pid_credential_get_session_id(Matrix3PidCredential *credential);
-void matrix_3pid_credential_set_client_secret(Matrix3PidCredential *credential,
-                                              const gchar *client_secret);
-const gchar *matrix_3pid_credential_get_client_secret(Matrix3PidCredential *credential);
-JsonNode *matrix_3pid_credential_get_json_node(Matrix3PidCredential *credential,
-                                               GError **error);
-gchar *matrix_3pid_credential_get_json_data(Matrix3PidCredential *credential,
-                                            gsize *datalen,
-                                            GError **error);
-
 typedef struct _MatrixPusher MatrixPusher;
 
 GType matrix_pusher_get_type(void);

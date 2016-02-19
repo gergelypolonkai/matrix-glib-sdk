@@ -358,4 +358,58 @@ namespace Matrix {
             return builder.get_root();
         }
     }
+
+    /**
+     * Class to hold 3rd party credential related data.
+     */
+    public class @3PidCredential : JsonCompact {
+        /**
+         * The Identity Server used for this credential.
+         */
+        public string? id_server { get; set; default = null; }
+
+        /**
+         * The session identifier got from the Identity Server.
+         */
+        public string? session_id { get; set; default = null; }
+
+        /**
+         * The client secret that was used in the session with the
+         * Identity Server.
+         */
+        public string? client_secret { get; set; default = null; }
+
+        /**
+         * Get 3rd party credential related data as a JSON node.
+         */
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            if ((id_server == null)
+                || (session_id == null)
+                || (client_secret == null))
+            {
+                throw new Matrix.Error.INCOMPLETE(
+                        "All fields of a 3PID credential must be filled!");
+            }
+
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("id_server");
+            builder.add_string_value(id_server);
+
+            builder.set_member_name("session_id");
+            builder.add_string_value(session_id);
+
+            builder.set_member_name("client_secret");
+            builder.add_string_value(client_secret);
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
 }
