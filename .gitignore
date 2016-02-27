@@ -32,6 +32,8 @@ Makefile.in
 /GRTAGS
 /GSYMS
 /GTAGS
+/INSTALL
+/ChangeLog
 /src/matrix-version.h
 /src/matrix-enumtypes.[ch]
 /src/matrix-marshalers.[ch]
