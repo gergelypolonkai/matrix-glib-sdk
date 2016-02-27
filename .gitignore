@@ -27,7 +27,8 @@ Makefile.in
 .libs/
 /stamp-h1
 /gtk-doc.make
-/m4/
+/m4/*
+!/m4/valac.m4
 /GPATH
 /GRTAGS
 /GSYMS
@@ -54,3 +55,9 @@ Makefile.in
 /docs/reference/matrix-glib/matrix-glib.signals
 /docs/reference/matrix-glib/matrix-glib.types
 /docs/reference/matrix-glib/*.bak
+
+# Vala related files
+/src/Matrix-0.0.vapi
+/src/vala-temp
+/src/vala-stamp
+/src/matrix-glib.h

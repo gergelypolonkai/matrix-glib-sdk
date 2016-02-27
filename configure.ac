@@ -83,31 +83,27 @@ AC_SUBST([LT_CURRENT], matrix_glib_lt_current)
 AC_SUBST([LT_REVISION], matrix_glib_lt_revision)
 AC_SUBST([LT_AGE], matrix_glib_lt_age)
 
-AC_SUBST([MATRIX_GLIB_MAJOR_MINOR_VERSION], matrix_glib_major_minor_version)
-
-# This is used to identify a set of API compatible between versions
-# - If new versions are compatible with the actual one, just leave
-#   this untouched
-# - If new version breaks API change it in order to allow parallel
-#   installations with old versions. Change name of pc files to use
-#   a new API, too
-AC_SUBST([API_VERSION], matrix_glib_api_version)
-
 AC_SUBST([MATRIX_GLIB_VERSION], matrix_glib_base_version)
 
 ### Dependencies
 
-GLIB_REQUIRED=2.38.0
+GLIB_REQUIRED=2.40.0
+VALA_REQUIRED=0.30.0
+LIBVALA_REQUIRED=0.30
+GIO_REQUIRED=2.22
 SOUP_REQUIRED=2.44.2
 JSON_REQUIRED=0.16.2
 
 # Check GLib
 PKG_CHECK_MODULES([GLIB],
-                  [glib-2.0 >= $GLIB_REQUIRED])
+                  [glib-2.0 >= $GLIB_REQUIRED
+                   gobject-2.0 >= $GLIB_REQUIRED])
 
-# Check GObject
-PKG_CHECK_MODULES([GOBJECT],
-                  [gobject-2.0 >= $GLIB_REQUIRED])
+# Check for vala
+VALAC_CHECK
+
+# Check for GIO
+PKG_CHECK_MODULES([GIO], [gio-2.0 >= $GIO_REQUIRED])
 
 # Check for libSoup
 PKG_CHECK_MODULES([SOUP], [libsoup-2.4 >= $SOUP_REQUIRED])
@@ -139,8 +135,14 @@ fi
 AC_SUBST([MATRIX_GLIB_MAJOR_VERSION], matrix_glib_major_version)
 AC_SUBST([MATRIX_GLIB_MINOR_VERSION], matrix_glib_minor_version)
 AC_SUBST([MATRIX_GLIB_MICRO_VERSION], matrix_glib_micro_version)
+
+# This is used to identify a set of API compatible between versions
+# - If new versions are compatible with the actual one, just leave
+#   this untouched
+# - If new version breaks API change it in order to allow parallel
+#   installations with old versions. Change name of pc files to use
+#   a new API, too
 AC_SUBST([MATRIX_GLIB_API_VERSION], matrix_glib_api_version)
-AC_SUBST([MATRIX_GLIB_API_VERSION_U], [AS_TR_SH(matrix_glib_api_version)])
 
 m4_ifdef([GTK_DOC_CHECK], [
 GTK_DOC_CHECK([1.20], [--flavour no-tmpl])
@@ -150,9 +152,6 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 
 AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
-
-LIBMATRIX_GLIB_LIBS='$(top_builddir)/src/libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la'
-AC_SUBST(LIBMATRIX_GLIB_LIBS)
 
 AC_CONFIG_FILES([
     Makefile

@@ -79,7 +79,9 @@ expand_content_files=
 # e.g. GTKDOC_CFLAGS=-I$(top_srcdir) -I$(top_builddir) $(GTK_DEBUG_FLAGS)
 # e.g. GTKDOC_LIBS=$(top_builddir)/gtk/$(gtktargetlib)
 GTKDOC_CFLAGS=
-GTKDOC_LIBS=$(LIBMATRIX_GLIB_LIBS) $(NULL)
+GTKDOC_LIBS = \
+	$(top_builddir)/src/libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la \
+	$(NULL)
 
 # This includes the standard gtk-doc make rules, copied by gtkdocize.
 include $(top_srcdir)/gtk-doc.make
