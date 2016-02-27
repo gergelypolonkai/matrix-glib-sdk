@@ -21,6 +21,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-enums.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
+	matrix-compacts.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
