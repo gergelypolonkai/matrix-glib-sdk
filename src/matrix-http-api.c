@@ -536,7 +536,7 @@ _response_callback(SoupSession *session,
         gsize datalen;
         JsonParser *parser;
         SoupURI *request_uri = soup_message_get_uri(msg);
-        const gchar *request_url;
+        const gchar *request_url = NULL;
 
         switch (request->call_type) {
             case CALL_API:
@@ -732,7 +732,7 @@ _send(MatrixHTTPAPI *api,
       GError **error)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(api);
-    SoupURI *request_path;
+    SoupURI *request_path = NULL;
     SoupMessage *message;
     gchar *data, *url;
     gsize datalen;
