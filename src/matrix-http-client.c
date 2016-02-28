@@ -45,7 +45,7 @@ typedef struct _MatrixHTTPClientPrivate {
     guint event_timeout;
 } MatrixHTTPClientPrivate;
 
-static void matrix_http_client_matrix_client_init(MatrixClientInterface *iface);
+static void matrix_http_client_matrix_client_init(MatrixClientIface *iface);
 static void i_begin_polling(MatrixClient *client, GError **error);
 
 G_DEFINE_TYPE_WITH_CODE(MatrixHTTPClient, matrix_http_client, MATRIX_TYPE_HTTP_API,
@@ -61,7 +61,7 @@ cb_login(MatrixAPI *api,
          GError *error,
          gpointer user_data)
 {
-    matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
+    matrix_client_emit_login_finished(MATRIX_CLIENT(api), (error == NULL));
 }
 
 static void
@@ -100,7 +100,7 @@ cb_register_account(MatrixAPI *api,
                     GError *error,
                     gpointer user_data)
 {
-    matrix_client_login_finished(MATRIX_CLIENT(api), (error == NULL));
+    matrix_client_emit_login_finished(MATRIX_CLIENT(api), (error == NULL));
 }
 
 static void
@@ -211,7 +211,7 @@ i_stop_polling(MatrixClient *client, gboolean cancel_ongoing, GError **error)
 }
 
 static void
-matrix_http_client_matrix_client_init(MatrixClientInterface *iface)
+matrix_http_client_matrix_client_init(MatrixClientIface *iface)
 {
     iface->login_with_password = i_login_with_password;
     iface->register_with_password = i_register_with_password;

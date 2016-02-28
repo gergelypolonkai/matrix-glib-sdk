@@ -17,6 +17,7 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 # Vala source files
 libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-api.vala \
+	matrix-client.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -72,7 +73,6 @@ bin_PROGRAMS = test-api-client
 INST_H_SRC_FILES = \
 	matrix-types.h \
 	matrix-http-api.h \
-	matrix-client.h \
 	matrix-http-client.h \
 	$(NULL)
 
@@ -87,14 +87,12 @@ matrix_enum_headers = \
 
 libmatrix_glib_0_0_la_SOURCES = \
 	$(INST_H_BUILT_FILES) \
-	matrix-marshalers.c \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-version.c \
 	matrix-types.c \
 	matrix-http-api.c \
 	matrix-enumtypes.c \
 	utils.c \
-	matrix-client.c \
 	matrix-http-client.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
@@ -121,8 +119,6 @@ $(PUBLIC_HEADER): vala-stamp
 BUILT_SOURCES += \
 	matrix-enumtypes.c \
 	matrix-enumtypes.h \
-	matrix-marshalers.c \
-	matrix-marshalers.h \
 	$(NULL)
 
 test_api_client_SOURCES = test-api-client.c
@@ -136,7 +132,6 @@ CLEANFILES += $(BUILT_SOURCES)
 EXTRA_DIST += \
 	matrix-enumtypes.h.template \
 	matrix-enumtypes.c.template \
-	matrix-marshalers.list \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
 
@@ -149,29 +144,6 @@ matrix-enumtypes.c: $(matrix_enum_headers) matrix-enumtypes.h matrix-enumtypes.c
 	$(AM_V_GEN) $(GLIB_MKENUMS) --template $(filter %.template,$^) \
 	                            $(filter-out %.template,$^) > $@.tmp \
 	&& mv $@.tmp $@
-
-matrix-marshalers.h: stamp-matrix-marshalers
-	@true
-
-stamp-matrix-marshalers: matrix-marshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
-	                               $(srcdir)/matrix-marshalers.list \
-	                               --header \
-	                               --valist-marshallers >> xgen-gmlh \
-	&& (cmp -s xgen-gmlh matrix-marshalers.h \
-	    || cp xgen-gmlh matrix-marshalers.h) \
-	&& rm -f xgen-gmlh \
-	&& echo timestamp > $(@F)
-
-matrix-marshalers.c: matrix-marshalers.h
-	$(AM_V_GEN) (echo "#include \"matrix-marshalers.h\""; \
-	             echo "#undef G_ENABLE_DEBUG"; \
-	             $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
-	                                $(srcdir)/matrix-marshalers.list \
-	                                --body \
-	                                --valist-marshallers) >> xgen-gmlc \
-	&& cp xgen-gmlc matrix-marshalers.c \
-	&& rm -f xgen-gmlc
 
 include $(INTROSPECTION_MAKEFILE)
 Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la

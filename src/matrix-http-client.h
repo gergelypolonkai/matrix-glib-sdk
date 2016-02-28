@@ -20,7 +20,7 @@
 #define __MATRIX_HTTP_CLIENT_H__
 
 #include <glib-object.h>
-#include "matrix-client.h"
+#include "matrix-glib.h"
 #include "matrix-http-api.h"
 
 G_BEGIN_DECLS

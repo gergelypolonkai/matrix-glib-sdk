@@ -62,3 +62,4 @@ Makefile.in
 /src/vala-stamp
 /src/matrix-glib.h
 /src/matrix-api.c
+/src/matrix-client.c
