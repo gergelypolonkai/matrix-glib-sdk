@@ -175,6 +175,22 @@ namespace Matrix {
         PRIVATE; /// hide the room from the public room list
     }
 
+    public enum SearchOrder {
+        RECENT,
+        RANK
+    }
+
+    public enum SearchKey {
+        CONTENT_BODY,
+        CONTENT_NAME,
+        CONTENT_TOPIC
+    }
+
+    public enum SearchGroupBy {
+        ROOM_ID,
+        SENDER
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {

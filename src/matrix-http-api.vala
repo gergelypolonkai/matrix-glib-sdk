@@ -1410,6 +1410,25 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
 
     /* Search */
 
+    public void
+    search(Matrix.API.Callback? cb,
+           string? next_batch,
+           SearchCategories search_categories)
+    throws Matrix.Error
+    {
+        HashTable<string, string>? parms = null;
+
+        if (next_batch == null) {
+            parms = _create_query_params();
+
+            parms.replace("next_batch", next_batch);
+        }
+
+        _send(cb,
+              CallType.API, "POST", "search",
+              parms, null, search_categories.get_json_node(), null, false);
+    }
+
     /* Server administration */
 
     public void

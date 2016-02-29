@@ -940,7 +940,21 @@ public interface Matrix.API : GLib.Object {
 
     /* Search */
 
-    /* TODO: implement search! */
+    /**
+     * Perform a server side search.
+     *
+     * @param next_batch the point to return events from. If given,
+     *                   this should be a next_batch result from a
+     *                   previous call to this method
+     * @param search_categories describes which categories to search,
+     *                          and their criteria
+     */
+    public abstract void
+    search([CCode (delegate_target_pos = 1.5, scope = "async")]
+           owned Matrix.API.Callback? @callback,
+           string? next_batch,
+           SearchCategories search_categories)
+        throws Matrix.Error;
 
     /* Server administration */
 

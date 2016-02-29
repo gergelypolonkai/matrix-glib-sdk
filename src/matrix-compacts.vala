@@ -688,6 +688,247 @@ namespace Matrix {
         }
     }
 
+    public class EventContext : JsonCompact {
+        public int? before_limit { get; set; default = null; }
+        public int? after_limit { get; set; default = null; }
+        public bool? include_profile { get; set; default = null; }
+
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            if ((before_limit == null)
+                && (after_limit == null)
+                && (include_profile == null))
+            {
+                return null;
+            }
+
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            if (before_limit != null) {
+                builder.set_member_name("before_limit");
+                builder.add_int_value(before_limit);
+            }
+
+            if (after_limit != null) {
+                builder.set_member_name("after_limit");
+                builder.add_int_value(after_limit);
+            }
+
+            if (include_profile != null) {
+                builder.set_member_name("include_profile");
+                builder.add_boolean_value(include_profile);
+            }
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+     }
+
+    public class SearchGrouping : JsonCompact {
+        public SearchGroupBy? key { get; set; default = null; }
+
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            if (key == null) {
+                return null;
+            }
+
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("key");
+            builder.add_string_value(
+                    _g_enum_value_to_nick(typeof(SearchGroupBy), key, true));
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
+
+    public class SearchGroupings : JsonCompact {
+        private List<SearchGrouping>? _group_by = null;
+        public List<SearchGrouping>? group_by {
+            get {
+                return _group_by;
+            }
+
+            set {
+                _group_by = value.copy();
+            }
+
+            default = null;
+        }
+
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            if (group_by == null) {
+                return null;
+            }
+
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("group_by");
+            builder.begin_array();
+
+            foreach (var entry in group_by) {
+                var node = entry.get_json_node();
+
+                if (node != null) {
+                    builder.add_value(node);
+                }
+            }
+
+            builder.end_array();
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
+
+    public class SearchRoomEvents : JsonCompact {
+        private List<SearchKey?>? _keys = null;
+
+        public SearchOrder? order_by { get; set; default = SearchOrder.RECENT; }
+        public List<SearchKey?>? keys {
+            get {
+                return _keys;
+            }
+
+            set {
+                _keys = value.copy();
+            }
+
+            default = null; }
+        public EventContext? event_context { get; set; default = null; }
+        public bool? include_state { get; set; default = false; }
+        public string? filter_id { get; set; default = null; }
+        public Filter? filter { get; set; default = null; }
+        public string search_term { get; set; }
+        public SearchGroupings? groupings { get; set; default = null; }
+
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            Json.Node? node = null;
+
+            var builder = new Json.Builder();
+
+            if ((filter_id != null) && (filter != null)) {
+                throw new Matrix.Error.INCOMPLETE(
+                        "filter and filter_id is exclusive to each other");
+            }
+
+            builder.begin_object();
+
+            if (order_by != null) {
+                builder.set_member_name("order_by");
+                builder.add_string_value(
+                        _g_enum_value_to_nick(typeof(SearchOrder), order_by));
+            }
+
+            if (keys != null) {
+                EnumClass key_class = (EnumClass)(typeof(SearchKey).class_ref());
+                var key_array = new Json.Array();
+
+                foreach (var entry in keys) {
+                    if (entry != null) {
+                        unowned EnumValue? key_value = key_class.get_value(entry);
+
+                        if (key_value != null) {
+                            key_array.add_string_element(
+                                    key_value.value_nick.replace("-", "."));
+                        }
+                    }
+                }
+
+                if (key_array.get_length() > 0) {
+                    node = new Json.Node(Json.NodeType.ARRAY);
+                    node.set_array(key_array);
+
+                    builder.set_member_name("keys");
+                    builder.add_value(node);
+                }
+            }
+
+            if ((event_context != null)
+                && ((node = event_context.get_json_node()) != null)) {
+                builder.set_member_name("event_context");
+                builder.add_value(node);
+            }
+
+            if (include_state != null) {
+                builder.set_member_name("include_state");
+                builder.add_boolean_value(include_state);
+            }
+
+            if ((filter != null)
+                && ((node = filter.get_json_node()) != null)) {
+                builder.set_member_name("filter");
+                builder.add_value(node);
+            }
+
+            if (filter_id != null) {
+                builder.set_member_name("filter");
+                builder.add_string_value(filter_id);
+            }
+
+            builder.set_member_name("search_term");
+            builder.add_string_value(search_term);
+
+            if ((groupings != null)
+                && ((node = groupings.get_json_node()) != null)) {
+                builder.set_member_name("groupings");
+                builder.add_value(node);
+            }
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
+
+    public class SearchCategories : JsonCompact {
+        public SearchRoomEvents? room_events { get; set; default = null; }
+
+        public override Json.Node?
+        get_json_node()
+            throws Matrix.Error
+        {
+            Json.Node? node = null;
+
+            if ((room_events == null)
+                && ((node = room_events.get_json_node()) != null)) {
+                return null;
+            }
+
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("room_events");
+            builder.add_value(node);
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
+
     private Json.Node?
     _json_object_node_ensure_field(Json.Node node,
                                    string field_name,
