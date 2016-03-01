@@ -1,10 +1,15 @@
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
+# Set up subdirectories to traverse
 SUBDIRS = src
 
 if ENABLE_GTK_DOC
 SUBDIRS += docs/reference/matrix-glib
 endif
 
+# Specify files to include in dist
+
+# in share/doc/
 matrixglibdocdir = ${prefix}/doc/matrix-glib
 matrixglibdoc_DATA = \
 	README \
@@ -19,6 +24,8 @@ matrixglibdoc_DATA = \
 EXTRA_DIST = $(matrixglibdoc_DATA) \
 	autogen.sh \
 	config.rpath
+
+# Lists of generated files you want to be able to clean
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/aclocal.m4 \
