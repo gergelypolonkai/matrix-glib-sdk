@@ -92,21 +92,26 @@ matrix-enumtypes.c: $(matrix_enum_headers) matrix-enumtypes.h matrix-enumtypes.c
 	                            $(filter-out %.template,$^) > $@.tmp \
 	&& mv $@.tmp $@
 
-matrix-marshalers.h: matrix-marshalers.list
+matrix-marshalers.h: stamp-matrix-marshalers
+	@true
+
+stamp-matrix-marshalers: matrix-marshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
 	                               $(srcdir)/matrix-marshalers.list \
 	                               --header \
 	                               --valist-marshallers >> xgen-gmlh \
 	&& (cmp -s xgen-gmlh matrix-marshalers.h \
 	    || cp xgen-gmlh matrix-marshalers.h) \
-	&& rm -f xgen-gmlh
+	&& rm -f xgen-gmlh \
+	&& echo timestamp > $(@F)
 
-matrix-marshalers.c: matrix-marshalers.list
+matrix-marshalers.c: matrix-marshalers.h
 	$(AM_V_GEN) (echo "#include \"matrix-marshalers.h\""; \
-	$(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
-	                   $(srcdir)/matrix-marshalers.list \
-	                   --body \
-	                   --valist-marshallers) >> xgen-gmlc \
+	             echo "#undef G_ENABLE_DEBUG"; \
+	             $(GLIB_GENMARSHAL) --prefix=_matrix_marshal \
+	                                $(srcdir)/matrix-marshalers.list \
+	                                --body \
+	                                --valist-marshallers) >> xgen-gmlc \
 	&& cp xgen-gmlc matrix-marshalers.c \
 	&& rm -f xgen-gmlc
 

@@ -37,6 +37,7 @@ Makefile.in
 /src/matrix-version.h
 /src/matrix-enumtypes.[ch]
 /src/matrix-marshalers.[ch]
+/src/stamp-matrix-marshalers
 /docs/reference/matrix-glib/version.xml
 /docs/reference/matrix-glib/html/
 /docs/reference/matrix-glib/xml/
