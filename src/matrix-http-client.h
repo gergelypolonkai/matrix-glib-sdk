@@ -36,11 +36,11 @@ typedef struct _MatrixHTTPClient      MatrixHTTPClient;
 typedef struct _MatrixHTTPClientClass MatrixHTTPClientClass;
 
 struct _MatrixHTTPClient {
-    GObject parent_instance;
+    MatrixHTTPAPI parent_instance;
 };
 
 struct _MatrixHTTPClientClass {
-    GObjectClass parent_class;
+    MatrixHTTPAPIClass parent_class;
 };
 
 GType matrix_http_client_get_type(void) G_GNUC_CONST;
