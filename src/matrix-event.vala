@@ -16,6 +16,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+private HashTable<string, TypeClass>? event_type_handlers = null;
+
 /**
  * Base class for Matrix events.
  */
@@ -236,8 +238,7 @@ public class Matrix.Event : GLib.Object, GLib.Initable {
             event_type = node.get_string();
         }
 
-        // This is kind of a hack until type registration is done
-        event_gtype = typeof(Matrix.Event);
+        event_gtype = get_handler(event_type);
 
         ret = (Event)Object.new(event_gtype,
                                 event_type : event_type,
@@ -274,5 +275,65 @@ public class Matrix.Event : GLib.Object, GLib.Initable {
     delete_custom_field (string field_name)
     {
         _custom_fields.unset(field_name);
+    }
+
+    /**
+     * Get the {@link GLib.Type} of the class that is registered to
+     * handle events with type @param event_type.
+     *
+     * @param event_type the event type to look up
+     * @return a {@link GLib.Type} or {@link Matrix.Event} if no
+     *         handler is registered
+     */
+    public static GLib.Type
+    get_handler(string event_type)
+    {
+        unowned GLib.TypeClass? klass = null;
+
+        if ((event_type_handlers != null)
+            && ((klass = event_type_handlers.get(event_type)) != null)) {
+            return klass.get_type();
+        }
+
+        warning("UsingMatrix.Event for %s", event_type);
+
+        return typeof(Matrix.Event);
+    }
+
+    /**
+     * Registers @param event_type to be handled by the
+     * type @param event_gtype.
+     *
+     * @param event_type the type of the event
+     * @param event_gtype the {@link GLib.Type} of the event’s handler
+     */
+    public static void
+    register_type(string event_type, GLib.Type event_gtype)
+        throws Matrix.Error
+    {
+        if (!event_gtype.is_a(typeof(Matrix.Event))) {
+            throw new Matrix.Error.INVALID_TYPE(
+                    "Invalid event type handler. It must be a subclass of MatrixEvent");
+        }
+
+        if (event_type_handlers == null) {
+            event_type_handlers = new HashTable<string, GLib.TypeClass>(
+                    str_hash, str_equal);
+        }
+
+        event_type_handlers.replace(event_type, event_gtype.class_ref());
+    }
+
+    /**
+     * Unregister @param event_type.
+     *
+     * @param event_type the event type to remove
+     */
+    public static void
+    unregister_type(string event_type)
+    {
+        if (event_type_handlers != null) {
+            event_type_handlers.remove(event_type);
+        }
     }
 }
