@@ -92,6 +92,16 @@ namespace Matrix {
         SCALE;   /// scale thumbnail to the requested size
     }
 
+    /**
+     * Preset values for matrix_api_create_room() calls.
+     */
+    public enum RoomPreset {
+        NONE,            /// no preset
+        PRIVATE,         /// preset for private rooms
+        TRUSTED_PRIVATE, /// same as private rooms, but all users get the same power level as the room creator
+        PUBLIC;          /// preset for public rooms
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {

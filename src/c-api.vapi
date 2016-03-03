@@ -41,14 +41,6 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_PRESET_")]
-    public enum RoomPreset {
-        NONE,
-        PRIVATE,
-        TRUSTED_PRIVATE,
-        PUBLIC;
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_VISIBILITY_")]
     public enum RoomVisibility {
         DEFAULT,
