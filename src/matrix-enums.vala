@@ -26,6 +26,15 @@ namespace Matrix {
         FEDERATION; /// return the raw event as receieved over federation
     }
 
+    /**
+     * Resizing methods for matrix_api_media_thumbnail().
+     */
+    public enum ResizeMethod {
+        DEFAULT, /// use the server default value
+        CROP,    /// crop thumbnail to the requested size
+        SCALE;   /// scale thumbnail to the requested size
+    }
+
     public string?
     _g_enum_value_to_nick(Type enum_type,
                           int value,

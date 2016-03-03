@@ -137,15 +137,6 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  */
 
 /**
- * MatrixResizeMethod:
- * @MATRIX_RESIZE_METHOD_DEFAULT: use the server default value
- * @MATRIX_RESIZE_METHOD_CROP: crop thumbnail to the requested size
- * @MATRIX_RESIZE_METHOD_SCALE: scale thumbnail to the requested size
- *
- * Resizing methods for matrix_api_media_thumbnail().
- */
-
-/**
  * MatrixPresence:
  * @MATRIX_PRESENCE_UNKNOWN: user's presence is unknown
  * @MATRIX_PRESENCE_ONLINE: user is online

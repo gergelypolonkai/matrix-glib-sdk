@@ -73,12 +73,6 @@ typedef enum {
 GQuark matrix_error_quark(void);
 
 typedef enum {
-    MATRIX_RESIZE_METHOD_DEFAULT,
-    MATRIX_RESIZE_METHOD_CROP,
-    MATRIX_RESIZE_METHOD_SCALE
-} MatrixResizeMethod;
-
-typedef enum {
     MATRIX_PRESENCE_UNKNOWN,
     MATRIX_PRESENCE_ONLINE,
     MATRIX_PRESENCE_OFFLINE,
