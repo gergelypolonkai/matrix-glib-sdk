@@ -18,6 +18,15 @@
 
 namespace Matrix {
     /**
+     * User account types.
+     */
+    public enum AccountKind {
+        DEFAULT, /// use the server default (usually {{{USER}}})
+        USER,    /// normal user
+        GUEST;   /// guest user
+    }
+
+    /**
      * Event format received when synchronizing.
      */
     public enum EventFormat {

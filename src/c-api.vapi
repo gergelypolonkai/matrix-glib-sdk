@@ -93,13 +93,6 @@ namespace Matrix {
         READ;
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ACCOUNT_KIND_")]
-    public enum AccountKind {
-        DEFAULT,
-        USER,
-        GUEST;
-    }
-
     [CCode (cheader_filename = "matrix-types.h")]
     public class StateEvent {
         public Json.Node? get_json_node();

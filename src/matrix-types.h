@@ -117,12 +117,6 @@ typedef enum {
     MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
 } MatrixPusherConditionKind;
 
-typedef enum {
-    MATRIX_ACCOUNT_KIND_DEFAULT,
-    MATRIX_ACCOUNT_KIND_USER,
-    MATRIX_ACCOUNT_KIND_GUEST
-} MatrixAccountKind;
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);

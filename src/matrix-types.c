@@ -212,16 +212,6 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  */
 
 /**
- * MatrixAccountKind:
- * @MATRIX_ACCOUNT_KIND_DEFAULT: use the server default (usually
- *                               %MATRIX_ACCOUNT_KIND_USER)
- * @MATRIX_ACCOUNT_KIND_USER: normal user
- * @MATRIX_ACCOUNT_KIND_GUEST: guest user
- *
- * User account types.
- */
-
-/**
  * MatrixEventDirection:
  * @MATRIX_EVENT_DIRECTION_FORWARD: List events after the specified
  *                                  one
