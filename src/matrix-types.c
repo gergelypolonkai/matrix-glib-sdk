@@ -153,52 +153,6 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  */
 
 /**
- * MatrixPusherConditionKind:
- * @MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH: glob pattern match on a
- *                                            field of the
- *                                            event. Requires a
- *                                            <code>key</code> and a
- *                                            <code>pattern</code>
- *                                            parameter
- * @MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG: matches the profile tag
- *                                            of the device that the
- *                                            notification would be
- *                                            delivered to. Requires a
- *                                            <code>profile_tag</code>
- *                                            parameter
- * @MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME: matches
- *                                                      unencrypted
- *                                                      messages where
- *                                                      the content's
- *                                                      body contains
- *                                                      the owner's
- *                                                      display name
- *                                                      in that room.
- * @MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT: matches the
- *                                                  current number of
- *                                                  members in the
- *                                                  room. Requires an
- *                                                  <code>is</code>
- *                                                  parameter, which
- *                                                  must be an
- *                                                  integer,
- *                                                  optionally
- *                                                  prefixed by
- *                                                  <code>==</code>,
- *                                                  <code>&lt;</code>,
- *                                                  <code>&gt;</code>,
- *                                                  <code>&lt;=</code>
- *                                                  or
- *                                                  <code>&gt;=</code>. If
- *                                                  the prefix is
- *                                                  omitted, it
- *                                                  defaults to
- *                                                  <code>==</code>
- *
- * Condition types for pushers.
- */
-
-/**
  * MatrixReceiptType:
  * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
  *

@@ -56,6 +56,16 @@ namespace Matrix {
     }
 
     /**
+     * Condition types for pushers.
+     */
+    public enum PusherConditionKind {
+        EVENT_MATCH,           /// glob pattern match on a field of the event. Requires a {{{key}}} and a {{{pattern}}} parameter
+        PROFILE_TAG,           /// matches the profile tag of the device that the notification would be delivered to. Requires a {{{profile_tag}}} parameter
+        CONTAINS_DISPLAY_NAME, /// matches unencrypted messages where the content's body contains the owner's display name in that room.
+        ROOM_MEMBER_COUNT;     /// matches the current number of members in the room. Requires an {{{is}}} parameter, which must be an integer, optionally prefixed by {{==}}}, {{{&lt;}}}, {{{&gt;}}}, {{{&lt;=}}} or {{{&gt;=}}}. If the prefix is omitted, it defaults to {{{==}}}
+    }
+
+    /**
      * Resizing methods for matrix_api_media_thumbnail().
      */
     public enum ResizeMethod {

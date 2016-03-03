@@ -97,13 +97,6 @@ typedef enum {
     MATRIX_PUSHER_KIND_UNDERRIDE
 } MatrixPusherKind;
 
-typedef enum {
-    MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH,
-    MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG,
-    MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME,
-    MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT
-} MatrixPusherConditionKind;
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);

@@ -50,14 +50,6 @@ namespace Matrix {
         UNDERRIDE;
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PUSHER_CONDITION_KIND_")]
-    public enum PusherConditionKind {
-        EVENT_MATCH,
-        PROFILE_TAG,
-        CONTAINS_DISPLAY_NAME,
-        ROOM_MEMBER_COUNT;
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_PRESET_")]
     public enum RoomPreset {
         NONE,
