@@ -44,6 +44,18 @@ namespace Matrix {
     }
 
     /**
+     * Presence values for matrix_api_set_user_presence() and other
+     * presence related queries.
+     */
+    public enum Presence {
+        UNKNOWN,       /// user's presence is unknown
+        ONLINE,        /// user is online
+        OFFLINE,       /// user is offline
+        UNAVAILABLE,   /// user is unavailable (i.e. busy)
+        FREE_FOR_CHAT; /// user is free for chat
+    }
+
+    /**
      * Resizing methods for matrix_api_media_thumbnail().
      */
     public enum ResizeMethod {

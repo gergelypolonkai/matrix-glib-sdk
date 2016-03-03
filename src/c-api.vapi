@@ -41,15 +41,6 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PRESENCE_")]
-    public enum Presence {
-        UNKNOWN,
-        ONLINE,
-        OFFLINE,
-        UNAVAILABLE,
-        FREE_FOR_CHAT;
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PUSHER_KIND_")]
     public enum PusherKind {
         OVERRIDE,
