@@ -19,39 +19,6 @@
 #include "utils.h"
 #include "matrix-types.h"
 
-gint
-_g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error)
-{
-    GEnumClass *enum_class = g_type_class_ref(enum_type);
-    GEnumValue *enum_value = NULL;
-    gchar *nick_c = NULL;
-    gchar *a;
-    int ret = 0;
-
-    nick_c = g_strdup(nick);
-
-    for (a = nick_c; *a; a++) {
-        if (*a == '_') {
-            *a = '-';
-        }
-    }
-
-    enum_value = g_enum_get_value_by_nick(enum_class, nick_c);
-    g_free(nick_c);
-
-    if (enum_value) {
-        ret = enum_value->value;
-    } else {
-        g_set_error(error,
-                    MATRIX_ERROR, MATRIX_ERROR_UNKNOWN_VALUE,
-                    "Value %s is unknown", nick);
-    }
-
-    g_type_class_unref(enum_class);
-
-    return ret;
-}
-
 static void
 deep_copy_object(JsonObject *object,
                  const gchar *member_name,

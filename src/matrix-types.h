@@ -133,31 +133,6 @@ JsonNode *matrix_state_event_get_json_node(MatrixStateEvent *event);
 gchar *matrix_state_event_get_json_data(MatrixStateEvent *event,
                                         gsize *datalen);
 
-typedef struct _MatrixPresenceEvent MatrixPresenceEvent;
-
-GType matrix_presence_event_get_type(void);
-#define MATRIX_TYPE_PRESENCE_EVENT (matrix_presence_event_get_type())
-
-MatrixPresenceEvent *matrix_presence_event_new(void);
-MatrixPresenceEvent *matrix_presence_event_new_from_json(JsonNode *json_data);
-MatrixPresenceEvent *matrix_presence_event_ref(MatrixPresenceEvent *event);
-void matrix_presence_event_unref(MatrixPresenceEvent *event);
-void matrix_presence_event_set_user_id(MatrixPresenceEvent *event,
-                                       const gchar *user_id);
-const gchar *matrix_presence_event_get_user_id(MatrixPresenceEvent *event);
-void matrix_presence_event_set_display_name(MatrixPresenceEvent *event,
-                                            const gchar *display_name);
-const gchar *matrix_presence_event_get_display_name(MatrixPresenceEvent *event);
-void matrix_presence_event_set_avatar_url(MatrixPresenceEvent *event,
-                                          const gchar *avatar_url);
-const gchar *matrix_presence_event_get_avatar_url(MatrixPresenceEvent *event);
-void matrix_presence_event_set_last_active_ago(MatrixPresenceEvent *event,
-                                               gulong last_active_ago);
-gulong matrix_presence_event_get_last_active_ago(MatrixPresenceEvent *event);
-void matrix_presence_event_set_presence(MatrixPresenceEvent *event,
-                                        MatrixPresence presence);
-MatrixPresence matrix_presence_event_get_presence(MatrixPresenceEvent *event);
-
 G_END_DECLS
 
 #endif /* __MATRIX_TYPES_H__ */
