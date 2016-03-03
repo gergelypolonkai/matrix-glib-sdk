@@ -94,11 +94,6 @@ typedef enum {
 } MatrixRoomVisibility;
 
 typedef enum {
-    MATRIX_EVENT_DIRECTION_FORWARD,
-    MATRIX_EVENT_DIRECTION_BACKWARD
-} MatrixEventDirection;
-
-typedef enum {
     MATRIX_RECEIPT_TYPE_READ
 } MatrixReceiptType;
 

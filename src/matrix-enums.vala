@@ -27,6 +27,14 @@ namespace Matrix {
     }
 
     /**
+     * Direction of events when requesting an event context.
+     */
+    public enum EventDirection {
+        FORWARD,  /// List events after the specified one
+        BACKWARD; /// List events before the specified one
+    }
+
+    /**
      * Event format received when synchronizing.
      */
     public enum EventFormat {

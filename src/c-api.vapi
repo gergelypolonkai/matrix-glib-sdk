@@ -82,12 +82,6 @@ namespace Matrix {
         PRIVATE;
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_EVENT_DIRECTION_")]
-    public enum EventDirection {
-        FORWARD,
-        BACKWARD;
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_RECEIPT_TYPE_")]
     public enum ReceiptType {
         READ;

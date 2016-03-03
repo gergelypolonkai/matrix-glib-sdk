@@ -212,16 +212,6 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  */
 
 /**
- * MatrixEventDirection:
- * @MATRIX_EVENT_DIRECTION_FORWARD: List events after the specified
- *                                  one
- * @MATRIX_EVENT_DIRECTION_BACKWARD: List events before the specified
- *                                   one
- *
- * Direction of events when requesting an event context.
- */
-
-/**
  * MatrixReceiptType:
  * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
  *
