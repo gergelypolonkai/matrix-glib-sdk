@@ -112,20 +112,6 @@
 G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
- * MatrixEventFormat:
- * @MATRIX_EVENT_FORMAT_DEFAULT: event format will be omitted from the
- *                               filter, so the server will use its
- *                               default (usually
- *                               @MATRIX_EVENT_FORMAT_FEDERATION)
- * @MATRIX_EVENT_FORMAT_CLIENT: return the events in a format suitable
- *                              for clients
- * @MATRIX_EVENT_FORMAT_FEDERATION: return the raw event as receieved
- *                                  over federation
- *
- * Event format received when synchronizing.
- */
-
-/**
  * MatrixRoomPreset:
  * @MATRIX_ROOM_PRESET_NONE: no preset
  * @MATRIX_ROOM_PRESET_PRIVATE: preset for private rooms

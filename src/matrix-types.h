@@ -73,12 +73,6 @@ typedef enum {
 GQuark matrix_error_quark(void);
 
 typedef enum {
-    MATRIX_EVENT_FORMAT_DEFAULT,
-    MATRIX_EVENT_FORMAT_CLIENT,
-    MATRIX_EVENT_FORMAT_FEDERATION
-} MatrixEventFormat;
-
-typedef enum {
     MATRIX_RESIZE_METHOD_DEFAULT,
     MATRIX_RESIZE_METHOD_CROP,
     MATRIX_RESIZE_METHOD_SCALE

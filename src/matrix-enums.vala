@@ -17,6 +17,15 @@
  */
 
 namespace Matrix {
+    /**
+     * Event format received when synchronizing.
+     */
+    public enum EventFormat {
+        DEFAULT,    /// event format will be omitted from the filter, so the server will use its default (usually {{{FEDERATION}}})
+        CLIENT,     /// return the events in a format suitable for clients
+        FEDERATION; /// return the raw event as receieved over federation
+    }
+
     public string?
     _g_enum_value_to_nick(Type enum_type,
                           int value,

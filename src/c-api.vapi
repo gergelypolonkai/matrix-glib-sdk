@@ -41,13 +41,6 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_EVENT_FORMAT_")]
-    public enum EventFormat {
-        DEFAULT,
-        CLIENT,
-        FEDERATION
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_RESIZE_METHOD_")]
     public enum ResizeMethod {
         DEFAULT,
