@@ -56,11 +56,6 @@ namespace Matrix {
         PRIVATE;
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_RECEIPT_TYPE_")]
-    public enum ReceiptType {
-        READ;
-    }
-
     [CCode (cheader_filename = "matrix-types.h")]
     public class StateEvent {
         public Json.Node? get_json_node();

@@ -136,13 +136,6 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  */
 
 /**
- * MatrixReceiptType:
- * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
- *
- * Receipt types of acknowledgment.
- */
-
-/**
  * MatrixStateEvent:
  *
  * An opaque structure to hold a state event filter.

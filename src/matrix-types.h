@@ -85,10 +85,6 @@ typedef enum {
     MATRIX_ROOM_VISIBILITY_PRIVATE
 } MatrixRoomVisibility;
 
-typedef enum {
-    MATRIX_RECEIPT_TYPE_READ
-} MatrixReceiptType;
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);
