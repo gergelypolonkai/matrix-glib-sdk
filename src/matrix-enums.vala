@@ -66,6 +66,17 @@ namespace Matrix {
     }
 
     /**
+     * Pusher types.
+     */
+    public enum PusherKind {
+        OVERRIDE,  /// highest priority rules
+        SENDER,    /// for (unencrypted) messages that match certain patterns
+        ROOM,      /// for all messages for a given room. The rule ID of a room rule is always the ID of the room that it affects
+        CONTENT,   /// for messages from a specific Matrix user ID. The rule ID of such rules is always the Matrix ID of the user whose messages they'd apply to
+        UNDERRIDE; /// lowest priority rules
+    }
+
+    /**
      * Resizing methods for matrix_api_media_thumbnail().
      */
     public enum ResizeMethod {

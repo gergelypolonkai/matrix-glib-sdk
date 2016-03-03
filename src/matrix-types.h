@@ -89,14 +89,6 @@ typedef enum {
     MATRIX_RECEIPT_TYPE_READ
 } MatrixReceiptType;
 
-typedef enum {
-    MATRIX_PUSHER_KIND_OVERRIDE,
-    MATRIX_PUSHER_KIND_SENDER,
-    MATRIX_PUSHER_KIND_ROOM,
-    MATRIX_PUSHER_KIND_CONTENT,
-    MATRIX_PUSHER_KIND_UNDERRIDE
-} MatrixPusherKind;
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);

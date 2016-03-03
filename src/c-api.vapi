@@ -41,15 +41,6 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PUSHER_KIND_")]
-    public enum PusherKind {
-        OVERRIDE,
-        SENDER,
-        ROOM,
-        CONTENT,
-        UNDERRIDE;
-    }
-
     [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_PRESET_")]
     public enum RoomPreset {
         NONE,
