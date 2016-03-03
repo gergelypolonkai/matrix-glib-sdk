@@ -41,13 +41,6 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
-    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_VISIBILITY_")]
-    public enum RoomVisibility {
-        DEFAULT,
-        PUBLIC,
-        PRIVATE;
-    }
-
     [CCode (cheader_filename = "matrix-types.h")]
     public class StateEvent {
         public Json.Node? get_json_node();

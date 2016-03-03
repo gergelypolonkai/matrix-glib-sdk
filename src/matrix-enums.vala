@@ -102,6 +102,16 @@ namespace Matrix {
         PUBLIC;          /// preset for public rooms
     }
 
+    /**
+     * Visibility values for room creation. Not to be confused with
+     * join rules.
+     */
+    public enum RoomVisibility {
+        DEFAULT, /// use a server-assigned value (usually {{{private}}}
+        PUBLIC,  /// make the room visible in the public room list
+        PRIVATE; /// hide the room from the public room list
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {

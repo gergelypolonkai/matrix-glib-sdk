@@ -72,12 +72,6 @@ typedef enum {
 #define MATRIX_ERROR matrix_error_quark()
 GQuark matrix_error_quark(void);
 
-typedef enum {
-    MATRIX_ROOM_VISIBILITY_DEFAULT,
-    MATRIX_ROOM_VISIBILITY_PUBLIC,
-    MATRIX_ROOM_VISIBILITY_PRIVATE
-} MatrixRoomVisibility;
-
 typedef struct _MatrixStateEvent MatrixStateEvent;
 
 GType matrix_state_event_get_type(void);

@@ -111,19 +111,6 @@
 G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
- * MatrixRoomVisibility:
- * @MATRIX_ROOM_VISIBILITY_DEFAULT: use a server-assigned value
- *                                  (usually <code>private</code>
- * @MATRIX_ROOM_VISIBILITY_PUBLIC: make the room visible in the public
- *                                 room list
- * @MATRIX_ROOM_VISIBILITY_PRIVATE: hide the room from the public room
- *                                  list
- *
- * Visibility values for room creation. Not to be confused with join
- * rules.
- */
-
-/**
  * MatrixStateEvent:
  *
  * An opaque structure to hold a state event filter.
