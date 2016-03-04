@@ -107,6 +107,13 @@ libmatrix_glib_0_0_la_LDFLAGS = \
 
 $(PUBLIC_HEADER): vala-stamp
 
+Matrix-0.0.vapi: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
+vapidir = $(datadir)/vala/vapi
+dist_vapi_DATA = \
+	Matrix-$(MATRIX_GLIB_API_VERSION).vapi \
+	Matrix-$(MATRIX_GLIB_API_VERSION).deps \
+	$(NULL)
+
 BUILT_SOURCES += \
 	$(NULL)
 
@@ -125,35 +132,6 @@ EXTRA_DIST += \
 include $(INTROSPECTION_MAKEFILE)
 Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
 
-Matrix_0_0_gir_FILES = \
-	$(INST_H_SRC_FILES) \
-	$(INST_H_BUILT_FILES) \
-	$(filter %.c,$(libmatrix_glib_0_0_la_SOURCES)) \
-	$(NULL)
-
-Matrix_0_0_gir_LIBS = libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
-
-Matrix_0_0_gir_SCANNERFLAGS = \
-	--identifier-prefix=Matrix \
-	--symbol-prefix=matrix \
-	--warn-all \
-	$(NULL)
-
-Matrix_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0 Soup-2.4 Json-1.0
-
-Matrix_0_0_gir_CFLAGS = \
-	-D__MATRIX_GLIB_BUILDING__ \
-	-I$(top_srcdir) \
-	-I$(srcdir) \
-	-I$(builddir) \
-	$(NULL)
-
-Matrix_0_0_gir_EXPORT_PACKAGES = matrix-glib
-INTROSPECTION_GIRS = Matrix-$(MATRIX_GLIB_API_VERSION).gir
-
-girdir = $(datadir)/gir-1.0
-gir_DATA = Matrix-$(MATRIX_GLIB_API_VERSION).gir
-
 typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = Matrix-$(MATRIX_GLIB_API_VERSION).typelib
 
@@ -164,4 +142,4 @@ header_DATA = \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)
 
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+CLEANFILES += $(typelibs_DATA)
