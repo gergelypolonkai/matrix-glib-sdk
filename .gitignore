@@ -39,22 +39,7 @@ Makefile.in
 /src/matrix-version.h
 /src/matrix-marshalers.[ch]
 /src/stamp-matrix-marshalers
-/docs/reference/matrix-glib/version.xml
-/docs/reference/matrix-glib/html/
-/docs/reference/matrix-glib/xml/
-/docs/reference/matrix-glib/matrix-glib-decl-list.txt
-/docs/reference/matrix-glib/matrix-glib-decl.txt
-/docs/reference/matrix-glib/matrix-glib-overrides.txt
-/docs/reference/matrix-glib/matrix-glib-undeclared.txt
-/docs/reference/matrix-glib/matrix-glib-undocumented.txt
-/docs/reference/matrix-glib/matrix-glib-unused.txt
-/docs/reference/matrix-glib/matrix-glib.args
-/docs/reference/matrix-glib/matrix-glib.hierarchy
-/docs/reference/matrix-glib/matrix-glib.interfaces
-/docs/reference/matrix-glib/matrix-glib.prerequisites
-/docs/reference/matrix-glib/matrix-glib.signals
-/docs/reference/matrix-glib/matrix-glib.types
-/docs/reference/matrix-glib/*.bak
+/docs/valadoc/gtk-doc/gtk-doc
 
 # Vala related files
 /src/Matrix-0.0.vapi

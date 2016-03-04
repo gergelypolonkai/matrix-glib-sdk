@@ -18,28 +18,6 @@
 
 #include "matrix-version.h"
 
-/**
- * SECTION:matrix-version
- * @short_description: Matrix.org GLib SDK version information
- * @title: Version information
- * @stability: Stable
- * @include: matrix-client/matrix-client.h
- *
- * Version information for the Matrix.org GLib SDK.
- */
-
-/**
- * MATRIX_GLIB_CHECK_VERSION:
- * @major: the major version to check for
- * @minor: the minor version to check for
- * @micro: the micro version to check for
- *
- * Checks the version number of the Matrix.org GLib SDK that is being
- * compiled against.
- *
- * Returns: TRUE if the required version is satisfied; FALSE otherwise.
- */
-
 gboolean
 matrix_glib_check_version(guint required_major,
                           guint required_minor,

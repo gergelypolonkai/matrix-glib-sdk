@@ -3,8 +3,8 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 # Set up subdirectories to traverse
 SUBDIRS = src
 
-if ENABLE_GTK_DOC
-SUBDIRS += docs/reference/matrix-glib
+if ENABLE_DOCS
+    SUBDIRS += docs
 endif
 
 # Specify files to include in dist
