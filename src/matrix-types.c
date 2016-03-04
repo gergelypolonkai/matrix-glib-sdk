@@ -18,6 +18,7 @@
 
 #include "matrix-types.h"
 #include "matrix-enumtypes.h"
+#include "matrix-glib.h"
 #include "utils.h"
 
 /**
@@ -1566,7 +1567,7 @@ matrix_filter_get_json_node(MatrixFilter *filter)
 
     json_builder_set_member_name(builder, "event_format");
     json_builder_add_string_value(builder,
-                                  _g_enum_to_string(
+                                  _matrix_g_enum_value_to_nick(
                                           MATRIX_TYPE_EVENT_FORMAT,
                                           filter->event_format,
                                           TRUE));

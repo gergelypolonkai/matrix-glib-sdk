@@ -19,32 +19,6 @@
 #include "utils.h"
 #include "matrix-types.h"
 
-gchar *
-_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
-{
-    GEnumClass *enum_class = g_type_class_ref(enum_type);
-    GEnumValue *enum_value = g_enum_get_value(enum_class, value);
-    gchar *nick = NULL;
-
-    if (value) {
-        nick = g_strdup(enum_value->value_nick);
-
-        if (convert_dashes) {
-            gchar *a;
-
-            for (a = nick; *a; a++) {
-                if (*a == '-') {
-                    *a = '_';
-                }
-            }
-        }
-    }
-
-    g_type_class_unref(enum_class);
-
-    return nick;
-}
-
 gint
 _g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error)
 {

@@ -16,14 +16,25 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MATRIX_UTILS_H__
-#define __MATRIX_UTILS_H__
+namespace Matrix {
+    public string?
+    _g_enum_value_to_nick(Type enum_type,
+                          int value,
+                          bool convert_dashes = true)
+    {
+        EnumClass enum_class = (EnumClass)enum_type.class_ref();
+        unowned EnumValue? enum_val = enum_class.get_value(value);
 
-#include <glib.h>
-#include <glib-object.h>
-#include <json-glib/json-glib.h>
+        if (enum_val != null) {
+            var nick = enum_val.value_nick;
 
-gint _g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error);
-JsonNode *_json_node_deep_copy(const JsonNode *node);
+            if (convert_dashes) {
+                return nick.replace("-", "_");
+            }
 
-#endif /* __MATRIX_UTILS_H__ */
+            return nick;
+        } else {
+            return null;
+        }
+    }
+}

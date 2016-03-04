@@ -18,6 +18,7 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-api.vala \
 	matrix-client.vala \
+	matrix-enums.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

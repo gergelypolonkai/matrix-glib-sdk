@@ -63,3 +63,4 @@ Makefile.in
 /src/matrix-glib.h
 /src/matrix-api.c
 /src/matrix-client.c
+/src/matrix-enums.c
