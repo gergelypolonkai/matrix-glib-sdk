@@ -58,3 +58,5 @@ Makefile.in
 /src/matrix-room-member-event.c
 /src/matrix-state-event.c
 /src/matrix-room-message-event.c
+
+/src/object-generator
