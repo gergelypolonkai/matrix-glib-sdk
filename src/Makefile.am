@@ -93,7 +93,6 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-version.c \
 	matrix-types.c \
 	matrix-enumtypes.c \
-	utils.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
 

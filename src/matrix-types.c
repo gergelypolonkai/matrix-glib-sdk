@@ -19,7 +19,6 @@
 #include "matrix-types.h"
 #include "matrix-enumtypes.h"
 #include "matrix-glib.h"
-#include "utils.h"
 
 /**
  * SECTION:matrix-types

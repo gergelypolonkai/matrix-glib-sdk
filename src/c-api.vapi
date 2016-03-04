@@ -91,8 +91,4 @@ namespace Matrix {
     public class StateEvent {
         public Json.Node? get_json_node();
     }
-
-    [CCode (cheader_filename = "utils.h", cname = "_json_node_deep_copy")]
-    public Json.Node?
-    _json_node_deep_copy(Json.Node? node);
 }

@@ -651,4 +651,53 @@ namespace Matrix {
             return builder.get_root();
         }
     }
+
+    private Json.Node?
+    _json_node_deep_copy(Json.Node? node)
+    {
+        Json.Node ret;
+
+        if (node == null) {
+            return null;
+        }
+
+        ret = new Json.Node(node.get_node_type());
+
+        switch (node.get_node_type()) {
+            case Json.NodeType.OBJECT:
+                var new_obj = new Json.Object();
+
+                node.get_object().foreach_member(
+                        (old_obj, member_name, member_node) => {
+                            new_obj.set_member(
+                                    member_name,
+                                    _json_node_deep_copy(member_node));
+                        });
+
+                ret.set_object(new_obj);
+
+                break;
+
+            case Json.NodeType.ARRAY:
+                var new_ary = new Json.Array();
+
+                node.get_array().foreach_element(
+                        (old_ary, idx, element_node) => {
+                            new_ary.add_element(
+                                    _json_node_deep_copy(element_node));
+                        });
+
+                break;
+
+            case Json.NodeType.VALUE:
+                ret.set_value(node.get_value());
+
+                break;
+
+            case Json.NodeType.NULL:
+                break;
+        }
+
+        return ret;
+    }
 }
