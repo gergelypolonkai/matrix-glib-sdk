@@ -29,24 +29,6 @@
  */
 
 /**
- * MATRIX_GLIB_MAJOR_VERSION:
- *
- * The major version number of the Matrix.org GLib SDK.
- */
-
-/**
- * MATRIX_GLIB_MINOR_VERSION:
- *
- * The minor version number of the Matrix.org GLib SDK.
- */
-
-/**
- * MATRIX_GLIB_MICRO_VERSION:
- *
- * The micro (patch) version number of the Matrix.org GLib SDK.
- */
-
-/**
  * MATRIX_GLIB_CHECK_VERSION:
  * @major: the major version to check for
  * @minor: the minor version to check for
@@ -54,18 +36,6 @@
  *
  * Checks the version number of the Matrix.org GLib SDK that is being
  * compiled against.
- *
- * Returns: TRUE if the required version is satisfied; FALSE otherwise.
- */
-
-/**
- * matrix_glib_check_version:
- * @required_major: the required major version
- * @required_minor: the required minor version
- * @required_micro: the required micro version
- *
- * Check that the Matrix.org GLib SDK in use is compatible with the
- * given version.
  *
  * Returns: TRUE if the required version is satisfied; FALSE otherwise.
  */
