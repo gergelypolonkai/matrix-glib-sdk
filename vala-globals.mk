@@ -3,6 +3,8 @@ VALA_PKG_LIST = \
 	--pkg=Json-1.0 \
 	--pkg=libsoup-2.4 \
 	--pkg=gee-0.8 \
+	--pkg=c-api \
+	--pkg=config \
 	$(NULL)
 
 VALADOC_FLAGS = \
@@ -12,6 +14,5 @@ VALADOC_FLAGS = \
 	--package-version=$(PACKAGE_VERSION) \
 	-b $(top_srcdir)/src \
 	$(VALA_PKG_LIST) \
-	--vapidir=$(top_srcdir)/src \
-	$(top_srcdir)/src/c-api.vapi \
+	--vapidir=$(top_srcdir)/vapi \
 	$(NULL)

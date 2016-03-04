@@ -51,7 +51,7 @@ AM_VALAFLAGS += \
 	-C \
 	--use-header \
 	--gir=Matrix-$(MATRIX_GLIB_API_VERSION).gir \
-	$(top_srcdir)/src/c-api.vapi \
+	--vapidir=$(top_srcdir)/vapi \
 	$(NULL)
 
 vala-stamp: $(libmatrix_glib_0_0_la_VALA_SOURCES)
