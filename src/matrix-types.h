@@ -72,27 +72,6 @@ typedef enum {
 #define MATRIX_ERROR matrix_error_quark()
 GQuark matrix_error_quark(void);
 
-typedef struct _MatrixStateEvent MatrixStateEvent;
-
-GType matrix_state_event_get_type(void);
-#define MATRIX_TYPE_STATE_EVENT (matrix_state_event_get_type())
-
-MatrixStateEvent *matrix_state_event_new(void);
-MatrixStateEvent *matrix_state_event_ref(MatrixStateEvent *event);
-void matrix_state_event_unref(MatrixStateEvent *event);
-void matrix_state_event_set_event_type(MatrixStateEvent *event,
-                                       const gchar *event_type);
-const gchar *matrix_state_event_get_event_type(MatrixStateEvent *event);
-void matrix_state_event_set_state_key(MatrixStateEvent *event,
-                                      const gchar *state_key);
-const gchar *matrix_state_event_get_state_key(MatrixStateEvent *event);
-void matrix_state_event_set_content(MatrixStateEvent *event,
-                                    const JsonNode *content);
-const JsonNode *matrix_state_event_get_content(MatrixStateEvent *event);
-JsonNode *matrix_state_event_get_json_node(MatrixStateEvent *event);
-gchar *matrix_state_event_get_json_data(MatrixStateEvent *event,
-                                        gsize *datalen);
-
 G_END_DECLS
 
 #endif /* __MATRIX_TYPES_H__ */

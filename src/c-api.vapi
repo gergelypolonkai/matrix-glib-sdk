@@ -40,9 +40,4 @@ namespace Matrix {
         UNKNOWN_ERROR;
         public static GLib.Quark quark ();
     }
-
-    [CCode (cheader_filename = "matrix-types.h")]
-    public class StateEvent {
-        public Json.Node? get_json_node();
-    }
 }

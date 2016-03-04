@@ -652,6 +652,30 @@ namespace Matrix {
         }
     }
 
+    public class StateEvent : JsonCompact {
+        public string? state_key { get; set; default = null; }
+        public Json.Node? content { get; set; default = null; }
+
+        public override Json.Node?
+            get_json_node()
+        throws Matrix.Error
+        {
+            var builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("state_key");
+            builder.add_string_value(state_key);
+
+            builder.set_member_name("content");
+            builder.add_value(content);
+
+            builder.end_object();
+
+            return builder.get_root();
+        }
+    }
+
     private Json.Node?
     _json_node_deep_copy(Json.Node? node)
     {
