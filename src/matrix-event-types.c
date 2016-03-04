@@ -142,3 +142,14 @@
 #endif
 
 #endif /* __GTK_DOC_IGNORE__ */
+
+#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
+#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(matrix_event_types_ctor)
+#endif
+
+G_DEFINE_CONSTRUCTOR(matrix_event_types_ctor);
+
+static void
+matrix_event_types_ctor(void)
+{
+}
