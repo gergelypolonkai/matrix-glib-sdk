@@ -148,6 +148,8 @@ login_finished(MatrixAPI *api,
                                      user_id, NULL);
     } else {
         g_printf("Login unsuccessful!\n");
+
+        g_main_loop_quit(loop);
     }
 }
 
