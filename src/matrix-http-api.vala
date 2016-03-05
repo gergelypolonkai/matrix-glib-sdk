@@ -69,8 +69,10 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                 _homeserver = null;
                 _user_id = null;
 
-                debug("API URL: %s", api_uri.to_string(false));
-                debug("Media URL: %s", media_uri.to_string(false));
+                if (Config.DEBUG) {
+                    debug("API URL: %s", api_uri.to_string(false));
+                    debug("Media URL: %s", media_uri.to_string(false));
+                }
             } else {
                 warning("Invalid base URL: %s", value);
             }
@@ -186,7 +188,9 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
         }
 
         if (token != null) {
-            debug("Adding access token '%s'", token);
+            if (Config.DEBUG) {
+                debug("Adding access token '%s'", token);
+            }
 
             parms.replace("access_token", token);
         }
@@ -208,13 +212,15 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             request_data = "{}".data;
         }
 
-        debug("Sending %d bytes (%s %s): %s",
-              request_data.length,
-              method,
-              request_path.to_string(false),
-              (raw_content != null)
-                  ? "<Binary data>"
-                  : (string)request_data);
+        if (Config.DEBUG) {
+            debug("Sending %d bytes (%s %s): %s",
+                  request_data.length,
+                  method,
+                  request_path.to_string(false),
+                  (raw_content != null)
+                      ? "<Binary data>"
+                      : (string)request_data);
+        }
 
         message.set_flags(Soup.MessageFlags.NO_REDIRECT);
         message.set_request(
@@ -276,7 +282,9 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             }
 
             if (is_json) {
-                debug("Response (%s): %s", request_url, data);
+                if (Config.DEBUG) {
+                    debug("Response (%s): %s", request_url, data);
+                }
 
                 content = parser.get_root();
 
@@ -290,7 +298,10 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                         string? access_token;
 
                         if ((access_token = node.get_string()) != null) {
-                            debug("Got new access token: %s", access_token);
+                            if (Config.DEBUG) {
+                                debug("Got new access token: %s", access_token);
+                            }
+
                             token = access_token;
                         }
                     }
@@ -301,8 +312,11 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                         string? refresh_token;
 
                         if ((refresh_token = node.get_string()) != null) {
-                            debug("Got new refresh token: %s",
-                                  refresh_token);
+                            if (Config.DEBUG) {
+                                debug("Got new refresh token: %s",
+                                      refresh_token);
+                            }
+
                             this.refresh_token = refresh_token;
                         }
                     }
@@ -311,7 +325,11 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                     if ((node = root.get_member("home_server")) != null) {
                         string homeserver = node.get_string();
 
-                        debug("Our home server calls itself %s", homeserver);
+                        if (Config.DEBUG) {
+                            debug("Our home server calls itself %s",
+                                  homeserver);
+                        }
+
                         this._homeserver = homeserver;
                     }
 
@@ -320,7 +338,11 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                     if ((node = root.get_member("user_id")) != null) {
                         string user_id = node.get_string();
 
-                        debug("We are reported to be logged in as %s", user_id);
+                        if (Config.DEBUG) {
+                            debug("We are reported to be logged in as %s",
+                                  user_id);
+                        }
+
                         this._user_id = user_id;
                     }
 
@@ -403,11 +425,18 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                 if (accept_non_json) {
                     raw_content = new ByteArray.sized((uint)datalen);
                     raw_content.append(buffer.data);
-                    debug("Binary data (%s): %u bytes", request_url, (uint)datalen);
+
+                    if (Config.DEBUG) {
+                        debug("Binary data (%s): %u bytes",
+                              request_url, (uint)datalen);
+                    }
                 } else {
                     err = new Matrix.Error.BAD_RESPONSE(
                             "Malformed response (invalid JSON)");
-                    debug("Malformed response (%s): %s", request_url, data);
+
+                    if (Config.DEBUG) {
+                        debug("Malformed response (%s): %s", request_url, data);
+                    }
                 }
             }
         }

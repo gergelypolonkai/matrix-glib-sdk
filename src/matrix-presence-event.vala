@@ -40,8 +40,8 @@ public class Matrix.PresenceEvent : Matrix.Event {
 
         if ((node = content_root.get_member("user_id")) != null) {
             _sender = node.get_string();
-        } else {
-            GLib.warning("user_id is missing from the m.presence event");
+        } else if (Config.DEBUG) {
+            warning("user_id is missing from the m.presence event");
         }
 
         if ((node = content_root.get_member("last_active_ago")) != null) {
@@ -67,8 +67,8 @@ public class Matrix.PresenceEvent : Matrix.Event {
             } else {
                 _presence = Matrix.Presence.UNKNOWN;
             }
-        } else {
-            GLib.warning("presence is missing from the m.presence event");
+        } else if (Config.DEBUG) {
+            warning("presence is missing from the m.presence event");
         }
 
         base.from_json(json_data);

@@ -295,7 +295,9 @@ public class Matrix.Event : GLib.Object, GLib.Initable {
             return klass.get_type();
         }
 
-        warning("UsingMatrix.Event for %s", event_type);
+        if (Config.DEBUG) {
+            warning("Using Matrix.Event for %s", event_type);
+        }
 
         return typeof(Matrix.Event);
     }

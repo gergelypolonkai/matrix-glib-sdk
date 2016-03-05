@@ -84,7 +84,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         Matrix.Event evt;
 
         if (event_node.get_node_type() != Json.NodeType.OBJECT) {
-            warning("Received event that is not an object.");
+            if (Config.DEBUG) {
+                warning("Received event that is not an object.");
+            }
 
             return;
         }
@@ -92,7 +94,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         root_obj = event_node.get_object();
 
         if ((node = root_obj.get_member("type")) == null) {
-            warning("Received event without type.");
+            if (Config.DEBUG) {
+                warning("Received event without type.");
+            }
 
             return;
         }
@@ -102,11 +106,15 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         try {
             evt = Matrix.Event.new_from_json(event_type, room_id, event_node);
         } catch (Matrix.Error e) {
-            warning("Error during event creation: %s", e.message);
+            if (Config.DEBUG) {
+                warning("Error during event creation: %s", e.message);
+            }
 
             return;
         } catch (GLib.Error e) {
-            warning("Error during event creation: %s", e.message);
+            if (Config.DEBUG) {
+                warning("Error during event creation: %s", e.message);
+            }
 
             return;
         }
@@ -143,11 +151,17 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             var root_obj = json_content.get_object();
             Json.Node? node;
 
-            debug("Processing account data");
+            if (Config.DEBUG) {
+                debug("Processing account data");
+            }
+
             _process_event_list_obj(root_obj.get_member("account_data"),
                                     null);
 
-            debug("Processing presence");
+            if (Config.DEBUG) {
+                debug("Processing presence");
+            }
+
             _process_event_list_obj(root_obj.get_member("presence"),
                                     null);
 
@@ -156,7 +170,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                     Json.Object rooms_object = node.get_object();
                     Json.Node rooms_node;
 
-                    debug("Processing rooms");
+                    if (Config.DEBUG) {
+                        debug("Processing rooms");
+                    }
 
                     if ((rooms_node = rooms_object.get_member(
                                  "invite")) != null) {

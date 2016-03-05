@@ -40,14 +40,14 @@ public class Matrix.RoomMemberEvent : Matrix.RoomEvent {
 
         if ((node = root.get_member("state_key")) != null) {
             _state_key = node.get_string();
-        } else {
-            GLib.warning("state_key is missing from the m.room.member event");
+        } else if (Config.DEBUG) {
+            warning("state_key is missing from the m.room.member event");
         }
 
         if ((node = root.get_member("room_id")) != null) {
             _room_id = node.get_string();
-        } else {
-            GLib.warning("room_id is missing from the m.room.member event");
+        } else if (Config.DEBUG) {
+            warning("room_id is missing from the m.room.member event");
         }
 
         if ((node = content_root.get_member("membership")) != null) {
@@ -58,8 +58,8 @@ public class Matrix.RoomMemberEvent : Matrix.RoomEvent {
             if (mship != null) {
                 _membership = mship;
             }
-        } else {
-            GLib.warning("membership key is missing from the m.room.member event");
+        } else if (Config.DEBUG) {
+            warning("membership key is missing from the m.room.member event");
         }
 
         if ((node = content_root.get_member("avatar_url")) != null) {
