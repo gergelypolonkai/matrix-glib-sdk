@@ -63,9 +63,8 @@ cb_room_member_event(MatrixClient *client,
                      MatrixEventBase *event,
                      gpointer user_data)
 {
-    g_printerr("Incoming room member event from %s in room %s (%s)\n",
-               matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
-               matrix_event_room_get_room_id(MATRIX_EVENT_ROOM(event)),
+    g_printerr("Incoming room member event from %s via room %s\n",
+               matrix_event_room_member_get_user_id(MATRIX_EVENT_ROOM_MEMBER(event)),
                room_id);
 }
 

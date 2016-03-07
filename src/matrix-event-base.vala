@@ -24,13 +24,25 @@ public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
     private bool _inited = false;
     private Json.Node? _json;
 
+    protected string? _event_type = null;
+
     /**
      * The type of the event. It should be namespaced similar to the
      * Java package naming conventions,
      * e.g. `com.example.subdomain.event.type`. It cannot be changed
      * after object initialization.
      */
-    public string? event_type { get; construct; default = null; }
+    public string? event_type {
+        get {
+            return _event_type;
+        }
+
+        construct {
+            _event_type = value;
+        }
+
+        default = null;
+    }
 
     /**
      * The event as a JSON node.
