@@ -64,3 +64,4 @@ Makefile.in
 /src/matrix-event-room-aliases.c
 /src/matrix-event-receipt.c
 /src/matrix-event-room-history-visibility.c
+/src/matrix-event-room-join-rules.c

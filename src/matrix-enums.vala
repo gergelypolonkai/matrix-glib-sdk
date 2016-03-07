@@ -200,6 +200,17 @@ namespace Matrix {
         PRIVATE; /// hide the room from the public room list
     }
 
+    /**
+     * Room join rules.
+     */
+    public enum JoinRules {
+        UNKNOWN, /// A value unknown to this library
+        PUBLIC,  /// Anyone can join
+        INVITE,  /// Users may join upon invite
+        PRIVATE, /// Reserved word, not usable yet
+        KNOCK;   /// Reserved word, not usable yet
+    }
+
     public enum SearchOrder {
         RECENT,
         RANK
