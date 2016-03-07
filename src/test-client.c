@@ -49,23 +49,23 @@ static void
 cb_presence_event(MatrixClient *client,
                   const gchar *room_id,
                   JsonNode *raw_event,
-                  MatrixEvent *event,
+                  MatrixEventBase *event,
                   gpointer user_data)
 {
     g_printerr("Incoming presence event from %s!\n",
-               matrix_event_get_sender(event));
+               matrix_event_room_get_sender(MATRIX_EVENT_PRESENCE(event)));
 }
 
 static void
 cb_room_member_event(MatrixClient *client,
                      const gchar *room_id,
                      JsonNode *raw_event,
-                     MatrixEvent *event,
+                     MatrixEventBase *event,
                      gpointer user_data)
 {
     g_printerr("Incoming room member event from %s in room %s (%s)\n",
-               matrix_event_get_sender(event),
-               matrix_event_get_room_id(MATRIX_EVENT(event)),
+               matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
+               matrix_event_room_get_room_id(MATRIX_EVENT_ROOM(event)),
                room_id);
 }
 
@@ -73,13 +73,13 @@ static void
 cb_room_message_event(MatrixClient *client,
                       const gchar *room_id,
                       JsonNode *raw_event,
-                      MatrixEvent *event,
+                      MatrixEventBase *event,
                       gpointer user_data)
 {
     g_printf("Message from %s: %s\n",
-             matrix_event_get_sender(event),
-             matrix_room_message_event_get_body(
-                     MATRIX_ROOM_MESSAGE_EVENT(event)));
+             matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
+             matrix_event_room_message_get_body(
+                     MATRIX_EVENT_ROOM_MESSAGE(event)));
 }
 
 int
@@ -119,11 +119,11 @@ main(int argc, char *argv[])
                      "login-finished",
                      G_CALLBACK(login_finished),
                      loop);
-    matrix_client_connect_event(client, MATRIX_TYPE_PRESENCE_EVENT,
+    matrix_client_connect_event(client, MATRIX_EVENT_TYPE_PRESENCE,
                                 cb_presence_event, NULL, NULL);
-    matrix_client_connect_event(client, MATRIX_TYPE_ROOM_MEMBER_EVENT,
+    matrix_client_connect_event(client, MATRIX_EVENT_TYPE_ROOM_MEMBER,
                                 cb_room_member_event, NULL, NULL);
-    matrix_client_connect_event(client, MATRIX_TYPE_ROOM_MESSAGE_EVENT,
+    matrix_client_connect_event(client, MATRIX_EVENT_TYPE_ROOM_MESSAGE,
                                 cb_room_message_event, NULL, NULL);
 
     matrix_client_login_with_password(client, user, password, NULL);

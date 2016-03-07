@@ -809,7 +809,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                 string? topic,
                 RoomVisibility visibility,
                 Json.Node? creation_content,
-                List<StateEvent>? initial_state,
+                List<Matrix.Event.State>? initial_state,
                 List<string>? invitees,
                 List<3PidCredential>? invite_3pids)
         throws Matrix.Error

@@ -16,18 +16,19 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 
 # Vala source files
 libmatrix_glib_0_0_la_VALA_SOURCES = \
+	namespace-info.vala \
 	matrix-api.vala \
 	matrix-client.vala \
 	matrix-enums.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
 	matrix-compacts.vala \
-	matrix-event.vala \
-	matrix-presence-event.vala \
-	matrix-state-event.vala \
-	matrix-room-event.vala \
-	matrix-room-member-event.vala \
-	matrix-room-message-event.vala \
+	matrix-event-base.vala \
+	matrix-event-room-base.vala \
+	matrix-event-state-base.vala \
+	matrix-event-presence.vala \
+	matrix-event-room-member.vala \
+	matrix-event-room-message.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

@@ -16,38 +16,42 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Matrix.RoomMessageEvent : Matrix.RoomEvent {
-    public string msg_type { get; set; }
-    public string body { get; set; }
+public abstract class Matrix.Event.State : Matrix.Event.Base {
+    public string? state_key { get; set; default = null; }
+    public Json.Node? prev_content { get; set; default = null; }
 
     protected override void
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
         var root = json_data.get_object();
-
-        if (root.get_member("content") == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Message event without a content!");
-        }
-
-        var content_root = root.get_member("content").get_object();
         Json.Node? node;
 
-        if ((node = content_root.get_member("msgtype")) == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Message event without a message type!");
+        if ((node = root.get_member("state_key")) != null) {
+            state_key = node.get_string();
         }
 
-        _msg_type = node.get_string();
-
-        if ((node = content_root.get_member("body")) == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Message event without a body!");
+        if ((node = root.get_member("prev_content")) != null) {
+            _prev_content = node;
         }
-
-        _body = node.get_string();
 
         base.from_json(json_data);
+    }
+
+    protected override void
+    to_json(Json.Node json_node)
+        throws Matrix.Error
+    {
+        var root = json_node.get_object();
+
+        if (state_key != null) {
+            root.set_string_member("state_key", state_key);
+        }
+
+        if (prev_content != null) {
+            root.set_member("prev_content", prev_content);
+        }
+
+        base.to_json(json_node);
     }
 }

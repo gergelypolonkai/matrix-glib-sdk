@@ -21,10 +21,11 @@
  *
  * The presence event class.
  */
-public class Matrix.PresenceEvent : Matrix.Event {
+public class Matrix.Event.Presence : Matrix.Event.Base {
     public string? avatar_url { get; set; }
     public string? display_name { get; set; }
     public ulong? last_active_ago { get; set; }
+    public string? user_id { get; set; default = null; }
     public Matrix.Presence presence {
         get;
         set;
@@ -39,7 +40,7 @@ public class Matrix.PresenceEvent : Matrix.Event {
         Json.Node? node;
 
         if ((node = content_root.get_member("user_id")) != null) {
-            _sender = node.get_string();
+            _user_id = node.get_string();
         } else if (Config.DEBUG) {
             warning("user_id is missing from the m.presence event");
         }
@@ -86,17 +87,17 @@ public class Matrix.PresenceEvent : Matrix.Event {
                     "unkwnown presence cannot be added to a presence event");
         }
 
-        if (sender == null) {
+        if (_user_id == null) {
             throw new Matrix.Error.INCOMPLETE (
                     "sender must be set for presence events!");
         }
 
-        content_root = _json_object_node_ensure_field(json_data,
-                                                      "content",
-                                                      Json.NodeType.OBJECT)
+        content_root = json_data
+            .get_object()
+            .get_member("content")
             .get_object();
 
-        content_root.set_string_member("user_id", sender);
+        content_root.set_string_member("user_id", _user_id);
 
         if (last_active_ago != null) {
             content_root.set_int_member("last_active_ago", last_active_ago);

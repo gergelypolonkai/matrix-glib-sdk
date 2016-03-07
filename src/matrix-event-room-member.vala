@@ -21,8 +21,7 @@
  *
  * The room membership event class.
  */
-public class Matrix.RoomMemberEvent : Matrix.RoomEvent {
-    public string? state_key { get; set; }
+public class Matrix.Event.RoomMember : Matrix.Event.State {
     public RoomMembership membership {
         get; set;
         default = RoomMembership.UNKNOWN;
@@ -37,18 +36,6 @@ public class Matrix.RoomMemberEvent : Matrix.RoomEvent {
         Json.Object root = json_data.get_object();
         Json.Object content_root = root.get_member("content").get_object();
         Json.Node? node;
-
-        if ((node = root.get_member("state_key")) != null) {
-            _state_key = node.get_string();
-        } else if (Config.DEBUG) {
-            warning("state_key is missing from the m.room.member event");
-        }
-
-        if ((node = root.get_member("room_id")) != null) {
-            _room_id = node.get_string();
-        } else if (Config.DEBUG) {
-            warning("room_id is missing from the m.room.member event");
-        }
 
         if ((node = content_root.get_member("membership")) != null) {
             Matrix.RoomMembership? mship = (Matrix.RoomMembership?)_g_enum_nick_to_value(
@@ -94,10 +81,6 @@ public class Matrix.RoomMemberEvent : Matrix.RoomEvent {
             .get_object();
 
         root.set_string_member("state_key", state_key);
-
-        if (room_id != null) {
-            root.set_string_member("room_id", room_id);
-        }
 
         mship = _g_enum_value_to_nick(typeof(Matrix.RoomMembership),
                                       membership);

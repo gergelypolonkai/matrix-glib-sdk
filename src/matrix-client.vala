@@ -47,7 +47,7 @@ public interface Matrix.Client : GLib.Object {
      */
     [Signal (detailed=true)]
     public virtual signal void
-    @event(string? room_id, Json.Node raw_event, Matrix.Event matrix_event)
+    @event(string? room_id, Json.Node raw_event, Matrix.Event.Base? matrix_event)
     {}
 
     /**
@@ -61,7 +61,7 @@ public interface Matrix.Client : GLib.Object {
     EventCallback(Matrix.Client client,
                   string? room_id,
                   Json.Node raw_event,
-                  Matrix.Event matrix_event);
+                  Matrix.Event.Base? matrix_event);
 
     /**
      * Authenticate with the Matrix.org server with a username and
@@ -144,9 +144,15 @@ public interface Matrix.Client : GLib.Object {
     public void
     incoming_event(string? room_id,
                    Json.Node raw_event,
-                   Matrix.Event matrix_event)
+                   Matrix.Event.Base? matrix_event)
     {
-        Quark equark = matrix_event.get_type().qname();
+        Quark equark;
+
+        if (matrix_event == null) {
+            equark = typeof(Matrix.Event.Base).qname();
+        } else {
+            equark = matrix_event.get_type().qname();
+        }
 
         this.@event[equark.to_string()](room_id, raw_event, matrix_event);
     }
@@ -161,7 +167,7 @@ public interface Matrix.Client : GLib.Object {
      *
      * @param event_gtype the {@link GLib.Type} of a
      *                    {@link Matrix.Event} derivative
-     * @param callback the allback function to connect
+     * @param event_callback the allback function to connect
      */
     public extern void
     connect_event(GLib.Type event_gtype,

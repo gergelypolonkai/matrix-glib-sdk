@@ -357,7 +357,7 @@ public interface Matrix.API : GLib.Object {
                 string? topic,
                 Matrix.RoomVisibility visibility,
                 Json.Node? creation_content,
-                GLib.List<Matrix.StateEvent>? initial_state,
+                GLib.List<Matrix.Event.State>? initial_state,
                 GLib.List<string>? invitees,
                 GLib.List<Matrix.3PidCredential>? invite_3pids)
         throws Matrix.Error;

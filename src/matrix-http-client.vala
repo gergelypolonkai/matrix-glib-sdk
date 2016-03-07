@@ -81,7 +81,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         Json.Object root_obj;
         Json.Node node;
         string event_type;
-        Matrix.Event evt;
+        Matrix.Event.Base? evt = null;
 
         if (event_node.get_node_type() != Json.NodeType.OBJECT) {
             if (Config.DEBUG) {
@@ -104,19 +104,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         event_type = node.get_string();
 
         try {
-            evt = Matrix.Event.new_from_json(event_type, room_id, event_node);
-        } catch (Matrix.Error e) {
-            if (Config.DEBUG) {
-                warning("Error during event creation: %s", e.message);
-            }
-
-            return;
+            evt = Matrix.Event.Base.new_from_json(event_type, event_node);
         } catch (GLib.Error e) {
-            if (Config.DEBUG) {
-                warning("Error during event creation: %s", e.message);
-            }
-
-            return;
+            evt = null;
         }
 
         incoming_event(room_id, event_node, evt);

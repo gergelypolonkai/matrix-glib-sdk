@@ -15,6 +15,7 @@
  * License along with matrix-glib-sdk. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
 namespace Matrix {
     /**
      * Abstract parent class for classes that can be saved to JSON.

@@ -153,13 +153,13 @@ static void
 matrix_event_types_ctor(void)
 {
     matrix_event_register_type("m.room.member",
-                               MATRIX_TYPE_ROOM_MEMBER_EVENT,
+                               MATRIX_EVENT_TYPE_ROOM_MEMBER,
                                NULL);
     matrix_event_register_type("m.presence",
-                               MATRIX_TYPE_PRESENCE_EVENT,
+                               MATRIX_EVENT_TYPE_PRESENCE,
                                NULL);
     matrix_event_register_type("m.room.message",
-                               MATRIX_TYPE_ROOM_MESSAGE_EVENT,
+                               MATRIX_EVENT_TYPE_ROOM_MESSAGE,
                                NULL);
 }
 
@@ -172,11 +172,11 @@ matrix_client_connect_event(MatrixClient *client,
 {
     GClosure *closure;
     GQuark equark;
-    MatrixEventClass *event_class = MATRIX_EVENT_CLASS(
+    MatrixEventBaseClass *event_class = MATRIX_EVENT_BASE_CLASS(
             g_type_class_ref(event_gtype));
     guint event_signal_id = g_signal_lookup("event", MATRIX_TYPE_CLIENT);
 
-    if (!MATRIX_IS_EVENT_CLASS(event_class)) {
+    if (!MATRIX_EVENT_IS_BASE_CLASS(event_class)) {
         g_warning("Trying to connect to a type that is not derived from MatrixEvent");
         g_type_class_unref(event_class);
 
@@ -196,5 +196,4 @@ matrix_client_connect_event(MatrixClient *client,
     g_signal_connect_closure_by_id(client,
                                    event_signal_id, equark,
                                    closure, FALSE);
-
 }

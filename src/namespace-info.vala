@@ -16,7 +16,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Abstract base class for room events.
- */
-public abstract class Matrix.RoomEvent : Matrix.Event {}
+[CCode (gir_namespace = "Matrix", gir_version = "0.10")]
+namespace Matrix {
+    [CCode (gir_namespace = "Event", gir_version = "0.10")]
+    namespace Event {}
+}
