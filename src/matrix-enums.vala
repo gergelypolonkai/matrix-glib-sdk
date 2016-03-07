@@ -216,6 +216,14 @@ namespace Matrix {
         SENDER
     }
 
+    public enum HistoryVisibility {
+        UNKNOWN,
+        INVITED,
+        JOINED,
+        SHARE,
+        WORLD_READABLE;
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {

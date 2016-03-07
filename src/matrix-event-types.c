@@ -173,6 +173,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.receipt",
                                MATRIX_EVENT_TYPE_RECEIPT,
                                NULL);
+    matrix_event_register_type("m.room.history_visibility",
+                               MATRIX_EVENT_TYPE_ROOM_HISTORY_VISIBILITY,
+                               NULL);
 }
 
 void

@@ -63,3 +63,4 @@ Makefile.in
 /src/matrix-event-typing.c
 /src/matrix-event-room-aliases.c
 /src/matrix-event-receipt.c
+/src/matrix-event-room-history-visibility.c
