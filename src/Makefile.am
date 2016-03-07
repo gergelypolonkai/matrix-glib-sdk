@@ -30,6 +30,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-room-member.vala \
 	matrix-event-room-message.vala \
 	matrix-event-room-topic.vala \
+	matrix-event-typing.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
