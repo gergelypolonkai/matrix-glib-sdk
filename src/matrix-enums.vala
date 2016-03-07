@@ -19,46 +19,71 @@
 namespace Matrix {
     public errordomain Error {
         NONE,                  /// no error
-        COMMUNICATION_ERROR,   /// there was a problem in communication (e.g. connection error)
+        COMMUNICATION_ERROR,   /// there was a problem in
+                               /// communication (e.g. connection
+                               /// error)
         INCOMPLETE,            /// the passed/generated data is incomplete
         BAD_REQUEST,           /// the request is invalid
-        BAD_RESPONSE,          /// malformed response, or the response is not a JSON object
-        INVALID_ROOM_ID,       /// the provided string doesn’t contain a valid room ID
-        UNKNOWN_VALUE,         /// the response from the Matrix.org server contains a value unknown to this library. These should be reported to the Matrix GLib SDK developers
+        BAD_RESPONSE,          /// malformed response, or the response
+                               /// is not a JSON object
+        INVALID_ROOM_ID,       /// the provided string doesn’t contain
+                               /// a valid room ID
+        UNKNOWN_VALUE,         /// the response from the Matrix.org
+                               /// server contains a value unknown to
+                               /// this library. These should be
+                               /// reported to the Matrix GLib SDK
+                               /// developers
         INVALID_TYPE,          /// the provided type is invalid
         UNSUPPORTED,           ///the operation is unsupported
-        INVALID_FORMAT,        /// the format of the JSON node is invalid (e.g. it is an array instead of an object)
+        INVALID_FORMAT,        /// the format of the JSON node is
+                               /// invalid (e.g. it is an array
+                               /// instead of an object)
 
         /* Add Matrix-defined error codes under here, prefixing them with
          * `MATRIX_ERROR_`, i.e. `M_FORBIDDEN` =>
          * `MATRIX_ERROR_M_FORBIDDEN` */
-        M_MISSING_TOKEN = 500,    /// authorization token is missing from the request
-        M_FORBIDDEN,              /// access was forbidden (e.g. due to a missing/invalid token, or using a bad password during login)
+        M_MISSING_TOKEN = 500,    /// authorization token is missing
+                                  /// from the request
+        M_FORBIDDEN,              /// access was forbidden (e.g. due
+                                  /// to a missing/invalid token, or
+                                  /// using a bad password during
+                                  /// login)
         M_UNKNOWN,                /// an error unknown to the Matrix homeserver
-        M_UNKNOWN_TOKEN,          /// the token provided is not known for the homeserver
-        M_NOT_JSON,               /// illegal request, the content is not valid JSON
-        M_UNRECOGNIZED,           /// the homeserver didn't understand the request
+        M_UNKNOWN_TOKEN,          /// the token provided is not known
+                                  /// for the homeserver
+        M_NOT_JSON,               /// illegal request, the content is
+                                  /// not valid JSON
+        M_UNRECOGNIZED,           /// the homeserver didn't understand
+                                  /// the request
         M_UNAUTHORIZED,           /// the request is unauthorized
-        M_BAD_JSON,               /// the JSON data is not in the required format
+        M_BAD_JSON,               /// the JSON data is not in the
+                                  /// required format
         M_USER_IN_USE,            /// the specified username is in use
         M_ROOM_IN_USE,            /// the specified room is in use
         M_BAD_PAGINATION,         /// invalid pagination parameters
         M_BAD_STATE,              /// invalid state event
         M_NOT_FOUND,              /// the requested resource is not found
-        M_GUEST_ACCESS_FORBIDDEN, /// guest access was requested, but it is forbidden
+        M_GUEST_ACCESS_FORBIDDEN, /// guest access was requested, but
+                                  /// it is forbidden
         M_LIMIT_EXCEEDED,         /// the request was rate limited
         M_CAPTCHA_NEEDED,         /// a captcha is needed to continue
         M_CAPTCHA_INVALID,        /// the provided captcha is invalid
         M_MISSING_PARAM,          /// a parameter is missing from the request
         M_TOO_LARGE,              /// the request data is too large
-        M_EXCLUSIVE,              /// the desired user ID is in an exclusive namespace claimed by an application server
+        M_EXCLUSIVE,              /// the desired user ID is in an
+                                  /// exclusive namespace claimed by
+                                  /// an application server
         M_THREEPID_AUTH_FAILED,   /// 3rd party authentication failed
-        M_THREEPID_IN_USE,        /// the provided 3rd party ID is already in use
+        M_THREEPID_IN_USE,        /// the provided 3rd party ID is
+                                  /// already in use
         M_INVALID_USERNAME,       /// the given username is invalid
 
         /* Allow for a lot of Matrix.org defined codes
          * Do not define error codes after this! */
-        UNSPECIFIED = 16383,      /// no error code was sent by the homeserver. If you see this error, that usually indicates a homeserver bug
+        UNSPECIFIED = 16383,      /// no error code was sent by the
+                                  /// homeserver. If you see this
+                                  /// error, that usually indicates a
+                                  /// homeserver bug
         UNKNOWN_ERROR;            /// an error unknown to this library
 
         public static GLib.Quark
