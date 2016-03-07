@@ -170,6 +170,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.aliases",
                                MATRIX_EVENT_TYPE_ROOM_ALIASES,
                                NULL);
+    matrix_event_register_type("m.receipt",
+                               MATRIX_EVENT_TYPE_RECEIPT,
+                               NULL);
 }
 
 void
