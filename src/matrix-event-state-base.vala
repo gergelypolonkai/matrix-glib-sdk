@@ -54,4 +54,25 @@ public abstract class Matrix.Event.State : Matrix.Event.Base {
 
         base.to_json(json_node);
     }
+
+    /**
+     * Get a stripped state event.
+     *
+     * @return `null` if the event is not allowed to be stripped, or
+     *         the full JSON node otherwise
+     */
+    public Json.Node?
+    get_stripped_node()
+    {
+        if ((_event_type != "m.room.join_rules")
+            && (_event_type != "m.room.canonical_alias")
+            && (_event_type != "m.room.avatar")
+            && (_event_type != "m.room.name")) {
+            warning("Trying to strip down event that is not allowed to be stripped.");
+
+            return null;
+        }
+
+        return json;
+    }
 }
