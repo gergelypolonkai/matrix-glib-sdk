@@ -206,10 +206,12 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             generator.set_root(json_content);
             var json_str = generator.to_data(null);
             request_data = json_str.data;
+            request_data[request_data.length] = 0;
         } else if (raw_content != null) {
             request_data = raw_content.data;
         } else {
             request_data = "{}".data;
+            request_data[2] = 0;
         }
 
         if (Config.DEBUG) {
