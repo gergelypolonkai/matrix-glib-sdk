@@ -179,6 +179,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.join_rules",
                                MATRIX_EVENT_TYPE_ROOM_JOIN_RULES,
                                NULL);
+    matrix_event_register_type("m.room.name",
+                               MATRIX_EVENT_TYPE_ROOM_NAME,
+                               NULL);
 }
 
 void

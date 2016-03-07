@@ -35,6 +35,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-receipt.vala \
 	matrix-event-room-history-visibility.vala \
 	matrix-event-room-join-rules.vala \
+	matrix-event-room-name.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
