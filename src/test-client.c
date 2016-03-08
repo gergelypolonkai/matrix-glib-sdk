@@ -53,7 +53,7 @@ cb_presence_event(MatrixClient *client,
                   gpointer user_data)
 {
     g_printerr("Incoming presence event from %s!\n",
-               matrix_event_room_get_sender(MATRIX_EVENT_PRESENCE(event)));
+               matrix_event_presence_get_user_id(MATRIX_EVENT_PRESENCE(event)));
 }
 
 static void
