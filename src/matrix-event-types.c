@@ -191,6 +191,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.create",
                                MATRIX_EVENT_TYPE_ROOM_CREATE,
                                NULL);
+    matrix_event_register_type("m.room.power_levels",
+                               MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS,
+                               NULL);
 }
 
 void

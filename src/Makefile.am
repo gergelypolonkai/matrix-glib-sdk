@@ -39,6 +39,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-tag.vala \
 	matrix-event-room-canonical-alias.vala \
 	matrix-event-room-create.vala \
+	matrix-event-room-power-levels.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

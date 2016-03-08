@@ -1,0 +1,215 @@
+/*
+ * This file is part of matrix-glib-sdk
+ *
+ * matrix-glib-sdk is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * matrix-glib-sdk is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with matrix-glib-sdk. If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Class to handle m.room.power_levels event
+ *
+ * This event specifies the minimum level a user must have in order to
+ * perform a certain action. It also specifies the levels of each user
+ * in the room. If a user_id is in the users list, then that user_id
+ * has the associated power level. Otherwise they have the default
+ * level users_default. If users_default is not supplied, it is
+ * assumed to be 0. The level required to send a certain event is
+ * governed by events, state_default and events_default. If an event
+ * type is specified in events, then the user must have at least the
+ * level specified in order to send that event. If the event type is
+ * not supplied, it defaults to events_default for Message Events and
+ * state_default for State Events.
+ */
+public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
+    /**
+     * The level required to ban a user.
+     */
+    public int? ban { get; set; default = null; }
+
+    /**
+     * The default level required to send message events. Can be
+     * overridden by the events key.
+     */
+    public int? events_default { get; set; default = null; }
+
+    /**
+     * The level required to kick a user.
+     */
+    public int? kick { get; set; default = null; }
+
+    /**
+     * The level required to redact an event.
+     */
+    public int? redact { get; set; default = null; }
+
+    /**
+     * The default level required to send state events. Can be
+     * overridden by the events key.
+     */
+    public int? state_default { get; set; default = null; }
+
+    /**
+     * The default power level for every user in the room, unless
+     * their user_id is mentioned in the users key.
+     */
+    public int users_default { get; set; default = 0; }
+
+    /**
+     * The level required to invite someone.
+     */
+    public int? invite { get; set; default = null; }
+
+    private HashTable<string, int?> _event_levels = null;
+    private HashTable<string, int?> _user_levels = null;
+
+    protected override void
+    from_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        var content_root = json_data.get_object()
+            .get_member("content").get_object();
+        Json.Node? node;
+
+        if ((node = content_root.get_member("ban")) != null) {
+            _ban = (int)node.get_int();
+        } else {
+            warning("content.ban is missing from a m.room.power_levels event");
+        }
+
+        if ((node = content_root.get_member("kick")) != null) {
+            _kick = (int)node.get_int();
+        } else {
+            warning("content.kick is missing from a m.room.power_levels event");
+        }
+
+        if ((node = content_root.get_member("redact")) != null) {
+            _redact = (int)node.get_int();
+        } else {
+            warning("content.redact is missing from a m.room.power_levels event");
+        }
+
+        if ((node = content_root.get_member("events_default")) != null) {
+            _events_default = (int)node.get_int();
+        } else {
+            warning("content.events_default is missing from a m.room.power_levels event");
+        }
+
+        if ((node = content_root.get_member("state_default")) != null) {
+            _state_default = (int)node.get_int();
+        } else {
+            warning("content.state_default is missing from a m.room.power_levels event");
+        }
+
+        if ((node = content_root.get_member("users_default")) != null) {
+            _users_default = (int)node.get_int();
+        }
+
+        if ((node = content_root.get_member("invite")) != null) {
+            _invite = (int)node.get_int();
+        }
+
+        if ((node = content_root.get_member("events")) != null) {
+            node.get_object().foreach_member((obj, event_name, event_node) => {
+                    if (_event_levels == null) {
+                        _event_levels = new HashTable<string, int?>(str_hash, str_equal);
+                    }
+
+                    _event_levels.replace(event_name, (int)event_node.get_int());
+                });
+        }
+
+        if ((node = content_root.get_member("users")) != null) {
+            node.get_object().foreach_member((obj, user_id, user_node) => {
+                    if (_user_levels == null) {
+                        _user_levels = new HashTable<string, int?>(str_hash, str_equal);
+                    }
+
+                    _user_levels.replace(user_id, (int)user_node.get_int());
+                });
+        }
+
+        base.from_json(json_data);
+    }
+
+    protected override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        var content_root = json_data.get_object()
+            .get_member("content").get_object();
+
+        if (_ban == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.ban key");
+        }
+
+        if (_events_default == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.events_default key");
+        }
+
+        if (_kick == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.kick key");
+        }
+
+        if (_redact == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.redact key");
+        }
+
+        if (_state_default == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.state_default key");
+        }
+
+        if (_user_levels == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.users key");
+        }
+
+        if (_event_levels == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't create an m.room.power_levels event without a content.events key");
+        }
+
+        content_root.set_int_member("ban", _ban);
+        content_root.set_int_member("kick", _kick);
+        content_root.set_int_member("redact", _redact);
+        content_root.set_int_member("state_default", _state_default);
+        content_root.set_int_member("events_default", _events_default);
+
+        var user_obj = new Json.Object();
+        var user_node = new Json.Node(Json.NodeType.OBJECT);
+        user_node.set_object(user_obj);
+
+        _user_levels.foreach((user_id, power_level) => {
+                user_obj.set_int_member(user_id, power_level);
+            });
+
+        content_root.set_member("users", user_node);
+
+        var events_obj = new Json.Object();
+        var events_node = new Json.Node(Json.NodeType.OBJECT);
+        events_node.set_object(events_obj);
+
+        _event_levels.foreach((events_id, power_level) => {
+                events_obj.set_int_member(events_id, power_level);
+            });
+
+        content_root.set_member("users", events_node);
+
+        base.to_json(json_data);
+    }
+}
