@@ -51,7 +51,7 @@ public class Matrix.Event.Tag : Matrix.Event.Base {
             var tags_root = new Json.Object();
 
             _tags.foreach((tag, tag_contents) => {
-                    tags_root.add_member(tag, tag_contents);
+                    tags_root.set_member(tag, tag_contents);
                 });
 
             if (tags_root.get_size() > 0) {
