@@ -270,6 +270,37 @@ namespace Matrix {
         WORLD_READABLE;
     }
 
+    public struct ImageInfo {
+        int? size;
+        int? height;
+        int? width;
+        string? mimetype;
+
+        public Json.Node
+        get_json_node()
+            throws Matrix.Error
+        {
+            if ((size == null)
+                || (height == null)
+                || (width == null)
+                || (mimetype == null)) {
+                throw new Matrix.Error.INCOMPLETE(
+                        "Won't generate an ImageInfo without all fields set.");
+            }
+
+            var node = new Json.Node(Json.NodeType.OBJECT);
+            var obj = new Json.Object();
+            node.set_object(obj);
+
+            obj.set_int_member("size", size);
+            obj.set_int_member("h", height);
+            obj.set_int_member("w", width);
+            obj.set_string_member("mimetype", mimetype);
+
+            return node;
+        }
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {

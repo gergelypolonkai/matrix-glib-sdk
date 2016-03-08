@@ -19,7 +19,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	namespace-info.vala \
 	matrix-api.vala \
 	matrix-client.vala \
-	matrix-enums.vala \
+	matrix-types.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
 	matrix-compacts.vala \
