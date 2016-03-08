@@ -182,6 +182,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.name",
                                MATRIX_EVENT_TYPE_ROOM_NAME,
                                NULL);
+    matrix_event_register_type("m.tag",
+                               MATRIX_EVENT_TYPE_TAG,
+                               NULL);
 }
 
 void
