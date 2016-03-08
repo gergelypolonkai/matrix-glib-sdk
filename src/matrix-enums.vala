@@ -114,9 +114,13 @@ namespace Matrix {
      * Event format received when synchronizing.
      */
     public enum EventFormat {
-        DEFAULT,    /// event format will be omitted from the filter, so the server will use its default (usually {{{FEDERATION}}})
-        CLIENT,     /// return the events in a format suitable for clients
-        FEDERATION; /// return the raw event as receieved over federation
+        DEFAULT,    /// event format will be omitted from the filter,
+                    /// so the server will use its default (usually
+                    /// {{{FEDERATION}}})
+        CLIENT,     /// return the events in a format suitable for
+                    /// clients
+        FEDERATION; /// return the raw event as receieved over
+                    /// federation
     }
 
     /**
@@ -135,10 +139,24 @@ namespace Matrix {
      * Condition types for pushers.
      */
     public enum PusherConditionKind {
-        EVENT_MATCH,           /// glob pattern match on a field of the event. Requires a {{{key}}} and a {{{pattern}}} parameter
-        PROFILE_TAG,           /// matches the profile tag of the device that the notification would be delivered to. Requires a {{{profile_tag}}} parameter
-        CONTAINS_DISPLAY_NAME, /// matches unencrypted messages where the content's body contains the owner's display name in that room.
-        ROOM_MEMBER_COUNT;     /// matches the current number of members in the room. Requires an {{{is}}} parameter, which must be an integer, optionally prefixed by {{==}}}, {{{&lt;}}}, {{{&gt;}}}, {{{&lt;=}}} or {{{&gt;=}}}. If the prefix is omitted, it defaults to {{{==}}}
+        EVENT_MATCH,           /// glob pattern match on a field of
+                               /// the event. Requires a {{{key}}} and
+                               /// a {{{pattern}}} parameter
+        PROFILE_TAG,           /// matches the profile tag of the
+                               /// device that the notification would
+                               /// be delivered to. Requires a
+                               /// {{{profile_tag}}} parameter
+        CONTAINS_DISPLAY_NAME, /// matches unencrypted messages where
+                               /// the content's body contains the
+                               /// owner's display name in that room.
+        ROOM_MEMBER_COUNT;     /// matches the current number of
+                               /// members in the room. Requires an
+                               /// {{{is}}} parameter, which must be
+                               /// an integer, optionally prefixed by
+                               /// {{==}}}, {{{<}}}, {{{>}}},
+                               /// {{{<=}}} or {{{>=}}}. If the
+                               /// prefix is omitted, it defaults to
+                               /// {{{==}}}
     }
 
     /**
@@ -146,9 +164,15 @@ namespace Matrix {
      */
     public enum PusherKind {
         OVERRIDE,  /// highest priority rules
-        SENDER,    /// for (unencrypted) messages that match certain patterns
-        ROOM,      /// for all messages for a given room. The rule ID of a room rule is always the ID of the room that it affects
-        CONTENT,   /// for messages from a specific Matrix user ID. The rule ID of such rules is always the Matrix ID of the user whose messages they'd apply to
+        SENDER,    /// for (unencrypted) messages that match certain
+                   /// patterns
+        ROOM,      /// for all messages for a given room. The rule ID
+                   /// of a room rule is always the ID of the room
+                   /// that it affects
+        CONTENT,   /// for messages from a specific Matrix user
+                   /// ID. The rule ID of such rules is always the
+                   /// Matrix ID of the user whose messages they'd
+                   /// apply to
         UNDERRIDE; /// lowest priority rules
     }
 
@@ -172,11 +196,21 @@ namespace Matrix {
      * Room membership types.
      */
     public enum RoomMembership {
-        UNKNOWN, /// the membership sent by the server is unknown to this SDK
-        INVITE,  /// the user has been invited to join a room, but has not yet joined it. They may not participate in the room until they join
-        JOIN,    /// the user has joined the room (possibly after accepting an invite), and may participate in it
-        LEAVE,   /// the user was once joined to the room, but has since left (possibly by choice, or possibly by being kicked)
-        BAN,     /// the user has been banned from the room, and is no longer allowed to join it until they are un-banned from the room (by having their membership state set to a value other than {{{BAN}}})
+        UNKNOWN, /// the membership sent by the server is unknown to
+                 /// this SDK
+        INVITE,  /// the user has been invited to join a room, but has
+                 /// not yet joined it. They may not participate in
+                 /// the room until they join
+        JOIN,    /// the user has joined the room (possibly after
+                 /// accepting an invite), and may participate in it
+        LEAVE,   /// the user was once joined to the room, but has
+                 /// since left (possibly by choice, or possibly by
+                 /// being kicked)
+        BAN,     /// the user has been banned from the room, and is no
+                 /// longer allowed to join it until they are
+                 /// un-banned from the room (by having their
+                 /// membership state set to a value other than
+                 /// {{{BAN}}})
         KNOCK;   /// this is a reserved word, which currently has no meaning
     }
 
@@ -186,7 +220,8 @@ namespace Matrix {
     public enum RoomPreset {
         NONE,            /// no preset
         PRIVATE,         /// preset for private rooms
-        TRUSTED_PRIVATE, /// same as private rooms, but all users get the same power level as the room creator
+        TRUSTED_PRIVATE, /// same as private rooms, but all users get
+                         /// the same power level as the room creator
         PUBLIC;          /// preset for public rooms
     }
 
