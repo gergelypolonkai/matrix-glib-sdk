@@ -42,6 +42,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-room-power-levels.vala \
 	matrix-event-room-avatar.vala \
 	matrix-event-room-message-feedback.vala \
+	matrix-event-room-guest-access.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

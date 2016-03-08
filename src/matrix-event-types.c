@@ -200,6 +200,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.message.feedback",
                                MATRIX_EVENT_TYPE_ROOM_MESSAGE_FEEDBACK,
                                NULL);
+    matrix_event_register_type("m.room.guest_access",
+                               MATRIX_EVENT_TYPE_ROOM_GUEST_ACCESS,
+                               NULL);
 }
 
 void

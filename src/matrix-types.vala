@@ -270,6 +270,12 @@ namespace Matrix {
         WORLD_READABLE;
     }
 
+    public enum GuestAccess {
+        UNKNOWN,   /// represents a value unknown to this library
+        CAN_JOIN,  /// guest users are allowed to access the room
+        FORBIDDEN; /// guest users are not allowed to access the room
+    }
+
     public struct ImageInfo {
         int? size;
         int? height;
