@@ -64,7 +64,7 @@ public class Matrix.Event.Typing : Matrix.Event.Base {
             node.get_array().foreach_element((ary, idx, user_node) => {
                     _user_ids.prepend(user_node.get_string());
                 });
-        } else {
+        } else if (Config.DEBUG) {
             warning("content.user_ids is missing from a m.typing event");
         }
 
