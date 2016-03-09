@@ -75,3 +75,4 @@ Makefile.in
 /src/matrix-event-room-guest-access.c
 /src/matrix-event-room-redaction.c
 /src/matrix-event-room-third-party-invite.c
+/src/matrix-event-call-invite.c

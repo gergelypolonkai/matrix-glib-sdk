@@ -209,6 +209,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.room.third_party_invite",
                                MATRIX_EVENT_TYPE_ROOM_THIRD_PARTY_INVITE,
                                NULL);
+    matrix_event_register_type("m.call.invite",
+                               MATRIX_EVENT_TYPE_CALL_INVITE,
+                               NULL);
 }
 
 void

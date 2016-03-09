@@ -276,6 +276,11 @@ namespace Matrix {
         FORBIDDEN; /// guest users are not allowed to access the room
     }
 
+    public enum CallOfferType {
+        UNKNOWN, /// represents a value unknown to this library
+        OFFER;   /// call offer
+    }
+
     public struct ImageInfo {
         int? size;
         int? height;
