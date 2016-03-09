@@ -19,12 +19,7 @@
 /**
  * This event is sent by the callee when they wish to answer the call.
  */
-public class Matrix.Event.CallAnswer : Matrix.Event.Room {
-    /**
-     * The ID of the call this event relates to.
-     */
-    public string? call_id { get; set; default = null; }
-
+public class Matrix.Event.CallAnswer : Matrix.Event.Call {
     /**
      * The type of session description.
      */
@@ -35,11 +30,6 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Room {
      */
     public string? answer_sdp { get; set; default = null; }
 
-    /**
-     * The version of the VoIP specification this messages adheres to.
-     */
-    public int? version { get; set; default = null; }
-
     protected override void
     from_json(Json.Node json_data)
         throws Matrix.Error
@@ -47,12 +37,6 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Room {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
         Json.Node? node;
-
-        if ((node = content_root.get_member("call_id")) != null) {
-            _call_id = node.get_string();
-        } else {
-            warning("content.call_id is missing from a m.call.answer event");
-        }
 
         if ((node = content_root.get_member("answer")) != null) {
             var answer_root = node.get_object();
@@ -79,12 +63,6 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Room {
             }
         }
 
-        if ((node = content_root.get_member("version")) != null) {
-            _version = (int)node.get_int();
-        } else {
-            warning("content.version is missing from a m.call.answer event");
-        }
-
         base.from_json(json_data);
     }
 
@@ -92,16 +70,6 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Room {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if (_version == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.answer event without version");
-        }
-
-        if (_call_id == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.answer event without call_id");
-        }
-
         if (_answer_type == null) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.answer event without answer.type");
@@ -114,9 +82,6 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Room {
 
         var content_root = json_data.get_object()
             .get_member("content").get_object();
-
-        content_root.set_string_member("call_id", _call_id);
-        content_root.set_int_member("version", _version);
 
         var answer_root = new Json.Object();
         var answer_node = new Json.Node(Json.NodeType.OBJECT);

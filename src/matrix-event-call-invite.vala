@@ -20,12 +20,7 @@
  * This event is sent by the caller when they wish to establish a
  * call.
  */
-public class Matrix.Event.CallInvite : Matrix.Event.Room {
-    /**
-     * A unique identifer for the call.
-     */
-    public string? call_id { get; set; default = null;}
-
+public class Matrix.Event.CallInvite : Matrix.Event.Call {
     /**
      * The type of session description.
      */
@@ -34,11 +29,6 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
      * The SDP text of the session description.
      */
     public string? sdp { get; set; default = null; }
-
-    /**
-     * The version of the VoIP specification this message adheres to.
-     */
-    public int? version { get; set; default = null; }
 
     /**
      * The time in milliseconds that the invite is valid for. Once the
@@ -55,12 +45,6 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
         Json.Node? node;
-
-        if ((node = content_root.get_member("call_id")) != null) {
-            _call_id = node.get_string();
-        } else {
-            warning("content.call_id is missing from a m.call.invite event");
-        }
 
         if ((node = content_root.get_member("offer")) != null) {
             var offer_node = node.get_object();
@@ -87,12 +71,6 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
             }
         }
 
-        if ((node = content_root.get_member("version")) != null) {
-            _version = (int)node.get_int();
-        } else {
-            warning("content.version is missing from a m.call.invite event");
-        }
-
         if ((node = content_root.get_member("lifetime")) != null) {
             _lifetime = (int)node.get_int();
         } else {
@@ -111,14 +89,9 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
                     "Won't generate a m.call.invite without offer.type");
         }
 
-        if (_offer_sdp == null) {
+        if (_sdp == null) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.invite without offer.sdp");
-        }
-
-        if (_version == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.invite without version");
         }
 
         if (_lifetime == null) {
@@ -129,8 +102,6 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
 
-        content_root.set_string_member("call_id", _call_id);
-        content_root.set_int_member("version", _version);
         content_root.set_int_member("lifetime", _lifetime);
 
         var offer_root = new Json.Object();
@@ -141,7 +112,7 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
                 "type",
                 _g_enum_value_to_nick(typeof(CallOfferType),
                                       _offer_type));
-        offer_root.set_string_member("sdp", _offer_sdp);
+        offer_root.set_string_member("sdp", _sdp);
 
         content_root.set_member("offer", offer_node);
 

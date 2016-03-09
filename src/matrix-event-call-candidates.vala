@@ -21,7 +21,7 @@
  * callee after answering. Its purpose is to give the other party
  * additional ICE candidates to try using to communicate.
  */
-public class Matrix.Event.CallCandidates : Matrix.Event.Room {
+public class Matrix.Event.CallCandidates : Matrix.Event.Call {
     public struct Candidate {
         string? sdp_mid;     /// The SDP media type this candidate is
                              /// intended for.
@@ -29,11 +29,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
                              /// candidate is intended for.
         string? candidate;   /// The SDP 'a' line of the candidate.
     }
-
-    /**
-     * The ID of the call this event relates to.
-     */
-    public string? call_id { get; set; default = null; }
 
     /**
      * The list of candidates.
@@ -50,11 +45,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
         default = null;
     }
 
-    /**
-     * The version of the VoIP specification this messages adheres to.
-     */
-    public int? version { get; set; default = null; }
-
     private List<Candidate?>? _candidates;
 
     protected override void
@@ -64,12 +54,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
         Json.Node? node;
-
-        if ((node = content_root.get_member("call_id")) != null) {
-            _call_id = node.get_string();
-        } else {
-            warning("content.call_id is missing from a m.call.candidates event");
-        }
 
         if ((node = content_root.get_member("candidates")) != null) {
             node.get_array().foreach_element((ary, idx, cand_node) => {
@@ -100,12 +84,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
             warning("content.candidates is missing from a m.call.candidates event");
         }
 
-        if ((node = content_root.get_member("version")) != null) {
-            _version = (int)node.get_int();
-        } else {
-            warning("content.version is missing from a m.call.candidates event");
-        }
-
         base.from_json(json_data);
     }
 
@@ -113,16 +91,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if (_call_id == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.candidates event without call_id");
-        }
-
-        if (_version == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.candidates event without version");
-        }
-
         if ((_candidates == null) || (_candidates.length() < 1)) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.candidates event without candidates");
@@ -130,9 +98,6 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
 
         var content_root = json_data.get_object()
             .get_member("content").get_object();
-
-        content_root.set_string_member("call_id", _call_id);
-        content_root.set_int_member("version", _version);
 
         var cands = new Json.Array();
 

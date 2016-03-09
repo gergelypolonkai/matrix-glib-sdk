@@ -79,3 +79,4 @@ Makefile.in
 /src/matrix-event-call-candidates.c
 /src/matrix-event-call-answer.c
 /src/matrix-event-call-hangup.c
+/src/matrix-event-call-base.c
