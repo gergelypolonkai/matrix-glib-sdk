@@ -33,42 +33,42 @@
  */
 public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
     /**
-     * The level required to ban a user.
-     */
-    public int? ban { get; set; default = null; }
-
-    /**
-     * The default level required to send message events. Can be
-     * overridden by the events key.
-     */
-    public int? events_default { get; set; default = null; }
-
-    /**
-     * The level required to kick a user.
-     */
-    public int? kick { get; set; default = null; }
-
-    /**
-     * The level required to redact an event.
-     */
-    public int? redact { get; set; default = null; }
-
-    /**
-     * The default level required to send state events. Can be
-     * overridden by the events key.
-     */
-    public int? state_default { get; set; default = null; }
-
-    /**
      * The default power level for every user in the room, unless
      * their user_id is mentioned in the users key.
      */
     public int users_default { get; set; default = 0; }
 
     /**
+     * The default level required to send message events. Can be
+     * overridden by the events key.
+     */
+    public int events_default { get; set; default = 0; }
+
+    /**
+     * The default level required to send state events. Can be
+     * overridden by the events key.
+     */
+    public int state_default { get; set; default = 10; }
+
+    /**
+     * The level required to ban a user.
+     */
+    public int ban { get; set; default = 5; }
+
+    /**
+     * The level required to kick a user.
+     */
+    public int kick { get; set; default = 5; }
+
+    /**
+     * The level required to redact an event.
+     */
+    public int redact { get; set; default = 20; }
+
+    /**
      * The level required to invite someone.
      */
-    public int? invite { get; set; default = null; }
+    public int invite { get; set; default = 0; }
 
     private HashTable<string, int?> _event_levels = null;
     private HashTable<string, int?> _user_levels = null;
@@ -77,9 +77,15 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
-        Json.Node? node;
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("content")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.power_levels event is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("ban")) != null) {
             _ban = (int)node.get_int();
@@ -149,29 +155,9 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
 
-        if (_ban == null) {
+        if (_state_key != "") {
             throw new Matrix.Error.INCOMPLETE(
-                    "Won't create an m.room.power_levels event without a content.ban key");
-        }
-
-        if (_events_default == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't create an m.room.power_levels event without a content.events_default key");
-        }
-
-        if (_kick == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't create an m.room.power_levels event without a content.kick key");
-        }
-
-        if (_redact == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't create an m.room.power_levels event without a content.redact key");
-        }
-
-        if (_state_default == null) {
-            throw new Matrix.Error.INCOMPLETE(
-                    "Won't create an m.room.power_levels event without a content.state_default key");
+                    "Won't generate a m.room.power_levels event with a non-empty state_key");
         }
 
         if (_user_levels == null) {
