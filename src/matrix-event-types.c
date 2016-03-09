@@ -215,6 +215,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.call.candidates",
                                MATRIX_EVENT_TYPE_CALL_CANDIDATES,
                                NULL);
+    matrix_event_register_type("m.call.answer",
+                               MATRIX_EVENT_TYPE_CALL_ANSWER,
+                               NULL);
 }
 
 void

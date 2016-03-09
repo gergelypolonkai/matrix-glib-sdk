@@ -281,6 +281,11 @@ namespace Matrix {
         OFFER;   /// call offer
     }
 
+    public enum CallAnswerType {
+        UNKNOWN, /// represents a value unknown to this library
+        ANSWER;  /// call answer
+    }
+
     public struct ImageInfo {
         int? size;
         int? height;

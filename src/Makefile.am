@@ -47,6 +47,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-room-third-party-invite.vala \
 	matrix-event-call-invite.vala \
 	matrix-event-call-candidates.vala \
+	matrix-event-call-answer.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

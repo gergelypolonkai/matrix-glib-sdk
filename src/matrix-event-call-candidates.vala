@@ -50,6 +50,9 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Room {
         default = null;
     }
 
+    /**
+     * The version of the VoIP specification this messages adheres to.
+     */
     public int? version { get; set; default = null; }
 
     private List<Candidate?>? _candidates;
