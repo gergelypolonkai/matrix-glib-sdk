@@ -56,7 +56,8 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
             .get_member("content").get_object();
         Json.Node? node;
 
-        if ((node = content_root.get_member("call_id")) != null) {            _call_id = node.get_string();
+        if ((node = content_root.get_member("call_id")) != null) {
+            _call_id = node.get_string();
         } else {
             warning("content.call_id is missing from a m.call.invite event");
         }
@@ -99,5 +100,51 @@ public class Matrix.Event.CallInvite : Matrix.Event.Room {
         }
 
         base.from_json(json_data);
+    }
+
+    protected override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        if (_offer_type == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.call.invite without offer.type");
+        }
+
+        if (_offer_sdp == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.call.invite without offer.sdp");
+        }
+
+        if (_version == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.call.invite without version");
+        }
+
+        if (_lifetime == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.call.invite without lifetime");
+        }
+
+        var content_root = json_data.get_object()
+            .get_member("content").get_object();
+
+        content_root.set_string_member("call_id", _call_id);
+        content_root.set_int_member("version", _version);
+        content_root.set_int_member("lifetime", _lifetime);
+
+        var offer_root = new Json.Object();
+        var offer_node = new Json.Node(Json.NodeType.OBJECT);
+        offer_node.set_object(offer_root);
+
+        offer_root.set_string_member(
+                "type",
+                _g_enum_value_to_nick(typeof(CallOfferType),
+                                      _offer_type));
+        offer_root.set_string_member("sdp", _offer_sdp);
+
+        content_root.set_member("offer", offer_node);
+
+        base.to_json(json_data);
     }
 }
