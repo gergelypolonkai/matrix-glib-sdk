@@ -17,7 +17,19 @@
  */
 
 public abstract class Matrix.Event.State : Matrix.Event.Base {
-    public string? state_key { get; set; default = null; }
+    protected string? _state_key;
+
+    public string? state_key {
+        get {
+            return _state_key;
+        }
+
+        set {
+            _state_key = value;
+        }
+
+        default = null;
+    }
     public Json.Node? prev_content { get; set; default = null; }
 
     protected override void
