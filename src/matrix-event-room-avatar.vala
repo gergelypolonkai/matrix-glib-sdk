@@ -47,9 +47,19 @@ public class Matrix.Event.RoomAvatar : Matrix.Event.State {
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
         Json.Node? node;
+
+        if (Config.DEBUG) {
+            if ((node = root.get_member("state_key")) != null) {
+                var sk = node.get_string();
+
+                if (sk != "") {
+                    warning("state_key of a m.room.avatar event is non-empty");
+                }
+            }
+        }
 
         if ((node = content_root.get_member("url")) != null) {
             _url = node.get_string();
@@ -131,8 +141,13 @@ public class Matrix.Event.RoomAvatar : Matrix.Event.State {
                     "Won't generate a m.room.avatar event without url");
         }
 
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+
+        if (_state_key != "") {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.avatar event with a non-empty state_key");
+        }
 
         content_root.set_string_member("url", _url);
 
