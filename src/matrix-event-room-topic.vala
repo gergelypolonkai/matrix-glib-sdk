@@ -36,7 +36,13 @@ public class Matrix.Event.RoomTopic : Matrix.Event.State {
     {
         var root = json_data.get_object();
         var content_root = root.get_member("content").get_object();
-        Json.Node? node;
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("state_key")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.topic event is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("topic")) != null) {
             _topic = node.get_string();
@@ -53,6 +59,11 @@ public class Matrix.Event.RoomTopic : Matrix.Event.State {
     {
         var root = json_data.get_object();
         var content_root = root.get_member("content").get_object();
+
+        if (_state_key != "") {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.topic event with a non-empty state_key");
+        }
 
         if (_topic != null) {
             content_root.set_string_member("topic", _topic);
