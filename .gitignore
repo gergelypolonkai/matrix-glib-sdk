@@ -76,3 +76,4 @@ Makefile.in
 /src/matrix-event-room-redaction.c
 /src/matrix-event-room-third-party-invite.c
 /src/matrix-event-call-invite.c
+/src/matrix-event-call-candidates.c
