@@ -61,9 +61,7 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
      * The membership state of the user.
      */
     public RoomMembership membership {
-        get;
-
-        set;
+        get; set;
 
         default = RoomMembership.UNKNOWN;
     }
@@ -123,7 +121,17 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
     /**
      * The user ID whom this event relates to.
      */
-    public string? user_id { get; set; default = null; }
+    public string? user_id {
+        get {
+            return _state_key;
+        }
+
+        set {
+            _state_key = value;
+        }
+
+        default = null;
+    }
 
     protected override void
     from_json(Json.Node json_data)
@@ -136,9 +144,9 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
         // Even though the state_key is handled by the parent class,
         // in this event type this actually means the sender
         if ((node = root.get_member("state_key")) != null) {
-            _user_id = node.get_string();
+            _state_key = node.get_string();
         } else {
-            warning("state_key (thus, a user ID) is missing from a m.room.member event");
+            warning("state_key is missing from a m.room.member event");
         }
 
         if ((node = content_root.get_member("membership")) != null) {
@@ -220,30 +228,28 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        Json.Object root, content_root;
-        string? mship;
-
-        root = json_data.get_object();
-        content_root = _json_object_node_ensure_field(json_data,
-                                                      "content",
-                                                      Json.NodeType.OBJECT)
-            .get_object();
-
-        // I’m not sure if it is a good idea to set it here.
-        if (user_id != null) {
-            root.set_string_member("state_key", user_id);
-        }
-
         if (membership == RoomMembership.UNKNOWN) {
             throw new Matrix.Error.UNKNOWN_VALUE(
                     "Unknown membership value cannot be added to a room member event");
         }
+
+        if (_state_key == "") {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.member event with an empty state_key");
+        }
+
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        string? mship;
 
         mship = _g_enum_value_to_nick(typeof(Matrix.RoomMembership),
                                       membership);
 
         if (mship != null) {
             content_root.set_string_member("membership", mship);
+        } else {
+            throw new Matrix.Error.UNKNOWN_VALUE(
+                    "Won't generate a m.room.member event with an unknown membership");
         }
 
         if (avatar_url != null) {
