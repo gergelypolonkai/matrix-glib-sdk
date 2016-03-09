@@ -62,15 +62,39 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
 
         if ((node = root.get_member("event_id")) != null) {
             _event_id = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("event_id is missing from a Room event");
         }
 
         if ((node = root.get_member("room_id")) != null) {
             _room_id = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("room_id is missing from a Room event");
         }
 
         if ((node = root.get_member("sender")) != null) {
             _sender = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("sender is missing from a Room event");
         }
+
+        if ((node = root.get_member("unsigned")) != null) {
+            var unsigned_root = node.get_object();
+
+            if ((node = unsigned_root.get_member("age")) != null) {
+                _age = (int)node.get_int();
+            }
+
+            if ((node = unsigned_root.get_member("redacted_because")) != null) {
+                _redacted_because = node.get_string();
+            }
+
+            if ((node = unsigned_root.get_member("transaction_id")) != null) {
+                _transaction_id = node.get_string();
+            }
+        }
+
+        base.from_json(json_data);
     }
 
     protected override void
@@ -80,31 +104,31 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
         var root_obj = json_data.get_object();
 
         if (event_id != null) {
-            root_obj.set_string_member("event_id", event_id);
+            root_obj.set_string_member("event_id", _event_id);
         }
 
         if (room_id != null) {
-            root_obj.set_string_member("room_id", room_id);
+            root_obj.set_string_member("room_id", _room_id);
         }
 
         if (sender != null) {
-            root_obj.set_string_member("sender", sender);
+            root_obj.set_string_member("sender", _sender);
         }
 
         var unsigned_obj = new Json.Object();
 
         if (age != null) {
-            unsigned_obj.set_int_member("age", age);
+            unsigned_obj.set_int_member("age", _age);
         }
 
         if (redacted_because != null) {
             unsigned_obj.set_string_member("redacted_because",
-                                           redacted_because);
+                                           _redacted_because);
         }
 
         if (transaction_id != null) {
             unsigned_obj.set_string_member("transaction_id",
-                                           transaction_id);
+                                           _transaction_id);
         }
 
         if (unsigned_obj.get_size() > 0) {
@@ -112,5 +136,7 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
             unsigned_node.set_object(unsigned_obj);
             root_obj.set_member("unsigned", unsigned_node);
         }
+
+        base.to_json(json_data);
     }
 }
