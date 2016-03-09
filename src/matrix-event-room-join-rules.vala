@@ -26,15 +26,21 @@
  * private are reserved keywords which are not implemented.
  */
 public class Matrix.Event.RoomJoinRules : Matrix.Event.State {
-    public Matrix.JoinRules? join_rules { get; set; default = null; }
+    public JoinRules join_rules { get; set; default = JoinRules.UNKNOWN; }
 
     protected override void
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
-        Json.Node? node;
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("state_key")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.join_rules is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("join_rule")) != null) {
             Matrix.JoinRules? rules = (Matrix.JoinRules)_g_enum_nick_to_value(
@@ -64,9 +70,9 @@ public class Matrix.Event.RoomJoinRules : Matrix.Event.State {
         var content_root = json_data.get_object().
             get_member("content").get_object();
 
-        if (_join_rules == null) {
+        if (_state_key != "") {
             throw new Matrix.Error.INCOMPLETE(
-                    "Won't send a m.room.join_rules event without content.join_rule");
+                    "Won't generate a m.room.join_rules event with a non-empty state_key");
         }
 
         if (_join_rules == Matrix.JoinRules.UNKNOWN) {
