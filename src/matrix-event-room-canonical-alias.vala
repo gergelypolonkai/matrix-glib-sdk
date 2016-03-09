@@ -24,15 +24,24 @@
  * as suggestion to users which alias to use to advertise the room.
  */
 public class Matrix.Event.RoomCanonicalAlias : Matrix.Event.State {
+    /**
+     * The canonical alias.
+     */
     public string? canonical_alias { get; set; default = null; }
 
     protected override void
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
-        Json.Node? node;
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("state_key")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.canonical_alias event is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("alias")) != null) {
             _canonical_alias = node.get_string();
@@ -47,6 +56,11 @@ public class Matrix.Event.RoomCanonicalAlias : Matrix.Event.State {
     {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
+
+        if (_state_key != "") {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.canonical_alias event with a non-empty state_key");
+        }
 
         if (_canonical_alias != null) {
             content_root.set_string_member("alias", _canonical_alias);
