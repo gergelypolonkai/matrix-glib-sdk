@@ -36,9 +36,15 @@ public class Matrix.Event.RoomHistoryVisibility : Matrix.Event.State {
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
-        Json.Node? node;
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("state_key")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.history_visibility event is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("history_visibility")) != null) {
             Matrix.HistoryVisibility? vis = (Matrix.HistoryVisibility?)_g_enum_nick_to_value(
@@ -61,6 +67,11 @@ public class Matrix.Event.RoomHistoryVisibility : Matrix.Event.State {
     {
         var content_root = json_data.get_object()
             .get_member("content").get_object();
+
+        if (_state_key != "") {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.history_visibility event with a non-empty state key");
+        }
 
         if (visibility == Matrix.HistoryVisibility.UNKNOWN) {
             throw new Matrix.Error.UNKNOWN_VALUE(
