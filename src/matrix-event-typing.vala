@@ -22,9 +22,14 @@
  * Informs the client of the list of users currently typing.
  */
 public class Matrix.Event.Typing : Matrix.Event.Base {
-    private List<string>? _user_ids = null;
-
+    /**
+     * The ID of the room this event belongs to.
+     */
     public string? room_id { get; set; default = null; }
+
+    /**
+     * The list of user IDs typing in this room, if any.
+     */
     public List<string>? user_ids {
         get {
             return _user_ids;
@@ -35,5 +40,59 @@ public class Matrix.Event.Typing : Matrix.Event.Base {
         }
 
         default = null;
+    }
+
+    private List<string>? _user_ids = null;
+
+    protected override void
+    from_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node;
+
+        if ((node = root.get_member("room_id")) != null) {
+            _room_id = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("room_id is missing from a m.typing event");
+        }
+
+        if ((node = content_root.get_member("user_ids")) != null) {
+            _user_ids = null;
+
+            node.get_array().foreach_element((ary, idx, user_node) => {
+                    _user_ids.prepend(user_node.get_string());
+                });
+        } else {
+            warning("content.user_ids is missing from a m.typing event");
+        }
+
+        base.from_json(json_data);
+    }
+
+    protected override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        if (_room_id == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.typing event without room_id");
+        }
+
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+
+        root.set_string_member("room_id", _room_id);
+
+        var users_ary = new Json.Array();
+        var users_node = new Json.Node(Json.NodeType.ARRAY);
+        content_root.set_member("user_ids", users_node);
+
+        foreach (var entry in _user_ids) {
+            users_ary.add_string_element(entry);
+        }
+
+        base.to_json(json_data);
     }
 }
