@@ -263,11 +263,16 @@ namespace Matrix {
     }
 
     public enum HistoryVisibility {
-        UNKNOWN,
-        INVITED,
-        JOINED,
-        SHARE,
-        WORLD_READABLE;
+        UNKNOWN,        /// represents a value unknown to this library
+        INVITED,        /// only room members can see the room
+                        /// history, and only what happened after they
+                        /// got an invitation
+        JOINED,         /// only room members can see the room
+                        /// history, and only what happened after they
+                        /// joined
+        SHARED,         /// only room members can see the room
+                        /// history, but they see all of it
+        WORLD_READABLE; /// anyone can see the room history
     }
 
     public enum GuestAccess {
