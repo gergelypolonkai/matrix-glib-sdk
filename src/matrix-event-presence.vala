@@ -19,16 +19,38 @@
 /**
  * Class for representing presence events
  *
- * The presence event class.
+ * Informs the client of a user's presence state change.
  */
 public class Matrix.Event.Presence : Matrix.Event.Base {
+    /**
+     * The current avatar URL for this user, if any.
+     */
     public string? avatar_url { get; set; }
+
+    /**
+     * The current display name for this user, if any.
+     */
     public string? display_name { get; set; }
+
+    /**
+     * The last time since this used performed some action, in
+     * milliseconds.
+     */
     public ulong? last_active_ago { get; set; }
+
+    /**
+     * The user's ID.
+     */
     public string? user_id { get; set; default = null; }
+
+    public string? event_id { get; set; default = null; }
+
+    /**
+     * The presence state for this user.
+     */
     public Matrix.Presence presence {
-        get;
-        set;
+        get; set;
+
         default = Matrix.Presence.UNKNOWN;
     }
 
@@ -36,19 +58,24 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        Json.Object content_root = json_data.get_object().get_member("content").get_object();
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
         Json.Node? node;
+
+        if ((node = root.get_member("event_id")) != null) {
+            _event_id = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("event_id is missing from a m.presence event");
+        }
 
         if ((node = content_root.get_member("user_id")) != null) {
             _user_id = node.get_string();
         } else if (Config.DEBUG) {
-            warning("user_id is missing from the m.presence event");
+            warning("content.user_id is missing from the m.presence event");
         }
 
         if ((node = content_root.get_member("last_active_ago")) != null) {
             _last_active_ago = (ulong)node.get_int();
-        } else {
-            _last_active_ago = null;
         }
 
         if ((node = content_root.get_member("avatar_url")) != null) {
@@ -67,9 +94,14 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
                 _presence = pres;
             } else {
                 _presence = Matrix.Presence.UNKNOWN;
+
+                if (Config.DEBUG) {
+                    warning("Unknown value %s for content.presence in a m.presence event",
+                            node.get_string());
+                }
             }
         } else if (Config.DEBUG) {
-            warning("presence is missing from the m.presence event");
+            warning("content.presence is missing from the m.presence event");
         }
 
         base.from_json(json_data);
@@ -79,25 +111,30 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        Json.Object content_root;
-        string? pres;
-
-        if (presence == Matrix.Presence.UNKNOWN) {
-            throw new Matrix.Error.UNKNOWN_VALUE (
-                    "unkwnown presence cannot be added to a presence event");
+        if (_presence == Matrix.Presence.UNKNOWN) {
+            throw new Matrix.Error.UNKNOWN_VALUE(
+                    "Won't generate a m.presence event with an unkwnown presence");
         }
 
         if (_user_id == null) {
-            throw new Matrix.Error.INCOMPLETE (
-                    "sender must be set for presence events!");
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.presence event without sender");
         }
 
-        content_root = json_data
-            .get_object()
-            .get_member("content")
-            .get_object();
+        if (_event_id == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.presence event without event_id");
+        }
+
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+
+        root.set_string_member("event_id", _event_id);
 
         content_root.set_string_member("user_id", _user_id);
+        content_root.set_string_member("presence",
+                                       _g_enum_value_to_nick(typeof(Presence),
+                                                             _presence));
 
         if (last_active_ago != null) {
             content_root.set_int_member("last_active_ago", last_active_ago);
@@ -109,12 +146,6 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
 
         if (display_name != null) {
             content_root.set_string_member("displayname", display_name);
-        }
-
-        pres = _g_enum_value_to_nick(typeof(Matrix.Presence), presence);
-
-        if (pres != null) {
-            content_root.set_string_member("presence", pres);
         }
 
         base.to_json(json_data);
