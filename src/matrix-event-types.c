@@ -218,6 +218,9 @@ matrix_event_types_ctor(void)
     matrix_event_register_type("m.call.answer",
                                MATRIX_EVENT_TYPE_CALL_ANSWER,
                                NULL);
+    matrix_event_register_type("m.call.hangup",
+                               MATRIX_EVENT_TYPE_CALL_HANGUP,
+                               NULL);
 }
 
 void
