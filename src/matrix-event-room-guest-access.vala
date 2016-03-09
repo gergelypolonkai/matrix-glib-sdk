@@ -31,15 +31,21 @@ public class Matrix.Event.RoomGuestAccess : Matrix.Event.State {
     /**
      * Whether guests can join the room.
      */
-    public GuestAccess? guest_access { get; set; default = null; }
+    public GuestAccess guest_access { get; set; default = GuestAccess.UNKNOWN; }
 
     protected override void
     from_json(Json.Node json_data)
         throws Matrix.Error
     {
-        var content_root = json_data.get_object()
-            .get_member("content").get_object();
-        Json.Node? node;
+        var root = json_data.get_object();
+        var content_root = root.get_member("content").get_object();
+        Json.Node? node = null;
+
+        if (Config.DEBUG && ((node = root.get_member("state_key")) != null)) {
+            if (node.get_string() != "") {
+                warning("state_key of a m.room.guest_access is non-empty");
+            }
+        }
 
         if ((node = content_root.get_member("guest_access")) != null) {
             GuestAccess? rules = (GuestAccess?)_g_enum_nick_to_value(
@@ -64,9 +70,14 @@ public class Matrix.Event.RoomGuestAccess : Matrix.Event.State {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if ((_guest_access == null) || (_guest_access == GuestAccess.UNKNOWN)) {
+        if (_state_key != "") {
             throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.room.guest_access event with an unset content.guest_access key");
+                    "Won't generate a m.room.guest_access event with a non-empty state key");
+        }
+
+        if ((_guest_access == GuestAccess.UNKNOWN)) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.guest_access event with an unknown content.guest_access key");
         }
 
         var content_root = json_data.get_object()
