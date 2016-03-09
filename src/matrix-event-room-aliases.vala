@@ -65,6 +65,35 @@ public class Matrix.Event.RoomAliases : Matrix.Event.State {
             node.get_array().foreach_element((ary, idx, member_node) => {
                     _aliases.prepend(member_node.get_string());
                 });
+        } else if (Config.DEBUG) {
+            warning("content.aliases is missing from a m.room.aliases event");
         }
+
+        base.from_json(json_data);
+    }
+
+    protected override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        if ((_aliases == null) || (_aliases.length() == 0)) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a m.room.aliases event without aliases");
+        }
+
+        var content_root = json_data.get_object()
+            .get_member("content").get_object();
+
+        var aliases_ary = new Json.Array();
+
+        foreach (var entry in _aliases) {
+            aliases_ary.add_string_element(entry);
+        }
+
+        var aliases_node = new Json.Node(Json.NodeType.ARRAY);
+        aliases_node.set_array(aliases_ary);
+        content_root.set_member("aliases", aliases_node);
+
+        base.to_json(json_data);
     }
 }
