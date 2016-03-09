@@ -40,7 +40,9 @@ public abstract class Matrix.Event.State : Matrix.Event.Base {
         Json.Node? node;
 
         if ((node = root.get_member("state_key")) != null) {
-            state_key = node.get_string();
+            _state_key = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("state_key is not present in a State event");
         }
 
         if ((node = root.get_member("prev_content")) != null) {
@@ -54,13 +56,16 @@ public abstract class Matrix.Event.State : Matrix.Event.Base {
     to_json(Json.Node json_node)
         throws Matrix.Error
     {
-        var root = json_node.get_object();
-
-        if (state_key != null) {
-            root.set_string_member("state_key", state_key);
+        if (_state_key == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate state events without state_key");
         }
 
-        if (prev_content != null) {
+        var root = json_node.get_object();
+
+        root.set_string_member("state_key", state_key);
+
+        if (_prev_content != null) {
             root.set_member("prev_content", prev_content);
         }
 
