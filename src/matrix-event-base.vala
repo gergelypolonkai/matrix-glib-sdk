@@ -144,7 +144,16 @@ public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
     public virtual void
     from_json(Json.Node json_data)
         throws Matrix.Error
-    {}
+    {
+        var root = json_data.get_object();
+        Json.Node? node;
+
+        if ((node = root.get_member("type")) != null) {
+            _event_type = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("type is not present in an event");
+        }
+    }
 
     /**
      * Subclasses should implement this to export their data to JSON.
@@ -153,11 +162,14 @@ public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        Json.Object root = json_data.get_object();
+        var root = json_data.get_object();
 
-        if (event_type != null) {
-            root.set_string_member("type", event_type);
+        if (_event_type == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate an event without type");
         }
+
+        root.set_string_member("type", _event_type);
     }
 
     public static Base?
