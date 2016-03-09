@@ -74,3 +74,4 @@ Makefile.in
 /src/matrix-event-room-message-feedback.c
 /src/matrix-event-room-guest-access.c
 /src/matrix-event-room-redaction.c
+/src/matrix-event-room-third-party-invite.c
