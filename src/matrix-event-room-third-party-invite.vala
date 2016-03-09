@@ -96,7 +96,7 @@ public class Matrix.Event.RoomThirdPartyInvite : Matrix.Event.State {
 
         if ((node = root.get_member("state_key")) != null) {
             _state_key = node.get_string();
-        } else {
+        } else if (Config.DEBUG) {
             warning("state_key is missing from a m.room.third_party_invite_event");
         }
 
