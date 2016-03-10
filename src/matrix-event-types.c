@@ -234,6 +234,9 @@ matrix_event_types_ctor(void)
     matrix_message_register_type("m.file",
                                  MATRIX_MESSAGE_TYPE_FILE,
                                  NULL);
+    matrix_message_register_type("m.image",
+                                 MATRIX_MESSAGE_TYPE_IMAGE,
+                                 NULL);
 }
 
 void
