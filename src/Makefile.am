@@ -50,6 +50,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-call-candidates.vala \
 	matrix-event-call-answer.vala \
 	matrix-event-call-hangup.vala \
+	matrix-message-base.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

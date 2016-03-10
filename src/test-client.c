@@ -75,10 +75,19 @@ cb_room_message_event(MatrixClient *client,
                       MatrixEventBase *event,
                       gpointer user_data)
 {
-    g_printf("Message from %s: %s\n",
-             matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
-             matrix_event_room_message_get_body(
-                     MATRIX_EVENT_ROOM_MESSAGE(event)));
+    MatrixMessageBase *message;
+
+    if ((message = matrix_event_room_message_get_message(
+                 MATRIX_EVENT_ROOM_MESSAGE(event))) != NULL) {
+        g_printf("Message from %s in %s: %s\n",
+                 matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
+                 matrix_event_room_get_room_id(MATRIX_EVENT_ROOM(event)),
+                 matrix_message_base_get_body(message));
+    } else {
+        g_printf("Unknown message received from %s in %s\n",
+                 matrix_event_room_get_sender(MATRIX_EVENT_ROOM(event)),
+                 matrix_event_room_get_room_id(MATRIX_EVENT_ROOM(event)));
+    }
 }
 
 int
