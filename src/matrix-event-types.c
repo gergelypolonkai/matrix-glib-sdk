@@ -240,6 +240,9 @@ matrix_event_types_ctor(void)
     matrix_message_register_type("m.audio",
                                  MATRIX_MESSAGE_TYPE_AUDIO,
                                  NULL);
+    matrix_message_register_type("m.video",
+                                 MATRIX_MESSAGE_TYPE_VIDEO,
+                                 NULL);
 }
 
 void

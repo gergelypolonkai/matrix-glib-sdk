@@ -89,3 +89,4 @@ Makefile.in
 /src/matrix-message-file.c
 /src/matrix-message-image.c
 /src/matrix-message-audio.c
+/src/matrix-message-video.c
