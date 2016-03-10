@@ -211,4 +211,9 @@ header_DATA = \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)
 
+pkgconfig_in = matrix-glib-$(MATRIX_GLIB_API_VERSION).pc.in
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = $(pkgconfig_in:.in=)
+EXTRA_DIST += $(pkgconfig_in)
+
 CLEANFILES += $(typelibs_DATA)
