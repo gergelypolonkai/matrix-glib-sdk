@@ -228,6 +228,9 @@ matrix_event_types_ctor(void)
     matrix_message_register_type("m.emote",
                                  MATRIX_MESSAGE_TYPE_EMOTE,
                                  NULL);
+    matrix_message_register_type("m.notice",
+                                 MATRIX_MESSAGE_TYPE_NOTICE,
+                                 NULL);
 }
 
 void
