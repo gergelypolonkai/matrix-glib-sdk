@@ -198,11 +198,22 @@ matrix-marshalers.c: matrix-marshalers.h
 
 CLEANFILES += stamp-matrix-marshalers
 
-include $(INTROSPECTION_MAKEFILE)
-Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
+limtatrix_glib_dlname = \
+	`$(SED) -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libmatrix-glib-0.0.la`¬
+INTROSPECTION_GIRS = Matrix-$(MATRIX_GLIB_API_VERSION).gir
+INTROSPECTION_COMPILER_ARGS = --includedir=. $(libmatrix_glib_dlname)
 
-typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = Matrix-$(MATRIX_GLIB_API_VERSION).typelib
+Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
+Matrix-0.0.typelib: $(INTROSPECTION_GIRS)
+	$(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
+
+girdir = $(INTROSPECTION_GIRDIR)
+gir_DATA = $(INTROSPECTION_GIRS)
+typelibdir = $(INTROSPECTION_TYPELIBDIR)
+typelib_DATA = Matrix-$(MATRIX_GLIB_API_VERSION).typelib
+
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
 
 headerdir = $(includedir)/matrix-glib-$(MATRIX_GLIB_API_VERSION)
 header_DATA = \
@@ -215,5 +226,3 @@ pkgconfig_in = matrix-glib-$(MATRIX_GLIB_API_VERSION).pc.in
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(pkgconfig_in:.in=)
 EXTRA_DIST += $(pkgconfig_in)
-
-CLEANFILES += $(typelibs_DATA)
