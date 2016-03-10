@@ -83,3 +83,4 @@ Makefile.in
 /src/matrix-event-call-base.c
 /src/matrix-glib-0.0.pc
 /src/matrix-message-base.c
+/src/matrix-message-text.c
