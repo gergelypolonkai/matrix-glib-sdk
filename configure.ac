@@ -173,7 +173,7 @@ AC_ARG_ENABLE(debug,
 AM_CONDITIONAL([DEBUG], [test $debug = yes])
 
 if test x"$debug" = x"$enableval"; then
-    AC_DEFINE([DEBUG], [1], [Define if debugging should be enabled])
+    AC_DEFINE([DEBUG], [1], [Define as 1 if debugging should be enabled])
 
     if test x"$cflags_set" != x"set"; then
         case " $CFLAGS " in
@@ -181,6 +181,8 @@ if test x"$debug" = x"$enableval"; then
             *) CFLAGS="$CFLAGS -g" ;;
         esac
     fi
+else
+    AC_DEFINE([DEBUG], [0], [Define as 1 if debugging should be enabled])
 fi
 
 AC_SUBST([MATRIX_GLIB_MAJOR_VERSION], matrix_glib_major_version)
