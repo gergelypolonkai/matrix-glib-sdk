@@ -231,6 +231,9 @@ matrix_event_types_ctor(void)
     matrix_message_register_type("m.notice",
                                  MATRIX_MESSAGE_TYPE_NOTICE,
                                  NULL);
+    matrix_message_register_type("m.file",
+                                 MATRIX_MESSAGE_TYPE_FILE,
+                                 NULL);
 }
 
 void

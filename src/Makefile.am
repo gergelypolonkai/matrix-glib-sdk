@@ -54,6 +54,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-message-text.vala \
 	matrix-message-emote.vala \
 	matrix-message-notice.vala \
+	matrix-message-file.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
