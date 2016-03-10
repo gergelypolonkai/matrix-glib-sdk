@@ -297,6 +297,42 @@ namespace Matrix {
         int? width;
         string? mimetype;
 
+        public void
+        set_from_json(Json.Node json_data)
+        {
+            size = null;
+            mimetype = null;
+            height = null;
+            width = null;
+
+            var root = json_data.get_object();
+            Json.Node? node;
+
+            if ((node = root.get_member("w")) != null) {
+                width = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("w is missing from an ImageInfo");
+            }
+
+            if ((node = root.get_member("h")) != null) {
+                height = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("h is missing from an ImageInfo");
+            }
+
+            if ((node = root.get_member("size")) != null) {
+                size = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("size is missing from an ImageInfo");
+            }
+
+            if ((node = root.get_member("mimetype")) != null) {
+                mimetype = node.get_string();
+            } else if (Config.DEBUG) {
+                warning("mimetype is missing from an ImageInfo");
+            }
+        }
+
         public Json.Node
         get_json_node()
             throws Matrix.Error

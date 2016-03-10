@@ -72,61 +72,13 @@ public class Matrix.Event.RoomAvatar : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("info")) != null) {
-            var info_obj = node.get_object();
             _info = ImageInfo();
-
-            if ((node = info_obj.get_member("size")) != null) {
-                _info.size = (int)node.get_int();
-            } else {
-                warning("content.info.size is missing from a m.room.avatar event");
-            }
-
-            if ((node = info_obj.get_member("h")) != null) {
-                _info.height = (int)node.get_int();
-            } else {
-                warning("content.info.h is missing from a m.room.avatar event");
-            }
-
-            if ((node = info_obj.get_member("w")) != null) {
-                _info.width = (int)node.get_int();
-            } else {
-                warning("content.info.w is missing from a m.room.avatar event");
-            }
-
-            if ((node = info_obj.get_member("mimetype")) != null) {
-                _info.mimetype = node.get_string();
-            } else {
-                warning("content.info.mimetype is missing from a m.room.avatar event");
-            }
+            _info.set_from_json(node);
         }
 
         if ((node = content_root.get_member("thumbnail_info")) != null) {
-            var thumbnail_info_obj = node.get_object();
             _thumbnail_info = ImageInfo();
-
-            if ((node = thumbnail_info_obj.get_member("size")) != null) {
-                _thumbnail_info.size = (int)node.get_int();
-            } else {
-                warning("content.thumbnail_info.size is missing from a m.room.avatar event");
-            }
-
-            if ((node = thumbnail_info_obj.get_member("h")) != null) {
-                _thumbnail_info.height = (int)node.get_int();
-            } else {
-                warning("content.thumbnail_info.h is missing from a m.room.avatar event");
-            }
-
-            if ((node = thumbnail_info_obj.get_member("w")) != null) {
-                _thumbnail_info.width = (int)node.get_int();
-            } else {
-                warning("content.thumbnail_info.w is missing from a m.room.avatar event");
-            }
-
-            if ((node = thumbnail_info_obj.get_member("mimetype")) != null) {
-                _thumbnail_info.mimetype = node.get_string();
-            } else {
-                warning("content.thumbnail_info.mimetype is missing from a m.room.avatar event");
-            }
+            _thumbnail_info.set_from_json(node);
         }
 
         base.from_json(json_data);
