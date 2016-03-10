@@ -204,6 +204,7 @@ AC_CONFIG_FILES([
     src/Makefile
     src/matrix-version.h
     src/matrix-glib-0.0.pc
+    src/namespace-info.vala
     docs/Makefile
     docs/valadoc/Makefile
     docs/valadoc/gtk-doc/Makefile

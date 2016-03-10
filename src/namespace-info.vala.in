@@ -16,8 +16,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-[CCode (gir_namespace = "Matrix", gir_version = "0.10")]
+[CCode (gir_namespace = "Matrix", gir_version = "@MATRIX_GLIB_API_VERSION@")]
 namespace Matrix {
-    [CCode (gir_namespace = "Event", gir_version = "0.10")]
+    [CCode (gir_namespace = "Event", gir_version = "@MATRIX_GLIB_API_VERSION@")]
     namespace Event {}
 }

@@ -58,6 +58,7 @@ Makefile.in
 /src/matrix-event-room-member.c
 /src/matrix-event-state-base.c
 /src/matrix-event-room-message.c
+/src/namespace-info.vala
 /src/namespace-info.c
 /src/matrix-event-room-topic.c
 /src/matrix-event-typing.c
