@@ -243,6 +243,9 @@ matrix_event_types_ctor(void)
     matrix_message_register_type("m.video",
                                  MATRIX_MESSAGE_TYPE_VIDEO,
                                  NULL);
+    matrix_message_register_type("m.location",
+                                 MATRIX_MESSAGE_TYPE_LOCATION,
+                                 NULL);
 }
 
 void
