@@ -408,6 +408,63 @@ namespace Matrix {
         }
     }
 
+    public struct AudioInfo {
+        int? size;
+        string? mimetype;
+        int? duration;
+
+        public void
+        set_from_json(Json.Node json_data)
+        {
+            size = null;
+            mimetype = null;
+            duration = null;
+
+            var root = json_data.get_object();
+            Json.Node? node;
+
+            if ((node = root.get_member("size")) != null) {
+                size = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("size is missing from an ImageInfo");
+            }
+
+            if ((node = root.get_member("mimetype")) != null) {
+                mimetype = node.get_string();
+            } else if (Config.DEBUG) {
+                warning("mimetype is missing from an ImageInfo");
+            }
+
+            if ((node = root.get_member("duration")) != null) {
+                duration = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("duration is missing from an ImageInfo");
+            }
+        }
+
+        public Json.Node
+        get_json_node()
+            throws Matrix.Error
+        {
+            if ((size == null)
+                || (mimetype == null)
+                || (duration == null)) {
+                throw new Matrix.Error.INCOMPLETE(
+                        "Won't generate an ImageInfo without all fields set.");
+            }
+
+            var node = new Json.Node(Json.NodeType.OBJECT);
+            var obj = new Json.Object();
+            node.set_object(obj);
+
+            obj.set_int_member("size", size);
+            obj.set_string_member("mimetype", mimetype);
+            obj.set_int_member("duration", duration);
+
+            return node;
+        }
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {
