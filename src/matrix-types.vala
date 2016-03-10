@@ -465,6 +465,96 @@ namespace Matrix {
         }
     }
 
+    public struct VideoInfo {
+        int? size;
+        string? mimetype;
+        int? duration;
+        int? width;
+        int? height;
+        string? thumbnail_url;
+        ImageInfo? thumbnail_info;
+
+        public void
+        set_from_json(Json.Node json_data)
+        {
+            size = null;
+            mimetype = null;
+            duration = null;
+
+            var root = json_data.get_object();
+            Json.Node? node;
+
+            if ((node = root.get_member("size")) != null) {
+                size = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("size is missing from an VideoInfo");
+            }
+
+            if ((node = root.get_member("mimetype")) != null) {
+                mimetype = node.get_string();
+            } else if (Config.DEBUG) {
+                warning("mimetype is missing from an VideoInfo");
+            }
+
+            if ((node = root.get_member("duration")) != null) {
+                duration = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("duration is missing from an VideoInfo");
+            }
+
+            if ((node = root.get_member("w")) != null) {
+                width = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("w is missing from a VideoInfo");
+            }
+
+            if ((node = root.get_member("h")) != null) {
+                height = (int)node.get_int();
+            } else if (Config.DEBUG) {
+                warning("h is missing from a VideoInfo");
+            }
+
+            if ((node = root.get_member("thumbnail_url")) != null) {
+                thumbnail_url = node.get_string();
+            }
+
+            if ((node = root.get_member("thumbnail_info")) != null) {
+                thumbnail_info = ImageInfo();
+                thumbnail_info.set_from_json(node);
+            }
+        }
+
+        public Json.Node
+        get_json_node()
+            throws Matrix.Error
+        {
+            if ((size == null)
+                || (mimetype == null)
+                || (duration == null)
+                || (width == null)
+                || (height == null)
+                || (thumbnail_url == null)
+                || (thumbnail_info == null)) {
+                throw new Matrix.Error.INCOMPLETE(
+                        "Won't generate an ImageInfo without all fields set.");
+            }
+
+            var node = new Json.Node(Json.NodeType.OBJECT);
+            var obj = new Json.Object();
+            node.set_object(obj);
+
+            obj.set_int_member("size", size);
+            obj.set_string_member("mimetype", mimetype);
+            obj.set_int_member("duration", duration);
+            obj.set_int_member("w", width);
+            obj.set_int_member("h", height);
+            obj.set_string_member("thumbnail_url", thumbnail_url);
+            obj.set_member("thumbnail_info", thumbnail_info.get_json_node());
+
+            return node;
+        }
+    }
+
     private int?
     _g_enum_nick_to_value(Type enum_type, string nick)
     {
