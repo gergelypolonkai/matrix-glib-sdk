@@ -38,6 +38,10 @@ namespace Matrix {
         INVALID_FORMAT,        /// the format of the JSON node is
                                /// invalid (e.g. it is an array
                                /// instead of an object)
+        UNAVAILABLE,           /// the requested data is not cached
+                               /// yet. Clients getting this message
+                               /// may go online by some means to get
+                               /// the data
 
         /* Add Matrix-defined error codes under here, prefixing them with
          * `MATRIX_ERROR_`, i.e. `M_FORBIDDEN` =>

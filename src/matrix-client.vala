@@ -172,4 +172,25 @@ public interface Matrix.Client : GLib.Object {
     public extern void
     connect_event(GLib.Type event_gtype,
                   owned EventCallback event_callback);
+
+    /**
+     * Get the profile of a user specified by @param user_id.
+     * If @param room_id is not null, return the room-specific
+     * profile. If the user's profile is not cached yet,
+     * Matrix.Error.UNAVAILABLE is thrown.
+     */
+    public abstract Profile?
+    get_user_profile(string user_id, string? room_id = null)
+        throws Matrix.Error;
+
+    /**
+     * Get the presence state of a user specified
+     * by @param user_id. If @param room_id is null, return
+     * the room specific presence state. If the user's presence
+     * state is not cached yet, Matrix.Error.UNAVAILABLE is
+     * thrown.
+     */
+    public abstract Presence?
+    get_user_presence(string user_id, string? room_id = null)
+        throws Matrix.Error;
 }

@@ -24,6 +24,10 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     private bool _polling = false;
     private ulong _event_timeout = 30000;
     private string? _last_sync_token;
+    private Gee.HashMap<string, Profile> _user_global_profiles =
+        new Gee.HashMap<string, Profile>();
+    private Gee.HashMap<string, Presence> _user_global_presence =
+        new Gee.HashMap<string, Presence>();
 
     public
     HTTPClient(string base_url)
@@ -107,6 +111,42 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             evt = Matrix.Event.Base.new_from_json(event_type, event_node);
         } catch (GLib.Error e) {
             evt = null;
+        }
+
+        if (evt != null) {
+            string? user_id = null;
+
+            if (evt.get_type().is_a(typeof(Matrix.Event.Presence))) {
+                var pevt = (Matrix.Event.Presence)evt;
+                user_id = pevt.user_id;
+
+                _user_global_presence[user_id] = pevt.presence;
+
+                Profile? profile = _user_global_profiles[user_id];
+
+                if (profile == null) {
+                    profile = new Profile();
+                    _user_global_profiles[user_id] = profile;
+                }
+
+                profile.avatar_url = pevt.avatar_url;
+                profile.display_name = pevt.display_name;
+            } else if (evt.get_type().is_a(typeof(Matrix.Event.RoomMember))) {
+                // The following is a temporary hack until per-room
+                // profiles get implemented in HSes.
+                var mevt = (Matrix.Event.RoomMember)evt;
+                user_id = mevt.user_id;
+
+                Profile? profile = _user_global_profiles[user_id];
+
+                if (profile == null) {
+                    profile = new Profile();
+                    _user_global_profiles[user_id] = profile;
+                }
+
+                profile.avatar_url = mevt.avatar_url;
+                profile.display_name = mevt.display_name;
+            }
         }
 
         incoming_event(room_id, event_node, evt);
@@ -280,5 +320,45 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         if (cancel_ongoing) {
             abort_pending();
         }
+    }
+
+    public Profile?
+    get_user_profile(string user_id, string? room_id = null)
+        throws Matrix.Error
+    {
+        if (room_id == null) {
+            var profile = _user_global_profiles[user_id];
+
+            if (profile == null) {
+                throw new Matrix.Error.UNAVAILABLE(
+                        "Global profile for %s is not cached yet.",
+                        user_id);
+            }
+
+            return profile;
+        }
+
+        throw new Matrix.Error.UNSUPPORTED(
+                "Per-room profiles are not supported yet.");
+    }
+
+    public Presence?
+    get_user_presence(string user_id, string? room_id = null)
+        throws Matrix.Error
+    {
+        if (room_id == null) {
+            Presence? presence = _user_global_presence[user_id];
+
+            if (presence == null) {
+                throw new Matrix.Error.UNAVAILABLE(
+                        "Global presence for %s is not cached yet.",
+                        user_id);
+            }
+
+            return presence;
+        }
+
+        throw new Matrix.Error.UNSUPPORTED(
+                "Per-room presences are not supported yet.");
     }
 }
