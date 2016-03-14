@@ -591,7 +591,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    get_user_presence(API.Callback? cb,
+    get_presence(API.Callback? cb,
                       string user_id)
         throws Matrix.Error
     {

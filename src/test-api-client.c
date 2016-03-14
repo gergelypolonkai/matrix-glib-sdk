@@ -68,7 +68,7 @@ create_room_finished(MatrixAPI *api,
 }
 
 static void
-get_user_presence_finished(MatrixAPI *api,
+get_presence_finished(MatrixAPI *api,
                            const gchar *content_type,
                            JsonNode *json_content,
                            GByteArray *raw_content,
@@ -143,8 +143,8 @@ login_finished(MatrixAPI *api,
                                MATRIX_ROOM_VISIBILITY_DEFAULT,
                                NULL, NULL, NULL, NULL, NULL);
         matrix_api_get_presence_list(api, NULL, NULL, user_id, NULL);
-        matrix_api_get_user_presence(api,
-                                     get_user_presence_finished, NULL,
+        matrix_api_get_presence(api,
+                                     get_presence_finished, NULL,
                                      user_id, NULL);
     } else {
         g_printf("Login unsuccessful!\n");

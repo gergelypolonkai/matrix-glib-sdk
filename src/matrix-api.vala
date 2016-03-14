@@ -177,7 +177,7 @@ public interface Matrix.API : GLib.Object {
      * @param user_id the user whose presence list is being modified
      */
     public abstract void
-    get_user_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
+    get_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
                       owned Matrix.API.Callback? @callback,
                       string user_id)
         throws Matrix.Error;
