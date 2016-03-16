@@ -439,4 +439,18 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         throw new Matrix.Error.UNSUPPORTED(
                 "Per-room presences are not supported yet.");
     }
+
+    public Room
+    get_room_by_id(string room_id)
+        throws Matrix.Error
+    {
+        Room? room;
+
+        if ((room = _rooms[room_id]) == null) {
+            throw new Matrix.Error.UNAVAILABLE(
+                    "Room data for %s is not cached yet.", room_id);
+        }
+
+        return room;
+    }
 }

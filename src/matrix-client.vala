@@ -193,4 +193,16 @@ public interface Matrix.Client : GLib.Object {
     public abstract Presence
     get_user_presence(string user_id, string? room_id = null)
         throws Matrix.Error;
+
+    /**
+     * Get a room object by the room ID specified in @param room_id.
+     * If room data is not cached yet, Matrix.Error.UNAVAILABLE is
+     * thrown.
+     *
+     * @param room_id the ID of a room
+     * @return a Matrix.Room object
+     */
+    public abstract Room
+    get_room_by_id(string room_id)
+        throws Matrix.Error;
 }
