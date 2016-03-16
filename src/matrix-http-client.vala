@@ -115,6 +115,17 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         if (evt != null) {
             string? user_id = null;
+            GLib.Type evt_type = evt.get_type();
+
+            // Make sure Room events have room_id set, even if it was
+            // stripped by the HS
+            if (evt_type.is_a(typeof(Matrix.Event.Room))) {
+                Matrix.Event.Room revt = (Matrix.Event.Room)evt;
+
+                if (revt.room_id == null) {
+                    revt.room_id = room_id;
+                }
+            }
 
             if (evt.get_type().is_a(typeof(Matrix.Event.Presence))) {
                 var pevt = (Matrix.Event.Presence)evt;

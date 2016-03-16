@@ -26,7 +26,9 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
     public string? event_id { get; set; default = null; }
 
     /**
-     * The ID of the room associated with this event. Required.
+     * The ID of the room associated with this event. Required, but it
+     * may be stripped by HS implementations from some APIs if they
+     * reside under a key marked with the room ID.
      */
     public string? room_id { get; set; default = null; }
 

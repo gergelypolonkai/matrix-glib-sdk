@@ -16,7 +16,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public abstract class Matrix.Event.State : Matrix.Event.Base {
+public abstract class Matrix.Event.State : Matrix.Event.Room {
     protected string? _state_key;
 
     public string? state_key {
