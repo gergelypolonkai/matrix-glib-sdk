@@ -60,6 +60,7 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-message-video.vala \
 	matrix-message-location.vala \
 	matrix-profile.vala \
+	matrix-room.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \

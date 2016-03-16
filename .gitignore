@@ -92,3 +92,4 @@ Makefile.in
 /src/matrix-message-video.c
 /src/matrix-message-location.c
 /src/matrix-profile.c
+/src/matrix-room.c

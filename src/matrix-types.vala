@@ -42,6 +42,11 @@ namespace Matrix {
                                /// yet. Clients getting this message
                                /// may go online by some means to get
                                /// the data
+        NOT_FOUND,             /// the requested data (e.g. member of
+                               /// a room) can not be found
+        ALREADY_EXISTS,        /// the data to create (e.g. when
+                               /// adding a new member to a Room
+                               /// object) already exists
 
         /* Add Matrix-defined error codes under here, prefixing them with
          * `MATRIX_ERROR_`, i.e. `M_FORBIDDEN` =>
