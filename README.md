@@ -22,8 +22,23 @@ object model to perform actions on.
 
 ## Client
 
-The `MatrixClient` interface is not fully planned yet.
+For a working example, see [test-client.c](src/test-client.c).
+
+    // Create a client object
+    MatrixClient *client = MATRIX_CLIENT(matrix_http_client_new("http://localhost:8008"));
+
+    // Set tokens for the session. Alternatively you may want to login with matrix_api_login() or matrix_client_login_with_password()
+    matrix_api_set_token(MATRIX_API(client), "your_access_token");
+    matrix_api_set_refresh_token(MATRIX_API(client), "your_refresh_token");
+
+    // Connect a callback that gets called when a m.room.message event arrives
+    matrix_client_connect_event(client, MATRIX_EVENT_TYPE_ROOM_MESSAGE, message_callback, NULL);
+
+    // Enter polling mode. This continuously calls the /sync API
+    matrix_client_begin_polling(client);
+
+    // Now enter a main loop with g_main_loop_run() so polling for events can actually begin
 
 ## API
 
-For a full blown example, see [test-client.c](src/test-client.c).
+For a full blown example, see [test-api-client.c](src/test-api-client.c).
