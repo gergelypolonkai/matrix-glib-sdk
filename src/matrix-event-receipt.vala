@@ -56,8 +56,8 @@ public class Matrix.Event.Receipt : Matrix.Event.Base {
 
         if ((node = root.get_member("room_id")) != null) {
             _room_id = node.get_string();
-        } else {
-            warning("room_id is missing from a m.presence event");
+        } else if (Config.DEBUG) {
+            warning("room_id is missing from a m.receipt event");
         }
 
         content_root.foreach_member((obj, event_id, event_content) => {
