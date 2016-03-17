@@ -420,7 +420,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                 "Per-room profiles are not supported yet.");
     }
 
-    public Presence?
+    public Presence
     get_user_presence(string user_id, string? room_id = null)
         throws Matrix.Error
     {

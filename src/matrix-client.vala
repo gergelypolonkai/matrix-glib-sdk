@@ -190,7 +190,7 @@ public interface Matrix.Client : GLib.Object {
      * state is not cached yet, Matrix.Error.UNAVAILABLE is
      * thrown.
      */
-    public abstract Presence?
+    public abstract Presence
     get_user_presence(string user_id, string? room_id = null)
         throws Matrix.Error;
 }
