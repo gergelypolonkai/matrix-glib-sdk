@@ -72,6 +72,12 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
             _user_id = node.get_string();
         } else if (Config.DEBUG) {
             warning("content.user_id is missing from the m.presence event");
+
+            // Workaround for having sender instead of content.user_id
+            // in most (room-dependent) presence events
+            if ((node = root.get_member("sender")) != null) {
+                _user_id = node.get_string();
+            }
         }
 
         if ((node = content_root.get_member("last_active_ago")) != null) {
