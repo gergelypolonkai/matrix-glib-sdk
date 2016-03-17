@@ -81,6 +81,9 @@ public abstract class Matrix.Message.Base : Object, Initable {
     initialize_from_json(Json.Node json_data)
         throws Matrix.Error
     {
+        var gen = new Json.Generator();
+        gen.set_root(json_data);
+
         if (json_data.get_node_type() != Json.NodeType.OBJECT) {
             throw new Matrix.Error.INVALID_FORMAT(
                     "The message is not valid");
@@ -132,6 +135,12 @@ public abstract class Matrix.Message.Base : Object, Initable {
         } else if (Config.DEBUG) {
             warning("msgtype is not present in a message");
         }
+
+        if ((node = root.get_member("body")) != null) {
+            _body = node.get_string();
+        } else if (Config.DEBUG) {
+            warning("body is not presente in a message");
+        }
     }
 
     /**
@@ -147,6 +156,11 @@ public abstract class Matrix.Message.Base : Object, Initable {
         if (_message_type == null) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a message with an empty msgtype");
+        }
+
+        if (_body == null) {
+            throw new Matrix.Error.INCOMPLETE(
+                    "Won't generate a message without body");
         }
 
         root.set_string_member("msgtype", _message_type);

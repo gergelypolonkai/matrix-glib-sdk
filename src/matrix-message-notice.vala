@@ -28,4 +28,18 @@
  * infinite-loop situations where two automated clients continuously
  * exchange messages, as each responds to the other.
  */
-public class Matrix.Message.Notice : Matrix.Message.Base {}
+public class Matrix.Message.Notice : Matrix.Message.Base {
+    public override void
+    from_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        base.from_json(json_data);
+    }
+
+    public override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        base.to_json(json_data);
+    }
+}

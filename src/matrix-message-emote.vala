@@ -25,4 +25,18 @@
  * sender. This message could also be represented in a different
  * colour to distinguish it from regular `m.text` messages.
  */
-public class Matrix.Message.Emote : Matrix.Message.Base {}
+public class Matrix.Message.Emote : Matrix.Message.Base {
+    public override void
+    from_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        base.from_json(json_data);
+    }
+
+    public override void
+    to_json(Json.Node json_data)
+        throws Matrix.Error
+    {
+        base.to_json(json_data);
+    }
+}
