@@ -28,6 +28,8 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         new Gee.HashMap<string, Profile>();
     private Gee.HashMap<string, Presence> _user_global_presence =
         new Gee.HashMap<string, Presence>();
+    private Gee.HashMap<string, Room> _rooms =
+        new Gee.HashMap<string, Room>();
 
     public
     HTTPClient(string base_url)
@@ -114,7 +116,6 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         }
 
         if (evt != null) {
-            string? user_id = null;
             GLib.Type evt_type = evt.get_type();
 
             // Make sure Room events have room_id set, even if it was
@@ -127,9 +128,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                 }
             }
 
-            if (evt.get_type().is_a(typeof(Matrix.Event.Presence))) {
+            if (evt_type.is_a(typeof(Matrix.Event.Presence))) {
                 var pevt = (Matrix.Event.Presence)evt;
-                user_id = pevt.user_id;
+                var user_id = pevt.user_id;
 
                 _user_global_presence[user_id] = pevt.presence;
 
@@ -142,25 +143,91 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
                 profile.avatar_url = pevt.avatar_url;
                 profile.display_name = pevt.display_name;
-            } else if (evt.get_type().is_a(typeof(Matrix.Event.RoomMember))) {
-                // The following is a temporary hack until per-room
-                // profiles get implemented in HSes.
-                var mevt = (Matrix.Event.RoomMember)evt;
-                user_id = mevt.user_id;
+            } else if (evt_type.is_a(typeof(Matrix.Event.Room))) {
+                var revt = (Matrix.Event.Room)evt;
+                var room = _get_or_create_room(revt.room_id);
 
-                Profile? profile = _user_global_profiles[user_id];
+                if (evt_type.is_a(typeof(Matrix.Event.RoomMember))) {
+                    var mevt = (Matrix.Event.RoomMember)evt;
+                    var user_id = mevt.user_id;
+                    Profile? profile = null;
 
-                if (profile == null) {
-                    profile = new Profile();
-                    _user_global_profiles[user_id] = profile;
+                    try {
+                        profile = room.get_or_add_member(
+                                user_id,
+                                (mevt.tpi_display_name != null));
+                    } catch (Matrix.Error e) {}
+
+                    profile.avatar_url = mevt.avatar_url;
+                    profile.display_name = mevt.display_name;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomAliases))) {
+                    var aevt = (Matrix.Event.RoomAliases)evt;
+
+                    room.aliases = aevt.aliases;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomAvatar))) {
+                    var aevt = (Matrix.Event.RoomAvatar)evt;
+
+                    room.avatar_url = aevt.url;
+                    room.avatar_info = aevt.info;
+                    room.avatar_thumbnail_url = aevt.thumbnail_url;
+                    room.avatar_thumbnail_info = aevt.thumbnail_info;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomCanonicalAlias))) {
+                    var cevt = (Matrix.Event.RoomCanonicalAlias)evt;
+
+                    room.canonical_alias = cevt.canonical_alias;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomCreate))) {
+                    var cevt = (Matrix.Event.RoomCreate)evt;
+
+                    room.creator = cevt.creator;
+                    room.federate = cevt.federate;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomGuestAccess))) {
+                    var gevt = (Matrix.Event.RoomGuestAccess)evt;
+
+                    room.guest_access = gevt.guest_access;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomHistoryVisibility))) {
+                    var hevt = (Matrix.Event.RoomHistoryVisibility)evt;
+
+                    room.history_visibility = hevt.visibility;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomJoinRules))) {
+                    var jevt = (Matrix.Event.RoomJoinRules)evt;
+
+                    room.join_rules = jevt.join_rules;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomName))) {
+                    var nevt = (Matrix.Event.RoomName)evt;
+
+                    room.name = nevt.name;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomPowerLevels))) {
+                    var levt = (Matrix.Event.RoomPowerLevels)evt;
+
+                    room.default_power_level = levt.users_default;
+                    room.default_event_level = levt.events_default;
+                    room.default_state_level = levt.state_default;
+                    room.ban_level = levt.ban;
+                    room.kick_level = levt.kick;
+                    room.redact_level = levt.redact;
+                    room.invite_level = levt.invite;
+                } else if (evt_type.is_a(typeof(Matrix.Event.RoomTopic))) {
+                    var tevt = (Matrix.Event.RoomTopic)evt;
+
+                    room.topic = tevt.topic;
                 }
-
-                profile.avatar_url = mevt.avatar_url;
-                profile.display_name = mevt.display_name;
             }
         }
 
         incoming_event(room_id, event_node, evt);
+    }
+
+    private Room
+    _get_or_create_room(string room_id)
+    {
+        Room? room = null;
+
+        if ((room = _rooms[room_id]) == null) {
+            room = new Room(room_id);
+            _rooms[room_id] = room;
+        }
+
+        return room;
     }
 
     private void
