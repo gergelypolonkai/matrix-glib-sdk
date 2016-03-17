@@ -30,19 +30,7 @@ public class Matrix.Event.Typing : Matrix.Event.Base {
     /**
      * The list of user IDs typing in this room, if any.
      */
-    public List<string>? user_ids {
-        get {
-            return _user_ids;
-        }
-
-        set {
-            _user_ids = value.copy();
-        }
-
-        default = null;
-    }
-
-    private List<string>? _user_ids = null;
+    public string[] user_ids { get; set; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -59,10 +47,10 @@ public class Matrix.Event.Typing : Matrix.Event.Base {
         }
 
         if ((node = content_root.get_member("user_ids")) != null) {
-            _user_ids = null;
+            _user_ids = new string[node.get_array().get_length()];
 
             node.get_array().foreach_element((ary, idx, user_node) => {
-                    _user_ids.prepend(user_node.get_string());
+                    _user_ids[idx] = user_node.get_string();
                 });
         } else if (Config.DEBUG) {
             warning("content.user_ids is missing from a m.typing event");

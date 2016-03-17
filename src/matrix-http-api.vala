@@ -551,8 +551,8 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     public void
     update_presence_list(API.Callback? cb,
                          string user_id,
-                         List<string> drop_ids,
-                         List<string> invite_ids)
+                         string[] drop_ids,
+                         string[] invite_ids)
         throws Matrix.Error
     {
         Json.Builder builder;
@@ -563,23 +563,25 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
         builder = new Json.Builder();
         builder.begin_object();
 
-        if (drop_ids != null) {
+        if (drop_ids.length > 0) {
             builder.set_member_name("drop");
             builder.begin_array();
-            drop_ids.foreach(
-                    (entry) => {
-                        builder.add_string_value(entry);
-                    });
+
+            foreach (var entry in drop_ids) {
+                builder.add_string_value(entry);
+            }
+
             builder.end_array();
         }
 
-        if (invite_ids != null) {
+        if (invite_ids.length > 0) {
             builder.set_member_name("invite");
             builder.begin_array();
-            invite_ids.foreach(
-                    (entry) => {
-                        builder.add_string_value(entry);
-                    });
+
+            foreach (var entry in invite_ids) {
+                builder.add_string_value(entry);
+            }
+
             builder.end_array();
         }
 
@@ -718,8 +720,8 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                string rule_id,
                string? before,
                string? after,
-               List<string> actions,
-               List<PusherConditionKind?>? conditions)
+               string[] actions,
+               PusherConditionKind[] conditions)
         throws Matrix.Error
     {
         Json.Builder builder;
@@ -738,32 +740,32 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
 
         builder.set_member_name("actions");
         builder.begin_array();
-        actions.foreach(
-                (entry) => {
-                    builder.add_string_value(entry);
-                });
+        foreach (var entry in actions) {
+            builder.add_string_value(entry);
+        }
         builder.end_array();
 
-        if (conditions != null) {
+        if (conditions.length > 0) {
             builder.set_member_name("conditions");
             builder.begin_array();
-            conditions.foreach(
-                    (entry) => {
-                        string? kind_string = _g_enum_value_to_nick(
-                                typeof(Matrix.PusherConditionKind),
-                                entry);
 
-                        if (kind_string == null) {
-                            warning("Invalid condition kind");
+            foreach (var entry in conditions) {
+                string? kind_string = _g_enum_value_to_nick(
+                        typeof(Matrix.PusherConditionKind),
+                        entry);
 
-                            return;
-                        }
+                if (kind_string == null) {
+                    warning("Invalid condition kind");
 
-                        builder.begin_object();
-                        builder.set_member_name("kind");
-                        builder.add_string_value(kind_string);
-                        builder.end_object();
-                    });
+                    return;
+                }
+
+                builder.begin_object();
+                builder.set_member_name("kind");
+                builder.add_string_value(kind_string);
+                builder.end_object();
+            }
+
             builder.end_array();
         }
 
@@ -809,9 +811,9 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
                 string? topic,
                 RoomVisibility visibility,
                 Json.Node? creation_content,
-                List<Matrix.Event.State>? initial_state,
-                List<string>? invitees,
-                List<3PidCredential>? invite_3pids)
+                Matrix.Event.State[] initial_state,
+                string[] invitees,
+                3PidCredential[] invite_3pids)
         throws Matrix.Error
     {
         Json.Builder builder = new Json.Builder();
@@ -823,37 +825,39 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             builder.add_value(creation_content);
         }
 
-        if (initial_state != null) {
+        if (initial_state.length > 0) {
             builder.set_member_name("initial_state");
             builder.begin_array();
-            initial_state.foreach(
-                    (entry) => {
-                        builder.add_value(entry.json);
-                    });
+
+            foreach (var entry in initial_state) {
+                builder.add_value(entry.json);
+            }
+
             builder.end_array();
         }
 
-        if (invitees != null) {
+        if (invitees.length > 0) {
             builder.set_member_name("invite");
             builder.begin_array();
-            invitees.foreach(
-                    (entry) => {
-                        builder.add_string_value(entry);
-                    });
+
+            foreach (var entry in invitees) {
+                builder.add_string_value(entry);
+            }
+
             builder.end_array();
         }
 
-        if (invite_3pids != null) {
+        if (invite_3pids.length > 0) {
             builder.set_member_name("invite_3pid");
             builder.begin_array();
-            invite_3pids.foreach(
-                    (entry) => {
-                        try {
-                            builder.add_value(entry.get_json_node());
-                            // TODO exceptions should be handled
-                            // here somehow
-                        } catch (Matrix.Error e) {}
-                    });
+
+            foreach (var entry in invite_3pids) {
+                try {
+                    builder.add_value(entry.get_json_node());
+                // TODO exceptions should be handled here somehow
+                } catch (Matrix.Error e) {}
+            }
+
             builder.end_array();
         }
 

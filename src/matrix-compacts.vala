@@ -41,22 +41,10 @@ namespace Matrix {
      * Class to hold a filter.
      */
     public class Filter : JsonCompact {
-        private List<string>? _event_fields;
-
         /**
          * The event fields to include in the filtered events.
          */
-        public List<string>? event_fields {
-            get {
-                return _event_fields;
-            }
-
-            set {
-                _event_fields = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] event_fields { get; set; }
 
         /**
          * The desired event format for the filtered events (e.g. for
@@ -179,13 +167,6 @@ namespace Matrix {
      * Class to hold filtering rules.
      */
     public class FilterRules : JsonCompact {
-        private List<string>? _types;
-        private List<string>? _excluded_types;
-        private List<string>? _senders;
-        private List<string>? _excluded_senders;
-        private List<string>? _rooms;
-        private List<string>? _excluded_rooms;
-
         /**
          * The limit of the count of returned events.
          */
@@ -194,98 +175,38 @@ namespace Matrix {
         /**
          * List of message types to include in the filtered result.
          */
-        public List<string>? types {
-            get {
-                return _types;
-            }
-
-            set {
-                _types = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] types { get; set; }
 
         /**
          * List of message types to exclude from the filtered
          * result. A matching type will be excluded from the result
          * even if it is listed in the types to include.
          */
-        public List<string>? excluded_types {
-            get {
-                return _excluded_types;
-            }
-
-            set {
-                _excluded_types = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] excluded_types { get; set; }
 
         /**
          * List of senders to include in the filtered results.
          */
-        public List<string>? senders {
-            get {
-                return _senders;
-            }
-
-            set {
-                _senders = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] senders { get; set; }
 
         /**
          * List of senders to exclude from the filtered result. A
          * matching sender will be excluded from the result even if it
          * is listed in the senders to include.
          */
-        public List<string>? excluded_senders {
-            get {
-                return _excluded_senders;
-            }
-
-            set {
-                _excluded_senders = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] excluded_senders { get; set; }
 
         /**
          * List of rooms to include in the filtered results.
          */
-        public List<string>? rooms {
-            get {
-                return _rooms;
-            }
-
-            set {
-                _rooms = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] rooms { get; set; }
 
         /**
          * List of rooms to exclude from the filtered result. A
          * matching room will be excluded from the result even if it
          * is listed in the rooms to include.
          */
-        public List<string>? excluded_rooms {
-            get {
-                return _excluded_rooms;
-            }
-
-            set {
-                _excluded_rooms = value.copy();
-            }
-
-            default = null;
-        }
+        public string[] excluded_rooms { get; set; }
 
         /**
          * Get the filtering rules as a JSON node.
@@ -609,18 +530,7 @@ namespace Matrix {
     }
 
     public class SearchGroupings : JsonCompact {
-        private List<SearchGrouping>? _group_by = null;
-        public List<SearchGrouping>? group_by {
-            get {
-                return _group_by;
-            }
-
-            set {
-                _group_by = value.copy();
-            }
-
-            default = null;
-        }
+        public SearchGrouping[] group_by { get; set; }
 
         public override Json.Node?
         get_json_node()
@@ -654,19 +564,8 @@ namespace Matrix {
     }
 
     public class SearchRoomEvents : JsonCompact {
-        private List<SearchKey?>? _keys = null;
-
-        public SearchOrder? order_by { get; set; default = SearchOrder.RECENT; }
-        public List<SearchKey?>? keys {
-            get {
-                return _keys;
-            }
-
-            set {
-                _keys = value.copy();
-            }
-
-            default = null; }
+        public SearchOrder order_by { get; set; default = SearchOrder.RECENT; }
+        public SearchKey[] keys { get; set; }
         public EventContext? event_context { get; set; default = null; }
         public bool? include_state { get; set; default = false; }
         public string? filter_id { get; set; default = null; }
@@ -689,24 +588,20 @@ namespace Matrix {
 
             builder.begin_object();
 
-            if (order_by != null) {
-                builder.set_member_name("order_by");
-                builder.add_string_value(
-                        _g_enum_value_to_nick(typeof(SearchOrder), order_by));
-            }
+            builder.set_member_name("order_by");
+            builder.add_string_value(
+                    _g_enum_value_to_nick(typeof(SearchOrder), order_by));
 
-            if (keys != null) {
+            if (keys.length > 0) {
                 EnumClass key_class = (EnumClass)(typeof(SearchKey).class_ref());
                 var key_array = new Json.Array();
 
                 foreach (var entry in keys) {
-                    if (entry != null) {
-                        unowned EnumValue? key_value = key_class.get_value(entry);
+                    unowned EnumValue? key_value = key_class.get_value(entry);
 
-                        if (key_value != null) {
-                            key_array.add_string_element(
-                                    key_value.value_nick.replace("-", "."));
-                        }
+                    if (key_value != null) {
+                        key_array.add_string_element(
+                                key_value.value_nick.replace("-", "."));
                     }
                 }
 

@@ -33,19 +33,7 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Call {
     /**
      * The list of candidates.
      */
-    public List<Candidate?>? candidates {
-        get {
-            return _candidates;
-        }
-
-        set {
-            _candidates = value.copy();
-        }
-
-        default = null;
-    }
-
-    private List<Candidate?>? _candidates;
+    public Candidate[] candidates { get; set; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -56,6 +44,8 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Call {
         Json.Node? node;
 
         if ((node = content_root.get_member("candidates")) != null) {
+            _candidates = new Candidate[node.get_array().get_length()];
+
             node.get_array().foreach_element((ary, idx, cand_node) => {
                     var cand_root = cand_node.get_object();
                     var cand = Candidate();
@@ -78,7 +68,7 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Call {
                         warning("candidate is missing from a candidate of a m.call.candidates event");
                     }
 
-                    _candidates.prepend(cand);
+                    _candidates[idx] = cand;
                 });
         } else {
             warning("content.candidates is missing from a m.call.candidates event");
@@ -91,7 +81,7 @@ public class Matrix.Event.CallCandidates : Matrix.Event.Call {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if ((_candidates == null) || (_candidates.length() < 1)) {
+        if (_candidates.length < 1) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.candidates event without candidates");
         }

@@ -31,8 +31,6 @@ public class Matrix.Event.RoomThirdPartyInvite : Matrix.Event.State {
         string? validity_url;
     }
 
-    private List<PublicKey?> _public_keys = null;
-
     /**
      * A user-readable string which represents the user who has been
      * invited. This should not contain the user's third party ID, as
@@ -59,17 +57,7 @@ public class Matrix.Event.RoomThirdPartyInvite : Matrix.Event.State {
     /**
      * Keys with which the token may be signed.
      */
-    List<PublicKey?>? public_keys {
-        get {
-            return _public_keys;
-        }
-
-        set {
-            _public_keys = value.copy();
-        }
-
-        default = null;
-    }
+    public PublicKey[] public_keys { get; set; }
 
     /**
      * The token, of which a signature must be produced in order to
@@ -161,11 +149,6 @@ public class Matrix.Event.RoomThirdPartyInvite : Matrix.Event.State {
         var key_list = new Json.Array();
 
         foreach (var entry in _public_keys) {
-            if (entry == null) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate a m.room.third_party_invite with an empty public_key under additional keys");
-            }
-
             if (entry.key == null) {
                 throw new Matrix.Error.INCOMPLETE(
                         "Won't generate a m.room.third_party_invite with a missing key under public_keys");

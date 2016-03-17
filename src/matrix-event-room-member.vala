@@ -55,8 +55,6 @@
  * events such as the room name.
  */
 public class Matrix.Event.RoomMember : Matrix.Event.State {
-    private List<Matrix.Event.State>? _invite_room_state = null;
-
     /**
      * The membership state of the user.
      */
@@ -106,17 +104,7 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
      * A subset of the state of the room at the time of the invite, if
      * membership is invite.
      */
-    public List<Matrix.Event.State>? invite_room_state {
-        get {
-            return _invite_room_state;
-        }
-
-        set {
-            _invite_room_state = value.copy();
-        }
-
-        default = null;
-    }
+    public Matrix.Event.State[] invite_room_state { get; set; }
 
     /**
      * The user ID whom this event relates to.
@@ -207,14 +195,14 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
             var events = node.get_array();
 
             if (events.get_length() > 0) {
-                _invite_room_state = null;
+                _invite_room_state = new Matrix.Event.State[node.get_array().get_length()];
 
                 events.foreach_element((ary, idx, member_node) => {
                         try {
                             var evt = Matrix.Event.Base.new_from_json(
                                     null, member_node);
 
-                            _invite_room_state.prepend((Matrix.Event.State)evt);
+                            _invite_room_state[idx] = (Matrix.Event.State)evt;
                         } catch (GLib.Error e) {}
                     });
             }

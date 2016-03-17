@@ -164,8 +164,8 @@ public interface Matrix.API : GLib.Object {
     update_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")]
                          owned Matrix.API.Callback? @callback,
                          string user_id,
-                         GLib.List<string> drop_ids,
-                         GLib.List<string> invite_ids)
+                         string[] drop_ids,
+                         string[] invite_ids)
         throws Matrix.Error;
 
     /**
@@ -299,8 +299,8 @@ public interface Matrix.API : GLib.Object {
                string rule_id,
                string? before,
                string? after,
-               GLib.List<string> actions,
-               GLib.List<Matrix.PusherConditionKind>? conditions)
+               string[] actions,
+               Matrix.PusherConditionKind[] conditions)
         throws Matrix.Error;
 
     /**
@@ -357,9 +357,9 @@ public interface Matrix.API : GLib.Object {
                 string? topic,
                 Matrix.RoomVisibility visibility,
                 Json.Node? creation_content,
-                GLib.List<Matrix.Event.State>? initial_state,
-                GLib.List<string>? invitees,
-                GLib.List<Matrix.3PidCredential>? invite_3pids)
+                Matrix.Event.State[] initial_state,
+                string[] invitees,
+                Matrix.3PidCredential[] invite_3pids)
         throws Matrix.Error;
 
     /* Room directory */

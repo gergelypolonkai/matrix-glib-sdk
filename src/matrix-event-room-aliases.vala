@@ -34,22 +34,10 @@
  * whether it receives the correct room ID.
  */
 public class Matrix.Event.RoomAliases : Matrix.Event.State {
-    private List<string>? _aliases = null;
-
     /**
      * A list of room aliases.
      */
-    public List<string>? aliases {
-        get {
-            return _aliases;
-        }
-
-        set {
-            _aliases = value.copy();
-        }
-
-        default = null;
-    }
+    public string[] aliases { get; set; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -60,10 +48,10 @@ public class Matrix.Event.RoomAliases : Matrix.Event.State {
         Json.Node? node;
 
         if ((node = content_root.get_member("aliases")) != null) {
-            _aliases = null;
+            _aliases = new string[node.get_array().get_length()];
 
             node.get_array().foreach_element((ary, idx, member_node) => {
-                    _aliases.prepend(member_node.get_string());
+                    _aliases[idx] = member_node.get_string();
                 });
         } else if (Config.DEBUG) {
             warning("content.aliases is missing from a m.room.aliases event");
@@ -76,7 +64,7 @@ public class Matrix.Event.RoomAliases : Matrix.Event.State {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if ((_aliases == null) || (_aliases.length() == 0)) {
+        if (_aliases.length == 0) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.room.aliases event without aliases");
         }
