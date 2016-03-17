@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MatrixEventCallHangup: Matrix-0.0 Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
+<link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
+<link rel="prev" href="Matrix-0.0-MatrixMessageImage.html" title="MatrixMessageImage">
+<link rel="next" href="Matrix-0.0-MatrixEventRoomRedaction.html" title="MatrixEventRoomRedaction">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixEventCallHangup.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixMessageImage.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixEventRoomRedaction.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="Matrix-0.0-MatrixEventCallHangup"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="Matrix-0.0-MatrixEventCallHangup.top_of_page"></a>MatrixEventCallHangup</span></h2>
+<p>MatrixEventCallHangup — Sent by either party to signal their termination of the call. This can be sent either once the call has has been established or before to abort the call.</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventCallHangup.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MATRIX-EVENT-TYPE-CALL-HANGUP:CAPS" title="MATRIX_EVENT_TYPE_CALL_HANGUP">MATRIX_EVENT_TYPE_CALL_HANGUP</a></td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangup" title="struct MatrixEventCallHangup"><span class="returnvalue">MatrixEventCallHangup</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#matrix-event-call-hangup-new" title="matrix_event_call_hangup_new ()">matrix_event_call_hangup_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventCallHangup.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangup" title="struct MatrixEventCallHangup">MatrixEventCallHangup</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangupClass" title="struct MatrixEventCallHangupClass">MatrixEventCallHangupClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventCallHangup.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventCallHangup.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="MATRIX-EVENT-TYPE-CALL-HANGUP:CAPS"></a><h3>MATRIX_EVENT_TYPE_CALL_HANGUP</h3>
+<pre class="programlisting">#define MATRIX_EVENT_TYPE_CALL_HANGUP (matrix_event_call_hangup_get_type ())
+</pre>
+<p>The type for <a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangup" title="struct MatrixEventCallHangup"><span class="type">MatrixEventCallHangup</span></a>.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-call-hangup-new"></a><h3>matrix_event_call_hangup_new ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangup" title="struct MatrixEventCallHangup"><span class="returnvalue">MatrixEventCallHangup</span></a> *
+matrix_event_call_hangup_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventCallHangup.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="MatrixEventCallHangup"></a><h3>struct MatrixEventCallHangup</h3>
+<pre class="programlisting">struct MatrixEventCallHangup {
+	MatrixEventCall parent_instance;
+	MatrixEventCallHangupPrivate * priv;
+};
+</pre>
+<p>Sent by either party to signal their termination of the call. This can be sent either once the call has has been established or before to abort the call.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MatrixEventCallHangupClass"></a><h3>struct MatrixEventCallHangupClass</h3>
+<pre class="programlisting">struct MatrixEventCallHangupClass {
+	MatrixEventCallClass parent_class;
+};
+</pre>
+<p>The class structure for <a class="link" href="Matrix-0.0-MatrixEventCallHangup.html#MATRIX-EVENT-TYPE-CALL-HANGUP:CAPS" title="MATRIX_EVENT_TYPE_CALL_HANGUP"><code class="literal">MATRIX_EVENT_TYPE_CALL_HANGUP</code></a>. All the fields in this structure are private and should never be accessed directly.</p>
+<div class="refsect3">
+<a name="id-1.2.31.7.3.5"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody><tr>
+<td class="struct_member_name"><p><a class="link" href="Matrix-0.0-MatrixEventCall.html#MatrixEventCallClass" title="struct MatrixEventCallClass"><span class="type">MatrixEventCallClass</span></a> <em class="structfield"><code><a name="MatrixEventCallHangupClass.parent-class"></a>parent_class</code></em>;</p></td>
+<td class="struct_member_description"><p>the parent class structure</p></td>
+<td class="struct_member_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.24</div>
+</body>
+</html>

@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<book xmlns="http://www.devhelp.net/book" title="Matrix-0.0 Reference Manual" link="index.html" author="" name="Matrix-0.0" version="2" language="c">
+  <chapters>
+    <sub name="Matrix-0.0 API Reference" link="ch01.html">
+      <sub name="MatrixEventRoomThirdPartyInvite" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html"/>
+      <sub name="MatrixMessageLocation" link="Matrix-0.0-MatrixMessageLocation.html"/>
+      <sub name="MatrixHTTPAPI" link="Matrix-0.0-MatrixHTTPAPI.html"/>
+      <sub name="MatrixEventCallInvite" link="Matrix-0.0-MatrixEventCallInvite.html"/>
+      <sub name="MatrixEventRoomName" link="Matrix-0.0-MatrixEventRoomName.html"/>
+      <sub name="MatrixEventPresence" link="Matrix-0.0-MatrixEventPresence.html"/>
+      <sub name="MatrixEventState" link="Matrix-0.0-MatrixEventState.html"/>
+      <sub name="MatrixEventRoomCanonicalAlias" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html"/>
+      <sub name="MatrixEventRoomAvatar" link="Matrix-0.0-MatrixEventRoomAvatar.html"/>
+      <sub name="MatrixClient" link="Matrix-0.0-MatrixClient.html"/>
+      <sub name="MatrixMessageAudio" link="Matrix-0.0-MatrixMessageAudio.html"/>
+      <sub name="MatrixProfile" link="Matrix-0.0-MatrixProfile.html"/>
+      <sub name="MatrixEventTyping" link="Matrix-0.0-MatrixEventTyping.html"/>
+      <sub name="MatrixJsonCompact" link="Matrix-0.0-MatrixJsonCompact.html"/>
+      <sub name="MatrixEventRoomMember" link="Matrix-0.0-MatrixEventRoomMember.html"/>
+      <sub name="MatrixEventRoom" link="Matrix-0.0-MatrixEventRoom.html"/>
+      <sub name="MatrixMessageBase" link="Matrix-0.0-MatrixMessageBase.html"/>
+      <sub name="MatrixEventReceipt" link="Matrix-0.0-MatrixEventReceipt.html"/>
+      <sub name="MatrixEventRoomMessageFeedback" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html"/>
+      <sub name="MatrixHTTPClient" link="Matrix-0.0-MatrixHTTPClient.html"/>
+      <sub name="MatrixEventRoomCreate" link="Matrix-0.0-MatrixEventRoomCreate.html"/>
+      <sub name="MatrixEventRoomGuestAccess" link="Matrix-0.0-MatrixEventRoomGuestAccess.html"/>
+      <sub name="MatrixEventCall" link="Matrix-0.0-MatrixEventCall.html"/>
+      <sub name="MatrixEventRoomJoinRules" link="Matrix-0.0-MatrixEventRoomJoinRules.html"/>
+      <sub name="MatrixMessageFile" link="Matrix-0.0-MatrixMessageFile.html"/>
+      <sub name="MatrixEventBase" link="Matrix-0.0-MatrixEventBase.html"/>
+      <sub name="MatrixEventTag" link="Matrix-0.0-MatrixEventTag.html"/>
+      <sub name="MatrixEventCallAnswer" link="Matrix-0.0-MatrixEventCallAnswer.html"/>
+      <sub name="MatrixMessageImage" link="Matrix-0.0-MatrixMessageImage.html"/>
+      <sub name="MatrixEventCallHangup" link="Matrix-0.0-MatrixEventCallHangup.html"/>
+      <sub name="MatrixEventRoomRedaction" link="Matrix-0.0-MatrixEventRoomRedaction.html"/>
+      <sub name="MatrixMessageNotice" link="Matrix-0.0-MatrixMessageNotice.html"/>
+      <sub name="MatrixEventRoomHistoryVisibility" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html"/>
+      <sub name="MatrixEventRoomAliases" link="Matrix-0.0-MatrixEventRoomAliases.html"/>
+      <sub name="MatrixEventCallCandidates" link="Matrix-0.0-MatrixEventCallCandidates.html"/>
+      <sub name="MatrixAPI" link="Matrix-0.0-MatrixAPI.html"/>
+      <sub name="MatrixEventRoomPowerLevels" link="Matrix-0.0-MatrixEventRoomPowerLevels.html"/>
+      <sub name="MatrixMessageText" link="Matrix-0.0-MatrixMessageText.html"/>
+      <sub name="MatrixMessageVideo" link="Matrix-0.0-MatrixMessageVideo.html"/>
+      <sub name="MatrixEventRoomTopic" link="Matrix-0.0-MatrixEventRoomTopic.html"/>
+      <sub name="MatrixEventRoomMessage" link="Matrix-0.0-MatrixEventRoomMessage.html"/>
+      <sub name="MatrixMessageEmote" link="Matrix-0.0-MatrixMessageEmote.html"/>
+      <sub name="matrix-types" link="Matrix-0.0-matrix-types.html"/>
+    </sub>
+    <sub name="API Index" link="api-index-full.html"/>
+    <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
+    <sub name="Annotation Glossary" link="annotation-glossary.html"/>
+  </chapters>
+  <functions>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_THIRD_PARTY_INVITE" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#MATRIX-EVENT-TYPE-ROOM-THIRD-PARTY-INVITE:CAPS"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_new ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-new"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_get_display_name ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-get-display-name"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_set_display_name ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-set-display-name"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_get_key_validity_url ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-get-key-validity-url"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_set_key_validity_url ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-set-key-validity-url"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_get_public_key ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-get-public-key"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_set_public_key ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-set-public-key"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_get_public_keys ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-get-public-keys"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_set_public_keys ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-set-public-keys"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_get_token ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-get-token"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_set_token ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-set-token"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_public_key_dup ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-public-key-dup"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_public_key_free ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-public-key-free"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_public_key_copy ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-public-key-copy"/>
+    <keyword type="function" name="matrix_event_room_third_party_invite_public_key_destroy ()" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#matrix-event-room-third-party-invite-public-key-destroy"/>
+    <keyword type="struct" name="struct MatrixEventRoomThirdPartyInvitePublicKey" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#MatrixEventRoomThirdPartyInvitePublicKey"/>
+    <keyword type="struct" name="struct MatrixEventRoomThirdPartyInvite" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#MatrixEventRoomThirdPartyInvite"/>
+    <keyword type="struct" name="struct MatrixEventRoomThirdPartyInviteClass" link="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html#MatrixEventRoomThirdPartyInviteClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_LOCATION" link="Matrix-0.0-MatrixMessageLocation.html#MATRIX-MESSAGE-TYPE-LOCATION:CAPS"/>
+    <keyword type="function" name="matrix_message_location_new ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-new"/>
+    <keyword type="function" name="matrix_message_location_get_geo_uri ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-get-geo-uri"/>
+    <keyword type="function" name="matrix_message_location_set_geo_uri ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-set-geo-uri"/>
+    <keyword type="function" name="matrix_message_location_get_thumbnail_url ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-get-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_location_set_thumbnail_url ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-set-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_location_get_thumbnail_info ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-get-thumbnail-info"/>
+    <keyword type="function" name="matrix_message_location_set_thumbnail_info ()" link="Matrix-0.0-MatrixMessageLocation.html#matrix-message-location-set-thumbnail-info"/>
+    <keyword type="struct" name="struct MatrixMessageLocation" link="Matrix-0.0-MatrixMessageLocation.html#MatrixMessageLocation"/>
+    <keyword type="struct" name="struct MatrixMessageLocationClass" link="Matrix-0.0-MatrixMessageLocation.html#MatrixMessageLocationClass"/>
+    <keyword type="macro" name="MATRIX_TYPE_HTTP_API" link="Matrix-0.0-MatrixHTTPAPI.html#MATRIX-TYPE-HTTP-API:CAPS"/>
+    <keyword type="function" name="matrix_http_api_new ()" link="Matrix-0.0-MatrixHTTPAPI.html#matrix-http-api-new"/>
+    <keyword type="function" name="matrix_http_api_get_base_url ()" link="Matrix-0.0-MatrixHTTPAPI.html#matrix-http-api-get-base-url"/>
+    <keyword type="function" name="matrix_http_api_set_base_url ()" link="Matrix-0.0-MatrixHTTPAPI.html#matrix-http-api-set-base-url"/>
+    <keyword type="function" name="matrix_http_api_get_validate_certificate ()" link="Matrix-0.0-MatrixHTTPAPI.html#matrix-http-api-get-validate-certificate"/>
+    <keyword type="function" name="matrix_http_api_set_validate_certificate ()" link="Matrix-0.0-MatrixHTTPAPI.html#matrix-http-api-set-validate-certificate"/>
+    <keyword type="struct" name="struct MatrixHTTPAPI" link="Matrix-0.0-MatrixHTTPAPI.html#MatrixHTTPAPI"/>
+    <keyword type="struct" name="struct MatrixHTTPAPIClass" link="Matrix-0.0-MatrixHTTPAPI.html#MatrixHTTPAPIClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_CALL_INVITE" link="Matrix-0.0-MatrixEventCallInvite.html#MATRIX-EVENT-TYPE-CALL-INVITE:CAPS"/>
+    <keyword type="function" name="matrix_event_call_invite_new ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-new"/>
+    <keyword type="function" name="matrix_event_call_invite_get_offer_type ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-get-offer-type"/>
+    <keyword type="function" name="matrix_event_call_invite_set_offer_type ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-set-offer-type"/>
+    <keyword type="function" name="matrix_event_call_invite_get_sdp ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-get-sdp"/>
+    <keyword type="function" name="matrix_event_call_invite_set_sdp ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-set-sdp"/>
+    <keyword type="function" name="matrix_event_call_invite_get_lifetime ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-get-lifetime"/>
+    <keyword type="function" name="matrix_event_call_invite_set_lifetime ()" link="Matrix-0.0-MatrixEventCallInvite.html#matrix-event-call-invite-set-lifetime"/>
+    <keyword type="struct" name="struct MatrixEventCallInvite" link="Matrix-0.0-MatrixEventCallInvite.html#MatrixEventCallInvite"/>
+    <keyword type="struct" name="struct MatrixEventCallInviteClass" link="Matrix-0.0-MatrixEventCallInvite.html#MatrixEventCallInviteClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_NAME" link="Matrix-0.0-MatrixEventRoomName.html#MATRIX-EVENT-TYPE-ROOM-NAME:CAPS"/>
+    <keyword type="function" name="matrix_event_room_name_new ()" link="Matrix-0.0-MatrixEventRoomName.html#matrix-event-room-name-new"/>
+    <keyword type="function" name="matrix_event_room_name_get_name ()" link="Matrix-0.0-MatrixEventRoomName.html#matrix-event-room-name-get-name"/>
+    <keyword type="function" name="matrix_event_room_name_set_name ()" link="Matrix-0.0-MatrixEventRoomName.html#matrix-event-room-name-set-name"/>
+    <keyword type="struct" name="struct MatrixEventRoomName" link="Matrix-0.0-MatrixEventRoomName.html#MatrixEventRoomName"/>
+    <keyword type="struct" name="struct MatrixEventRoomNameClass" link="Matrix-0.0-MatrixEventRoomName.html#MatrixEventRoomNameClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_PRESENCE" link="Matrix-0.0-MatrixEventPresence.html#MATRIX-EVENT-TYPE-PRESENCE:CAPS"/>
+    <keyword type="function" name="matrix_event_presence_new ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-new"/>
+    <keyword type="function" name="matrix_event_presence_get_avatar_url ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-avatar-url"/>
+    <keyword type="function" name="matrix_event_presence_set_avatar_url ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-avatar-url"/>
+    <keyword type="function" name="matrix_event_presence_get_display_name ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-display-name"/>
+    <keyword type="function" name="matrix_event_presence_set_display_name ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-display-name"/>
+    <keyword type="function" name="matrix_event_presence_get_last_active_ago ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-last-active-ago"/>
+    <keyword type="function" name="matrix_event_presence_set_last_active_ago ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-last-active-ago"/>
+    <keyword type="function" name="matrix_event_presence_get_user_id ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-user-id"/>
+    <keyword type="function" name="matrix_event_presence_set_user_id ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-user-id"/>
+    <keyword type="function" name="matrix_event_presence_get_event_id ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-event-id"/>
+    <keyword type="function" name="matrix_event_presence_set_event_id ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-event-id"/>
+    <keyword type="function" name="matrix_event_presence_get_presence ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-presence"/>
+    <keyword type="function" name="matrix_event_presence_set_presence ()" link="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-presence"/>
+    <keyword type="struct" name="struct MatrixEventPresence" link="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence"/>
+    <keyword type="struct" name="struct MatrixEventPresenceClass" link="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresenceClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_STATE" link="Matrix-0.0-MatrixEventState.html#MATRIX-EVENT-TYPE-STATE:CAPS"/>
+    <keyword type="function" name="matrix_event_state_get_stripped_node ()" link="Matrix-0.0-MatrixEventState.html#matrix-event-state-get-stripped-node"/>
+    <keyword type="function" name="matrix_event_state_get_state_key ()" link="Matrix-0.0-MatrixEventState.html#matrix-event-state-get-state-key"/>
+    <keyword type="function" name="matrix_event_state_set_state_key ()" link="Matrix-0.0-MatrixEventState.html#matrix-event-state-set-state-key"/>
+    <keyword type="function" name="matrix_event_state_get_prev_content ()" link="Matrix-0.0-MatrixEventState.html#matrix-event-state-get-prev-content"/>
+    <keyword type="function" name="matrix_event_state_set_prev_content ()" link="Matrix-0.0-MatrixEventState.html#matrix-event-state-set-prev-content"/>
+    <keyword type="struct" name="struct MatrixEventState" link="Matrix-0.0-MatrixEventState.html#MatrixEventState"/>
+    <keyword type="struct" name="struct MatrixEventStateClass" link="Matrix-0.0-MatrixEventState.html#MatrixEventStateClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_CANONICAL_ALIAS" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#MATRIX-EVENT-TYPE-ROOM-CANONICAL-ALIAS:CAPS"/>
+    <keyword type="function" name="matrix_event_room_canonical_alias_new ()" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#matrix-event-room-canonical-alias-new"/>
+    <keyword type="function" name="matrix_event_room_canonical_alias_get_canonical_alias ()" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#matrix-event-room-canonical-alias-get-canonical-alias"/>
+    <keyword type="function" name="matrix_event_room_canonical_alias_set_canonical_alias ()" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#matrix-event-room-canonical-alias-set-canonical-alias"/>
+    <keyword type="struct" name="struct MatrixEventRoomCanonicalAlias" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#MatrixEventRoomCanonicalAlias"/>
+    <keyword type="struct" name="struct MatrixEventRoomCanonicalAliasClass" link="Matrix-0.0-MatrixEventRoomCanonicalAlias.html#MatrixEventRoomCanonicalAliasClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_AVATAR" link="Matrix-0.0-MatrixEventRoomAvatar.html#MATRIX-EVENT-TYPE-ROOM-AVATAR:CAPS"/>
+    <keyword type="function" name="matrix_event_room_avatar_new ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-new"/>
+    <keyword type="function" name="matrix_event_room_avatar_get_url ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-get-url"/>
+    <keyword type="function" name="matrix_event_room_avatar_set_url ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-set-url"/>
+    <keyword type="function" name="matrix_event_room_avatar_get_thumbnail_url ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-get-thumbnail-url"/>
+    <keyword type="function" name="matrix_event_room_avatar_set_thumbnail_url ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-set-thumbnail-url"/>
+    <keyword type="function" name="matrix_event_room_avatar_get_info ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-get-info"/>
+    <keyword type="function" name="matrix_event_room_avatar_set_info ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-set-info"/>
+    <keyword type="function" name="matrix_event_room_avatar_get_thumbnail_info ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-get-thumbnail-info"/>
+    <keyword type="function" name="matrix_event_room_avatar_set_thumbnail_info ()" link="Matrix-0.0-MatrixEventRoomAvatar.html#matrix-event-room-avatar-set-thumbnail-info"/>
+    <keyword type="struct" name="struct MatrixEventRoomAvatar" link="Matrix-0.0-MatrixEventRoomAvatar.html#MatrixEventRoomAvatar"/>
+    <keyword type="struct" name="struct MatrixEventRoomAvatarClass" link="Matrix-0.0-MatrixEventRoomAvatar.html#MatrixEventRoomAvatarClass"/>
+    <keyword type="function" name="matrix_client_login_with_password ()" link="Matrix-0.0-MatrixClient.html#matrix-client-login-with-password"/>
+    <keyword type="function" name="matrix_client_register_with_password ()" link="Matrix-0.0-MatrixClient.html#matrix-client-register-with-password"/>
+    <keyword type="function" name="matrix_client_logout ()" link="Matrix-0.0-MatrixClient.html#matrix-client-logout"/>
+    <keyword type="function" name="matrix_client_begin_polling ()" link="Matrix-0.0-MatrixClient.html#matrix-client-begin-polling"/>
+    <keyword type="function" name="matrix_client_stop_polling ()" link="Matrix-0.0-MatrixClient.html#matrix-client-stop-polling"/>
+    <keyword type="function" name="matrix_client_emit_login_finished ()" link="Matrix-0.0-MatrixClient.html#matrix-client-emit-login-finished"/>
+    <keyword type="function" name="matrix_client_incoming_event ()" link="Matrix-0.0-MatrixClient.html#matrix-client-incoming-event"/>
+    <keyword type="function" name="matrix_client_connect_event ()" link="Matrix-0.0-MatrixClient.html#matrix-client-connect-event"/>
+    <keyword type="function" name="matrix_client_get_user_profile ()" link="Matrix-0.0-MatrixClient.html#matrix-client-get-user-profile"/>
+    <keyword type="function" name="matrix_client_get_user_presence ()" link="Matrix-0.0-MatrixClient.html#matrix-client-get-user-presence"/>
+    <keyword type="function" name="matrix_client_get_room_by_id ()" link="Matrix-0.0-MatrixClient.html#matrix-client-get-room-by-id"/>
+    <keyword type="function" name="MatrixClientEventCallback ()" link="Matrix-0.0-MatrixClient.html#MatrixClientEventCallback"/>
+    <keyword type="struct" name="MatrixClient" link="Matrix-0.0-MatrixClient.html#MatrixClient"/>
+    <keyword type="struct" name="struct MatrixClientIface" link="Matrix-0.0-MatrixClient.html#MatrixClientIface"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_AUDIO" link="Matrix-0.0-MatrixMessageAudio.html#MATRIX-MESSAGE-TYPE-AUDIO:CAPS"/>
+    <keyword type="function" name="matrix_message_audio_new ()" link="Matrix-0.0-MatrixMessageAudio.html#matrix-message-audio-new"/>
+    <keyword type="function" name="matrix_message_audio_get_url ()" link="Matrix-0.0-MatrixMessageAudio.html#matrix-message-audio-get-url"/>
+    <keyword type="function" name="matrix_message_audio_set_url ()" link="Matrix-0.0-MatrixMessageAudio.html#matrix-message-audio-set-url"/>
+    <keyword type="function" name="matrix_message_audio_get_info ()" link="Matrix-0.0-MatrixMessageAudio.html#matrix-message-audio-get-info"/>
+    <keyword type="function" name="matrix_message_audio_set_info ()" link="Matrix-0.0-MatrixMessageAudio.html#matrix-message-audio-set-info"/>
+    <keyword type="struct" name="struct MatrixMessageAudio" link="Matrix-0.0-MatrixMessageAudio.html#MatrixMessageAudio"/>
+    <keyword type="struct" name="struct MatrixMessageAudioClass" link="Matrix-0.0-MatrixMessageAudio.html#MatrixMessageAudioClass"/>
+    <keyword type="macro" name="MATRIX_TYPE_PROFILE" link="Matrix-0.0-MatrixProfile.html#MATRIX-TYPE-PROFILE:CAPS"/>
+    <keyword type="function" name="matrix_profile_new ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-new"/>
+    <keyword type="function" name="matrix_profile_get_age ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-get-age"/>
+    <keyword type="function" name="matrix_profile_get_display_name ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-get-display-name"/>
+    <keyword type="function" name="matrix_profile_set_display_name ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-set-display-name"/>
+    <keyword type="function" name="matrix_profile_get_avatar_url ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-get-avatar-url"/>
+    <keyword type="function" name="matrix_profile_set_avatar_url ()" link="Matrix-0.0-MatrixProfile.html#matrix-profile-set-avatar-url"/>
+    <keyword type="struct" name="struct MatrixProfile" link="Matrix-0.0-MatrixProfile.html#MatrixProfile"/>
+    <keyword type="struct" name="struct MatrixProfileClass" link="Matrix-0.0-MatrixProfile.html#MatrixProfileClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_TYPING" link="Matrix-0.0-MatrixEventTyping.html#MATRIX-EVENT-TYPE-TYPING:CAPS"/>
+    <keyword type="function" name="matrix_event_typing_new ()" link="Matrix-0.0-MatrixEventTyping.html#matrix-event-typing-new"/>
+    <keyword type="function" name="matrix_event_typing_get_room_id ()" link="Matrix-0.0-MatrixEventTyping.html#matrix-event-typing-get-room-id"/>
+    <keyword type="function" name="matrix_event_typing_set_room_id ()" link="Matrix-0.0-MatrixEventTyping.html#matrix-event-typing-set-room-id"/>
+    <keyword type="function" name="matrix_event_typing_get_user_ids ()" link="Matrix-0.0-MatrixEventTyping.html#matrix-event-typing-get-user-ids"/>
+    <keyword type="function" name="matrix_event_typing_set_user_ids ()" link="Matrix-0.0-MatrixEventTyping.html#matrix-event-typing-set-user-ids"/>
+    <keyword type="struct" name="struct MatrixEventTyping" link="Matrix-0.0-MatrixEventTyping.html#MatrixEventTyping"/>
+    <keyword type="struct" name="struct MatrixEventTypingClass" link="Matrix-0.0-MatrixEventTyping.html#MatrixEventTypingClass"/>
+    <keyword type="macro" name="MATRIX_TYPE_JSON_COMPACT" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-JSON-COMPACT:CAPS"/>
+    <keyword type="function" name="matrix_json_compact_get_json_node ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-json-compact-get-json-node"/>
+    <keyword type="function" name="matrix_json_compact_get_json_data ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-json-compact-get-json-data"/>
+    <keyword type="function" name="matrix_json_compact_ref ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-json-compact-ref"/>
+    <keyword type="function" name="matrix_json_compact_unref ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-json-compact-unref"/>
+    <keyword type="function" name="matrix_param_spec_json_compact ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-param-spec-json-compact"/>
+    <keyword type="function" name="matrix_value_set_json_compact ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-value-set-json-compact"/>
+    <keyword type="function" name="matrix_value_get_json_compact ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-value-get-json-compact"/>
+    <keyword type="function" name="matrix_value_take_json_compact ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-value-take-json-compact"/>
+    <keyword type="macro" name="MATRIX_TYPE_FILTER" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-FILTER:CAPS"/>
+    <keyword type="function" name="matrix_filter_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-new"/>
+    <keyword type="function" name="matrix_filter_get_event_fields ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-get-event-fields"/>
+    <keyword type="function" name="matrix_filter_set_event_fields ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-set-event-fields"/>
+    <keyword type="function" name="matrix_filter_get_event_format ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-get-event-format"/>
+    <keyword type="function" name="matrix_filter_set_event_format ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-set-event-format"/>
+    <keyword type="function" name="matrix_filter_get_presence_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-get-presence-filter"/>
+    <keyword type="function" name="matrix_filter_set_presence_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-set-presence-filter"/>
+    <keyword type="function" name="matrix_filter_get_room_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-get-room-filter"/>
+    <keyword type="function" name="matrix_filter_set_room_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-set-room-filter"/>
+    <keyword type="macro" name="MATRIX_TYPE_ROOM_FILTER" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-ROOM-FILTER:CAPS"/>
+    <keyword type="function" name="matrix_room_filter_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-new"/>
+    <keyword type="function" name="matrix_room_filter_get_include_leave ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-get-include-leave"/>
+    <keyword type="function" name="matrix_room_filter_set_include_leave ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-set-include-leave"/>
+    <keyword type="function" name="matrix_room_filter_get_ephemeral ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-get-ephemeral"/>
+    <keyword type="function" name="matrix_room_filter_set_ephemeral ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-set-ephemeral"/>
+    <keyword type="function" name="matrix_room_filter_get_state ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-get-state"/>
+    <keyword type="function" name="matrix_room_filter_set_state ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-set-state"/>
+    <keyword type="function" name="matrix_room_filter_get_timeline ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-get-timeline"/>
+    <keyword type="function" name="matrix_room_filter_set_timeline ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-room-filter-set-timeline"/>
+    <keyword type="macro" name="MATRIX_TYPE_FILTER_RULES" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-FILTER-RULES:CAPS"/>
+    <keyword type="function" name="matrix_filter_rules_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-new"/>
+    <keyword type="function" name="matrix_filter_rules_get_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-limit"/>
+    <keyword type="function" name="matrix_filter_rules_set_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-limit"/>
+    <keyword type="function" name="matrix_filter_rules_get_types ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-types"/>
+    <keyword type="function" name="matrix_filter_rules_set_types ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-types"/>
+    <keyword type="function" name="matrix_filter_rules_get_excluded_types ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-excluded-types"/>
+    <keyword type="function" name="matrix_filter_rules_set_excluded_types ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-excluded-types"/>
+    <keyword type="function" name="matrix_filter_rules_get_senders ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-senders"/>
+    <keyword type="function" name="matrix_filter_rules_set_senders ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-senders"/>
+    <keyword type="function" name="matrix_filter_rules_get_excluded_senders ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-excluded-senders"/>
+    <keyword type="function" name="matrix_filter_rules_set_excluded_senders ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-excluded-senders"/>
+    <keyword type="function" name="matrix_filter_rules_get_rooms ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-rooms"/>
+    <keyword type="function" name="matrix_filter_rules_set_rooms ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-rooms"/>
+    <keyword type="function" name="matrix_filter_rules_get_excluded_rooms ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-get-excluded-rooms"/>
+    <keyword type="function" name="matrix_filter_rules_set_excluded_rooms ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-filter-rules-set-excluded-rooms"/>
+    <keyword type="macro" name="MATRIX_TYPE_3PID_CREDENTIAL" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-3PID-CREDENTIAL:CAPS"/>
+    <keyword type="function" name="matrix_3pid_credential_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-new"/>
+    <keyword type="function" name="matrix_3pid_credential_get_id_server ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-get-id-server"/>
+    <keyword type="function" name="matrix_3pid_credential_set_id_server ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-set-id-server"/>
+    <keyword type="function" name="matrix_3pid_credential_get_session_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-get-session-id"/>
+    <keyword type="function" name="matrix_3pid_credential_set_session_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-set-session-id"/>
+    <keyword type="function" name="matrix_3pid_credential_get_client_secret ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-get-client-secret"/>
+    <keyword type="function" name="matrix_3pid_credential_set_client_secret ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-3pid-credential-set-client-secret"/>
+    <keyword type="macro" name="MATRIX_TYPE_PUSHER" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-PUSHER:CAPS"/>
+    <keyword type="function" name="matrix_pusher_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-new"/>
+    <keyword type="function" name="matrix_pusher_get_device_display_name ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-device-display-name"/>
+    <keyword type="function" name="matrix_pusher_set_device_display_name ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-device-display-name"/>
+    <keyword type="function" name="matrix_pusher_get_app_display_name ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-app-display-name"/>
+    <keyword type="function" name="matrix_pusher_set_app_display_name ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-app-display-name"/>
+    <keyword type="function" name="matrix_pusher_get_app_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-app-id"/>
+    <keyword type="function" name="matrix_pusher_set_app_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-app-id"/>
+    <keyword type="function" name="matrix_pusher_get_append ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-append"/>
+    <keyword type="function" name="matrix_pusher_set_append ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-append"/>
+    <keyword type="function" name="matrix_pusher_get_kind ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-kind"/>
+    <keyword type="function" name="matrix_pusher_set_kind ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-kind"/>
+    <keyword type="function" name="matrix_pusher_get_lang ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-lang"/>
+    <keyword type="function" name="matrix_pusher_set_lang ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-lang"/>
+    <keyword type="function" name="matrix_pusher_get_profile_tag ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-profile-tag"/>
+    <keyword type="function" name="matrix_pusher_set_profile_tag ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-profile-tag"/>
+    <keyword type="function" name="matrix_pusher_get_pushkey ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-pushkey"/>
+    <keyword type="function" name="matrix_pusher_set_pushkey ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-pushkey"/>
+    <keyword type="function" name="matrix_pusher_get_data ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-get-data"/>
+    <keyword type="function" name="matrix_pusher_set_data ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-pusher-set-data"/>
+    <keyword type="macro" name="MATRIX_TYPE_EVENT_CONTEXT" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-EVENT-CONTEXT:CAPS"/>
+    <keyword type="function" name="matrix_event_context_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-new"/>
+    <keyword type="function" name="matrix_event_context_get_before_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-get-before-limit"/>
+    <keyword type="function" name="matrix_event_context_set_before_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-set-before-limit"/>
+    <keyword type="function" name="matrix_event_context_get_after_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-get-after-limit"/>
+    <keyword type="function" name="matrix_event_context_set_after_limit ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-set-after-limit"/>
+    <keyword type="function" name="matrix_event_context_get_include_profile ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-get-include-profile"/>
+    <keyword type="function" name="matrix_event_context_set_include_profile ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-event-context-set-include-profile"/>
+    <keyword type="macro" name="MATRIX_TYPE_SEARCH_GROUPING" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-SEARCH-GROUPING:CAPS"/>
+    <keyword type="function" name="matrix_search_grouping_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-grouping-new"/>
+    <keyword type="function" name="matrix_search_grouping_get_key ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-grouping-get-key"/>
+    <keyword type="function" name="matrix_search_grouping_set_key ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-grouping-set-key"/>
+    <keyword type="macro" name="MATRIX_TYPE_SEARCH_GROUPINGS" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-SEARCH-GROUPINGS:CAPS"/>
+    <keyword type="function" name="matrix_search_groupings_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-groupings-new"/>
+    <keyword type="function" name="matrix_search_groupings_get_group_by ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-groupings-get-group-by"/>
+    <keyword type="function" name="matrix_search_groupings_set_group_by ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-groupings-set-group-by"/>
+    <keyword type="macro" name="MATRIX_TYPE_SEARCH_ROOM_EVENTS" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-SEARCH-ROOM-EVENTS:CAPS"/>
+    <keyword type="function" name="matrix_search_room_events_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-new"/>
+    <keyword type="function" name="matrix_search_room_events_get_order_by ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-order-by"/>
+    <keyword type="function" name="matrix_search_room_events_set_order_by ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-order-by"/>
+    <keyword type="function" name="matrix_search_room_events_get_keys ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-keys"/>
+    <keyword type="function" name="matrix_search_room_events_set_keys ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-keys"/>
+    <keyword type="function" name="matrix_search_room_events_get_event_context ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-event-context"/>
+    <keyword type="function" name="matrix_search_room_events_set_event_context ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-event-context"/>
+    <keyword type="function" name="matrix_search_room_events_get_include_state ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-include-state"/>
+    <keyword type="function" name="matrix_search_room_events_set_include_state ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-include-state"/>
+    <keyword type="function" name="matrix_search_room_events_get_filter_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-filter-id"/>
+    <keyword type="function" name="matrix_search_room_events_set_filter_id ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-filter-id"/>
+    <keyword type="function" name="matrix_search_room_events_get_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-filter"/>
+    <keyword type="function" name="matrix_search_room_events_set_filter ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-filter"/>
+    <keyword type="function" name="matrix_search_room_events_get_search_term ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-search-term"/>
+    <keyword type="function" name="matrix_search_room_events_set_search_term ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-search-term"/>
+    <keyword type="function" name="matrix_search_room_events_get_groupings ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-get-groupings"/>
+    <keyword type="function" name="matrix_search_room_events_set_groupings ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-room-events-set-groupings"/>
+    <keyword type="macro" name="MATRIX_TYPE_SEARCH_CATEGORIES" link="Matrix-0.0-MatrixJsonCompact.html#MATRIX-TYPE-SEARCH-CATEGORIES:CAPS"/>
+    <keyword type="function" name="matrix_search_categories_new ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-categories-new"/>
+    <keyword type="function" name="matrix_search_categories_get_room_events ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-categories-get-room-events"/>
+    <keyword type="function" name="matrix_search_categories_set_room_events ()" link="Matrix-0.0-MatrixJsonCompact.html#matrix-search-categories-set-room-events"/>
+    <keyword type="struct" name="struct MatrixJsonCompact" link="Matrix-0.0-MatrixJsonCompact.html#MatrixJsonCompact"/>
+    <keyword type="struct" name="struct MatrixJsonCompactClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixJsonCompactClass"/>
+    <keyword type="struct" name="struct MatrixFilter" link="Matrix-0.0-MatrixJsonCompact.html#MatrixFilter"/>
+    <keyword type="struct" name="struct MatrixFilterClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixFilterClass"/>
+    <keyword type="struct" name="struct MatrixRoomFilter" link="Matrix-0.0-MatrixJsonCompact.html#MatrixRoomFilter"/>
+    <keyword type="struct" name="struct MatrixRoomFilterClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixRoomFilterClass"/>
+    <keyword type="struct" name="struct MatrixFilterRules" link="Matrix-0.0-MatrixJsonCompact.html#MatrixFilterRules"/>
+    <keyword type="struct" name="struct MatrixFilterRulesClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixFilterRulesClass"/>
+    <keyword type="struct" name="struct Matrix3PidCredential" link="Matrix-0.0-MatrixJsonCompact.html#Matrix3PidCredential"/>
+    <keyword type="struct" name="struct Matrix3PidCredentialClass" link="Matrix-0.0-MatrixJsonCompact.html#Matrix3PidCredentialClass"/>
+    <keyword type="struct" name="struct MatrixPusher" link="Matrix-0.0-MatrixJsonCompact.html#MatrixPusher"/>
+    <keyword type="struct" name="struct MatrixPusherClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixPusherClass"/>
+    <keyword type="struct" name="struct MatrixEventContext" link="Matrix-0.0-MatrixJsonCompact.html#MatrixEventContext"/>
+    <keyword type="struct" name="struct MatrixEventContextClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixEventContextClass"/>
+    <keyword type="struct" name="struct MatrixSearchGrouping" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchGrouping"/>
+    <keyword type="struct" name="struct MatrixSearchGroupingClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchGroupingClass"/>
+    <keyword type="struct" name="struct MatrixSearchGroupings" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchGroupings"/>
+    <keyword type="struct" name="struct MatrixSearchGroupingsClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchGroupingsClass"/>
+    <keyword type="struct" name="struct MatrixSearchRoomEvents" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchRoomEvents"/>
+    <keyword type="struct" name="struct MatrixSearchRoomEventsClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchRoomEventsClass"/>
+    <keyword type="struct" name="struct MatrixSearchCategories" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchCategories"/>
+    <keyword type="struct" name="struct MatrixSearchCategoriesClass" link="Matrix-0.0-MatrixJsonCompact.html#MatrixSearchCategoriesClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_MEMBER" link="Matrix-0.0-MatrixEventRoomMember.html#MATRIX-EVENT-TYPE-ROOM-MEMBER:CAPS"/>
+    <keyword type="function" name="matrix_event_room_member_new ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-new"/>
+    <keyword type="function" name="matrix_event_room_member_get_membership ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-membership"/>
+    <keyword type="function" name="matrix_event_room_member_set_membership ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-membership"/>
+    <keyword type="function" name="matrix_event_room_member_get_avatar_url ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-avatar-url"/>
+    <keyword type="function" name="matrix_event_room_member_set_avatar_url ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-avatar-url"/>
+    <keyword type="function" name="matrix_event_room_member_get_display_name ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-display-name"/>
+    <keyword type="function" name="matrix_event_room_member_set_display_name ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-display-name"/>
+    <keyword type="function" name="matrix_event_room_member_get_tpi_display_name ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-tpi-display-name"/>
+    <keyword type="function" name="matrix_event_room_member_set_tpi_display_name ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-tpi-display-name"/>
+    <keyword type="function" name="matrix_event_room_member_get_tpi_signed_mxid ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-tpi-signed-mxid"/>
+    <keyword type="function" name="matrix_event_room_member_set_tpi_signed_mxid ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-tpi-signed-mxid"/>
+    <keyword type="function" name="matrix_event_room_member_get_tpi_signed_token ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-tpi-signed-token"/>
+    <keyword type="function" name="matrix_event_room_member_set_tpi_signed_token ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-tpi-signed-token"/>
+    <keyword type="function" name="matrix_event_room_member_get_tpi_signature ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-tpi-signature"/>
+    <keyword type="function" name="matrix_event_room_member_set_tpi_signature ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-tpi-signature"/>
+    <keyword type="function" name="matrix_event_room_member_get_invite_room_state ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-invite-room-state"/>
+    <keyword type="function" name="matrix_event_room_member_set_invite_room_state ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-invite-room-state"/>
+    <keyword type="function" name="matrix_event_room_member_get_user_id ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-get-user-id"/>
+    <keyword type="function" name="matrix_event_room_member_set_user_id ()" link="Matrix-0.0-MatrixEventRoomMember.html#matrix-event-room-member-set-user-id"/>
+    <keyword type="struct" name="struct MatrixEventRoomMember" link="Matrix-0.0-MatrixEventRoomMember.html#MatrixEventRoomMember"/>
+    <keyword type="struct" name="struct MatrixEventRoomMemberClass" link="Matrix-0.0-MatrixEventRoomMember.html#MatrixEventRoomMemberClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM" link="Matrix-0.0-MatrixEventRoom.html#MATRIX-EVENT-TYPE-ROOM:CAPS"/>
+    <keyword type="function" name="matrix_event_room_get_event_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-event-id"/>
+    <keyword type="function" name="matrix_event_room_set_event_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-event-id"/>
+    <keyword type="function" name="matrix_event_room_get_room_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-room-id"/>
+    <keyword type="function" name="matrix_event_room_set_room_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-room-id"/>
+    <keyword type="function" name="matrix_event_room_get_sender ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-sender"/>
+    <keyword type="function" name="matrix_event_room_set_sender ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-sender"/>
+    <keyword type="function" name="matrix_event_room_get_age ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-age"/>
+    <keyword type="function" name="matrix_event_room_set_age ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-age"/>
+    <keyword type="function" name="matrix_event_room_get_redacted_because ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-redacted-because"/>
+    <keyword type="function" name="matrix_event_room_set_redacted_because ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-redacted-because"/>
+    <keyword type="function" name="matrix_event_room_get_transaction_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-get-transaction-id"/>
+    <keyword type="function" name="matrix_event_room_set_transaction_id ()" link="Matrix-0.0-MatrixEventRoom.html#matrix-event-room-set-transaction-id"/>
+    <keyword type="struct" name="struct MatrixEventRoom" link="Matrix-0.0-MatrixEventRoom.html#MatrixEventRoom"/>
+    <keyword type="struct" name="struct MatrixEventRoomClass" link="Matrix-0.0-MatrixEventRoom.html#MatrixEventRoomClass"/>
+    <keyword type="function" name="matrix_message_get_handler ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-get-handler"/>
+    <keyword type="function" name="matrix_message_register_type ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-register-type"/>
+    <keyword type="function" name="matrix_message_unregister_type ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-unregister-type"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_BASE" link="Matrix-0.0-MatrixMessageBase.html#MATRIX-MESSAGE-TYPE-BASE:CAPS"/>
+    <keyword type="function" name="matrix_message_base_from_json ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-from-json"/>
+    <keyword type="function" name="matrix_message_base_to_json ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-to-json"/>
+    <keyword type="function" name="matrix_message_base_get_message_type ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-message-type"/>
+    <keyword type="function" name="matrix_message_base_set_message_type ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-set-message-type"/>
+    <keyword type="function" name="matrix_message_base_get_body ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-body"/>
+    <keyword type="function" name="matrix_message_base_set_body ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-set-body"/>
+    <keyword type="function" name="matrix_message_base_get_json ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-json"/>
+    <keyword type="function" name="matrix_message_base_new_from_json ()" link="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-new-from-json"/>
+    <keyword type="struct" name="struct MatrixMessageBase" link="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase"/>
+    <keyword type="struct" name="struct MatrixMessageBaseClass" link="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBaseClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_RECEIPT" link="Matrix-0.0-MatrixEventReceipt.html#MATRIX-EVENT-TYPE-RECEIPT:CAPS"/>
+    <keyword type="function" name="matrix_event_receipt_new ()" link="Matrix-0.0-MatrixEventReceipt.html#matrix-event-receipt-new"/>
+    <keyword type="function" name="matrix_event_receipt_get_room_id ()" link="Matrix-0.0-MatrixEventReceipt.html#matrix-event-receipt-get-room-id"/>
+    <keyword type="function" name="matrix_event_receipt_set_room_id ()" link="Matrix-0.0-MatrixEventReceipt.html#matrix-event-receipt-set-room-id"/>
+    <keyword type="struct" name="struct MatrixEventReceipt" link="Matrix-0.0-MatrixEventReceipt.html#MatrixEventReceipt"/>
+    <keyword type="struct" name="struct MatrixEventReceiptClass" link="Matrix-0.0-MatrixEventReceipt.html#MatrixEventReceiptClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_MESSAGE_FEEDBACK" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#MATRIX-EVENT-TYPE-ROOM-MESSAGE-FEEDBACK:CAPS"/>
+    <keyword type="function" name="matrix_event_room_message_feedback_new ()" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#matrix-event-room-message-feedback-new"/>
+    <keyword type="function" name="matrix_event_room_message_feedback_get_feedback_type ()" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#matrix-event-room-message-feedback-get-feedback-type"/>
+    <keyword type="function" name="matrix_event_room_message_feedback_set_feedback_type ()" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#matrix-event-room-message-feedback-set-feedback-type"/>
+    <keyword type="function" name="matrix_event_room_message_feedback_get_target_event_id ()" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#matrix-event-room-message-feedback-get-target-event-id"/>
+    <keyword type="function" name="matrix_event_room_message_feedback_set_target_event_id ()" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#matrix-event-room-message-feedback-set-target-event-id"/>
+    <keyword type="struct" name="struct MatrixEventRoomMessageFeedback" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#MatrixEventRoomMessageFeedback"/>
+    <keyword type="struct" name="struct MatrixEventRoomMessageFeedbackClass" link="Matrix-0.0-MatrixEventRoomMessageFeedback.html#MatrixEventRoomMessageFeedbackClass"/>
+    <keyword type="macro" name="MATRIX_TYPE_HTTP_CLIENT" link="Matrix-0.0-MatrixHTTPClient.html#MATRIX-TYPE-HTTP-CLIENT:CAPS"/>
+    <keyword type="function" name="matrix_http_client_new ()" link="Matrix-0.0-MatrixHTTPClient.html#matrix-http-client-new"/>
+    <keyword type="struct" name="struct MatrixHTTPClient" link="Matrix-0.0-MatrixHTTPClient.html#MatrixHTTPClient"/>
+    <keyword type="struct" name="struct MatrixHTTPClientClass" link="Matrix-0.0-MatrixHTTPClient.html#MatrixHTTPClientClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_CREATE" link="Matrix-0.0-MatrixEventRoomCreate.html#MATRIX-EVENT-TYPE-ROOM-CREATE:CAPS"/>
+    <keyword type="function" name="matrix_event_room_create_new ()" link="Matrix-0.0-MatrixEventRoomCreate.html#matrix-event-room-create-new"/>
+    <keyword type="function" name="matrix_event_room_create_get_creator ()" link="Matrix-0.0-MatrixEventRoomCreate.html#matrix-event-room-create-get-creator"/>
+    <keyword type="function" name="matrix_event_room_create_set_creator ()" link="Matrix-0.0-MatrixEventRoomCreate.html#matrix-event-room-create-set-creator"/>
+    <keyword type="function" name="matrix_event_room_create_get_federate ()" link="Matrix-0.0-MatrixEventRoomCreate.html#matrix-event-room-create-get-federate"/>
+    <keyword type="function" name="matrix_event_room_create_set_federate ()" link="Matrix-0.0-MatrixEventRoomCreate.html#matrix-event-room-create-set-federate"/>
+    <keyword type="struct" name="struct MatrixEventRoomCreate" link="Matrix-0.0-MatrixEventRoomCreate.html#MatrixEventRoomCreate"/>
+    <keyword type="struct" name="struct MatrixEventRoomCreateClass" link="Matrix-0.0-MatrixEventRoomCreate.html#MatrixEventRoomCreateClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_GUEST_ACCESS" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#MATRIX-EVENT-TYPE-ROOM-GUEST-ACCESS:CAPS"/>
+    <keyword type="function" name="matrix_event_room_guest_access_new ()" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#matrix-event-room-guest-access-new"/>
+    <keyword type="function" name="matrix_event_room_guest_access_get_guest_access ()" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#matrix-event-room-guest-access-get-guest-access"/>
+    <keyword type="function" name="matrix_event_room_guest_access_set_guest_access ()" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#matrix-event-room-guest-access-set-guest-access"/>
+    <keyword type="struct" name="struct MatrixEventRoomGuestAccess" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#MatrixEventRoomGuestAccess"/>
+    <keyword type="struct" name="struct MatrixEventRoomGuestAccessClass" link="Matrix-0.0-MatrixEventRoomGuestAccess.html#MatrixEventRoomGuestAccessClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_CALL" link="Matrix-0.0-MatrixEventCall.html#MATRIX-EVENT-TYPE-CALL:CAPS"/>
+    <keyword type="function" name="matrix_event_call_get_call_id ()" link="Matrix-0.0-MatrixEventCall.html#matrix-event-call-get-call-id"/>
+    <keyword type="function" name="matrix_event_call_set_call_id ()" link="Matrix-0.0-MatrixEventCall.html#matrix-event-call-set-call-id"/>
+    <keyword type="function" name="matrix_event_call_get_version ()" link="Matrix-0.0-MatrixEventCall.html#matrix-event-call-get-version"/>
+    <keyword type="function" name="matrix_event_call_set_version ()" link="Matrix-0.0-MatrixEventCall.html#matrix-event-call-set-version"/>
+    <keyword type="struct" name="struct MatrixEventCall" link="Matrix-0.0-MatrixEventCall.html#MatrixEventCall"/>
+    <keyword type="struct" name="struct MatrixEventCallClass" link="Matrix-0.0-MatrixEventCall.html#MatrixEventCallClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_JOIN_RULES" link="Matrix-0.0-MatrixEventRoomJoinRules.html#MATRIX-EVENT-TYPE-ROOM-JOIN-RULES:CAPS"/>
+    <keyword type="function" name="matrix_event_room_join_rules_new ()" link="Matrix-0.0-MatrixEventRoomJoinRules.html#matrix-event-room-join-rules-new"/>
+    <keyword type="function" name="matrix_event_room_join_rules_get_join_rules ()" link="Matrix-0.0-MatrixEventRoomJoinRules.html#matrix-event-room-join-rules-get-join-rules"/>
+    <keyword type="function" name="matrix_event_room_join_rules_set_join_rules ()" link="Matrix-0.0-MatrixEventRoomJoinRules.html#matrix-event-room-join-rules-set-join-rules"/>
+    <keyword type="struct" name="struct MatrixEventRoomJoinRules" link="Matrix-0.0-MatrixEventRoomJoinRules.html#MatrixEventRoomJoinRules"/>
+    <keyword type="struct" name="struct MatrixEventRoomJoinRulesClass" link="Matrix-0.0-MatrixEventRoomJoinRules.html#MatrixEventRoomJoinRulesClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_FILE" link="Matrix-0.0-MatrixMessageFile.html#MATRIX-MESSAGE-TYPE-FILE:CAPS"/>
+    <keyword type="function" name="matrix_message_file_new ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-new"/>
+    <keyword type="function" name="matrix_message_file_get_filename ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-get-filename"/>
+    <keyword type="function" name="matrix_message_file_set_filename ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-set-filename"/>
+    <keyword type="function" name="matrix_message_file_get_url ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-get-url"/>
+    <keyword type="function" name="matrix_message_file_set_url ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-set-url"/>
+    <keyword type="function" name="matrix_message_file_get_info ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-get-info"/>
+    <keyword type="function" name="matrix_message_file_set_info ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-set-info"/>
+    <keyword type="function" name="matrix_message_file_get_thumbnail_url ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-get-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_file_set_thumbnail_url ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-set-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_file_get_thumbnail_info ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-get-thumbnail-info"/>
+    <keyword type="function" name="matrix_message_file_set_thumbnail_info ()" link="Matrix-0.0-MatrixMessageFile.html#matrix-message-file-set-thumbnail-info"/>
+    <keyword type="struct" name="struct MatrixMessageFile" link="Matrix-0.0-MatrixMessageFile.html#MatrixMessageFile"/>
+    <keyword type="struct" name="struct MatrixMessageFileClass" link="Matrix-0.0-MatrixMessageFile.html#MatrixMessageFileClass"/>
+    <keyword type="function" name="matrix_event_get_handler ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-get-handler"/>
+    <keyword type="function" name="matrix_event_register_type ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-register-type"/>
+    <keyword type="function" name="matrix_event_unregister_type ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-unregister-type"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_BASE" link="Matrix-0.0-MatrixEventBase.html#MATRIX-EVENT-TYPE-BASE:CAPS"/>
+    <keyword type="function" name="matrix_event_base_from_json ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-base-from-json"/>
+    <keyword type="function" name="matrix_event_base_to_json ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-base-to-json"/>
+    <keyword type="function" name="matrix_event_base_get_event_type ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-base-get-event-type"/>
+    <keyword type="function" name="matrix_event_base_get_json ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-base-get-json"/>
+    <keyword type="function" name="matrix_event_base_new_from_json ()" link="Matrix-0.0-MatrixEventBase.html#matrix-event-base-new-from-json"/>
+    <keyword type="struct" name="struct MatrixEventBase" link="Matrix-0.0-MatrixEventBase.html#MatrixEventBase"/>
+    <keyword type="struct" name="struct MatrixEventBaseClass" link="Matrix-0.0-MatrixEventBase.html#MatrixEventBaseClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_TAG" link="Matrix-0.0-MatrixEventTag.html#MATRIX-EVENT-TYPE-TAG:CAPS"/>
+    <keyword type="function" name="matrix_event_tag_new ()" link="Matrix-0.0-MatrixEventTag.html#matrix-event-tag-new"/>
+    <keyword type="struct" name="struct MatrixEventTag" link="Matrix-0.0-MatrixEventTag.html#MatrixEventTag"/>
+    <keyword type="struct" name="struct MatrixEventTagClass" link="Matrix-0.0-MatrixEventTag.html#MatrixEventTagClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_CALL_ANSWER" link="Matrix-0.0-MatrixEventCallAnswer.html#MATRIX-EVENT-TYPE-CALL-ANSWER:CAPS"/>
+    <keyword type="function" name="matrix_event_call_answer_new ()" link="Matrix-0.0-MatrixEventCallAnswer.html#matrix-event-call-answer-new"/>
+    <keyword type="function" name="matrix_event_call_answer_get_answer_type ()" link="Matrix-0.0-MatrixEventCallAnswer.html#matrix-event-call-answer-get-answer-type"/>
+    <keyword type="function" name="matrix_event_call_answer_set_answer_type ()" link="Matrix-0.0-MatrixEventCallAnswer.html#matrix-event-call-answer-set-answer-type"/>
+    <keyword type="function" name="matrix_event_call_answer_get_answer_sdp ()" link="Matrix-0.0-MatrixEventCallAnswer.html#matrix-event-call-answer-get-answer-sdp"/>
+    <keyword type="function" name="matrix_event_call_answer_set_answer_sdp ()" link="Matrix-0.0-MatrixEventCallAnswer.html#matrix-event-call-answer-set-answer-sdp"/>
+    <keyword type="struct" name="struct MatrixEventCallAnswer" link="Matrix-0.0-MatrixEventCallAnswer.html#MatrixEventCallAnswer"/>
+    <keyword type="struct" name="struct MatrixEventCallAnswerClass" link="Matrix-0.0-MatrixEventCallAnswer.html#MatrixEventCallAnswerClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_IMAGE" link="Matrix-0.0-MatrixMessageImage.html#MATRIX-MESSAGE-TYPE-IMAGE:CAPS"/>
+    <keyword type="function" name="matrix_message_image_new ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-new"/>
+    <keyword type="function" name="matrix_message_image_get_url ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-get-url"/>
+    <keyword type="function" name="matrix_message_image_set_url ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-set-url"/>
+    <keyword type="function" name="matrix_message_image_get_thumbnail_url ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-get-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_image_set_thumbnail_url ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-set-thumbnail-url"/>
+    <keyword type="function" name="matrix_message_image_get_info ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-get-info"/>
+    <keyword type="function" name="matrix_message_image_set_info ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-set-info"/>
+    <keyword type="function" name="matrix_message_image_get_thumbnail_info ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-get-thumbnail-info"/>
+    <keyword type="function" name="matrix_message_image_set_thumbnail_info ()" link="Matrix-0.0-MatrixMessageImage.html#matrix-message-image-set-thumbnail-info"/>
+    <keyword type="struct" name="struct MatrixMessageImage" link="Matrix-0.0-MatrixMessageImage.html#MatrixMessageImage"/>
+    <keyword type="struct" name="struct MatrixMessageImageClass" link="Matrix-0.0-MatrixMessageImage.html#MatrixMessageImageClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_CALL_HANGUP" link="Matrix-0.0-MatrixEventCallHangup.html#MATRIX-EVENT-TYPE-CALL-HANGUP:CAPS"/>
+    <keyword type="function" name="matrix_event_call_hangup_new ()" link="Matrix-0.0-MatrixEventCallHangup.html#matrix-event-call-hangup-new"/>
+    <keyword type="struct" name="struct MatrixEventCallHangup" link="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangup"/>
+    <keyword type="struct" name="struct MatrixEventCallHangupClass" link="Matrix-0.0-MatrixEventCallHangup.html#MatrixEventCallHangupClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_REDACTION" link="Matrix-0.0-MatrixEventRoomRedaction.html#MATRIX-EVENT-TYPE-ROOM-REDACTION:CAPS"/>
+    <keyword type="function" name="matrix_event_room_redaction_new ()" link="Matrix-0.0-MatrixEventRoomRedaction.html#matrix-event-room-redaction-new"/>
+    <keyword type="function" name="matrix_event_room_redaction_get_reason ()" link="Matrix-0.0-MatrixEventRoomRedaction.html#matrix-event-room-redaction-get-reason"/>
+    <keyword type="function" name="matrix_event_room_redaction_set_reason ()" link="Matrix-0.0-MatrixEventRoomRedaction.html#matrix-event-room-redaction-set-reason"/>
+    <keyword type="function" name="matrix_event_room_redaction_get_redacted_event_id ()" link="Matrix-0.0-MatrixEventRoomRedaction.html#matrix-event-room-redaction-get-redacted-event-id"/>
+    <keyword type="function" name="matrix_event_room_redaction_set_redacted_event_id ()" link="Matrix-0.0-MatrixEventRoomRedaction.html#matrix-event-room-redaction-set-redacted-event-id"/>
+    <keyword type="struct" name="struct MatrixEventRoomRedaction" link="Matrix-0.0-MatrixEventRoomRedaction.html#MatrixEventRoomRedaction"/>
+    <keyword type="struct" name="struct MatrixEventRoomRedactionClass" link="Matrix-0.0-MatrixEventRoomRedaction.html#MatrixEventRoomRedactionClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_NOTICE" link="Matrix-0.0-MatrixMessageNotice.html#MATRIX-MESSAGE-TYPE-NOTICE:CAPS"/>
+    <keyword type="function" name="matrix_message_notice_new ()" link="Matrix-0.0-MatrixMessageNotice.html#matrix-message-notice-new"/>
+    <keyword type="struct" name="struct MatrixMessageNotice" link="Matrix-0.0-MatrixMessageNotice.html#MatrixMessageNotice"/>
+    <keyword type="struct" name="struct MatrixMessageNoticeClass" link="Matrix-0.0-MatrixMessageNotice.html#MatrixMessageNoticeClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_HISTORY_VISIBILITY" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#MATRIX-EVENT-TYPE-ROOM-HISTORY-VISIBILITY:CAPS"/>
+    <keyword type="function" name="matrix_event_room_history_visibility_new ()" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#matrix-event-room-history-visibility-new"/>
+    <keyword type="function" name="matrix_event_room_history_visibility_get_visibility ()" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#matrix-event-room-history-visibility-get-visibility"/>
+    <keyword type="function" name="matrix_event_room_history_visibility_set_visibility ()" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#matrix-event-room-history-visibility-set-visibility"/>
+    <keyword type="struct" name="struct MatrixEventRoomHistoryVisibility" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#MatrixEventRoomHistoryVisibility"/>
+    <keyword type="struct" name="struct MatrixEventRoomHistoryVisibilityClass" link="Matrix-0.0-MatrixEventRoomHistoryVisibility.html#MatrixEventRoomHistoryVisibilityClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_ALIASES" link="Matrix-0.0-MatrixEventRoomAliases.html#MATRIX-EVENT-TYPE-ROOM-ALIASES:CAPS"/>
+    <keyword type="function" name="matrix_event_room_aliases_new ()" link="Matrix-0.0-MatrixEventRoomAliases.html#matrix-event-room-aliases-new"/>
+    <keyword type="function" name="matrix_event_room_aliases_get_aliases ()" link="Matrix-0.0-MatrixEventRoomAliases.html#matrix-event-room-aliases-get-aliases"/>
+    <keyword type="function" name="matrix_event_room_aliases_set_aliases ()" link="Matrix-0.0-MatrixEventRoomAliases.html#matrix-event-room-aliases-set-aliases"/>
+    <keyword type="struct" name="struct MatrixEventRoomAliases" link="Matrix-0.0-MatrixEventRoomAliases.html#MatrixEventRoomAliases"/>
+    <keyword type="struct" name="struct MatrixEventRoomAliasesClass" link="Matrix-0.0-MatrixEventRoomAliases.html#MatrixEventRoomAliasesClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_CALL_CANDIDATES" link="Matrix-0.0-MatrixEventCallCandidates.html#MATRIX-EVENT-TYPE-CALL-CANDIDATES:CAPS"/>
+    <keyword type="function" name="matrix_event_call_candidates_new ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-new"/>
+    <keyword type="function" name="matrix_event_call_candidates_get_candidates ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-get-candidates"/>
+    <keyword type="function" name="matrix_event_call_candidates_set_candidates ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-set-candidates"/>
+    <keyword type="function" name="matrix_event_call_candidates_candidate_dup ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-candidate-dup"/>
+    <keyword type="function" name="matrix_event_call_candidates_candidate_free ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-candidate-free"/>
+    <keyword type="function" name="matrix_event_call_candidates_candidate_copy ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-candidate-copy"/>
+    <keyword type="function" name="matrix_event_call_candidates_candidate_destroy ()" link="Matrix-0.0-MatrixEventCallCandidates.html#matrix-event-call-candidates-candidate-destroy"/>
+    <keyword type="struct" name="struct MatrixEventCallCandidatesCandidate" link="Matrix-0.0-MatrixEventCallCandidates.html#MatrixEventCallCandidatesCandidate"/>
+    <keyword type="struct" name="struct MatrixEventCallCandidates" link="Matrix-0.0-MatrixEventCallCandidates.html#MatrixEventCallCandidates"/>
+    <keyword type="struct" name="struct MatrixEventCallCandidatesClass" link="Matrix-0.0-MatrixEventCallCandidates.html#MatrixEventCallCandidatesClass"/>
+    <keyword type="function" name="matrix_api_abort_pending ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-abort-pending"/>
+    <keyword type="function" name="matrix_api_media_download ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-media-download"/>
+    <keyword type="function" name="matrix_api_media_thumbnail ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-media-thumbnail"/>
+    <keyword type="function" name="matrix_api_media_upload ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-media-upload"/>
+    <keyword type="function" name="matrix_api_get_presence_list ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-presence-list"/>
+    <keyword type="function" name="matrix_api_update_presence_list ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-update-presence-list"/>
+    <keyword type="function" name="matrix_api_get_presence ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-presence"/>
+    <keyword type="function" name="matrix_api_set_user_presence ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-user-presence"/>
+    <keyword type="function" name="matrix_api_update_pusher ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-update-pusher"/>
+    <keyword type="function" name="matrix_api_get_pushers ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-pushers"/>
+    <keyword type="function" name="matrix_api_delete_pusher ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-delete-pusher"/>
+    <keyword type="function" name="matrix_api_get_pusher ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-pusher"/>
+    <keyword type="function" name="matrix_api_add_pusher ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-add-pusher"/>
+    <keyword type="function" name="matrix_api_toggle_pusher ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-toggle-pusher"/>
+    <keyword type="function" name="matrix_api_create_room ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-create-room"/>
+    <keyword type="function" name="matrix_api_delete_room_alias ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-delete-room-alias"/>
+    <keyword type="function" name="matrix_api_get_room_id ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-room-id"/>
+    <keyword type="function" name="matrix_api_create_room_alias ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-create-room-alias"/>
+    <keyword type="function" name="matrix_api_list_public_rooms ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-list-public-rooms"/>
+    <keyword type="function" name="matrix_api_ban_user ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-ban-user"/>
+    <keyword type="function" name="matrix_api_forget_room ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-forget-room"/>
+    <keyword type="function" name="matrix_api_invite_user_3rdparty ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-invite-user-3rdparty"/>
+    <keyword type="function" name="matrix_api_invite_user ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-invite-user"/>
+    <keyword type="function" name="matrix_api_join_room ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-join-room"/>
+    <keyword type="function" name="matrix_api_leave_room ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-leave-room"/>
+    <keyword type="function" name="matrix_api_event_stream ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-event-stream"/>
+    <keyword type="function" name="matrix_api_get_event ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-event"/>
+    <keyword type="function" name="matrix_api_initial_sync ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-initial-sync"/>
+    <keyword type="function" name="matrix_api_get_event_context ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-event-context"/>
+    <keyword type="function" name="matrix_api_initial_sync_room ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-initial-sync-room"/>
+    <keyword type="function" name="matrix_api_list_room_members ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-list-room-members"/>
+    <keyword type="function" name="matrix_api_list_room_messages ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-list-room-messages"/>
+    <keyword type="function" name="matrix_api_send_event_receipt ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-send-event-receipt"/>
+    <keyword type="function" name="matrix_api_redact_event ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-redact-event"/>
+    <keyword type="function" name="matrix_api_send_message_event ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-send-message-event"/>
+    <keyword type="function" name="matrix_api_get_room_state ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-room-state"/>
+    <keyword type="function" name="matrix_api_send_room_event ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-send-room-event"/>
+    <keyword type="function" name="matrix_api_notify_room_typing ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-notify-room-typing"/>
+    <keyword type="function" name="matrix_api_sync ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-sync"/>
+    <keyword type="function" name="matrix_api_create_filter ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-create-filter"/>
+    <keyword type="function" name="matrix_api_download_filter ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-download-filter"/>
+    <keyword type="function" name="matrix_api_search ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-search"/>
+    <keyword type="function" name="matrix_api_whois ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-whois"/>
+    <keyword type="function" name="matrix_api_versions ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-versions"/>
+    <keyword type="function" name="matrix_api_login ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-login"/>
+    <keyword type="function" name="matrix_api_token_refresh ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-token-refresh"/>
+    <keyword type="function" name="matrix_api_get_3pids ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-3pids"/>
+    <keyword type="function" name="matrix_api_add_3pid ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-add-3pid"/>
+    <keyword type="function" name="matrix_api_change_password ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-change-password"/>
+    <keyword type="function" name="matrix_api_get_profile ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-profile"/>
+    <keyword type="function" name="matrix_api_get_avatar_url ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-avatar-url"/>
+    <keyword type="function" name="matrix_api_set_avatar_url ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-avatar-url"/>
+    <keyword type="function" name="matrix_api_get_display_name ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-display-name"/>
+    <keyword type="function" name="matrix_api_set_display_name ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-display-name"/>
+    <keyword type="function" name="matrix_api_register_account ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-register-account"/>
+    <keyword type="function" name="matrix_api_set_account_data ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-account-data"/>
+    <keyword type="function" name="matrix_api_get_room_tags ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-room-tags"/>
+    <keyword type="function" name="matrix_api_delete_room_tag ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-delete-room-tag"/>
+    <keyword type="function" name="matrix_api_add_room_tag ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-add-room-tag"/>
+    <keyword type="function" name="matrix_api_get_turn_server ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-turn-server"/>
+    <keyword type="function" name="MatrixAPICallback ()" link="Matrix-0.0-MatrixAPI.html#MatrixAPICallback"/>
+    <keyword type="function" name="matrix_api_get_token ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-token"/>
+    <keyword type="function" name="matrix_api_set_token ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-token"/>
+    <keyword type="function" name="matrix_api_get_refresh_token ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-refresh-token"/>
+    <keyword type="function" name="matrix_api_set_refresh_token ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-set-refresh-token"/>
+    <keyword type="function" name="matrix_api_get_user_id ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-user-id"/>
+    <keyword type="function" name="matrix_api_get_homeserver ()" link="Matrix-0.0-MatrixAPI.html#matrix-api-get-homeserver"/>
+    <keyword type="struct" name="MatrixAPI" link="Matrix-0.0-MatrixAPI.html#MatrixAPI"/>
+    <keyword type="struct" name="struct MatrixAPIIface" link="Matrix-0.0-MatrixAPI.html#MatrixAPIIface"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#MATRIX-EVENT-TYPE-ROOM-POWER-LEVELS:CAPS"/>
+    <keyword type="function" name="matrix_event_room_power_levels_new ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-new"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_users_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-users-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_users_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-users-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_events_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-events-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_events_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-events-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_state_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-state-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_state_default ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-state-default"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_ban ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-ban"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_ban ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-ban"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_kick ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-kick"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_kick ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-kick"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_redact ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-redact"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_redact ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-redact"/>
+    <keyword type="function" name="matrix_event_room_power_levels_get_invite ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-invite"/>
+    <keyword type="function" name="matrix_event_room_power_levels_set_invite ()" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-invite"/>
+    <keyword type="struct" name="struct MatrixEventRoomPowerLevels" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels"/>
+    <keyword type="struct" name="struct MatrixEventRoomPowerLevelsClass" link="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevelsClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_TEXT" link="Matrix-0.0-MatrixMessageText.html#MATRIX-MESSAGE-TYPE-TEXT:CAPS"/>
+    <keyword type="function" name="matrix_message_text_new ()" link="Matrix-0.0-MatrixMessageText.html#matrix-message-text-new"/>
+    <keyword type="struct" name="struct MatrixMessageText" link="Matrix-0.0-MatrixMessageText.html#MatrixMessageText"/>
+    <keyword type="struct" name="struct MatrixMessageTextClass" link="Matrix-0.0-MatrixMessageText.html#MatrixMessageTextClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_VIDEO" link="Matrix-0.0-MatrixMessageVideo.html#MATRIX-MESSAGE-TYPE-VIDEO:CAPS"/>
+    <keyword type="function" name="matrix_message_video_new ()" link="Matrix-0.0-MatrixMessageVideo.html#matrix-message-video-new"/>
+    <keyword type="function" name="matrix_message_video_get_url ()" link="Matrix-0.0-MatrixMessageVideo.html#matrix-message-video-get-url"/>
+    <keyword type="function" name="matrix_message_video_set_url ()" link="Matrix-0.0-MatrixMessageVideo.html#matrix-message-video-set-url"/>
+    <keyword type="function" name="matrix_message_video_get_info ()" link="Matrix-0.0-MatrixMessageVideo.html#matrix-message-video-get-info"/>
+    <keyword type="function" name="matrix_message_video_set_info ()" link="Matrix-0.0-MatrixMessageVideo.html#matrix-message-video-set-info"/>
+    <keyword type="struct" name="struct MatrixMessageVideo" link="Matrix-0.0-MatrixMessageVideo.html#MatrixMessageVideo"/>
+    <keyword type="struct" name="struct MatrixMessageVideoClass" link="Matrix-0.0-MatrixMessageVideo.html#MatrixMessageVideoClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_TOPIC" link="Matrix-0.0-MatrixEventRoomTopic.html#MATRIX-EVENT-TYPE-ROOM-TOPIC:CAPS"/>
+    <keyword type="function" name="matrix_event_room_topic_new ()" link="Matrix-0.0-MatrixEventRoomTopic.html#matrix-event-room-topic-new"/>
+    <keyword type="function" name="matrix_event_room_topic_get_topic ()" link="Matrix-0.0-MatrixEventRoomTopic.html#matrix-event-room-topic-get-topic"/>
+    <keyword type="function" name="matrix_event_room_topic_set_topic ()" link="Matrix-0.0-MatrixEventRoomTopic.html#matrix-event-room-topic-set-topic"/>
+    <keyword type="struct" name="struct MatrixEventRoomTopic" link="Matrix-0.0-MatrixEventRoomTopic.html#MatrixEventRoomTopic"/>
+    <keyword type="struct" name="struct MatrixEventRoomTopicClass" link="Matrix-0.0-MatrixEventRoomTopic.html#MatrixEventRoomTopicClass"/>
+    <keyword type="macro" name="MATRIX_EVENT_TYPE_ROOM_MESSAGE" link="Matrix-0.0-MatrixEventRoomMessage.html#MATRIX-EVENT-TYPE-ROOM-MESSAGE:CAPS"/>
+    <keyword type="function" name="matrix_event_room_message_new ()" link="Matrix-0.0-MatrixEventRoomMessage.html#matrix-event-room-message-new"/>
+    <keyword type="function" name="matrix_event_room_message_get_message ()" link="Matrix-0.0-MatrixEventRoomMessage.html#matrix-event-room-message-get-message"/>
+    <keyword type="function" name="matrix_event_room_message_set_message ()" link="Matrix-0.0-MatrixEventRoomMessage.html#matrix-event-room-message-set-message"/>
+    <keyword type="function" name="matrix_event_room_message_get_fallback_content ()" link="Matrix-0.0-MatrixEventRoomMessage.html#matrix-event-room-message-get-fallback-content"/>
+    <keyword type="struct" name="struct MatrixEventRoomMessage" link="Matrix-0.0-MatrixEventRoomMessage.html#MatrixEventRoomMessage"/>
+    <keyword type="struct" name="struct MatrixEventRoomMessageClass" link="Matrix-0.0-MatrixEventRoomMessage.html#MatrixEventRoomMessageClass"/>
+    <keyword type="macro" name="MATRIX_MESSAGE_TYPE_EMOTE" link="Matrix-0.0-MatrixMessageEmote.html#MATRIX-MESSAGE-TYPE-EMOTE:CAPS"/>
+    <keyword type="function" name="matrix_message_emote_new ()" link="Matrix-0.0-MatrixMessageEmote.html#matrix-message-emote-new"/>
+    <keyword type="struct" name="struct MatrixMessageEmote" link="Matrix-0.0-MatrixMessageEmote.html#MatrixMessageEmote"/>
+    <keyword type="struct" name="struct MatrixMessageEmoteClass" link="Matrix-0.0-MatrixMessageEmote.html#MatrixMessageEmoteClass"/>
+    <keyword type="function" name="matrix_error_quark ()" link="Matrix-0.0-matrix-types.html#matrix-error-quark"/>
+    <keyword type="function" name="matrix_file_info_set_from_json ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-set-from-json"/>
+    <keyword type="function" name="matrix_file_info_get_json_node ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-get-json-node"/>
+    <keyword type="function" name="matrix_file_info_dup ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-dup"/>
+    <keyword type="function" name="matrix_file_info_free ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-free"/>
+    <keyword type="function" name="matrix_file_info_copy ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-copy"/>
+    <keyword type="function" name="matrix_file_info_destroy ()" link="Matrix-0.0-matrix-types.html#matrix-file-info-destroy"/>
+    <keyword type="function" name="matrix_image_info_set_from_json ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-set-from-json"/>
+    <keyword type="function" name="matrix_image_info_get_json_node ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-get-json-node"/>
+    <keyword type="function" name="matrix_image_info_dup ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-dup"/>
+    <keyword type="function" name="matrix_image_info_free ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-free"/>
+    <keyword type="function" name="matrix_image_info_copy ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-copy"/>
+    <keyword type="function" name="matrix_image_info_destroy ()" link="Matrix-0.0-matrix-types.html#matrix-image-info-destroy"/>
+    <keyword type="function" name="matrix_audio_info_set_from_json ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-set-from-json"/>
+    <keyword type="function" name="matrix_audio_info_get_json_node ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-get-json-node"/>
+    <keyword type="function" name="matrix_audio_info_dup ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-dup"/>
+    <keyword type="function" name="matrix_audio_info_free ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-free"/>
+    <keyword type="function" name="matrix_audio_info_copy ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-copy"/>
+    <keyword type="function" name="matrix_audio_info_destroy ()" link="Matrix-0.0-matrix-types.html#matrix-audio-info-destroy"/>
+    <keyword type="function" name="matrix_video_info_set_from_json ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-set-from-json"/>
+    <keyword type="function" name="matrix_video_info_get_json_node ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-get-json-node"/>
+    <keyword type="function" name="matrix_video_info_dup ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-dup"/>
+    <keyword type="function" name="matrix_video_info_free ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-free"/>
+    <keyword type="function" name="matrix_video_info_copy ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-copy"/>
+    <keyword type="function" name="matrix_video_info_destroy ()" link="Matrix-0.0-matrix-types.html#matrix-video-info-destroy"/>
+    <keyword type="enum" name="enum MatrixAccountKind" link="Matrix-0.0-matrix-types.html#MatrixAccountKind"/>
+    <keyword type="enum" name="enum MatrixEventDirection" link="Matrix-0.0-matrix-types.html#MatrixEventDirection"/>
+    <keyword type="enum" name="enum MatrixEventFormat" link="Matrix-0.0-matrix-types.html#MatrixEventFormat"/>
+    <keyword type="enum" name="enum MatrixPresence" link="Matrix-0.0-matrix-types.html#MatrixPresence"/>
+    <keyword type="enum" name="enum MatrixPusherConditionKind" link="Matrix-0.0-matrix-types.html#MatrixPusherConditionKind"/>
+    <keyword type="enum" name="enum MatrixPusherKind" link="Matrix-0.0-matrix-types.html#MatrixPusherKind"/>
+    <keyword type="enum" name="enum MatrixReceiptType" link="Matrix-0.0-matrix-types.html#MatrixReceiptType"/>
+    <keyword type="enum" name="enum MatrixResizeMethod" link="Matrix-0.0-matrix-types.html#MatrixResizeMethod"/>
+    <keyword type="enum" name="enum MatrixRoomMembership" link="Matrix-0.0-matrix-types.html#MatrixRoomMembership"/>
+    <keyword type="enum" name="enum MatrixRoomPreset" link="Matrix-0.0-matrix-types.html#MatrixRoomPreset"/>
+    <keyword type="enum" name="enum MatrixRoomVisibility" link="Matrix-0.0-matrix-types.html#MatrixRoomVisibility"/>
+    <keyword type="enum" name="enum MatrixJoinRules" link="Matrix-0.0-matrix-types.html#MatrixJoinRules"/>
+    <keyword type="enum" name="enum MatrixSearchOrder" link="Matrix-0.0-matrix-types.html#MatrixSearchOrder"/>
+    <keyword type="enum" name="enum MatrixSearchKey" link="Matrix-0.0-matrix-types.html#MatrixSearchKey"/>
+    <keyword type="enum" name="enum MatrixSearchGroupBy" link="Matrix-0.0-matrix-types.html#MatrixSearchGroupBy"/>
+    <keyword type="enum" name="enum MatrixHistoryVisibility" link="Matrix-0.0-matrix-types.html#MatrixHistoryVisibility"/>
+    <keyword type="enum" name="enum MatrixGuestAccess" link="Matrix-0.0-matrix-types.html#MatrixGuestAccess"/>
+    <keyword type="enum" name="enum MatrixCallOfferType" link="Matrix-0.0-matrix-types.html#MatrixCallOfferType"/>
+    <keyword type="enum" name="enum MatrixCallAnswerType" link="Matrix-0.0-matrix-types.html#MatrixCallAnswerType"/>
+    <keyword type="enum" name="enum MatrixError" link="Matrix-0.0-matrix-types.html#MatrixError"/>
+    <keyword type="struct" name="struct MatrixFileInfo" link="Matrix-0.0-matrix-types.html#MatrixFileInfo"/>
+    <keyword type="struct" name="struct MatrixImageInfo" link="Matrix-0.0-matrix-types.html#MatrixImageInfo"/>
+    <keyword type="struct" name="struct MatrixAudioInfo" link="Matrix-0.0-matrix-types.html#MatrixAudioInfo"/>
+    <keyword type="struct" name="struct MatrixVideoInfo" link="Matrix-0.0-matrix-types.html#MatrixVideoInfo"/>
+    <keyword type="constant" name="MATRIX_ACCOUNT_KIND_DEFAULT" link="Matrix-0.0-matrix-types.html#MATRIX-ACCOUNT-KIND-DEFAULT:CAPS"/>
+    <keyword type="constant" name="MATRIX_ACCOUNT_KIND_USER" link="Matrix-0.0-matrix-types.html#MATRIX-ACCOUNT-KIND-USER:CAPS"/>
+    <keyword type="constant" name="MATRIX_ACCOUNT_KIND_GUEST" link="Matrix-0.0-matrix-types.html#MATRIX-ACCOUNT-KIND-GUEST:CAPS"/>
+    <keyword type="constant" name="MATRIX_EVENT_DIRECTION_FORWARD" link="Matrix-0.0-matrix-types.html#MATRIX-EVENT-DIRECTION-FORWARD:CAPS"/>
+    <keyword type="constant" name="MATRIX_EVENT_DIRECTION_BACKWARD" link="Matrix-0.0-matrix-types.html#MATRIX-EVENT-DIRECTION-BACKWARD:CAPS"/>
+    <keyword type="constant" name="MATRIX_EVENT_FORMAT_DEFAULT" link="Matrix-0.0-matrix-types.html#MATRIX-EVENT-FORMAT-DEFAULT:CAPS"/>
+    <keyword type="constant" name="MATRIX_EVENT_FORMAT_CLIENT" link="Matrix-0.0-matrix-types.html#MATRIX-EVENT-FORMAT-CLIENT:CAPS"/>
+    <keyword type="constant" name="MATRIX_EVENT_FORMAT_FEDERATION" link="Matrix-0.0-matrix-types.html#MATRIX-EVENT-FORMAT-FEDERATION:CAPS"/>
+    <keyword type="constant" name="MATRIX_PRESENCE_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-PRESENCE-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_PRESENCE_ONLINE" link="Matrix-0.0-matrix-types.html#MATRIX-PRESENCE-ONLINE:CAPS"/>
+    <keyword type="constant" name="MATRIX_PRESENCE_OFFLINE" link="Matrix-0.0-matrix-types.html#MATRIX-PRESENCE-OFFLINE:CAPS"/>
+    <keyword type="constant" name="MATRIX_PRESENCE_UNAVAILABLE" link="Matrix-0.0-matrix-types.html#MATRIX-PRESENCE-UNAVAILABLE:CAPS"/>
+    <keyword type="constant" name="MATRIX_PRESENCE_FREE_FOR_CHAT" link="Matrix-0.0-matrix-types.html#MATRIX-PRESENCE-FREE-FOR-CHAT:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-CONDITION-KIND-EVENT-MATCH:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-CONDITION-KIND-PROFILE-TAG:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-CONDITION-KIND-CONTAINS-DISPLAY-NAME:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-CONDITION-KIND-ROOM-MEMBER-COUNT:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_KIND_OVERRIDE" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-KIND-OVERRIDE:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_KIND_SENDER" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-KIND-SENDER:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_KIND_ROOM" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-KIND-ROOM:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_KIND_CONTENT" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-KIND-CONTENT:CAPS"/>
+    <keyword type="constant" name="MATRIX_PUSHER_KIND_UNDERRIDE" link="Matrix-0.0-matrix-types.html#MATRIX-PUSHER-KIND-UNDERRIDE:CAPS"/>
+    <keyword type="constant" name="MATRIX_RECEIPT_TYPE_READ" link="Matrix-0.0-matrix-types.html#MATRIX-RECEIPT-TYPE-READ:CAPS"/>
+    <keyword type="constant" name="MATRIX_RESIZE_METHOD_DEFAULT" link="Matrix-0.0-matrix-types.html#MATRIX-RESIZE-METHOD-DEFAULT:CAPS"/>
+    <keyword type="constant" name="MATRIX_RESIZE_METHOD_CROP" link="Matrix-0.0-matrix-types.html#MATRIX-RESIZE-METHOD-CROP:CAPS"/>
+    <keyword type="constant" name="MATRIX_RESIZE_METHOD_SCALE" link="Matrix-0.0-matrix-types.html#MATRIX-RESIZE-METHOD-SCALE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_INVITE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-INVITE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_JOIN" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-JOIN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_LEAVE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-LEAVE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_BAN" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-BAN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_MEMBERSHIP_KNOCK" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-MEMBERSHIP-KNOCK:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_PRESET_NONE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-PRESET-NONE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_PRESET_PRIVATE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-PRESET-PRIVATE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_PRESET_TRUSTED_PRIVATE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-PRESET-TRUSTED-PRIVATE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_PRESET_PUBLIC" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-PRESET-PUBLIC:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_VISIBILITY_DEFAULT" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-VISIBILITY-DEFAULT:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_VISIBILITY_PUBLIC" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-VISIBILITY-PUBLIC:CAPS"/>
+    <keyword type="constant" name="MATRIX_ROOM_VISIBILITY_PRIVATE" link="Matrix-0.0-matrix-types.html#MATRIX-ROOM-VISIBILITY-PRIVATE:CAPS"/>
+    <keyword type="constant" name="MATRIX_JOIN_RULES_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-JOIN-RULES-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_JOIN_RULES_PUBLIC" link="Matrix-0.0-matrix-types.html#MATRIX-JOIN-RULES-PUBLIC:CAPS"/>
+    <keyword type="constant" name="MATRIX_JOIN_RULES_INVITE" link="Matrix-0.0-matrix-types.html#MATRIX-JOIN-RULES-INVITE:CAPS"/>
+    <keyword type="constant" name="MATRIX_JOIN_RULES_PRIVATE" link="Matrix-0.0-matrix-types.html#MATRIX-JOIN-RULES-PRIVATE:CAPS"/>
+    <keyword type="constant" name="MATRIX_JOIN_RULES_KNOCK" link="Matrix-0.0-matrix-types.html#MATRIX-JOIN-RULES-KNOCK:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_ORDER_RECENT" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-ORDER-RECENT:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_ORDER_RANK" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-ORDER-RANK:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_KEY_CONTENT_BODY" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-KEY-CONTENT-BODY:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_KEY_CONTENT_NAME" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-KEY-CONTENT-NAME:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_KEY_CONTENT_TOPIC" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-KEY-CONTENT-TOPIC:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_GROUP_BY_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-GROUP-BY-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_GROUP_BY_ROOM_ID" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-GROUP-BY-ROOM-ID:CAPS"/>
+    <keyword type="constant" name="MATRIX_SEARCH_GROUP_BY_SENDER" link="Matrix-0.0-matrix-types.html#MATRIX-SEARCH-GROUP-BY-SENDER:CAPS"/>
+    <keyword type="constant" name="MATRIX_HISTORY_VISIBILITY_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-HISTORY-VISIBILITY-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_HISTORY_VISIBILITY_INVITED" link="Matrix-0.0-matrix-types.html#MATRIX-HISTORY-VISIBILITY-INVITED:CAPS"/>
+    <keyword type="constant" name="MATRIX_HISTORY_VISIBILITY_JOINED" link="Matrix-0.0-matrix-types.html#MATRIX-HISTORY-VISIBILITY-JOINED:CAPS"/>
+    <keyword type="constant" name="MATRIX_HISTORY_VISIBILITY_SHARED" link="Matrix-0.0-matrix-types.html#MATRIX-HISTORY-VISIBILITY-SHARED:CAPS"/>
+    <keyword type="constant" name="MATRIX_HISTORY_VISIBILITY_WORLD_READABLE" link="Matrix-0.0-matrix-types.html#MATRIX-HISTORY-VISIBILITY-WORLD-READABLE:CAPS"/>
+    <keyword type="constant" name="MATRIX_GUEST_ACCESS_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-GUEST-ACCESS-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_GUEST_ACCESS_CAN_JOIN" link="Matrix-0.0-matrix-types.html#MATRIX-GUEST-ACCESS-CAN-JOIN:CAPS"/>
+    <keyword type="constant" name="MATRIX_GUEST_ACCESS_FORBIDDEN" link="Matrix-0.0-matrix-types.html#MATRIX-GUEST-ACCESS-FORBIDDEN:CAPS"/>
+    <keyword type="constant" name="MATRIX_CALL_OFFER_TYPE_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-CALL-OFFER-TYPE-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_CALL_OFFER_TYPE_OFFER" link="Matrix-0.0-matrix-types.html#MATRIX-CALL-OFFER-TYPE-OFFER:CAPS"/>
+    <keyword type="constant" name="MATRIX_CALL_ANSWER_TYPE_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-CALL-ANSWER-TYPE-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_CALL_ANSWER_TYPE_ANSWER" link="Matrix-0.0-matrix-types.html#MATRIX-CALL-ANSWER-TYPE-ANSWER:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_NONE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-NONE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_COMMUNICATION_ERROR" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-COMMUNICATION-ERROR:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_INCOMPLETE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-INCOMPLETE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_BAD_REQUEST" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-BAD-REQUEST:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_BAD_RESPONSE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-BAD-RESPONSE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_INVALID_ROOM_ID" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-INVALID-ROOM-ID:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_UNKNOWN_VALUE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-UNKNOWN-VALUE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_INVALID_TYPE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-INVALID-TYPE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_UNSUPPORTED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-UNSUPPORTED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_INVALID_FORMAT" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-INVALID-FORMAT:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_UNAVAILABLE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-UNAVAILABLE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_NOT_FOUND" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-NOT-FOUND:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_ALREADY_EXISTS" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-ALREADY-EXISTS:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_MISSING_TOKEN" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-MISSING-TOKEN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_FORBIDDEN" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-FORBIDDEN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_UNKNOWN" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-UNKNOWN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_UNKNOWN_TOKEN" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-UNKNOWN-TOKEN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_NOT_JSON" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-NOT-JSON:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_UNRECOGNIZED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-UNRECOGNIZED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_UNAUTHORIZED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-UNAUTHORIZED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_BAD_JSON" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-BAD-JSON:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_USER_IN_USE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-USER-IN-USE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_ROOM_IN_USE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-ROOM-IN-USE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_BAD_PAGINATION" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-BAD-PAGINATION:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_BAD_STATE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-BAD-STATE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_NOT_FOUND" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-NOT-FOUND:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_GUEST_ACCESS_FORBIDDEN" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-GUEST-ACCESS-FORBIDDEN:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_LIMIT_EXCEEDED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-LIMIT-EXCEEDED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_CAPTCHA_NEEDED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-CAPTCHA-NEEDED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_CAPTCHA_INVALID" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-CAPTCHA-INVALID:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_MISSING_PARAM" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-MISSING-PARAM:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_TOO_LARGE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-TOO-LARGE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_EXCLUSIVE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-EXCLUSIVE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_THREEPID_AUTH_FAILED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-THREEPID-AUTH-FAILED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_THREEPID_IN_USE" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-THREEPID-IN-USE:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_M_INVALID_USERNAME" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-M-INVALID-USERNAME:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_UNSPECIFIED" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-UNSPECIFIED:CAPS"/>
+    <keyword type="constant" name="MATRIX_ERROR_UNKNOWN_ERROR" link="Matrix-0.0-matrix-types.html#MATRIX-ERROR-UNKNOWN-ERROR:CAPS"/>
+  </functions>
+</book>

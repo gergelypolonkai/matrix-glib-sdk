@@ -1,0 +1,586 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MatrixEventPresence: Matrix-0.0 Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
+<link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
+<link rel="prev" href="Matrix-0.0-MatrixEventRoomName.html" title="MatrixEventRoomName">
+<link rel="next" href="Matrix-0.0-MatrixEventState.html" title="MatrixEventState">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixEventPresence.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixEventRoomName.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixEventState.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="Matrix-0.0-MatrixEventPresence"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="Matrix-0.0-MatrixEventPresence.top_of_page"></a>MatrixEventPresence</span></h2>
+<p>MatrixEventPresence — Class for representing presence events</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventPresence.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MATRIX-EVENT-TYPE-PRESENCE:CAPS" title="MATRIX_EVENT_TYPE_PRESENCE">MATRIX_EVENT_TYPE_PRESENCE</a></td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="returnvalue">MatrixEventPresence</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-new" title="matrix_event_presence_new ()">matrix_event_presence_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-avatar-url" title="matrix_event_presence_get_avatar_url ()">matrix_event_presence_get_avatar_url</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-avatar-url" title="matrix_event_presence_set_avatar_url ()">matrix_event_presence_set_avatar_url</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-display-name" title="matrix_event_presence_get_display_name ()">matrix_event_presence_get_display_name</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-display-name" title="matrix_event_presence_set_display_name ()">matrix_event_presence_set_display_name</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">glong</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-last-active-ago" title="matrix_event_presence_get_last_active_ago ()">matrix_event_presence_get_last_active_ago</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-last-active-ago" title="matrix_event_presence_set_last_active_ago ()">matrix_event_presence_set_last_active_ago</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-user-id" title="matrix_event_presence_get_user_id ()">matrix_event_presence_get_user_id</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-user-id" title="matrix_event_presence_set_user_id ()">matrix_event_presence_set_user_id</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-event-id" title="matrix_event_presence_get_event_id ()">matrix_event_presence_get_event_id</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-event-id" title="matrix_event_presence_set_event_id ()">matrix_event_presence_set_event_id</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-matrix-types.html#MatrixPresence" title="enum MatrixPresence"><span class="returnvalue">MatrixPresence</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-get-presence" title="matrix_event_presence_get_presence ()">matrix_event_presence_get_presence</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventPresence.html#matrix-event-presence-set-presence" title="matrix_event_presence_set_presence ()">matrix_event_presence_set_presence</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventPresence.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence">MatrixEventPresence</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresenceClass" title="struct MatrixEventPresenceClass">MatrixEventPresenceClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventPresence.description"></a><h2>Description</h2>
+<p>Informs the client of a user's presence state change.</p>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventPresence.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="MATRIX-EVENT-TYPE-PRESENCE:CAPS"></a><h3>MATRIX_EVENT_TYPE_PRESENCE</h3>
+<pre class="programlisting">#define MATRIX_EVENT_TYPE_PRESENCE (matrix_event_presence_get_type ())
+</pre>
+<p>The type for <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a>.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-new"></a><h3>matrix_event_presence_new ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="returnvalue">MatrixEventPresence</span></a> *
+matrix_event_presence_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-avatar-url"></a><h3>matrix_event_presence_get_avatar_url ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_event_presence_get_avatar_url (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"avatar-url"</span> property.</p>
+<p>The current avatar URL for this user, if any.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.4.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.4.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"avatar-url"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-avatar-url"></a><h3>matrix_event_presence_set_avatar_url ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_avatar_url (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                      <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"avatar-url"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The current avatar URL for this user, if any.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.5.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"avatar-url"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-display-name"></a><h3>matrix_event_presence_get_display_name ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_event_presence_get_display_name
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"display-name"</span> property.</p>
+<p>The current display name for this user, if any.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.6.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.6.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"display-name"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-display-name"></a><h3>matrix_event_presence_set_display_name ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_display_name
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"display-name"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The current display name for this user, if any.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.7.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"display-name"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-last-active-ago"></a><h3>matrix_event_presence_get_last_active_ago ()</h3>
+<pre class="programlisting"><span class="returnvalue">glong</span>
+matrix_event_presence_get_last_active_ago
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"last-active-ago"</span> property.</p>
+<p>The last time since this used performed some action, in milliseconds.</p>
+<p>This won’t get into the generated event JSON if negative.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.8.7"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.8.8"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"last-active-ago"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-last-active-ago"></a><h3>matrix_event_presence_set_last_active_ago ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_last_active_ago
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">glong</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"last-active-ago"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The last time since this used performed some action, in milliseconds.</p>
+<p>This won’t get into the generated event JSON if negative.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.9.7"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"last-active-ago"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-user-id"></a><h3>matrix_event_presence_get_user_id ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_event_presence_get_user_id (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"user-id"</span> property.</p>
+<p>The user's ID.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.10.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.10.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"user-id"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-user-id"></a><h3>matrix_event_presence_set_user_id ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_user_id (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                   <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"user-id"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The user's ID.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.11.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"user-id"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-event-id"></a><h3>matrix_event_presence_get_event_id ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_event_presence_get_event_id (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"event-id"</span> property.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.12.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.12.6"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"event-id"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-event-id"></a><h3>matrix_event_presence_set_event_id ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_event_id (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                    <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"event-id"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.13.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"event-id"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-get-presence"></a><h3>matrix_event_presence_get_presence ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-matrix-types.html#MatrixPresence" title="enum MatrixPresence"><span class="returnvalue">MatrixPresence</span></a>
+matrix_event_presence_get_presence (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"presence"</span> property.</p>
+<p>The presence state for this user.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.14.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.7.6.14.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"presence"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-presence-set-presence"></a><h3>matrix_event_presence_set_presence ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_presence_set_presence (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> *self</code></em>,
+                                    <em class="parameter"><code><a class="link" href="Matrix-0.0-matrix-types.html#MatrixPresence" title="enum MatrixPresence"><span class="type">MatrixPresence</span></a> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"presence"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The presence state for this user.</p>
+<div class="refsect3">
+<a name="id-1.2.7.6.15.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MatrixEventPresence" title="struct MatrixEventPresence"><span class="type">MatrixEventPresence</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"presence"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventPresence.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="MatrixEventPresence"></a><h3>struct MatrixEventPresence</h3>
+<pre class="programlisting">struct MatrixEventPresence {
+	MatrixEventBase parent_instance;
+	MatrixEventPresencePrivate * priv;
+};
+</pre>
+<p>Class for representing presence events</p>
+<p>Informs the client of a user's presence state change.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MatrixEventPresenceClass"></a><h3>struct MatrixEventPresenceClass</h3>
+<pre class="programlisting">struct MatrixEventPresenceClass {
+	MatrixEventBaseClass parent_class;
+};
+</pre>
+<p>The class structure for <a class="link" href="Matrix-0.0-MatrixEventPresence.html#MATRIX-EVENT-TYPE-PRESENCE:CAPS" title="MATRIX_EVENT_TYPE_PRESENCE"><code class="literal">MATRIX_EVENT_TYPE_PRESENCE</code></a>. All the fields in this structure are private and should never be accessed directly.</p>
+<div class="refsect3">
+<a name="id-1.2.7.7.3.5"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody><tr>
+<td class="struct_member_name"><p><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBaseClass" title="struct MatrixEventBaseClass"><span class="type">MatrixEventBaseClass</span></a> <em class="structfield"><code><a name="MatrixEventPresenceClass.parent-class"></a>parent_class</code></em>;</p></td>
+<td class="struct_member_description"><p>the parent class structure</p></td>
+<td class="struct_member_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.24</div>
+</body>
+</html>

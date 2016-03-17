@@ -1,0 +1,482 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MatrixEventBase: Matrix-0.0 Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
+<link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
+<link rel="prev" href="Matrix-0.0-MatrixMessageFile.html" title="MatrixMessageFile">
+<link rel="next" href="Matrix-0.0-MatrixEventTag.html" title="MatrixEventTag">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixEventBase.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixMessageFile.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixEventTag.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="Matrix-0.0-MatrixEventBase"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="Matrix-0.0-MatrixEventBase.top_of_page"></a>MatrixEventBase</span></h2>
+<p>MatrixEventBase — Base class for Matrix events.</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventBase.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<span class="returnvalue">GType</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-get-handler" title="matrix_event_get_handler ()">matrix_event_get_handler</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-register-type" title="matrix_event_register_type ()">matrix_event_register_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-unregister-type" title="matrix_event_unregister_type ()">matrix_event_unregister_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventBase.html#MATRIX-EVENT-TYPE-BASE:CAPS" title="MATRIX_EVENT_TYPE_BASE">MATRIX_EVENT_TYPE_BASE</a></td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-from-json" title="matrix_event_base_from_json ()">matrix_event_base_from_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-to-json" title="matrix_event_base_to_json ()">matrix_event_base_to_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-get-event-type" title="matrix_event_base_get_event_type ()">matrix_event_base_get_event_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="returnvalue">JsonNode</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-get-json" title="matrix_event_base_get_json ()">matrix_event_base_get_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="returnvalue">MatrixEventBase</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-new-from-json" title="matrix_event_base_new_from_json ()">matrix_event_base_new_from_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventBase.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase">MatrixEventBase</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBaseClass" title="struct MatrixEventBaseClass">MatrixEventBaseClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventBase.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventBase.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="matrix-event-get-handler"></a><h3>matrix_event_get_handler ()</h3>
+<pre class="programlisting"><span class="returnvalue">GType</span> *
+matrix_event_get_handler (<em class="parameter"><code>const <span class="type">gchar</span> *event_type</code></em>);</pre>
+<p>Get the <span class="type">GType</span> of the class that is registered to handle events with type <em class="parameter"><code>param</code></em>
+ event_type.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.2.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>event_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the event type to look up </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.27.6.2.6"></a><h4>Returns</h4>
+<p>a <span class="type">GType</span> or Matrix.Event if no handler is registered </p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-register-type"></a><h3>matrix_event_register_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_register_type (<em class="parameter"><code>const <span class="type">gchar</span> *event_type</code></em>,
+                            <em class="parameter"><code><span class="type">GType</span> event_gtype</code></em>,
+                            <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Registers <em class="parameter"><code>param</code></em>
+ event_type to be handled by the type <em class="parameter"><code>param</code></em>
+ event_gtype.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>event_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the type of the event </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>event_gtype</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the <span class="type">GType</span> of the event’s handler </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-unregister-type"></a><h3>matrix_event_unregister_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_unregister_type (<em class="parameter"><code>const <span class="type">gchar</span> *event_type</code></em>);</pre>
+<p>Unregister <em class="parameter"><code>param</code></em>
+ event_type.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>event_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the event type to remove </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MATRIX-EVENT-TYPE-BASE:CAPS"></a><h3>MATRIX_EVENT_TYPE_BASE</h3>
+<pre class="programlisting">#define MATRIX_EVENT_TYPE_BASE (matrix_event_base_get_type ())
+</pre>
+<p>The type for <a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a>.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-base-from-json"></a><h3>matrix_event_base_from_json ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_base_from_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *self</code></em>,
+                             <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                             <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Subclasses should implement this function to initialize themselves from JSON data.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.6.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-base-to-json"></a><h3>matrix_event_base_to_json ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_base_to_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *self</code></em>,
+                           <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                           <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Subclasses should implement this to export their data to JSON.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.7.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-base-get-event-type"></a><h3>matrix_event_base_get_event_type ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_event_base_get_event_type (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"event-type"</span> property.</p>
+<p>The type of the event. It should be namespaced similar to the Java package naming conventions, e.g. <code class="literal">com.example.subdomain.event.type</code>. It cannot be changed after object initialization.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.8.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.27.6.8.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"event-type"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-base-get-json"></a><h3>matrix_event_base_get_json ()</h3>
+<pre class="programlisting"><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="returnvalue">JsonNode</span></a> *
+matrix_event_base_get_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"json"</span> property.</p>
+<p>The event as a JSON node.</p>
+<div class="refsect3">
+<a name="id-1.2.27.6.9.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.27.6.9.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"json"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-base-new-from-json"></a><h3>matrix_event_base_new_from_json ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="returnvalue">MatrixEventBase</span></a> *
+matrix_event_base_new_from_json (<em class="parameter"><code><span class="type">gchar</span> *event_type</code></em>,
+                                 <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                                 <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<div class="refsect3">
+<a name="id-1.2.27.6.10.4"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>event_type</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventBase.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="MatrixEventBase"></a><h3>struct MatrixEventBase</h3>
+<pre class="programlisting">struct MatrixEventBase {
+	GObject parent_instance;
+	MatrixEventBasePrivate * priv;
+	gchar* _event_type;
+};
+</pre>
+<p>Base class for Matrix events.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MatrixEventBaseClass"></a><h3>struct MatrixEventBaseClass</h3>
+<pre class="programlisting">struct MatrixEventBaseClass {
+	GObjectClass parent_class;
+	void (*from_json) (MatrixEventBase* self, JsonNode* json_data, GError** error);
+	void (*to_json) (MatrixEventBase* self, JsonNode* json_data, GError** error);
+};
+</pre>
+<p>The class structure for <a class="link" href="Matrix-0.0-MatrixEventBase.html#MATRIX-EVENT-TYPE-BASE:CAPS" title="MATRIX_EVENT_TYPE_BASE"><code class="literal">MATRIX_EVENT_TYPE_BASE</code></a>. All the fields in this structure are private and should never be accessed directly.</p>
+<div class="refsect3">
+<a name="id-1.2.27.7.3.5"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="struct_member_name"><p><span class="type">GObjectClass</span> <em class="structfield"><code><a name="MatrixEventBaseClass.parent-class"></a>parent_class</code></em>;</p></td>
+<td class="struct_member_description"><p>the parent class structure</p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixEventBaseClass.from-json"></a>from_json</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-from-json" title="matrix_event_base_from_json ()"><code class="function">matrix_event_base_from_json()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixEventBaseClass.to-json"></a>to_json</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixEventBase.html#matrix-event-base-to-json" title="matrix_event_base_to_json ()"><code class="function">matrix_event_base_to_json()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.24</div>
+</body>
+</html>

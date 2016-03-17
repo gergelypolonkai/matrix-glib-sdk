@@ -1,0 +1,590 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MatrixMessageBase: Matrix-0.0 Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
+<link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
+<link rel="prev" href="Matrix-0.0-MatrixEventRoom.html" title="MatrixEventRoom">
+<link rel="next" href="Matrix-0.0-MatrixEventReceipt.html" title="MatrixEventReceipt">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixMessageBase.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixEventRoom.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixEventReceipt.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="Matrix-0.0-MatrixMessageBase"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="Matrix-0.0-MatrixMessageBase.top_of_page"></a>MatrixMessageBase</span></h2>
+<p>MatrixMessageBase — Base class for message handlers.</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixMessageBase.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<span class="returnvalue">GType</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-get-handler" title="matrix_message_get_handler ()">matrix_message_get_handler</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-register-type" title="matrix_message_register_type ()">matrix_message_register_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-unregister-type" title="matrix_message_unregister_type ()">matrix_message_unregister_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MATRIX-MESSAGE-TYPE-BASE:CAPS" title="MATRIX_MESSAGE_TYPE_BASE">MATRIX_MESSAGE_TYPE_BASE</a></td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-from-json" title="matrix_message_base_from_json ()">matrix_message_base_from_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-to-json" title="matrix_message_base_to_json ()">matrix_message_base_to_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-message-type" title="matrix_message_base_get_message_type ()">matrix_message_base_get_message_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-set-message-type" title="matrix_message_base_set_message_type ()">matrix_message_base_set_message_type</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <span class="returnvalue">gchar</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-body" title="matrix_message_base_get_body ()">matrix_message_base_get_body</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-set-body" title="matrix_message_base_set_body ()">matrix_message_base_set_body</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="returnvalue">JsonNode</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-get-json" title="matrix_message_base_get_json ()">matrix_message_base_get_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="returnvalue">MatrixMessageBase</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-new-from-json" title="matrix_message_base_new_from_json ()">matrix_message_base_new_from_json</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixMessageBase.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase">MatrixMessageBase</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBaseClass" title="struct MatrixMessageBaseClass">MatrixMessageBaseClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixMessageBase.description"></a><h2>Description</h2>
+<p>Message handler base class.</p>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixMessageBase.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="matrix-message-get-handler"></a><h3>matrix_message_get_handler ()</h3>
+<pre class="programlisting"><span class="returnvalue">GType</span> *
+matrix_message_get_handler (<em class="parameter"><code>const <span class="type">gchar</span> *message_type</code></em>);</pre>
+<p>Get the <span class="type">GType</span> of the class that is registered to handle messages with type <em class="parameter"><code>param</code></em>
+ message_type.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.2.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>message_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the message type to look up </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.18.6.2.6"></a><h4>Returns</h4>
+<p>a <span class="type">GType</span> or `null` if no handler is registered </p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-register-type"></a><h3>matrix_message_register_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_register_type (<em class="parameter"><code>const <span class="type">gchar</span> *message_type</code></em>,
+                              <em class="parameter"><code><span class="type">GType</span> message_gtype</code></em>,
+                              <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Register <em class="parameter"><code>param</code></em>
+ message_type to be handled by the type <em class="parameter"><code>param</code></em>
+ message_gtype.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>message_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the type of the message </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>message_gtype</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the <span class="type">GType</span> of the event's handler </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-unregister-type"></a><h3>matrix_message_unregister_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_unregister_type (<em class="parameter"><code>const <span class="type">gchar</span> *message_type</code></em>);</pre>
+<p>Unregister <em class="parameter"><code>param</code></em>
+ message_type.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the (null) instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>message_type</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the message type to remove </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MATRIX-MESSAGE-TYPE-BASE:CAPS"></a><h3>MATRIX_MESSAGE_TYPE_BASE</h3>
+<pre class="programlisting">#define MATRIX_MESSAGE_TYPE_BASE (matrix_message_base_get_type ())
+</pre>
+<p>The type for <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a>.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-from-json"></a><h3>matrix_message_base_from_json ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_base_from_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>,
+                               <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                               <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Subclasses should override this method to initialize themselves from JSON data while chaining up to allow parent classes to do the same.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.6.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-to-json"></a><h3>matrix_message_base_to_json ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_base_to_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>,
+                             <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                             <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Subclasses should override this method to export their data to JSON, while chaining up to allow parent classes to do the same.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.7.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-get-message-type"></a><h3>matrix_message_base_get_message_type ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_message_base_get_message_type (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"message-type"</span> property.</p>
+<p>The message type.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.8.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.18.6.8.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"message-type"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-set-message-type"></a><h3>matrix_message_base_set_message_type ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_base_set_message_type (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>,
+                                      <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"message-type"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The message type.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.9.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"message-type"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-get-body"></a><h3>matrix_message_base_get_body ()</h3>
+<pre class="programlisting">const <span class="returnvalue">gchar</span> *
+matrix_message_base_get_body (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"body"</span> property.</p>
+<p>The body of the message.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.10.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.18.6.10.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"body"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-set-body"></a><h3>matrix_message_base_set_body ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_message_base_set_body (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>,
+                              <em class="parameter"><code>const <span class="type">gchar</span> *value</code></em>);</pre>
+<p>Set the value of the <span class="type">"body"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The body of the message.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.11.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"body"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-get-json"></a><h3>matrix_message_base_get_json ()</h3>
+<pre class="programlisting"><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="returnvalue">JsonNode</span></a> *
+matrix_message_base_get_json (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"json"</span> property.</p>
+<div class="refsect3">
+<a name="id-1.2.18.6.12.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="type">MatrixMessageBase</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.18.6.12.6"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"json"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-message-base-new-from-json"></a><h3>matrix_message_base_new_from_json ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixMessageBase.html#MatrixMessageBase" title="struct MatrixMessageBase"><span class="returnvalue">MatrixMessageBase</span></a> *
+matrix_message_base_new_from_json (<em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *json_data</code></em>,
+                                   <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<div class="refsect3">
+<a name="id-1.2.18.6.13.4"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>json_data</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixMessageBase.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="MatrixMessageBase"></a><h3>struct MatrixMessageBase</h3>
+<pre class="programlisting">struct MatrixMessageBase {
+	GObject parent_instance;
+	MatrixMessageBasePrivate * priv;
+};
+</pre>
+<p>Base class for message handlers.</p>
+<p>Message handler base class.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MatrixMessageBaseClass"></a><h3>struct MatrixMessageBaseClass</h3>
+<pre class="programlisting">struct MatrixMessageBaseClass {
+	GObjectClass parent_class;
+	void (*from_json) (MatrixMessageBase* self, JsonNode* json_data, GError** error);
+	void (*to_json) (MatrixMessageBase* self, JsonNode* json_data, GError** error);
+};
+</pre>
+<p>The class structure for <a class="link" href="Matrix-0.0-MatrixMessageBase.html#MATRIX-MESSAGE-TYPE-BASE:CAPS" title="MATRIX_MESSAGE_TYPE_BASE"><code class="literal">MATRIX_MESSAGE_TYPE_BASE</code></a>. All the fields in this structure are private and should never be accessed directly.</p>
+<div class="refsect3">
+<a name="id-1.2.18.7.3.5"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="struct_member_name"><p><span class="type">GObjectClass</span> <em class="structfield"><code><a name="MatrixMessageBaseClass.parent-class"></a>parent_class</code></em>;</p></td>
+<td class="struct_member_description"><p>the parent class structure</p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixMessageBaseClass.from-json"></a>from_json</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-from-json" title="matrix_message_base_from_json ()"><code class="function">matrix_message_base_from_json()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixMessageBaseClass.to-json"></a>to_json</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixMessageBase.html#matrix-message-base-to-json" title="matrix_message_base_to_json ()"><code class="function">matrix_message_base_to_json()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.24</div>
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MatrixEventRoomPowerLevels: Matrix-0.0 Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
+<link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
+<link rel="prev" href="Matrix-0.0-MatrixAPI.html" title="MatrixAPI">
+<link rel="next" href="Matrix-0.0-MatrixMessageText.html" title="MatrixMessageText">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixEventRoomPowerLevels.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixAPI.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixMessageText.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="Matrix-0.0-MatrixEventRoomPowerLevels.top_of_page"></a>MatrixEventRoomPowerLevels</span></h2>
+<p>MatrixEventRoomPowerLevels — Class to handle m.room.power_levels event</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MATRIX-EVENT-TYPE-ROOM-POWER-LEVELS:CAPS" title="MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS">MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS</a></td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="returnvalue">MatrixEventRoomPowerLevels</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-new" title="matrix_event_room_power_levels_new ()">matrix_event_room_power_levels_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-users-default" title="matrix_event_room_power_levels_get_users_default ()">matrix_event_room_power_levels_get_users_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-users-default" title="matrix_event_room_power_levels_set_users_default ()">matrix_event_room_power_levels_set_users_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-events-default" title="matrix_event_room_power_levels_get_events_default ()">matrix_event_room_power_levels_get_events_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-events-default" title="matrix_event_room_power_levels_set_events_default ()">matrix_event_room_power_levels_set_events_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-state-default" title="matrix_event_room_power_levels_get_state_default ()">matrix_event_room_power_levels_get_state_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-state-default" title="matrix_event_room_power_levels_set_state_default ()">matrix_event_room_power_levels_set_state_default</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-ban" title="matrix_event_room_power_levels_get_ban ()">matrix_event_room_power_levels_get_ban</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-ban" title="matrix_event_room_power_levels_set_ban ()">matrix_event_room_power_levels_set_ban</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-kick" title="matrix_event_room_power_levels_get_kick ()">matrix_event_room_power_levels_get_kick</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-kick" title="matrix_event_room_power_levels_set_kick ()">matrix_event_room_power_levels_set_kick</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-redact" title="matrix_event_room_power_levels_get_redact ()">matrix_event_room_power_levels_get_redact</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-redact" title="matrix_event_room_power_levels_set_redact ()">matrix_event_room_power_levels_set_redact</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">gint</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-get-invite" title="matrix_event_room_power_levels_get_invite ()">matrix_event_room_power_levels_get_invite</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#matrix-event-room-power-levels-set-invite" title="matrix_event_room_power_levels_set_invite ()">matrix_event_room_power_levels_set_invite</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels">MatrixEventRoomPowerLevels</a></td>
+</tr>
+<tr>
+<td class="datatype_keyword">struct</td>
+<td class="function_name"><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevelsClass" title="struct MatrixEventRoomPowerLevelsClass">MatrixEventRoomPowerLevelsClass</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels.description"></a><h2>Description</h2>
+<p>This event specifies the minimum level a user must have in order to perform a certain action. It also specifies the levels of each user in the room. If a user_id is in the users list, then that user_id has the associated power level. Otherwise they have the default level users_default. If users_default is not supplied, it is assumed to be 0. The level required to send a certain event is governed by events, state_default and events_default. If an event type is specified in events, then the user must have at least the level specified in order to send that event. If the event type is not supplied, it defaults to events_default for Message Events and state_default for State Events.</p>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="MATRIX-EVENT-TYPE-ROOM-POWER-LEVELS:CAPS"></a><h3>MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS</h3>
+<pre class="programlisting">#define MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS (matrix_event_room_power_levels_get_type ())
+</pre>
+<p>The type for <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a>.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-new"></a><h3>matrix_event_room_power_levels_new ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="returnvalue">MatrixEventRoomPowerLevels</span></a> *
+matrix_event_room_power_levels_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-users-default"></a><h3>matrix_event_room_power_levels_get_users_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_users_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"users-default"</span> property.</p>
+<p>The default power level for every user in the room, unless their user_id is mentioned in the users key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.4.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.4.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"users-default"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-users-default"></a><h3>matrix_event_room_power_levels_set_users_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_users_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"users-default"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The default power level for every user in the room, unless their user_id is mentioned in the users key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.5.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"users-default"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-events-default"></a><h3>matrix_event_room_power_levels_get_events_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_events_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"events-default"</span> property.</p>
+<p>The default level required to send message events. Can be overridden by the events key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.6.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.6.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"events-default"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-events-default"></a><h3>matrix_event_room_power_levels_set_events_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_events_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"events-default"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The default level required to send message events. Can be overridden by the events key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.7.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"events-default"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-state-default"></a><h3>matrix_event_room_power_levels_get_state_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_state_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"state-default"</span> property.</p>
+<p>The default level required to send state events. Can be overridden by the events key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.8.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.8.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"state-default"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-state-default"></a><h3>matrix_event_room_power_levels_set_state_default ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_state_default
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"state-default"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The default level required to send state events. Can be overridden by the events key.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.9.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"state-default"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-ban"></a><h3>matrix_event_room_power_levels_get_ban ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_ban
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"ban"</span> property.</p>
+<p>The level required to ban a user.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.10.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.10.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"ban"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-ban"></a><h3>matrix_event_room_power_levels_set_ban ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_ban
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"ban"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The level required to ban a user.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.11.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"ban"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-kick"></a><h3>matrix_event_room_power_levels_get_kick ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_kick
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"kick"</span> property.</p>
+<p>The level required to kick a user.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.12.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.12.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"kick"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-kick"></a><h3>matrix_event_room_power_levels_set_kick ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_kick
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"kick"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The level required to kick a user.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.13.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"kick"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-redact"></a><h3>matrix_event_room_power_levels_get_redact ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_redact
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"redact"</span> property.</p>
+<p>The level required to redact an event.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.14.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.14.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"redact"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-redact"></a><h3>matrix_event_room_power_levels_set_redact ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_redact
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"redact"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The level required to redact an event.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.15.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"redact"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-get-invite"></a><h3>matrix_event_room_power_levels_get_invite ()</h3>
+<pre class="programlisting"><span class="returnvalue">gint</span>
+matrix_event_room_power_levels_get_invite
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>);</pre>
+<p>Get and return the current value of the <span class="type">"invite"</span> property.</p>
+<p>The level required to invite someone.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.16.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to query</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.38.6.16.7"></a><h4>Returns</h4>
+<p> the value of the <span class="type">"invite"</span> property</p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-event-room-power-levels-set-invite"></a><h3>matrix_event_room_power_levels_set_invite ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+matrix_event_room_power_levels_set_invite
+                               (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> *self</code></em>,
+                                <em class="parameter"><code><span class="type">gint</span> value</code></em>);</pre>
+<p>Set the value of the <span class="type">"invite"</span> property to <em class="parameter"><code>value</code></em>
+.</p>
+<p>The level required to invite someone.</p>
+<div class="refsect3">
+<a name="id-1.2.38.6.17.6"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MatrixEventRoomPowerLevels" title="struct MatrixEventRoomPowerLevels"><span class="type">MatrixEventRoomPowerLevels</span></a> instance to modify</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the new value of the <span class="type">"invite"</span> property</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="Matrix-0.0-MatrixEventRoomPowerLevels.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="MatrixEventRoomPowerLevels"></a><h3>struct MatrixEventRoomPowerLevels</h3>
+<pre class="programlisting">struct MatrixEventRoomPowerLevels {
+	MatrixEventState parent_instance;
+	MatrixEventRoomPowerLevelsPrivate * priv;
+};
+</pre>
+<p>Class to handle m.room.power_levels event</p>
+<p>This event specifies the minimum level a user must have in order to perform a certain action. It also specifies the levels of each user in the room. If a user_id is in the users list, then that user_id has the associated power level. Otherwise they have the default level users_default. If users_default is not supplied, it is assumed to be 0. The level required to send a certain event is governed by events, state_default and events_default. If an event type is specified in events, then the user must have at least the level specified in order to send that event. If the event type is not supplied, it defaults to events_default for Message Events and state_default for State Events.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MatrixEventRoomPowerLevelsClass"></a><h3>struct MatrixEventRoomPowerLevelsClass</h3>
+<pre class="programlisting">struct MatrixEventRoomPowerLevelsClass {
+	MatrixEventStateClass parent_class;
+};
+</pre>
+<p>The class structure for <a class="link" href="Matrix-0.0-MatrixEventRoomPowerLevels.html#MATRIX-EVENT-TYPE-ROOM-POWER-LEVELS:CAPS" title="MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS"><code class="literal">MATRIX_EVENT_TYPE_ROOM_POWER_LEVELS</code></a>. All the fields in this structure are private and should never be accessed directly.</p>
+<div class="refsect3">
+<a name="id-1.2.38.7.3.5"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="struct_members_name">
+<col class="struct_members_description">
+<col width="200px" class="struct_members_annotations">
+</colgroup>
+<tbody><tr>
+<td class="struct_member_name"><p><a class="link" href="Matrix-0.0-MatrixEventState.html#MatrixEventStateClass" title="struct MatrixEventStateClass"><span class="type">MatrixEventStateClass</span></a> <em class="structfield"><code><a name="MatrixEventRoomPowerLevelsClass.parent-class"></a>parent_class</code></em>;</p></td>
+<td class="struct_member_description"><p>the parent class structure</p></td>
+<td class="struct_member_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.24</div>
+</body>
+</html>

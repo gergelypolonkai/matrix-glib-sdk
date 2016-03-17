@@ -2,26 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Matrix-0.0 Reference Manual: MatrixClient</title>
+<title>MatrixClient: Matrix-0.0 Reference Manual</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
 <link rel="up" href="ch01.html" title="Matrix-0.0 API Reference">
-<link rel="prev" href="Matrix-0.0-MatrixRoomMemberEvent.html" title="MatrixRoomMemberEvent">
-<link rel="next" href="Matrix-0.0-MatrixJsonCompact.html" title="MatrixJsonCompact">
-<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
+<link rel="prev" href="Matrix-0.0-MatrixEventRoomAvatar.html" title="MatrixEventRoomAvatar">
+<link rel="next" href="Matrix-0.0-MatrixMessageAudio.html" title="MatrixMessageAudio">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
 <td width="100%" align="left" class="shortcuts">
-<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
-                  <a href="#Matrix-0.0-MatrixClient.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
-                  <a href="#Matrix-0.0-MatrixClient.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#Matrix-0.0-MatrixClient.description" class="shortcut">Description</a></span>
 </td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
-<td><a accesskey="p" href="Matrix-0.0-MatrixRoomMemberEvent.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
-<td><a accesskey="n" href="Matrix-0.0-MatrixJsonCompact.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+<td><a accesskey="p" href="Matrix-0.0-MatrixEventRoomAvatar.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="Matrix-0.0-MatrixMessageAudio.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
 </tr></table>
 <div class="refentry">
 <a name="Matrix-0.0-MatrixClient"></a><div class="titlepage"></div>
@@ -106,6 +105,30 @@
 </tr>
 <tr>
 <td class="function_type">
+<a class="link" href="Matrix-0.0-MatrixProfile.html#MatrixProfile" title="struct MatrixProfile"><span class="returnvalue">MatrixProfile</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-user-profile" title="matrix_client_get_user_profile ()">matrix_client_get_user_profile</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a class="link" href="Matrix-0.0-matrix-types.html#MatrixPresence" title="enum MatrixPresence"><span class="returnvalue">MatrixPresence</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-user-presence" title="matrix_client_get_user_presence ()">matrix_client_get_user_presence</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">MatrixRoom</span> *
+</td>
+<td class="function_name">
+<a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-room-by-id" title="matrix_client_get_room_by_id ()">matrix_client_get_room_by_id</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
 <span class="returnvalue">void</span>
 </td>
 <td class="function_name">
@@ -135,11 +158,6 @@
 </table></div>
 </div>
 <div class="refsect1">
-<a name="Matrix-0.0-MatrixClient.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="screen">
-</pre>
-</div>
-<div class="refsect1">
 <a name="Matrix-0.0-MatrixClient.description"></a><h2>Description</h2>
 </div>
 <div class="refsect1">
@@ -148,12 +166,12 @@
 <a name="matrix-client-login-with-password"></a><h3>matrix_client_login_with_password ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_login_with_password (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                                   <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *username</code></em>,
-                                   <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *password</code></em>,
-                                   <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+                                   <em class="parameter"><code>const <span class="type">gchar</span> *username</code></em>,
+                                   <em class="parameter"><code>const <span class="type">gchar</span> *password</code></em>,
+                                   <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
 <p>Authenticate with the Matrix.org server with a username and password.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.2.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.2.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -186,7 +204,7 @@ matrix_client_login_with_password (<em class="parameter"><code><a class="link" h
 </tr>
 <tr>
 <td class="parameter_name"><p>error</p></td>
-<td class="parameter_description"><p> location to store the error occuring, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> to ignore. </p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
 </tr>
 </tbody>
@@ -198,16 +216,16 @@ matrix_client_login_with_password (<em class="parameter"><code><a class="link" h
 <a name="matrix-client-register-with-password"></a><h3>matrix_client_register_with_password ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_register_with_password (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                                      <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *username</code></em>,
-                                      <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *password</code></em>,
-                                      <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+                                      <em class="parameter"><code>const <span class="type">gchar</span> *username</code></em>,
+                                      <em class="parameter"><code>const <span class="type">gchar</span> *password</code></em>,
+                                      <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
 <p>Register <em class="parameter"><code>username</code></em>
  with the homeserver as a normal user.</p>
 <p>Upon success, the user is registered and authenticated.</p>
 <p>Implementations must emit the login-finished signal when a response arrives.</p>
 <p>This method registers a normal user account. If you want to register a different kind of user, use <a class="link" href="Matrix-0.0-MatrixAPI.html#matrix-api-register-account" title="matrix_api_register_account ()"><code class="function">matrix_api_register_account()</code></a>.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.3.8"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.3.8"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -227,7 +245,7 @@ matrix_client_register_with_password (<em class="parameter"><code><a class="link
 <p>the username to register. If omitted, the server will generate one </p>
 <p>. </p>
 </td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is ok, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>password</p></td>
@@ -240,7 +258,7 @@ matrix_client_register_with_password (<em class="parameter"><code><a class="link
 </tr>
 <tr>
 <td class="parameter_name"><p>error</p></td>
-<td class="parameter_description"><p> location to store the error occuring, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> to ignore. </p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
 </tr>
 </tbody>
@@ -252,10 +270,10 @@ matrix_client_register_with_password (<em class="parameter"><code><a class="link
 <a name="matrix-client-logout"></a><h3>matrix_client_logout ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_logout (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                      <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+                      <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
 <p>Logout from the homeserver. As Matrix.org doesn’t have such a concept, this cancels all ongoing requests and clears the authentication data (e.g. tokens).</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.4.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.4.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -270,7 +288,7 @@ matrix_client_logout (<em class="parameter"><code><a class="link" href="Matrix-0
 </tr>
 <tr>
 <td class="parameter_name"><p>error</p></td>
-<td class="parameter_description"><p> location to store the error occuring, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> to ignore. </p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
 </tr>
 </tbody>
@@ -282,10 +300,10 @@ matrix_client_logout (<em class="parameter"><code><a class="link" href="Matrix-0
 <a name="matrix-client-begin-polling"></a><h3>matrix_client_begin_polling ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_begin_polling (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                             <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+                             <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
 <p>Begin polling the event stream.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.5.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.5.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -300,7 +318,7 @@ matrix_client_begin_polling (<em class="parameter"><code><a class="link" href="M
 </tr>
 <tr>
 <td class="parameter_name"><p>error</p></td>
-<td class="parameter_description"><p> location to store the error occuring, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> to ignore. </p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
 </tr>
 </tbody>
@@ -312,17 +330,25 @@ matrix_client_begin_polling (<em class="parameter"><code><a class="link" href="M
 <a name="matrix-client-stop-polling"></a><h3>matrix_client_stop_polling ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_stop_polling (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                            <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> cancel_ongoing</code></em>,
-                            <em class="parameter"><code><a href="../glib/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> **error</code></em>);</pre>
+                            <em class="parameter"><code><span class="type">gboolean</span> cancel_ongoing</code></em>,
+                            <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
 <p>Stop polling the event stream. If <em class="parameter"><code>param</code></em>
  cancel_ongoing is </p>
-<div class="informalexample"><pre class="programlisting">
-true
-</pre></div>
+<div class="informalexample">
+  <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="listing_lines" align="right"><pre>1</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="normal">true</span></pre></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <p>
 , ongoing requests will be cancelled, too.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.6.7"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.6.7"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -342,9 +368,17 @@ true
 <p>if </p>
 <p>
 </p>
-<div class="informalexample"><pre class="programlisting">
-true
-</pre></div>
+<div class="informalexample">
+  <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="listing_lines" align="right"><pre>1</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="normal">true</span></pre></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <p>
 </p>
 <p>
@@ -355,7 +389,7 @@ true
 </tr>
 <tr>
 <td class="parameter_name"><p>error</p></td>
-<td class="parameter_description"><p> location to store the error occuring, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> to ignore. </p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
 </tr>
 </tbody>
@@ -367,10 +401,10 @@ true
 <a name="matrix-client-emit-login-finished"></a><h3>matrix_client_emit_login_finished ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_emit_login_finished (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                                   <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> success</code></em>);</pre>
+                                   <em class="parameter"><code><span class="type">gboolean</span> success</code></em>);</pre>
 <p>Convenience function to emits the login-finished signal.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.7.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.7.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -390,9 +424,17 @@ matrix_client_emit_login_finished (<em class="parameter"><code><a class="link" h
 <p>set to </p>
 <p>
 </p>
-<div class="informalexample"><pre class="programlisting">
-true
-</pre></div>
+<div class="informalexample">
+  <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td class="listing_lines" align="right"><pre>1</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="normal">true</span></pre></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <p>
 </p>
 <p>
@@ -410,12 +452,12 @@ if login was successful </p>
 <a name="matrix-client-incoming-event"></a><h3>matrix_client_incoming_event ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_incoming_event (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                              <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *room_id</code></em>,
+                              <em class="parameter"><code>const <span class="type">gchar</span> *room_id</code></em>,
                               <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *raw_event</code></em>,
-                              <em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEvent.html#MatrixEvent" title="struct MatrixEvent"><span class="type">MatrixEvent</span></a> *matrix_event</code></em>);</pre>
+                              <em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *matrix_event</code></em>);</pre>
 <p>Emits the <span class="type">“event”</span> signal.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.8.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.8.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -435,7 +477,7 @@ matrix_client_incoming_event (<em class="parameter"><code><a class="link" href="
 <p>the room this event is associated with </p>
 <p>. </p>
 </td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is ok, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>raw_event</p></td>
@@ -453,7 +495,7 @@ matrix_client_incoming_event (<em class="parameter"><code><a class="link" href="
 <p>the event as a Matrix.Event </p>
 <p>. </p>
 </td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
@@ -464,15 +506,15 @@ matrix_client_incoming_event (<em class="parameter"><code><a class="link" href="
 <a name="matrix-client-connect-event"></a><h3>matrix_client_connect_event ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 matrix_client_connect_event (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
-                             <em class="parameter"><code><a href="../gobject/gobject-Type-Information.html#GType"><span class="type">GType</span></a> event_gtype</code></em>,
+                             <em class="parameter"><code><span class="type">GType</span> event_gtype</code></em>,
                              <em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClientEventCallback" title="MatrixClientEventCallback ()"><span class="type">MatrixClientEventCallback</span></a> event_callback</code></em>,
                              <em class="parameter"><code><span class="type">void</span> *event_callback_target</code></em>,
-                             <em class="parameter"><code><a href="../glib/glib-Datasets.html#GDestroyNotify"><span class="type">GDestroyNotify</span></a> event_callback_target_destroy_notify</code></em>);</pre>
+                             <em class="parameter"><code><span class="type">GDestroyNotify</span> event_callback_target_destroy_notify</code></em>);</pre>
 <p>Connect a handler for events. If <em class="parameter"><code>param</code></em>
  event_gtype is Matrix.Event, all events will be sent to the callback function, otherwise only events that match the specified event type.</p>
-<p>If <em class="parameter"><code>event_gtype</code></em> is not derived from <a class="link" href="Matrix-0.0-MatrixEvent.html#MatrixEvent" title="struct MatrixEvent"><span class="type">MatrixEvent</span></a>, <em class="parameter"><code>param</code></em> callback won’t get connected.</p>
+<p>If <em class="parameter"><code>event_gtype</code></em> is not derived from Matrix.Event, <em class="parameter"><code>param</code></em> callback won’t get connected.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.9.6"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.9.6"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -480,11 +522,6 @@ matrix_client_connect_event (<em class="parameter"><code><a class="link" href="M
 <col width="200px" class="parameters_annotations">
 </colgroup>
 <tbody>
-<tr>
-<td class="parameter_name"><p>callback</p></td>
-<td class="parameter_description"><p>the allback function to connect </p></td>
-<td class="parameter_annotations"> </td>
-</tr>
 <tr>
 <td class="parameter_name"><p>self</p></td>
 <td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> instance</p></td>
@@ -494,7 +531,16 @@ matrix_client_connect_event (<em class="parameter"><code><a class="link" href="M
 <td class="parameter_name"><p>event_gtype</p></td>
 <td class="parameter_description">
 <p>  .  </p>
-<p>the <a href="../gobject/gobject-Type-Information.html#GType"><span class="type">GType</span></a> of a <a class="link" href="Matrix-0.0-MatrixEvent.html#MatrixEvent" title="struct MatrixEvent"><span class="type">MatrixEvent</span></a> derivative </p>
+<p>the <span class="type">GType</span> of a Matrix.Event derivative </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>event_callback</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the allback function to connect </p>
 <p>. </p>
 </td>
 <td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
@@ -503,18 +549,13 @@ matrix_client_connect_event (<em class="parameter"><code><a class="link" href="M
 <td class="parameter_name"><p>event_callback_target</p></td>
 <td class="parameter_description"><p> user data to pass to <em class="parameter"><code>event_callback</code></em>
 . </p></td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is ok, both for passing and for returning."><span class="acronym">allow-none</span></acronym>][<acronym title="This parameter is a 'user_data', for callbacks; many bindings can pass NULL here."><span class="acronym">closure</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>][<acronym title="This parameter is a 'user_data', for callbacks; many bindings can pass NULL here."><span class="acronym">closure</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>event_callback_target_destroy_notify</p></td>
 <td class="parameter_description"><p> function to call when <em class="parameter"><code>event_callback_target</code></em>
 is no longer needed. </p></td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is ok, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
-</tr>
-<tr>
-<td class="parameter_name"><p>event_callback</p></td>
-<td class="parameter_description"><p> </p></td>
-<td class="parameter_annotations"> </td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
@@ -522,16 +563,149 @@ is no longer needed. </p></td>
 </div>
 <hr>
 <div class="refsect2">
+<a name="matrix-client-get-user-profile"></a><h3>matrix_client_get_user_profile ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-MatrixProfile.html#MatrixProfile" title="struct MatrixProfile"><span class="returnvalue">MatrixProfile</span></a> *
+matrix_client_get_user_profile (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
+                                <em class="parameter"><code>const <span class="type">gchar</span> *user_id</code></em>,
+                                <em class="parameter"><code>const <span class="type">gchar</span> *room_id</code></em>,
+                                <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Get the profile of a user specified by <em class="parameter"><code>param</code></em>
+ user_id. If <em class="parameter"><code>param</code></em>
+ room_id is not null, return the room-specific profile. If the user's profile is not cached yet, Matrix.Error.UNAVAILABLE is thrown.</p>
+<div class="refsect3">
+<a name="id-1.2.11.6.10.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>user_id</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>room_id</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-client-get-user-presence"></a><h3>matrix_client_get_user_presence ()</h3>
+<pre class="programlisting"><a class="link" href="Matrix-0.0-matrix-types.html#MatrixPresence" title="enum MatrixPresence"><span class="returnvalue">MatrixPresence</span></a>
+matrix_client_get_user_presence (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
+                                 <em class="parameter"><code>const <span class="type">gchar</span> *user_id</code></em>,
+                                 <em class="parameter"><code>const <span class="type">gchar</span> *room_id</code></em>,
+                                 <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Get the presence state of a user specified by <em class="parameter"><code>param</code></em>
+ user_id. If <em class="parameter"><code>param</code></em>
+ room_id is null, return the room specific presence state. If the user's presence state is not cached yet, Matrix.Error.UNAVAILABLE is thrown.</p>
+<div class="refsect3">
+<a name="id-1.2.11.6.11.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>user_id</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>room_id</p></td>
+<td class="parameter_description"><p> </p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="matrix-client-get-room-by-id"></a><h3>matrix_client_get_room_by_id ()</h3>
+<pre class="programlisting"><span class="returnvalue">MatrixRoom</span> *
+matrix_client_get_room_by_id (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *self</code></em>,
+                              <em class="parameter"><code>const <span class="type">gchar</span> *room_id</code></em>,
+                              <em class="parameter"><code><span class="type">GError</span> **error</code></em>);</pre>
+<p>Get a room object by the room ID specified in <em class="parameter"><code>param</code></em>
+ room_id. If room data is not cached yet, Matrix.Error.UNAVAILABLE is thrown.</p>
+<div class="refsect3">
+<a name="id-1.2.11.6.12.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p>the <a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> instance</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>room_id</p></td>
+<td class="parameter_description">
+<p>  .  </p>
+<p>the ID of a room </p>
+<p>. </p>
+</td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> location to store the error occuring, or <code class="literal">NULL</code> to ignore. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Typed errors. Similar to throws in Java."><span class="acronym">error-domains</span></acronym> MatrixError]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.2.11.6.12.6"></a><h4>Returns</h4>
+<p>a Matrix.Room object </p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="MatrixClientEventCallback"></a><h3>MatrixClientEventCallback ()</h3>
 <pre class="programlisting"><span class="returnvalue">void</span>
 <span class="c_punctuation">(</span>*MatrixClientEventCallback<span class="c_punctuation">)</span> (<em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> *client</code></em>,
-                              <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *room_id</code></em>,
+                              <em class="parameter"><code>const <span class="type">gchar</span> *room_id</code></em>,
                               <em class="parameter"><code><a href="../json-glib/json-glib-JSON-Node.html#JsonNode"><span class="type">JsonNode</span></a> *raw_event</code></em>,
-                              <em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEvent.html#MatrixEvent" title="struct MatrixEvent"><span class="type">MatrixEvent</span></a> *matrix_event</code></em>,
+                              <em class="parameter"><code><a class="link" href="Matrix-0.0-MatrixEventBase.html#MatrixEventBase" title="struct MatrixEventBase"><span class="type">MatrixEventBase</span></a> *matrix_event</code></em>,
                               <em class="parameter"><code><span class="type">void</span> *user_data</code></em>);</pre>
 <p>Callback function delegate for the event signal.</p>
 <div class="refsect3">
-<a name="id-1.2.7.7.10.5"></a><h4>Parameters</h4>
+<a name="id-1.2.11.6.13.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -546,7 +720,7 @@ is no longer needed. </p></td>
 <p>the room the event associated with </p>
 <p>. </p>
 </td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is ok, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>raw_event</p></td>
@@ -564,7 +738,7 @@ is no longer needed. </p></td>
 <p>the event as a Matrix.Event object </p>
 <p>. </p>
 </td>
-<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>]</span></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Parameter for input. Default is transfer none."><span class="acronym">in</span></acronym>][<acronym title="NULL is OK, both for passing and for returning."><span class="acronym">allow-none</span></acronym>]</span></td>
 </tr>
 <tr>
 <td class="parameter_name"><p>client</p></td>
@@ -598,13 +772,16 @@ is no longer needed. </p></td>
 	void (*logout) (MatrixClient* self, GError** error);
 	void (*begin_polling) (MatrixClient* self, GError** error);
 	void (*stop_polling) (MatrixClient* self, gboolean cancel_ongoing, GError** error);
+	MatrixProfile* (*get_user_profile) (MatrixClient* self, const gchar* user_id, const gchar* room_id, GError** error);
+	MatrixPresence (*get_user_presence) (MatrixClient* self, const gchar* user_id, const gchar* room_id, GError** error);
+	MatrixRoom* (*get_room_by_id) (MatrixClient* self, const gchar* room_id, GError** error);
 	void (*login_finished) (MatrixClient* self, gboolean success);
-	void (*event) (MatrixClient* self, const gchar* room_id, JsonNode* raw_event, MatrixEvent* matrix_event);
+	void (*event) (MatrixClient* self, const gchar* room_id, JsonNode* raw_event, MatrixEventBase* matrix_event);
 };
 </pre>
 <p>Interface for creating <a class="link" href="Matrix-0.0-MatrixClient.html#MatrixClient" title="MatrixClient"><span class="type">MatrixClient</span></a> implementations.</p>
 <div class="refsect3">
-<a name="id-1.2.7.8.3.5"></a><h4>Members</h4>
+<a name="id-1.2.11.7.3.5"></a><h4>Members</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="300px" class="struct_members_name">
@@ -613,7 +790,7 @@ is no longer needed. </p></td>
 </colgroup>
 <tbody>
 <tr>
-<td class="struct_member_name"><p><a href="../gobject/gobject-Type-Information.html#GTypeInterface"><span class="type">GTypeInterface</span></a> <em class="structfield"><code><a name="MatrixClientIface.parent-iface"></a>parent_iface</code></em>;</p></td>
+<td class="struct_member_name"><p><span class="type">GTypeInterface</span> <em class="structfield"><code><a name="MatrixClientIface.parent-iface"></a>parent_iface</code></em>;</p></td>
 <td class="struct_member_description"><p>the parent interface structure</p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
@@ -643,6 +820,21 @@ is no longer needed. </p></td>
 <td class="struct_member_annotations"> </td>
 </tr>
 <tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixClientIface.get-user-profile"></a>get_user_profile</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-user-profile" title="matrix_client_get_user_profile ()"><code class="function">matrix_client_get_user_profile()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixClientIface.get-user-presence"></a>get_user_presence</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-user-presence" title="matrix_client_get_user_presence ()"><code class="function">matrix_client_get_user_presence()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
+<td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixClientIface.get-room-by-id"></a>get_room_by_id</code></em> ()</p></td>
+<td class="struct_member_description"><p>virtual method called by <a class="link" href="Matrix-0.0-MatrixClient.html#matrix-client-get-room-by-id" title="matrix_client_get_room_by_id ()"><code class="function">matrix_client_get_room_by_id()</code></a></p></td>
+<td class="struct_member_annotations"> </td>
+</tr>
+<tr>
 <td class="struct_member_name"><p><em class="structfield"><code><a name="MatrixClientIface.login-finished"></a>login_finished</code></em> ()</p></td>
 <td> </td>
 <td> </td>
@@ -659,7 +851,6 @@ is no longer needed. </p></td>
 </div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.20</div>
+<hr>Generated by GTK-Doc V1.24</div>
 </body>
 </html>

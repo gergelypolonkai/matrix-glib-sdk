@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Matrix-0.0 Reference Manual">
 <link rel="next" href="ch01.html" title="Matrix-0.0 API Reference">
-<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -15,9 +15,9 @@
 <div>
 <div><table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0"><tr><th valign="middle"><p class="title">Matrix-0.0 Reference Manual</p></th></tr></table></div>
 <div><p class="releaseinfo">
-      for Matrix-0.0 0.0.1.20160304.
+      for Matrix-0.0 0.0.1.20160313.
       The latest version of this documentation can be found on-line at
-      <a class="ulink" href="http://gergelypolonkai.github.io/matrix-glib-sdk/index.html" target="_top">http://gergely.polonkai.eu/matrix-glib-sdk/</a>.
+      <a class="ulink" href="http://%5BSERVER%5D/Matrix-0.0/index.html" target="_top">http://[SERVER]/Matrix-0.0/</a>.
     </p></div>
 </div>
 <hr>
@@ -26,43 +26,133 @@
 <dt><span class="chapter"><a href="ch01.html">Matrix-0.0 API Reference</a></span></dt>
 <dd><dl>
 <dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixRoomEvent.html">MatrixRoomEvent</a></span><span class="refpurpose"> — Abstract base class for room events.</span>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomThirdPartyInvite.html">MatrixEventRoomThirdPartyInvite</a></span><span class="refpurpose"> — Class to hold a m.room.third_party_invite event</span>
 </dt>
 <dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixPresenceEvent.html">MatrixPresenceEvent</a></span><span class="refpurpose"> — Class for representing presence events</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-matrix-enums.html">matrix-enums</a></span><span class="refpurpose"></span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixEvent.html">MatrixEvent</a></span><span class="refpurpose"> — Base class for Matrix events.</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixRoomMemberEvent.html">MatrixRoomMemberEvent</a></span><span class="refpurpose"> — Class for representing a room membership events</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixClient.html">MatrixClient</a></span><span class="refpurpose"> — Base interface for client communication with a Matrix.org homeserver</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixJsonCompact.html">MatrixJsonCompact</a></span><span class="refpurpose"> — Abstract parent class for classes that can be saved to JSON.</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixHTTPClient.html">MatrixHTTPClient</a></span><span class="refpurpose"> — An event-driven client class to communicate with HTTP based Matrix.org servers.</span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixStateEvent.html">MatrixStateEvent</a></span><span class="refpurpose"></span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-MatrixRoomMessageEvent.html">MatrixRoomMessageEvent</a></span><span class="refpurpose"></span>
-</dt>
-<dt>
-<span class="refentrytitle"><a href="Matrix-0.0-c-api.html">c-api</a></span><span class="refpurpose"></span>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageLocation.html">MatrixMessageLocation</a></span><span class="refpurpose"> — This message represents a real-world location.</span>
 </dt>
 <dt>
 <span class="refentrytitle"><a href="Matrix-0.0-MatrixHTTPAPI.html">MatrixHTTPAPI</a></span><span class="refpurpose"> — This is a class for low level communication with a Matrix.org server via HTTP.</span>
 </dt>
 <dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventCallInvite.html">MatrixEventCallInvite</a></span><span class="refpurpose"> — This event is sent by the caller when they wish to establish a call.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomName.html">MatrixEventRoomName</a></span><span class="refpurpose"> — Class to hold a m.room.name event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventPresence.html">MatrixEventPresence</a></span><span class="refpurpose"> — Class for representing presence events</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventState.html">MatrixEventState</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomCanonicalAlias.html">MatrixEventRoomCanonicalAlias</a></span><span class="refpurpose"> — Class to hold a m.room.canonical_alias event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomAvatar.html">MatrixEventRoomAvatar</a></span><span class="refpurpose"> — Class to hold a m.room.avatar event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixClient.html">MatrixClient</a></span><span class="refpurpose"> — Base interface for client communication with a Matrix.org homeserver</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageAudio.html">MatrixMessageAudio</a></span><span class="refpurpose"> — Class to hold a m.audio message</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixProfile.html">MatrixProfile</a></span><span class="refpurpose"> — Object to hold a user's profile</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventTyping.html">MatrixEventTyping</a></span><span class="refpurpose"> — Class to hold an m.typing event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixJsonCompact.html">MatrixJsonCompact</a></span><span class="refpurpose"> — Abstract parent class for classes that can be saved to JSON.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomMember.html">MatrixEventRoomMember</a></span><span class="refpurpose"> — Class for representing a room membership events</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoom.html">MatrixEventRoom</a></span><span class="refpurpose"> — Abstract base class for room events.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageBase.html">MatrixMessageBase</a></span><span class="refpurpose"> — Base class for message handlers.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventReceipt.html">MatrixEventReceipt</a></span><span class="refpurpose"> — Class to hold m.receipt events.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomMessageFeedback.html">MatrixEventRoomMessageFeedback</a></span><span class="refpurpose"> — Class to hold a m.room.message.feedback event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixHTTPClient.html">MatrixHTTPClient</a></span><span class="refpurpose"> — An event-driven client class to communicate with HTTP based Matrix.org servers.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomCreate.html">MatrixEventRoomCreate</a></span><span class="refpurpose"> — Class to hold a m.room.create event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomGuestAccess.html">MatrixEventRoomGuestAccess</a></span><span class="refpurpose"> — Class to hold a m.room.guest_access event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventCall.html">MatrixEventCall</a></span><span class="refpurpose"> — Base class for m.call.* events.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomJoinRules.html">MatrixEventRoomJoinRules</a></span><span class="refpurpose"> — Class to hold a m.room.join_rules event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageFile.html">MatrixMessageFile</a></span><span class="refpurpose"> — Class to hold a m.file message</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventBase.html">MatrixEventBase</a></span><span class="refpurpose"> — Base class for Matrix events.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventTag.html">MatrixEventTag</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventCallAnswer.html">MatrixEventCallAnswer</a></span><span class="refpurpose"> — This event is sent by the callee when they wish to answer the call.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageImage.html">MatrixMessageImage</a></span><span class="refpurpose"> — Class to hold a m.image message</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventCallHangup.html">MatrixEventCallHangup</a></span><span class="refpurpose"> — Sent by either party to signal their termination of the call. This can be sent either once the call has has been established or before to abort the call.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomRedaction.html">MatrixEventRoomRedaction</a></span><span class="refpurpose"> — Class to hold a m.room.redaction event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageNotice.html">MatrixMessageNotice</a></span><span class="refpurpose"> — Message type to hold a m.notice message</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomHistoryVisibility.html">MatrixEventRoomHistoryVisibility</a></span><span class="refpurpose"> — Class to hold a m.room.history_visibility event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomAliases.html">MatrixEventRoomAliases</a></span><span class="refpurpose"> — Class to hold a m.room.aliases event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventCallCandidates.html">MatrixEventCallCandidates</a></span><span class="refpurpose"> — This event is sent by callers after sending an invite and by the callee after answering. Its purpose is to give the other party additional ICE candidates to try using to communicate.</span>
+</dt>
+<dt>
 <span class="refentrytitle"><a href="Matrix-0.0-MatrixAPI.html">MatrixAPI</a></span><span class="refpurpose"> — Base interface for all Client/Server API functionality.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomPowerLevels.html">MatrixEventRoomPowerLevels</a></span><span class="refpurpose"> — Class to handle m.room.power_levels event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageText.html">MatrixMessageText</a></span><span class="refpurpose"> — Message handler for plain text messages</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageVideo.html">MatrixMessageVideo</a></span><span class="refpurpose"> — This message represents a single video clip.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomTopic.html">MatrixEventRoomTopic</a></span><span class="refpurpose"> — Event type to hold the m.room.topic event.</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixEventRoomMessage.html">MatrixEventRoomMessage</a></span><span class="refpurpose"> — Class to hold an m.room.message event</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-MatrixMessageEmote.html">MatrixMessageEmote</a></span><span class="refpurpose"> — The emote message type</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="Matrix-0.0-matrix-types.html">matrix-types</a></span><span class="refpurpose"></span>
 </dt>
 </dl></dd>
 <dt><span class="index"><a href="api-index-full.html">API Index</a></span></dt>
@@ -71,7 +161,6 @@
 </dl></div>
 </div>
 <div class="footer">
-<hr>
-          Generated by GTK-Doc V1.20</div>
+<hr>Generated by GTK-Doc V1.24</div>
 </body>
 </html>
