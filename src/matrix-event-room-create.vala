@@ -32,7 +32,7 @@ public class Matrix.Event.RoomCreate : Matrix.Event.State {
      * Whether users on other servers can join this room. Defaults to
      * true if key does not exist.
      */
-    public bool? federate { get; set; default = null; }
+    public bool federate { get; set; default = false; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -79,10 +79,7 @@ public class Matrix.Event.RoomCreate : Matrix.Event.State {
             .get_member("content").get_object();
 
         content_root.set_string_member("creator", _creator);
-
-        if (_federate != null) {
-            content_root.set_boolean_member("m.federate", _federate);
-        }
+        content_root.set_boolean_member("m.federate", _federate);
 
         base.to_json(json_data);
     }
