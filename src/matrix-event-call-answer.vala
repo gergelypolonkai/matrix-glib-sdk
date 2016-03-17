@@ -23,7 +23,7 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Call {
     /**
      * The type of session description.
      */
-    public CallAnswerType? answer_type { get; set; default = null; }
+    public CallAnswerType answer_type { get; set; default = CallAnswerType.UNKNOWN; }
 
     /**
      * The SDP text of the session description.
@@ -70,9 +70,9 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Call {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if (_answer_type == null) {
+        if (_answer_type == CallAnswerType.UNKNOWN) {
             throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.answer event without answer.type");
+                    "Won't generate a m.call.answer event without a valid answer.type");
         }
 
         if (_answer_sdp == null) {

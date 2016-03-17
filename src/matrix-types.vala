@@ -267,8 +267,9 @@ namespace Matrix {
     }
 
     public enum SearchGroupBy {
+        UNKNOWN,
         ROOM_ID,
-        SENDER
+        SENDER;
     }
 
     public enum HistoryVisibility {

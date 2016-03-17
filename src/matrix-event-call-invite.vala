@@ -24,7 +24,7 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
     /**
      * The type of session description.
      */
-    public CallOfferType? offer_type { get; set; default = null; }
+    public CallOfferType offer_type { get; set; default = CallOfferType.UNKNOWN; }
     /**
      * The SDP text of the session description.
      */
@@ -36,7 +36,7 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
      * should also no longer show the call as awaiting an answer in
      * the UI.
      */
-    public int? lifetime { get; set; default = null; }
+    public int lifetime { get; set; default = -1; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -84,9 +84,9 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        if (_offer_type == null) {
+        if (_offer_type == CallOfferType.UNKNOWN) {
             throw new Matrix.Error.INCOMPLETE(
-                    "Won't generate a m.call.invite without offer.type");
+                    "Won't generate a m.call.invite without a valid offer.type");
         }
 
         if (_sdp == null) {
@@ -94,7 +94,7 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
                     "Won't generate a m.call.invite without offer.sdp");
         }
 
-        if (_lifetime == null) {
+        if (_lifetime < 0) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.invite without lifetime");
         }

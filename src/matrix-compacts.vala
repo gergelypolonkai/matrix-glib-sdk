@@ -464,39 +464,30 @@ namespace Matrix {
     }
 
     public class EventContext : JsonCompact {
-        public int? before_limit { get; set; default = null; }
-        public int? after_limit { get; set; default = null; }
-        public bool? include_profile { get; set; default = null; }
+        public int before_limit { get; set; default = -1; }
+        public int after_limit { get; set; default = -1; }
+        public bool include_profile { get; set; default = false; }
 
         public override Json.Node?
         get_json_node()
             throws Matrix.Error
         {
-            if ((before_limit == null)
-                && (after_limit == null)
-                && (include_profile == null))
-            {
-                return null;
-            }
-
             var builder = new Json.Builder();
 
             builder.begin_object();
 
-            if (before_limit != null) {
+            if (before_limit >= 0) {
                 builder.set_member_name("before_limit");
                 builder.add_int_value(before_limit);
             }
 
-            if (after_limit != null) {
+            if (after_limit >= 0) {
                 builder.set_member_name("after_limit");
                 builder.add_int_value(after_limit);
             }
 
-            if (include_profile != null) {
-                builder.set_member_name("include_profile");
-                builder.add_boolean_value(include_profile);
-            }
+            builder.set_member_name("include_profile");
+            builder.add_boolean_value(include_profile);
 
             builder.end_object();
 
@@ -505,14 +496,15 @@ namespace Matrix {
      }
 
     public class SearchGrouping : JsonCompact {
-        public SearchGroupBy? key { get; set; default = null; }
+        public SearchGroupBy key { get; set; default = SearchGroupBy.UNKNOWN; }
 
         public override Json.Node?
         get_json_node()
             throws Matrix.Error
         {
-            if (key == null) {
-                return null;
+            if (key == SearchGroupBy.UNKNOWN) {
+                throw new Matrix.Error.INCOMPLETE(
+                        "Won't generate SearchGrouping without a valid key");
             }
 
             var builder = new Json.Builder();
@@ -567,7 +559,7 @@ namespace Matrix {
         public SearchOrder order_by { get; set; default = SearchOrder.RECENT; }
         public SearchKey[] keys { get; set; }
         public EventContext? event_context { get; set; default = null; }
-        public bool? include_state { get; set; default = false; }
+        public bool include_state { get; set; default = false; }
         public string? filter_id { get; set; default = null; }
         public Filter? filter { get; set; default = null; }
         public string search_term { get; set; }
@@ -620,10 +612,8 @@ namespace Matrix {
                 builder.add_value(node);
             }
 
-            if (include_state != null) {
-                builder.set_member_name("include_state");
-                builder.add_boolean_value(include_state);
-            }
+            builder.set_member_name("include_state");
+            builder.add_boolean_value(include_state);
 
             if ((filter != null)
                 && ((node = filter.get_json_node()) != null)) {

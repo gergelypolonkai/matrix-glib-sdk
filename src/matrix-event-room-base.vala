@@ -41,8 +41,11 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
     /**
      * The time, in milliseconds, that has elapsed since the event was
      * sent. This is part of the unsigned event data.
+     *
+     * This value will be omitted from the generated event JSON if
+     * less than zero.
      */
-    public ulong? age { get; set; default = null; }
+    public long age { get; set; default = 0; }
 
     /**
      * The reason this event was redacted, if it was redacted.
@@ -119,7 +122,7 @@ public abstract class Matrix.Event.Room : Matrix.Event.Base {
 
         var unsigned_obj = new Json.Object();
 
-        if (age != null) {
+        if (age >= 0) {
             unsigned_obj.set_int_member("age", _age);
         }
 

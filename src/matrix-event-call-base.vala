@@ -28,7 +28,7 @@ public abstract class Matrix.Event.Call : Matrix.Event.Room {
     /**
      * The version of the VoIP specification this message adheres to.
      */
-    public int? version { get; set; default = null; }
+    public int version { get; set; default = -1; }
 
     protected override void
     from_json(Json.Node json_data)
@@ -62,7 +62,7 @@ public abstract class Matrix.Event.Call : Matrix.Event.Room {
                     "Won't generate a m.call.hangup event without call_id");
         }
 
-        if (_version == null) {
+        if (_version < 0) {
             throw new Matrix.Error.INCOMPLETE(
                     "Won't generate a m.call.hangup event without version");
         }

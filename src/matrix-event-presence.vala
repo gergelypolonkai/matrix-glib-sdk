@@ -35,8 +35,10 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
     /**
      * The last time since this used performed some action, in
      * milliseconds.
+     *
+     * This won’t get into the generated event JSON if negative.
      */
-    public ulong? last_active_ago { get; set; }
+    public long last_active_ago { get; set; default = -1; }
 
     /**
      * The user's ID.
@@ -81,7 +83,7 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
         }
 
         if ((node = content_root.get_member("last_active_ago")) != null) {
-            _last_active_ago = (ulong)node.get_int();
+            _last_active_ago = (long)node.get_int();
         }
 
         if ((node = content_root.get_member("avatar_url")) != null) {
@@ -142,7 +144,7 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
                                        _g_enum_value_to_nick(typeof(Presence),
                                                              _presence));
 
-        if (last_active_ago != null) {
+        if (last_active_ago >= 0) {
             content_root.set_int_member("last_active_ago", last_active_ago);
         }
 
