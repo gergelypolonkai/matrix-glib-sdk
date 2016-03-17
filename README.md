@@ -42,3 +42,11 @@ For a working example, see [test-client.c](src/test-client.c).
 ## API
 
 For a full blown example, see [test-api-client.c](src/test-api-client.c).
+
+# Code of Conduct
+
+See the file [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
+
+# Contact
+
+Should you need any help, join us in Matrix at #matrix-glib-sdk:polonkai.eu.
