@@ -205,4 +205,16 @@ public interface Matrix.Client : GLib.Object {
     public abstract Room
     get_room_by_id(string room_id)
         throws Matrix.Error;
+
+    /**
+     * Get a room object by the room alias specified
+     * in @param room_alias. If room data is not cached yet,
+     * {@link Matrix.Error.UNAVAILABLE} is thrown.
+     *
+     * @param room_alias a room alias
+     * @return a Matrix.Room object
+     */
+    public abstract Room
+    get_room_by_alias(string room_alias)
+        throws Matrix.Error;
 }

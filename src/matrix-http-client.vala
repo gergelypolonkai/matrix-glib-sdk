@@ -453,4 +453,24 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         return room;
     }
+
+    public Room
+    get_room_by_alias(string room_alias)
+        throws Matrix.Error
+    {
+        foreach (var entry in _rooms.entries) {
+            var room = entry.value;
+
+            if (room.canonical_alias == room_alias) {
+                return room;
+            }
+
+            if (room_alias in room.aliases) {
+                return room;
+            }
+        }
+
+        throw new Matrix.Error.UNAVAILABLE(
+                "Noo room data found for alias %s", room_alias);
+    }
 }
