@@ -126,10 +126,20 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
         }
     }
 
+    /**
+     * Create a new MatrixHTTPAPI object.
+     *
+     * @param base_url the base URL of the homeserver to use
+     * @param token an access token to use
+     * @param refresh_token a refresh token to use
+     * @return a new MatrixHTTPAPI object
+     */
     protected
-    HTTPAPI(string base_url, string? token = null)
+    HTTPAPI(string base_url, string? token = null, string? refresh_token = null)
     {
-        Object(base_url : base_url, token : token);
+        Object(base_url : base_url,
+               token : token,
+               refresh_token : refresh_token);
         _soup_session.ssl_strict = true;
     }
 
