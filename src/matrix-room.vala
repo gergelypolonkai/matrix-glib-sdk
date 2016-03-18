@@ -156,4 +156,86 @@ public class Matrix.Room : GLib.Object {
 
         _members.unset(user_id);
     }
+
+    /**
+     * Clear the stored individual user levels. This should be called
+     * e.g. when receiving a new m.room.power_levels event.
+     */
+    public void
+    clear_user_levels()
+    {
+        _user_levels.clear();
+    }
+
+    /**
+     * Set an individual power level for a user.
+     *
+     * @param user_id a fully qualified Matrix ID
+     * @param level the new power level
+     */
+    public void
+    set_user_level(string user_id, int level)
+    {
+        _user_levels[user_id] = level;
+    }
+
+    /**
+     * Get the power level of a user.
+     *
+     * @param user_id a fully qualified Matrix ID
+     * @return the level of the user. If the user doesn’t have an
+     *         individually set power level, the default value is
+     *         returned
+     */
+    public int
+    get_user_level(string user_id)
+    {
+        int? level = _user_levels[user_id];
+
+        if (level == null) {
+            level = _default_power_level;
+        }
+
+        return level;
+    }
+
+    /**
+     * Clear the stored event level requirements. This should be
+     * called e.g. when receiving a new m.room.power_levels event.
+     */
+    public void
+    clear_event_levels()
+    {
+        _event_levels.clear();
+    }
+
+    /**
+     * Set the required level to send an event of
+     * type @param event_type.
+     *
+     * @param event_type the event type to restrict
+     * @param level the desired level for the event type
+     */
+    public void
+    set_event_level(string event_type, int level)
+    {
+        _event_levels[event_type] = level;
+    }
+
+    /**
+     * Get the required level to send an event of
+     * type @param event_type.
+     *
+     * @param event_type the event type to query
+     * @return the level required to send a specific event. If there
+     *         is no level requirement is set for this event type,
+     *         this function returns null as there is no way to decide
+     *         if {@link Matrix.Room.default_state_level} or
+     *         {@link Matrix.Room.default_event_level} should be used
+     */
+    public int?
+    get_event_level(string event_type)
+    {
+        return _event_levels[event_type];
+    }
 }
