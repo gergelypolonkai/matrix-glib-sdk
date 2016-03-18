@@ -761,7 +761,7 @@ public interface Matrix.API : GLib.Object {
      * @param content the content of the event as a {@link Json.Node}
      */
     public abstract void
-    send_message_event([CCode (delegate_target_pos = 1.5, scope = "async")]
+    send_event([CCode (delegate_target_pos = 1.5, scope = "async")]
                        owned Matrix.API.Callback? @callback,
                        string room_id,
                        string event_type,
@@ -819,7 +819,7 @@ public interface Matrix.API : GLib.Object {
      * @param content the content of the state event
      */
     public abstract void
-    send_room_event([CCode (delegate_target_pos = 1.5, scope = "async")]
+    send_state_event([CCode (delegate_target_pos = 1.5, scope = "async")]
                     owned Matrix.API.Callback? @callback,
                     string room_id,
                     string event_type,

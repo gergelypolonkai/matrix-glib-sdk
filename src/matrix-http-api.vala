@@ -1289,7 +1289,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    send_message_event(API.Callback? cb,
+    send_event(API.Callback? cb,
                        string room_id,
                        string event_type,
                        string txn_id,
@@ -1330,7 +1330,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    send_room_event(API.Callback? cb,
+    send_state_event(API.Callback? cb,
                     string room_id,
                     string event_type,
                     string? state_key,
