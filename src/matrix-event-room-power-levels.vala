@@ -70,8 +70,29 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
      */
     public int invite { get; set; default = 0; }
 
-    private HashTable<string, int?> _event_levels = null;
-    private HashTable<string, int?> _user_levels = null;
+    /**
+     * A hash map to store the required level to send specific events.
+     */
+    public Gee.HashMap<string, int?> event_levels {
+        get {
+            return _event_levels;
+        }
+    }
+
+    /**
+     * A hash map to store current level for individual users.
+     */
+    public Gee.HashMap<string, int?> user_levels {
+        get {
+            return _user_levels;
+        }
+    }
+
+    private Gee.HashMap<string, int?> _event_levels =
+        new Gee.HashMap<string, int?>();
+
+    private Gee.HashMap<string, int?> _user_levels =
+        new Gee.HashMap<string, int?>();
 
     protected override void
     from_json(Json.Node json_data)
@@ -126,22 +147,18 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("events")) != null) {
-            node.get_object().foreach_member((obj, event_name, event_node) => {
-                    if (_event_levels == null) {
-                        _event_levels = new HashTable<string, int?>(str_hash, str_equal);
-                    }
+            _event_levels.clear();
 
-                    _event_levels.replace(event_name, (int)event_node.get_int());
+            node.get_object().foreach_member((obj, event_name, event_node) => {
+                    _event_levels[event_name] = (int)event_node.get_int();
                 });
         }
 
         if ((node = content_root.get_member("users")) != null) {
-            node.get_object().foreach_member((obj, user_id, user_node) => {
-                    if (_user_levels == null) {
-                        _user_levels = new HashTable<string, int?>(str_hash, str_equal);
-                    }
+            _user_levels.clear();
 
-                    _user_levels.replace(user_id, (int)user_node.get_int());
+            node.get_object().foreach_member((obj, user_id, user_node) => {
+                    _user_levels[user_id] = (int)user_node.get_int();
                 });
         }
 
@@ -180,9 +197,9 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         var user_node = new Json.Node(Json.NodeType.OBJECT);
         user_node.set_object(user_obj);
 
-        _user_levels.foreach((user_id, power_level) => {
-                user_obj.set_int_member(user_id, power_level);
-            });
+        foreach (var entry in _user_levels.entries) {
+            user_obj.set_int_member(entry.key, entry.value);
+        }
 
         content_root.set_member("users", user_node);
 
@@ -190,9 +207,9 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         var events_node = new Json.Node(Json.NodeType.OBJECT);
         events_node.set_object(events_obj);
 
-        _event_levels.foreach((events_id, power_level) => {
-                events_obj.set_int_member(events_id, power_level);
-            });
+        foreach (var entry in _event_levels.entries) {
+            events_obj.set_int_member(entry.key, entry.value);
+        }
 
         content_root.set_member("users", events_node);
 
