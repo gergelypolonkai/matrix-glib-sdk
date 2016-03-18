@@ -414,8 +414,14 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             return profile;
         }
 
-        throw new Matrix.Error.UNSUPPORTED(
-                "Per-room profiles are not supported yet.");
+        var room = _rooms[room_id];
+
+        if (room == null) {
+            throw new Matrix.Error.UNAVAILABLE(
+                    "Room data for %s is not cached yet.", room_id);
+        }
+
+        return room.get_member(user_id, null);
     }
 
     public Presence
