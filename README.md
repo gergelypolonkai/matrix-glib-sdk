@@ -43,6 +43,10 @@ For a working example, see [test-client.c](src/test-client.c).
 
 For a full blown example, see [test-api-client.c](src/test-api-client.c).
 
+# Contribution
+
+See the file [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
 # Code of Conduct
 
 See the file [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
