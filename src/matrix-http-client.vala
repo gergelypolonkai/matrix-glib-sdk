@@ -116,11 +116,9 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         }
 
         if (evt != null) {
-            GLib.Type evt_type = evt.get_type();
-
             // Make sure Room events have room_id set, even if it was
             // stripped by the HS
-            if (evt_type.is_a(typeof(Matrix.Event.Room))) {
+            if (evt is Matrix.Event.Room) {
                 Matrix.Event.Room revt = (Matrix.Event.Room)evt;
 
                 if (revt.room_id == null) {
@@ -128,7 +126,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                 }
             }
 
-            if (evt_type.is_a(typeof(Matrix.Event.Presence))) {
+            if (evt is Matrix.Event.Presence) {
                 var pevt = (Matrix.Event.Presence)evt;
                 var user_id = pevt.user_id;
 
@@ -143,11 +141,11 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
                 profile.avatar_url = pevt.avatar_url;
                 profile.display_name = pevt.display_name;
-            } else if (evt_type.is_a(typeof(Matrix.Event.Room))) {
+            } else if (evt is Matrix.Event.Room) {
                 var revt = (Matrix.Event.Room)evt;
                 var room = _get_or_create_room(revt.room_id);
 
-                if (evt_type.is_a(typeof(Matrix.Event.RoomMember))) {
+                if (evt is Matrix.Event.RoomMember) {
                     var mevt = (Matrix.Event.RoomMember)evt;
                     var user_id = mevt.user_id;
                     Profile? profile = null;
@@ -160,43 +158,43 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
                     profile.avatar_url = mevt.avatar_url;
                     profile.display_name = mevt.display_name;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomAliases))) {
+                } else if (evt is Matrix.Event.RoomAliases) {
                     var aevt = (Matrix.Event.RoomAliases)evt;
 
                     room.aliases = aevt.aliases;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomAvatar))) {
+                } else if (evt is Matrix.Event.RoomAvatar) {
                     var aevt = (Matrix.Event.RoomAvatar)evt;
 
                     room.avatar_url = aevt.url;
                     room.avatar_info = aevt.info;
                     room.avatar_thumbnail_url = aevt.thumbnail_url;
                     room.avatar_thumbnail_info = aevt.thumbnail_info;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomCanonicalAlias))) {
+                } else if (evt is Matrix.Event.RoomCanonicalAlias) {
                     var cevt = (Matrix.Event.RoomCanonicalAlias)evt;
 
                     room.canonical_alias = cevt.canonical_alias;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomCreate))) {
+                } else if (evt is Matrix.Event.RoomCreate) {
                     var cevt = (Matrix.Event.RoomCreate)evt;
 
                     room.creator = cevt.creator;
                     room.federate = cevt.federate;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomGuestAccess))) {
+                } else if (evt is Matrix.Event.RoomGuestAccess) {
                     var gevt = (Matrix.Event.RoomGuestAccess)evt;
 
                     room.guest_access = gevt.guest_access;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomHistoryVisibility))) {
+                } else if (evt is Matrix.Event.RoomHistoryVisibility) {
                     var hevt = (Matrix.Event.RoomHistoryVisibility)evt;
 
                     room.history_visibility = hevt.visibility;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomJoinRules))) {
+                } else if (evt is Matrix.Event.RoomJoinRules) {
                     var jevt = (Matrix.Event.RoomJoinRules)evt;
 
                     room.join_rules = jevt.join_rules;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomName))) {
+                } else if (evt is Matrix.Event.RoomName) {
                     var nevt = (Matrix.Event.RoomName)evt;
 
                     room.name = nevt.name;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomPowerLevels))) {
+                } else if (evt is Matrix.Event.RoomPowerLevels) {
                     var levt = (Matrix.Event.RoomPowerLevels)evt;
 
                     room.default_power_level = levt.users_default;
@@ -206,7 +204,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                     room.kick_level = levt.kick;
                     room.redact_level = levt.redact;
                     room.invite_level = levt.invite;
-                } else if (evt_type.is_a(typeof(Matrix.Event.RoomTopic))) {
+                } else if (evt is Matrix.Event.RoomTopic) {
                     var tevt = (Matrix.Event.RoomTopic)evt;
 
                     room.topic = tevt.topic;
