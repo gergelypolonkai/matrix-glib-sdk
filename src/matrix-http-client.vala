@@ -204,6 +204,16 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                     room.kick_level = levt.kick;
                     room.redact_level = levt.redact;
                     room.invite_level = levt.invite;
+                    room.clear_user_levels();
+                    room.clear_event_levels();
+
+                    foreach (var entry in levt.user_levels.entries) {
+                        room.set_user_level(entry.key, entry.value);
+                    }
+
+                    foreach (var entry in levt.event_levels.entries) {
+                        room.set_event_level(entry.key, entry.value);
+                    }
                 } else if (evt is Matrix.Event.RoomTopic) {
                     var tevt = (Matrix.Event.RoomTopic)evt;
 
