@@ -496,15 +496,14 @@ namespace Matrix {
      }
 
     public class SearchGrouping : JsonCompact {
-        public SearchGroupBy key { get; set; default = SearchGroupBy.UNKNOWN; }
+        public SearchGroupBy key { get; set; default = SearchGroupBy.NONE; }
 
         public override Json.Node?
         get_json_node()
             throws Matrix.Error
         {
-            if (key == SearchGroupBy.UNKNOWN) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate SearchGrouping without a valid key");
+            if (key == SearchGroupBy.NONE) {
+                return null;
             }
 
             var builder = new Json.Builder();
@@ -539,12 +538,19 @@ namespace Matrix {
             builder.set_member_name("group_by");
             builder.begin_array();
 
+            int count = 0;
+
             foreach (var entry in group_by) {
                 var node = entry.get_json_node();
 
                 if (node != null) {
+                    count++;
                     builder.add_value(node);
                 }
+            }
+
+            if (count == 0) {
+                return null;
             }
 
             builder.end_array();

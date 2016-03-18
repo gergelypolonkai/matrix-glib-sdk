@@ -18,82 +18,211 @@
 
 namespace Matrix {
     public errordomain Error {
-        NONE,                  /// no error
-        COMMUNICATION_ERROR,   /// there was a problem in
-                               /// communication (e.g. connection
-                               /// error)
-        INCOMPLETE,            /// the passed/generated data is incomplete
-        BAD_REQUEST,           /// the request is invalid
-        BAD_RESPONSE,          /// malformed response, or the response
-                               /// is not a JSON object
-        INVALID_ROOM_ID,       /// the provided string doesn’t contain
-                               /// a valid room ID
-        UNKNOWN_VALUE,         /// the response from the Matrix.org
-                               /// server contains a value unknown to
-                               /// this library. These should be
-                               /// reported to the Matrix GLib SDK
-                               /// developers
-        INVALID_TYPE,          /// the provided type is invalid
-        UNSUPPORTED,           ///the operation is unsupported
-        INVALID_FORMAT,        /// the format of the JSON node is
-                               /// invalid (e.g. it is an array
-                               /// instead of an object)
-        UNAVAILABLE,           /// the requested data is not cached
-                               /// yet. Clients getting this message
-                               /// may go online by some means to get
-                               /// the data
-        NOT_FOUND,             /// the requested data (e.g. member of
-                               /// a room) can not be found
-        ALREADY_EXISTS,        /// the data to create (e.g. when
-                               /// adding a new member to a Room
-                               /// object) already exists
+        /**
+         * no error. You should never see this.
+         */
+        NONE,
+
+        /**
+         * there was a problem in communication (e.g. connection
+         * error)
+         */
+        COMMUNICATION_ERROR,
+
+        /**
+         * the passed/generated data is incomplete
+         */
+        INCOMPLETE,
+
+        /**
+         * the request is invalid
+         */
+        BAD_REQUEST,
+
+        /**
+         * malformed response, or the response is not a JSON object
+         */
+        BAD_RESPONSE,
+
+        /**
+         * the provided string doesn’t contain a valid room ID
+         */
+        INVALID_ROOM_ID,
+
+        /**
+         * the response from the Matrix.org server contains a value
+         * unknown to this library. These should be reported to the
+         * Matrix GLib SDK developers
+         */
+        UNKNOWN_VALUE,
+
+        /**
+         * the provided type is invalid
+         */
+        INVALID_TYPE,
+
+        /**
+         * the operation is unsupported
+         */
+        UNSUPPORTED,
+
+        /**
+         * the format of the JSON node is invalid (e.g. it is an array
+         * instead of an object)
+         */
+        INVALID_FORMAT,
+
+        /**
+         * the requested data is not cached yet. Clients getting this
+         * message may go online by some means to get the data
+         */
+        UNAVAILABLE,
+
+        /**
+         * the requested data (e.g. member of a room) can not be found
+         */
+        NOT_FOUND,
+
+        /**
+         * the data to create (e.g. when adding a new member to a Room
+         * object) already exists
+         */
+        ALREADY_EXISTS,
 
         /* Add Matrix-defined error codes under here, prefixing them with
          * `MATRIX_ERROR_`, i.e. `M_FORBIDDEN` =>
          * `MATRIX_ERROR_M_FORBIDDEN` */
-        M_MISSING_TOKEN = 500,    /// authorization token is missing
-                                  /// from the request
-        M_FORBIDDEN,              /// access was forbidden (e.g. due
-                                  /// to a missing/invalid token, or
-                                  /// using a bad password during
-                                  /// login)
-        M_UNKNOWN,                /// an error unknown to the Matrix homeserver
-        M_UNKNOWN_TOKEN,          /// the token provided is not known
-                                  /// for the homeserver
-        M_NOT_JSON,               /// illegal request, the content is
-                                  /// not valid JSON
-        M_UNRECOGNIZED,           /// the homeserver didn't understand
-                                  /// the request
-        M_UNAUTHORIZED,           /// the request is unauthorized
-        M_BAD_JSON,               /// the JSON data is not in the
-                                  /// required format
-        M_USER_IN_USE,            /// the specified username is in use
-        M_ROOM_IN_USE,            /// the specified room is in use
-        M_BAD_PAGINATION,         /// invalid pagination parameters
-        M_BAD_STATE,              /// invalid state event
-        M_NOT_FOUND,              /// the requested resource is not found
-        M_GUEST_ACCESS_FORBIDDEN, /// guest access was requested, but
-                                  /// it is forbidden
-        M_LIMIT_EXCEEDED,         /// the request was rate limited
-        M_CAPTCHA_NEEDED,         /// a captcha is needed to continue
-        M_CAPTCHA_INVALID,        /// the provided captcha is invalid
-        M_MISSING_PARAM,          /// a parameter is missing from the request
-        M_TOO_LARGE,              /// the request data is too large
-        M_EXCLUSIVE,              /// the desired user ID is in an
-                                  /// exclusive namespace claimed by
-                                  /// an application server
-        M_THREEPID_AUTH_FAILED,   /// 3rd party authentication failed
-        M_THREEPID_IN_USE,        /// the provided 3rd party ID is
-                                  /// already in use
-        M_INVALID_USERNAME,       /// the given username is invalid
 
-        /* Allow for a lot of Matrix.org defined codes
-         * Do not define error codes after this! */
-        UNSPECIFIED = 16383,      /// no error code was sent by the
-                                  /// homeserver. If you see this
-                                  /// error, that usually indicates a
-                                  /// homeserver bug
-        UNKNOWN_ERROR;            /// an error unknown to this library
+        /**
+         * authorization token is missing from the request
+         */
+        M_MISSING_TOKEN = 500,
+
+        /**
+         * access was forbidden (e.g. due to a missing/invalid token,
+         * or using a bad password during login)
+         */
+        M_FORBIDDEN,
+
+        /**
+         * an error unknown to the Matrix homeserver
+         */
+        M_UNKNOWN,
+
+        /**
+         * the token provided is not known for the homeserver
+         */
+        M_UNKNOWN_TOKEN,
+
+        /**
+         * illegal request, the content is not valid JSON
+         */
+        M_NOT_JSON,
+
+        /**
+         * the homeserver didn't understand the request
+         */
+        M_UNRECOGNIZED,
+
+        /**
+         * the request is unauthorized
+         */
+        M_UNAUTHORIZED,
+
+        /**
+         * the JSON data is not in the required format
+         */
+        M_BAD_JSON,
+
+        /**
+         * the specified username is in use
+         */
+        M_USER_IN_USE,
+
+        /**
+         * the specified room is in use
+         */
+        M_ROOM_IN_USE,
+
+        /**
+         * invalid pagination parameters
+         */
+        M_BAD_PAGINATION,
+
+        /**
+         * invalid state event
+         */
+        M_BAD_STATE,
+
+        /**
+         * the requested resource is not found
+         */
+        M_NOT_FOUND,
+
+        /**
+         * guest access was requested, but ( it is forbidden
+         */
+        M_GUEST_ACCESS_FORBIDDEN,
+
+        /**
+         * the request was rate limited
+         */
+        M_LIMIT_EXCEEDED,
+
+        /**
+         * a captcha is needed to continue
+         */
+        M_CAPTCHA_NEEDED,
+
+        /**
+         * the provided captcha is invalid
+         */
+        M_CAPTCHA_INVALID,
+
+        /**
+         * a parameter is missing from the request
+         */
+        M_MISSING_PARAM,
+
+        /**
+         * the request data is too large
+         */
+        M_TOO_LARGE,
+
+        /**
+         * the desired user ID is in an exclusive namespace claimed by
+         * an application server
+         */
+        M_EXCLUSIVE,
+
+        /**
+         * 3rd party authentication failed
+         */
+        M_THREEPID_AUTH_FAILED,
+
+        /**
+         * the provided 3rd party ID is already in use
+         */
+        M_THREEPID_IN_USE,
+
+        /**
+         * the given username is invalid
+         */
+        M_INVALID_USERNAME,
+
+        /* Allow for a lot of Matrix.org defined codes. Do not define
+         * Matrix-specific error codes after this! */
+
+        /**
+         * no error code was sent by the homeserver. If you see this
+         * error, that usually indicates a homeserver bug
+         */
+        UNSPECIFIED = 16383,
+
+        /**
+         * an error unknown to this library
+         */
+        UNKNOWN_ERROR;
 
         public static GLib.Quark
         quark ()
@@ -106,30 +235,58 @@ namespace Matrix {
      * User account types.
      */
     public enum AccountKind {
-        DEFAULT, /// use the server default (usually {{{USER}}})
-        USER,    /// normal user
-        GUEST;   /// guest user
+        /**
+         * use the server default (usually
+         * {@link Matrix.AccountKind.USER})
+         */
+        DEFAULT,
+
+        /**
+         * normal user
+         */
+        USER,
+
+        /**
+         * guest user
+         */
+        GUEST;
     }
 
     /**
      * Direction of events when requesting an event context.
      */
     public enum EventDirection {
-        FORWARD,  /// List events after the specified one
-        BACKWARD; /// List events before the specified one
+        /**
+         * list events after the specified one
+         */
+        FORWARD,
+
+        /**
+         * list events before the specified one
+         */
+        BACKWARD;
     }
 
     /**
      * Event format received when synchronizing.
      */
     public enum EventFormat {
-        DEFAULT,    /// event format will be omitted from the filter,
-                    /// so the server will use its default (usually
-                    /// {{{FEDERATION}}})
-        CLIENT,     /// return the events in a format suitable for
-                    /// clients
-        FEDERATION; /// return the raw event as receieved over
-                    /// federation
+        /**
+         * event format will be omitted from the filter, so the server
+         * will use its default (usually
+         * {@link Matrix.EventFormat.FEDERATION})
+         */
+        DEFAULT,
+
+        /**
+         * return the events in a format suitable for clients
+         */
+        CLIENT,
+
+        /**
+         * return the raw event as receieved over federation
+         */
+        FEDERATION;
     }
 
     /**
@@ -137,101 +294,193 @@ namespace Matrix {
      * presence related queries.
      */
     public enum Presence {
-        UNKNOWN,       /// user's presence is unknown
-        ONLINE,        /// user is online
-        OFFLINE,       /// user is offline
-        UNAVAILABLE,   /// user is unavailable (i.e. busy)
-        FREE_FOR_CHAT; /// user is free for chat
+        /**
+         * user's presence is unknown
+         */
+        UNKNOWN,
+
+        /**
+         * user is online
+         */
+        ONLINE,
+
+        /**
+         * user is offline
+         */
+        OFFLINE,
+
+        /**
+         * user is unavailable (i.e. busy)
+         */
+        UNAVAILABLE,
+
+        /**
+         * user is free for chat
+         */
+        FREE_FOR_CHAT;
     }
 
     /**
      * Condition types for pushers.
      */
     public enum PusherConditionKind {
-        EVENT_MATCH,           /// glob pattern match on a field of
-                               /// the event. Requires a {{{key}}} and
-                               /// a {{{pattern}}} parameter
-        PROFILE_TAG,           /// matches the profile tag of the
-                               /// device that the notification would
-                               /// be delivered to. Requires a
-                               /// {{{profile_tag}}} parameter
-        CONTAINS_DISPLAY_NAME, /// matches unencrypted messages where
-                               /// the content's body contains the
-                               /// owner's display name in that room.
-        ROOM_MEMBER_COUNT;     /// matches the current number of
-                               /// members in the room. Requires an
-                               /// {{{is}}} parameter, which must be
-                               /// an integer, optionally prefixed by
-                               /// {{==}}}, {{{<}}}, {{{>}}},
-                               /// {{{<=}}} or {{{>=}}}. If the
-                               /// prefix is omitted, it defaults to
-                               /// {{{==}}}
+        /**
+         * glob pattern match on a field of the event. Requires a
+         * {{{key}}} and a {{{pattern}}} parameter
+         */
+        EVENT_MATCH,
+
+        /**
+         * matches the profile tag of the device that the notification
+         * would be delivered to. Requires a {{{profile_tag}}}
+         * parameter
+         */
+        PROFILE_TAG,
+
+        /**
+         * matches unencrypted messages where the content's body
+         * contains the owner's display name in that room.
+         */
+        CONTAINS_DISPLAY_NAME,
+
+        /**
+         * matches the current number of members in the room. Requires
+         * an {{{is}}} parameter, which must be an integer, optionally
+         * prefixed by {{{==}}}, {{{<}}}, {{{>}}}, {{{<=}}} or
+         * {{{>=}}}. If the prefix is omitted, it defaults to {{{==}}}
+         */
+        ROOM_MEMBER_COUNT;
     }
 
     /**
      * Pusher types.
      */
     public enum PusherKind {
-        OVERRIDE,  /// highest priority rules
-        SENDER,    /// for (unencrypted) messages that match certain
-                   /// patterns
-        ROOM,      /// for all messages for a given room. The rule ID
-                   /// of a room rule is always the ID of the room
-                   /// that it affects
-        CONTENT,   /// for messages from a specific Matrix user
-                   /// ID. The rule ID of such rules is always the
-                   /// Matrix ID of the user whose messages they'd
-                   /// apply to
-        UNDERRIDE; /// lowest priority rules
+        /**
+         * highest priority rules
+         */
+        OVERRIDE,
+
+        /**
+         * for (unencrypted) messages that match certain patterns
+         */
+        SENDER,
+
+        /**
+         * for all messages for a given room. The rule ID of a room
+         * rule is always the ID of the room that it affects
+         */
+        ROOM,
+
+        /**
+         * for messages from a specific Matrix user ID. The rule ID of
+         * such rules is always the Matrix ID of the user whose
+         * messages they'd apply to
+         */
+        CONTENT,
+
+        /**
+         * lowest priority rules
+         */
+        UNDERRIDE;
     }
 
     /**
      * Receipt types of acknowledgment.
      */
     public enum ReceiptType {
-        READ; /// indicate that the message has been read
+        /**
+         * indicate that the message has been read
+         */
+        READ;
     }
 
     /**
      * Resizing methods for matrix_api_media_thumbnail().
      */
     public enum ResizeMethod {
-        DEFAULT, /// use the server default value
-        CROP,    /// crop thumbnail to the requested size
-        SCALE;   /// scale thumbnail to the requested size
+        /**
+         * use the server default value
+         */
+        DEFAULT,
+
+        /**
+         * crop thumbnail to the requested size
+         */
+        CROP,
+
+        /**
+         * scale thumbnail to the requested size
+         */
+        SCALE;
     }
 
     /**
      * Room membership types.
      */
     public enum RoomMembership {
-        UNKNOWN, /// the membership sent by the server is unknown to
-                 /// this SDK
-        INVITE,  /// the user has been invited to join a room, but has
-                 /// not yet joined it. They may not participate in
-                 /// the room until they join
-        JOIN,    /// the user has joined the room (possibly after
-                 /// accepting an invite), and may participate in it
-        LEAVE,   /// the user was once joined to the room, but has
-                 /// since left (possibly by choice, or possibly by
-                 /// being kicked)
-        BAN,     /// the user has been banned from the room, and is no
-                 /// longer allowed to join it until they are
-                 /// un-banned from the room (by having their
-                 /// membership state set to a value other than
-                 /// {{{BAN}}})
-        KNOCK;   /// this is a reserved word, which currently has no meaning
+        /**
+         * the membership sent by the server is unknown to this SDK
+         */
+        UNKNOWN,
+
+        /**
+         * the user has been invited to join a room, but has not yet
+         * joined it. They may not participate in the room until they
+         * join
+         */
+        INVITE,
+
+        /**
+         * the user has joined the room (possibly after accepting an
+         * invite), and may participate in it
+         */
+        JOIN,
+
+        /**
+         * the user was once joined to the room, but has since left
+         * (possibly by choice, or possibly by being kicked)
+         */
+        LEAVE,
+
+        /**
+         * the user has been banned from the room, and is no longer
+         * allowed to join it until they are un-banned from the room
+         * (by having their membership state set to a value other than
+         * {@link Matrix.RoomMembership.BAN})
+         */
+        BAN,
+
+        /**
+         * this is a reserved word, which currently has no meaning
+         */
+        KNOCK;
     }
 
     /**
      * Preset values for matrix_api_create_room() calls.
      */
     public enum RoomPreset {
-        NONE,            /// no preset
-        PRIVATE,         /// preset for private rooms
-        TRUSTED_PRIVATE, /// same as private rooms, but all users get
-                         /// the same power level as the room creator
-        PUBLIC;          /// preset for public rooms
+        /**
+         * no preset
+         */
+        NONE,
+
+        /**
+         * preset for private rooms
+         */
+        PRIVATE,
+
+        /**
+         * same as private rooms, but all users get the same power
+         * level as the room creator
+         */
+        TRUSTED_PRIVATE,
+
+        /**
+         * preset for public rooms
+         */
+        PUBLIC;
     }
 
     /**
@@ -239,66 +488,196 @@ namespace Matrix {
      * join rules.
      */
     public enum RoomVisibility {
-        DEFAULT, /// use a server-assigned value (usually {{{private}}}
-        PUBLIC,  /// make the room visible in the public room list
-        PRIVATE; /// hide the room from the public room list
+        /**
+         * use a server-assigned value (usually
+         * {@link Matrix.RoomVisibility.PRIVATE})
+         */
+        DEFAULT,
+
+        /**
+         * make the room visible in the public room list
+         */
+        PUBLIC,
+
+        /**
+         * hide the room from the public room list
+         */
+        PRIVATE;
     }
 
     /**
      * Room join rules.
      */
     public enum JoinRules {
-        UNKNOWN, /// A value unknown to this library
-        PUBLIC,  /// Anyone can join
-        INVITE,  /// Users may join upon invite
-        PRIVATE, /// Reserved word, not usable yet
-        KNOCK;   /// Reserved word, not usable yet
-    }
-
-    public enum SearchOrder {
-        RECENT,
-        RANK
-    }
-
-    public enum SearchKey {
-        CONTENT_BODY,
-        CONTENT_NAME,
-        CONTENT_TOPIC
-    }
-
-    public enum SearchGroupBy {
+        /**
+         * a value unknown to this library
+         */
         UNKNOWN,
+
+        /**
+         * anyone can join
+         */
+        PUBLIC,
+
+        /**
+         * users may join upon invite
+         */
+        INVITE,
+
+        /**
+         * reserved word, not usable yet
+         */
+        PRIVATE,
+
+        /**
+         * reserved word, not usable yet
+         */
+        KNOCK;
+    }
+
+    /**
+     * Search ordering.
+     */
+    public enum SearchOrder {
+        /**
+         * order messages as they arrived
+         */
+        RECENT,
+
+        /**
+         * order messages by relevance
+         */
+        RANK;
+    }
+
+    /**
+     * Search keys.
+     */
+    public enum SearchKey {
+        /**
+         * search in the body of a message
+         */
+        CONTENT_BODY,
+
+        /**
+         * search in the name of rooms
+         */
+        CONTENT_NAME,
+
+        /**
+         * search in the topic of rooms
+         */
+        CONTENT_TOPIC;
+    }
+
+    /**
+     * Search grouping
+     *
+     * The client can request that the results are returned along with
+     * grouping information, e.g. grouped by room_id. In this case the
+     * response will contain a group entry for each distinct value of
+     * room_id. Each group entry contains at least a list of the
+     * event_ids that are in that group, as well as potentially other
+     * metadata about the group.
+     */
+    public enum SearchGroupBy {
+        /**
+         * no grouping
+         */
+        NONE,
+
+        /**
+         * group by room ID
+         */
         ROOM_ID,
+
+        /**
+         * group by sender
+         */
         SENDER;
     }
 
+    /**
+     * Room history visibility
+     */
     public enum HistoryVisibility {
-        UNKNOWN,        /// represents a value unknown to this library
-        INVITED,        /// only room members can see the room
-                        /// history, and only what happened after they
-                        /// got an invitation
-        JOINED,         /// only room members can see the room
-                        /// history, and only what happened after they
-                        /// joined
-        SHARED,         /// only room members can see the room
-                        /// history, but they see all of it
-        WORLD_READABLE; /// anyone can see the room history
+        /**
+         * represents a value unknown to this library
+         */
+        UNKNOWN,
+
+        /**
+         * only room members can see the room history, and only what
+         * happened after they got an invitation
+         */
+        INVITED,
+
+        /**
+         * only room members can see the room history, and only what
+         * happened after they joined
+         */
+        JOINED,
+
+        /**
+         * only room members can see the room history, but they see
+         * all of it
+         */
+        SHARED,
+
+        /**
+         * anyone can see the room history
+         */
+        WORLD_READABLE;
     }
 
+    /**
+     * Room guest access
+     */
     public enum GuestAccess {
-        UNKNOWN,   /// represents a value unknown to this library
-        CAN_JOIN,  /// guest users are allowed to access the room
-        FORBIDDEN; /// guest users are not allowed to access the room
+        /**
+         * represents a value unknown to this library
+         */
+        UNKNOWN,
+
+        /**
+         * guest users are allowed to access the room
+         */
+        CAN_JOIN,
+
+        /**
+         * guest users are not allowed to access the room
+         */
+        FORBIDDEN;
     }
 
+    /**
+     * Call offer types
+     */
     public enum CallOfferType {
-        UNKNOWN, /// represents a value unknown to this library
-        OFFER;   /// call offer
+        /**
+         * represents a value unknown to this library
+         */
+        UNKNOWN,
+
+        /**
+         * call offer
+         */
+        OFFER;
     }
 
+    /**
+     * Call answer types
+     */
     public enum CallAnswerType {
-        UNKNOWN, /// represents a value unknown to this library
-        ANSWER;  /// call answer
+        /**
+         * represents a value unknown to this library
+         */
+        UNKNOWN,
+
+        /**
+         * call answer
+         */
+        ANSWER;
     }
 
     /**
