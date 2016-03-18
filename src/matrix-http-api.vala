@@ -617,7 +617,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    set_user_presence(API.Callback? cb,
+    set_presence(API.Callback? cb,
                       string user_id,
                       Presence presence,
                       string? status_message)

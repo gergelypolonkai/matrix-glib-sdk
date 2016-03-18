@@ -194,7 +194,7 @@ public interface Matrix.API : GLib.Object {
      * @param status_message a status message attached to this state
      */
     public abstract void
-    set_user_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
+    set_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
                       owned Matrix.API.Callback? @callback,
                       string user_id,
                       Matrix.Presence presence,
