@@ -30,6 +30,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         new Gee.HashMap<string, Presence>();
     private Gee.HashMap<string, Room> _rooms =
         new Gee.HashMap<string, Room>();
+    private ulong _last_txn_id = 0;
 
     public
     HTTPClient(string base_url)
@@ -486,5 +487,81 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         throw new Matrix.Error.UNAVAILABLE(
                 "Noo room data found for alias %s", room_alias);
+    }
+
+    /**
+     * Get the next transaction ID to use. It increments the
+     * internally stored value and returns that, so it is guaranteed
+     * to be unique until we run out of ulong boundaries.
+     *
+     * It is called internally by send().
+     */
+    public ulong
+    next_txn_id()
+    {
+        return ++_last_txn_id;
+    }
+
+    private void
+    send_callback(Json.Node? json_content,
+                  GLib.Error? err,
+                  Matrix.Client.SendCallback? cb)
+    {
+        string? event_id = null;
+        GLib.Error? new_err = err;
+
+        // If there is no callback, there is no point to continue
+        if (cb == null) {
+            return;
+        }
+
+        if (err == null) {
+            var root = json_content.get_object();
+
+            if (root.has_member("event_id")) {
+                event_id = root.get_string_member("event_id");
+            } else {
+                new_err = new Matrix.Error.BAD_RESPONSE(
+                        "event_id is missing from an event response");
+            }
+        }
+
+        cb(event_id, new_err);
+    }
+
+    public void
+    send(string room_id,
+         Matrix.Event.Base evt,
+         Matrix.Client.SendCallback? cb,
+         out ulong txn_id)
+        throws Matrix.Error
+    {
+        var evt_node = evt.json;
+        var evt_root = evt_node.get_object();
+        string? state_key = null;
+
+        if (evt_root.has_member("state_key")) {
+            state_key = evt_root.get_string_member("state_key");
+        }
+
+        if (state_key != null) {
+            txn_id = 0;
+            send_state_event(
+                    (i, ct, json_node, rc, err) =>
+                        send_callback(json_node, err, cb),
+                    room_id,
+                    evt.event_type,
+                    (state_key == "") ? null : state_key,
+                    evt_root.get_member("content"));
+        } else {
+            txn_id = next_txn_id();
+            send_event(
+                    (i, ct, json_node, rc, err) =>
+                        send_callback(json_node, err, cb),
+                    room_id,
+                    evt.event_type,
+                    "%lu".printf(txn_id),
+                    evt_root.get_member("content"));
+        }
     }
 }

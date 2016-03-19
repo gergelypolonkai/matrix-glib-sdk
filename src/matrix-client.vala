@@ -217,4 +217,34 @@ public interface Matrix.Client : GLib.Object {
     public abstract Room
     get_room_by_alias(string room_alias)
         throws Matrix.Error;
+
+    /**
+     * Callback type for {@link Matrix.Client.send}.
+     *
+     * @param event_id the event_id returned by the server
+     * @param err an error raised during event sending, if any
+     */
+    public delegate void
+    SendCallback(string? event_id, GLib.Error? err);
+
+    /**
+     * Send an event to the given room. This will use the
+     * /room/{roomId}/send or /room/{roomId}/state API depending on
+     * the event: if the event has a state key (there is a state_key
+     * key in the generated JSON), even if an empty one, it will use
+     * the latter.
+     *
+     * @param room_id the room to send the event to
+     * @param evt the event to send
+     * @param cb the callback function to call when the request is
+     *           finished
+     * @param txn_id the transaction ID used by this request. In case
+     *               of a state event, it will be untouched
+     */
+    public abstract void
+    send(string room_id,
+         Matrix.Event.Base evt,
+         SendCallback? cb,
+         out ulong txn_id)
+        throws Matrix.Error;
 }
