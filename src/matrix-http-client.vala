@@ -594,6 +594,10 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         var node = new Json.Node(Json.NodeType.OBJECT);
         node.set_object(root);
 
+        if (Config.DEBUG) {
+            debug("Saving state to %s\n", filename);
+        }
+
         var generator = new Json.Generator();
         generator.set_root(node);
         generator.to_file(filename);
@@ -604,6 +608,10 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
         throws Matrix.Error, GLib.Error
     {
         var parser = new Json.Parser();
+
+        if (Config.DEBUG) {
+            debug("Loading state from %s\n", filename);
+        }
 
         parser.load_from_file(filename);
         Json.Node? node = parser.get_root();
@@ -622,6 +630,10 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         base_url = node.get_string();
 
+        if (Config.DEBUG) {
+            debug("Loaded base URL %s", base_url);
+        }
+
         if ((node = root.get_member("validate_certificate")) == null) {
             throw new Matrix.Error.INVALID_FORMAT(
                     "Save data has no validate_certificate key");
@@ -631,18 +643,34 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
 
         if ((node = root.get_member("user_id")) != null) {
             _user_id = node.get_string();
+
+            if (Config.DEBUG) {
+                debug("Loaded user ID %s", user_id);
+            }
         }
 
         if ((node = root.get_member("homeserver_name")) != null) {
             _homeserver = node.get_string();
+
+            if (Config.DEBUG) {
+                debug("Loaded homeserver name %s", homeserver);
+            }
         }
 
         if ((node = root.get_member("access_token")) != null) {
             token = node.get_string();
+
+            if (Config.DEBUG) {
+                debug("Loaded access token %s", token);
+            }
         }
 
         if ((node = root.get_member("refresh_token")) != null) {
             refresh_token = node.get_string();
+
+            if (Config.DEBUG) {
+                debug("Loaded refresh token %s", refresh_token);
+            }
         }
     }
 }
