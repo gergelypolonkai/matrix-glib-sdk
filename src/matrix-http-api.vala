@@ -63,6 +63,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             if ((api_uri != null) && (media_uri != null)) {
                 _api_uri = api_uri;
                 _media_uri = media_uri;
+                _base_url = value;
 
                 _token = null;
                 _refresh_token = null;
