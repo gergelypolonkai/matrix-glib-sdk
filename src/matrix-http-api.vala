@@ -87,7 +87,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
             _soup_session.ssl_strict = value;
         }
     }
-    private string? _user_id;
+    protected string? _user_id;
     public string? user_id {
         get {
             return _user_id;
@@ -97,7 +97,7 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
     public string? token { get; set; default = null; }
     public string? refresh_token { get; set; default = null; }
-    private string? _homeserver;
+    protected string? _homeserver;
     public string? homeserver {
         get {
             return _homeserver;

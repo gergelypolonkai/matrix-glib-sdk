@@ -564,4 +564,85 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                     evt_root.get_member("content"));
         }
     }
+
+    public void
+    save_state(string filename)
+        throws Matrix.Error, GLib.Error
+    {
+        var root = new Json.Object();
+
+        root.set_string_member("base_url", base_url);
+
+        root.set_boolean_member("validate_certificate", validate_certificate);
+
+        if (user_id != null) {
+            root.set_string_member("user_id", user_id);
+        }
+
+        if (homeserver != null) {
+            root.set_string_member("homeserver_name", homeserver);
+        }
+
+        if (token != null) {
+            root.set_string_member("access_token", token);
+        }
+
+        if (refresh_token != null) {
+            root.set_string_member("refresh_token", refresh_token);
+        }
+
+        var node = new Json.Node(Json.NodeType.OBJECT);
+        node.set_object(root);
+
+        var generator = new Json.Generator();
+        generator.set_root(node);
+        generator.to_file(filename);
+    }
+
+    public void
+    load_state(string filename)
+        throws Matrix.Error, GLib.Error
+    {
+        var parser = new Json.Parser();
+
+        parser.load_from_file(filename);
+        Json.Node? node = parser.get_root();
+
+        if (node.get_node_type() != Json.NodeType.OBJECT) {
+            throw new Matrix.Error.INVALID_FORMAT(
+                    "Save data must be a JSON object.");
+        }
+
+        var root = node.get_object();
+
+        if ((node = root.get_member("base_url")) == null) {
+            throw new Matrix.Error.INVALID_FORMAT(
+                    "Save data has no base_url key");
+        }
+
+        base_url = node.get_string();
+
+        if ((node = root.get_member("validate_certificate")) == null) {
+            throw new Matrix.Error.INVALID_FORMAT(
+                    "Save data has no validate_certificate key");
+        }
+
+        validate_certificate = node.get_boolean();
+
+        if ((node = root.get_member("user_id")) != null) {
+            _user_id = node.get_string();
+        }
+
+        if ((node = root.get_member("homeserver_name")) != null) {
+            _homeserver = node.get_string();
+        }
+
+        if ((node = root.get_member("access_token")) != null) {
+            token = node.get_string();
+        }
+
+        if ((node = root.get_member("refresh_token")) != null) {
+            refresh_token = node.get_string();
+        }
+    }
 }

@@ -247,4 +247,23 @@ public interface Matrix.Client : GLib.Object {
          SendCallback? cb,
          out ulong txn_id)
         throws Matrix.Error;
+
+    /*
+     * Save the state of the client. Implementors can choose what they
+     * actually save, and in what format.
+     *
+     * @param filename the name of the file to save state to
+     */
+    public abstract void
+    save_state(string filename)
+        throws Matrix.Error, GLib.Error;
+
+    /**
+     * Load the state of the client, as saved by save_state().
+     *
+     * @param filename the name of the file to load state from
+     */
+    public abstract void
+    load_state(string filename)
+        throws Matrix.Error, GLib.Error;
 }
