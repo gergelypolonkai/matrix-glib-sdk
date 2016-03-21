@@ -25,8 +25,12 @@
 public class Matrix.Room : GLib.Object {
     /**
      * The ID of the room this object belongs to.
+     *
+     * If this property is null, then this object is acting as a
+     * temporary stash for another room object, which is used when
+     * calculating state events to be sent by apply_changes().
      */
-    public string room_id { get; construct; }
+    public string? room_id { get; construct; }
 
     /**
      * All the known room aliases.
@@ -155,13 +159,22 @@ public class Matrix.Room : GLib.Object {
     private HashTable<string, MemberData?> _members =
         new HashTable<string, MemberData?>(str_hash, str_equal);
 
+    private Room _stash = null;
+
     /**
      * Create a new Room object.
+     *
+     * @param room_id the ID of the room this object belongs to. For
+     *                null values, see remark at the room_id property.
      */
     public
-    Room(string room_id)
+    Room(string? room_id)
     {
         Object(room_id : room_id);
+
+        if (room_id != null) {
+            _stash = new Room(null);
+        }
     }
 
     /**
@@ -343,5 +356,27 @@ public class Matrix.Room : GLib.Object {
     get_event_level(string event_type)
     {
         return _event_levels[event_type];
+    }
+
+    /**
+     * Generate a set of events that can change the room state on the
+     * home server similar to what this object shows.
+     */
+    public void
+    apply_changes()
+    {
+        Matrix.Event.Base[] ret = {};
+
+        foreach (var to_add in _aliases) {
+            if (!(to_add in _stash._aliases)) {
+                // add alias
+            }
+        }
+
+        foreach (var to_remove in _stash._aliases) {
+            if (!(to_remove in _aliases)) {
+                // remove alias
+            }
+        }
     }
 }
