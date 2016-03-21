@@ -364,6 +364,15 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             if ((node = root_obj.get_member("next_batch")) != null) {
                 _last_sync_token = node.get_string();
             }
+        } else if ((error is Matrix.Error.M_FORBIDDEN)
+                   || (error is Matrix.Error.M_UNKNOWN_TOKEN)
+                   || (error is Matrix.Error.M_UNAUTHORIZED)) {
+            try {
+                token_refresh((i, ct, jc, rc, err) => {
+                        login_finished((error == null)
+                                       || (error is Matrix.Error.NONE));
+                    } , null);
+            } catch (Matrix.Error e) {}
         }
 
         // It is possible that polling has been disabled while we were
