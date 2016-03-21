@@ -33,13 +33,50 @@ static GOptionEntry entries[] = {
     {G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &homeserver, "The homeserver to connect to", "homeserver"},
 };
 
+static gchar *
+save_file_name(MatrixClient *client)
+{
+    const gchar *base_url = matrix_http_api_get_base_url(
+            MATRIX_HTTP_API(client));
+    gchar *filename = g_compute_checksum_for_string(
+            G_CHECKSUM_SHA1, base_url, -1);
+    gchar *dir = g_strdup_printf("%s/matrix-glib-sdk", g_get_user_cache_dir());
+    gchar *full_fn = g_strdup_printf("%s/%s", dir, filename);
+
+    g_mkdir_with_parents(dir);
+
+    g_free(dir);
+    g_free(filename);
+
+    return full_fn;
+}
+
+static void
+save_state(MatrixClient *client)
+{
+    gchar *filename = save_file_name(client);
+
+    matrix_client_save_state(client, filename, NULL);
+    g_free(filename);
+}
+
+static void
+load_state(MatrixClient *client)
+{
+    gchar *filename = save_file_name(client);
+
+    matrix_client_load_state(client, filename, NULL);
+    g_printf("Token loaded: %s\n", matrix_api_get_token(MATRIX_API(client)));
+    g_free(filename);
+}
+
 void
 login_finished(MatrixClient *client, gboolean success, GMainLoop *loop)
 {
     g_printerr("Login %s.\n", (success) ? "succesful" : "failed");
 
     if (success) {
-        matrix_client_begin_polling(client, NULL);
+        save_state(client);
     } else {
         g_main_loop_quit(loop);
     }
@@ -134,7 +171,13 @@ main(int argc, char *argv[])
     matrix_client_connect_event(client, MATRIX_EVENT_TYPE_ROOM_MESSAGE,
                                 cb_room_message_event, NULL, NULL);
 
-    matrix_client_login_with_password(client, user, password, NULL);
+    load_state(client);
+
+    if (matrix_api_get_token(MATRIX_API(client)) == NULL) {
+        matrix_client_login_with_password(client, user, password, NULL);
+    } else {
+        matrix_client_begin_polling(client, NULL);
+    }
 
     g_main_loop_run(loop);
 
