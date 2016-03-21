@@ -43,7 +43,7 @@ save_file_name(MatrixClient *client)
     gchar *dir = g_strdup_printf("%s/matrix-glib-sdk", g_get_user_cache_dir());
     gchar *full_fn = g_strdup_printf("%s/%s", dir, filename);
 
-    g_mkdir_with_parents(dir);
+    g_mkdir_with_parents(dir, 0700);
 
     g_free(dir);
     g_free(filename);
