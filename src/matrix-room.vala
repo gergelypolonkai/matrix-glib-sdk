@@ -23,51 +23,122 @@
  * its known aliases, its members, etc.
  */
 public class Matrix.Room : GLib.Object {
+    /**
+     * The ID of the room this object belongs to.
+     */
     public string room_id { get; construct; }
 
+    /**
+     * All the known room aliases.
+     */
     public string[] aliases { get; set; }
 
+    /**
+     * The URL of the room’s avatar.
+     */
     public string? avatar_url { get; set; default = null; }
 
+    /**
+     * ImageInfo relevant to the room avatar.
+     */
     public ImageInfo? avatar_info { get; set; default = null; }
 
+    /**
+     * The URL of the room avatar’s thumbnail.
+     */
     public string? avatar_thumbnail_url { get; set; default = null; }
 
+    /**
+     * ImageInfo relevant to the room avatar’s thumbnail.
+     */
     public ImageInfo? avatar_thumbnail_info { get; set; default = null; }
 
+    /**
+     * The canonical alias of the room.
+     */
     public string? canonical_alias { get; set; default = null; }
 
+    /**
+     * The Matrix ID of the room’s creator.
+     */
     public string? creator { get; set; default = null; }
 
+    /**
+     * If false, the room is not federated.
+     */
     public bool federate { get; set; default = false; }
 
+    /**
+     * Wether guests are allowed to join the room.
+     */
     public GuestAccess guest_access { get; set; default = GuestAccess.UNKNOWN; }
 
+    /**
+     * This value controls the visibility of the room’s history.
+     */
     public HistoryVisibility history_visibility {
         get; set;
         default = HistoryVisibility.UNKNOWN;
     }
 
+    /**
+     * Controls who can join the room.
+     */
     public JoinRules join_rules { get; set; default = JoinRules.UNKNOWN; }
 
+    /**
+     * The room’s name.
+     */
     public string? name { get; set; default = null; }
 
+    /**
+     * The default power level users get upon joining the room.
+     */
     public int default_power_level { get; set; default = 0; }
 
+    /**
+     * The power level required to send non-state events to the
+     * room. This gets applied if the event type doesn’t have an
+     * explicit level requirement (see set_event_level() and
+     * get_event_level()).
+     */
     public int default_event_level { get; set; default = 0; }
 
+    /**
+     * The power level required to send state events to the room. This
+     * get applied if the event type doesn’t have an explicit level
+     * requirement (see set_event_level() and get_event_level()).
+     */
     public int default_state_level { get; set; default = 10; }
 
+    /**
+     * The power level required to ban other users from the room.
+     */
     public int ban_level { get; set; default = 5; }
 
+    /**
+     * The power level required to kick other users from the room.
+     */
     public int kick_level { get; set; default = 5; }
 
+    /**
+     * The power level required to redact events in the room.
+     */
     public int redact_level { get; set; default = 20; }
 
+    /**
+     * The power level required to invite users to the room.
+     */
     public int invite_level { get; set; default = 0; }
 
+    /**
+     * The room’s topic.
+     */
     public string? topic { get; set; default = null; }
 
+    /**
+     * The users currently typing in the room.
+     */
     public string[] typing_users { get; set; }
 
     private Gee.HashMap<string, int?> _event_levels =
@@ -84,12 +155,24 @@ public class Matrix.Room : GLib.Object {
     private Gee.HashMap<string, MemberData?> _members =
         new Gee.HashMap<string, MemberData?>();
 
+    /**
+     * Create a new Room object.
+     */
     public
     Room(string room_id)
     {
         Object(room_id : room_id);
     }
 
+    /**
+     * Add a member to the room member list. If a member with the
+     * same @user_id exists, {@link Matrix.Error.ALREADY_EXISTS} is
+     * thrown.
+     *
+     * @param user_id the Matrix ID of the user to add
+     * @param third_party if true, the member is marked as a pending
+     *                    3rd party invitation
+     */
     public void
     add_member(string user_id, Profile? profile, bool third_party)
         throws Matrix.Error
@@ -114,6 +197,16 @@ public class Matrix.Room : GLib.Object {
         _members[user_id] = data;
     }
 
+    /**
+     * Gets the profile of the room member specified in @user_id. If
+     * that user is not added to the room yet, it gets added with an
+     * empty profile and that profile is returned.
+     *
+     * @param user_id the Matrix ID of the user to add
+     * @param third_party if true, the member is marked as a pending
+     *                    3rd party invitation
+     * @return the {@link Matrix.Profile} of the user
+     */
     public Profile
     get_or_add_member(string user_id, bool third_party = false)
         throws Matrix.Error
@@ -127,6 +220,16 @@ public class Matrix.Room : GLib.Object {
         }
     }
 
+    /**
+     * Gets the profile of the room member specified in @user_id. If
+     * that user is not added to the room yet,
+     * {@link Matrix.Error.NOT_FOUND) is thrown.
+     *
+     * @param user_id the Matrix ID of the user to find
+     * @param third_party gets a true value if the member is actually
+     *                    a pending 3rd party invitation
+     * @return the profile of the user
+     */
     public Profile
     get_member(string user_id, out bool third_party)
         throws Matrix.Error
@@ -143,6 +246,9 @@ public class Matrix.Room : GLib.Object {
         return data.profile;
     }
 
+    /**
+     * Removes a member from the member list.
+     */
     public void
     remove_member(string user_id)
         throws Matrix.Error
