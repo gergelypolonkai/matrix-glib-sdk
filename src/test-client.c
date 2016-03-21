@@ -77,6 +77,7 @@ login_finished(MatrixClient *client, gboolean success, GMainLoop *loop)
 
     if (success) {
         save_state(client);
+        matrix_client_begin_polling(client, NULL);
     } else {
         g_main_loop_quit(loop);
     }
