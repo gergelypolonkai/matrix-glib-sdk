@@ -368,9 +368,20 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                    || (error is Matrix.Error.M_UNKNOWN_TOKEN)
                    || (error is Matrix.Error.M_UNAUTHORIZED)) {
             try {
+                token = null;
+
                 token_refresh((i, ct, jc, rc, err) => {
                         login_finished((error == null)
                                        || (error is Matrix.Error.NONE));
+
+                        if (token == null) {
+                            refresh_token = null;
+                            polling_stopped(err);
+
+                            try {
+                                stop_polling(false);
+                            } catch (GLib.Error e) {}
+                        }
                     } , null);
             } catch (Matrix.Error e) {}
         }
@@ -384,6 +395,7 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                 if ((error == null) || (error.code < 500)) {
                     begin_polling();
                 } else if ((error != null) && error.code >= 500) {
+                    polling_stopped(error);
                     stop_polling(false);
                 }
             } catch (Matrix.Error e) {}
@@ -402,6 +414,10 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
             _polling = true;
         } catch (Matrix.Error e) {
             throw e;
+        }
+
+        if (_polling == false) {
+            polling_started();
         }
 
         _polling = true;

@@ -51,6 +51,22 @@ public interface Matrix.Client : GLib.Object {
     {}
 
     /**
+     * This signal is emitted when polling is started.
+     */
+    public signal void
+    polling_started();
+
+    /**
+     * This signal gets invoked when polling is stopped due to any
+     * reason.
+     *
+     * @param error gets set to an actual error if polling is stopped
+     *              due to one
+     */
+    public signal void
+    polling_stopped(GLib.Error? error);
+
+    /**
      * Callback function delegate for the event signal.
      *
      * @param room_id the room the event associated with
