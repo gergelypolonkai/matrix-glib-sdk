@@ -47,7 +47,9 @@ public interface Matrix.Client : GLib.Object {
      */
     [Signal (detailed=true)]
     public virtual signal void
-    @event(string? room_id, Json.Node raw_event, Matrix.Event.Base? matrix_event)
+    @event(string? room_id,
+           Json.Node raw_event,
+           Matrix.Event.Base? matrix_event)
     {}
 
     /**
