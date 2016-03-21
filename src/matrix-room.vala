@@ -223,7 +223,7 @@ public class Matrix.Room : GLib.Object {
     /**
      * Gets the profile of the room member specified in @user_id. If
      * that user is not added to the room yet,
-     * {@link Matrix.Error.NOT_FOUND) is thrown.
+     * {@link Matrix.Error.NOT_FOUND} is thrown.
      *
      * @param user_id the Matrix ID of the user to find
      * @param third_party gets a true value if the member is actually
