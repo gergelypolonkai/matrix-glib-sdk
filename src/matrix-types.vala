@@ -795,6 +795,21 @@ namespace Matrix {
 
             return node;
         }
+
+        /**
+         * Check if two ImageInfo objects are identical.
+         *
+         * @param other the ImageInfo object to compare with
+         * @return true if the two objects hold different values
+         */
+        public bool
+        differs(ImageInfo other)
+        {
+            return ((size != other.size)
+                    || (height != other.height)
+                    || (width != other.width)
+                    || (mimetype != other.mimetype));
+        }
     }
 
     public struct AudioInfo {
