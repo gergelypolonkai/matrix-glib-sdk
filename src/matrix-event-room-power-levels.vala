@@ -215,4 +215,16 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
 
         base.to_json(json_data);
     }
+
+    public void
+    set_user_level(string user_id, int level)
+    {
+        _user_levels[user_id] = level;
+    }
+
+    public void
+    set_event_level(string event_type, int level)
+    {
+        _event_levels[event_type] = level;
+    }
 }
