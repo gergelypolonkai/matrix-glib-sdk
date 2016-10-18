@@ -19,7 +19,9 @@
 /**
  * Base class for Matrix events.
  */
-public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
+public abstract class Matrix.Event.Base : GLib.Object,
+                                          GLib.Initable,
+                                          Json.Serializable {
     private Error? _construct_error = null;
     private bool _inited = false;
     private Json.Node? _json;
@@ -77,6 +79,8 @@ public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
         }
     }
 
+    // Implementation of GLib.Initable
+
     public bool
     init(GLib.Cancellable? cancellable = null)
         throws Error, Matrix.Error
@@ -94,6 +98,39 @@ public abstract class Matrix.Event.Base : GLib.Object, GLib.Initable {
 
         return true;
     }
+
+    // Implementation of Json.Serializable
+
+
+    public unowned ParamSpec
+    find_property(string name)
+    {
+        return get_class().find_property(name);
+    }
+
+    public Json.Node
+    serialize_property(string property_name,
+                       Value value,
+                       ParamSpec pspec)
+    {
+        return default_serialize_property(property_name, value, pspec);
+    }
+
+    public bool
+    deserialize_property(string property_name,
+                         out Value value,
+                         ParamSpec pspec,
+                         Json.Node property_node)
+    {
+        value = Value(pspec.value_type);
+
+        return default_deserialize_property(property_name,
+                                            value,
+                                            pspec,
+                                            property_node);
+    }
+
+    // Own methods
 
     private void
     initialize_from_json(Json.Node json_data)
