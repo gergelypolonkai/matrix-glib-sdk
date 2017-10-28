@@ -705,34 +705,34 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    delete_pusher(API.Callback? cb,
-                  string scope,
-                  PusherKind kind,
-                  string rule_id)
+    delete_pushrule(API.Callback? cb,
+                    string scope,
+                    PusherKind kind,
+                    string rule_id)
         throws Matrix.Error
     {
         _pusher_modif(cb, "DELETE", scope, kind, rule_id);
     }
 
     public void
-    get_pusher(API.Callback? cb,
-               string scope,
-               PusherKind kind,
-               string rule_id)
+    get_pushrule(API.Callback? cb,
+                 string scope,
+                 PusherKind kind,
+                 string rule_id)
         throws Matrix.Error
     {
         _pusher_modif(cb, "GET", scope, kind, rule_id);
     }
 
     public void
-    add_pusher(API.Callback? cb,
-               string scope,
-               PusherKind kind,
-               string rule_id,
-               string? before,
-               string? after,
-               string[] actions,
-               PusherConditionKind[] conditions)
+    add_pushrule(API.Callback? cb,
+                 string scope,
+                 PusherKind kind,
+                 string rule_id,
+                 string? before,
+                 string? after,
+                 string[] actions,
+                 PusherConditionKind[] conditions)
         throws Matrix.Error
     {
         Json.Builder builder;
@@ -789,11 +789,11 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
-    toggle_pusher(API.Callback? cb,
-                  string scope,
-                  PusherKind kind,
-                  string rule_id,
-                  bool enabled)
+    toggle_pushrule(API.Callback? cb,
+                    string scope,
+                    PusherKind kind,
+                    string rule_id,
+                    bool enabled)
         throws Matrix.Error
     {
         Json.Builder builder;
@@ -810,6 +810,15 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
               CallType.API, "GET",
               _pusher_url(scope, kind, rule_id),
               null, null, builder.get_root(), null, false);
+    }
+
+    public void
+    get_pushrules(API.Callback? cb)
+        throws Matrix.Error
+    {
+        _send(cb,
+              CallType.API, "GET", "pushrules",
+              null, null, null, null, false);
     }
 
     /* Room creation */
@@ -1008,6 +1017,27 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
     }
 
     public void
+    unban_user(API.Callback? cb,
+                   string room_id,
+                   string user_id)
+        throws Matrix.Error
+    {
+        string path = "rooms/"
+            + Soup.URI.encode(room_id, null)
+            + "/unban";
+        var builder = new Json.Builder();
+
+        builder.begin_object();
+
+        builder.set_member_name("user_id");
+        builder.add_string_value(user_id);
+
+        builder.end_object();
+
+        _send(cb, CallType.API, "POST", path, null, null, builder.get_root(), null, false);
+    }
+
+    public void
     forget_room(API.Callback? cb,
                 string room_id)
         throws Matrix.Error
@@ -1090,6 +1120,40 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
         _send(cb,
               CallType.API, "POST", path,
               null, null, null, null, false);
+    }
+
+    public void
+    join_room_id_or_alias(API.Callback? cb, string room_id_or_alias)
+        throws Matrix.Error
+    {
+        var path = "join/" + Soup.URI.encode(room_id_or_alias, null);
+
+        _send(cb, CallType.API, "POST", path,
+              null, null, null, null, false);
+    }
+
+    public void
+    kick_user(API.Callback? cb,
+              string room_id, string user_id, string? reason)
+        throws Matrix.Error
+    {
+        var path = "rooms/" + Soup.URI.encode(room_id, null) + "/kick";
+        var builder = new Json.Builder();
+
+        builder.begin_object();
+
+        builder.set_member_name("user_id");
+        builder.add_string_value(user_id);
+
+        if (reason != null) {
+            builder.set_member_name("reason");
+            builder.add_string_value(reason);
+        }
+
+        builder.end_object();
+
+        _send(cb, CallType.API, "POST", path,
+              null, null, builder.get_root(), null, false);
     }
 
     /* Room participation */
@@ -1537,6 +1601,15 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
               null, null, builder.get_root(), null, false);
     }
 
+    public void
+    logout(API.Callback? cb)
+        throws Matrix.Error
+    {
+        _send(cb,
+              CallType.API, "POST", "logout",
+              null, null, null, null, false);
+    }
+
     /* User data */
 
     public void
@@ -1787,6 +1860,36 @@ public class Matrix.HTTPAPI : GLib.Object, Matrix.API {
         _send(cb,
               CallType.API, "PUT", path,
               null, null, content, null, false);
+    }
+
+    public void
+    deactivate_account(API.Callback? cb, string? session, string? login_type)
+        throws Matrix.Error
+    {
+        Json.Builder? builder = null;
+
+        if (login_type != null) {
+            builder = new Json.Builder();
+
+            builder.begin_object();
+
+            builder.set_member_name("auth");
+            builder.begin_object();
+
+            if (session != null) {
+                builder.set_member_name("session");
+                builder.add_string_value(session);
+            }
+
+            builder.set_member_name("type");
+            builder.add_string_value(login_type);
+
+            builder.end_object();
+            builder.end_object();
+        }
+
+        _send(cb, CallType.API, "POST", "account/deactivate",
+              null, null, (builder != null) ? builder.get_root() : null, null, false);
     }
 
     /* VoIP */

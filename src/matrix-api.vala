@@ -75,256 +75,316 @@ public interface Matrix.API : GLib.Object {
     public abstract void
     abort_pending();
 
-    /* Media */
+    /* User data */
 
     /**
-     * Download content from the content repository.
+     * Get a list of the third party identifiers that a homeserver has
+     * associated with the user's account.
      *
-     * Implementors: If server_name or media_id is {{{null}}},
-     * implementations MUST throw Matrix.Error.INCOMPLETE.
+     * This is not the same as the list of third party identifiers bound
+     * to the user's Matrix ID in Identity Servers.
      *
-     * @param callback a function to call when the request is finished
-     * @param server_name the server name from the `mxc:` URI
-     * @param media_id the media ID from the `mxc:` URI
+     * Identifiers in this list may be used by the homeserver as, for
+     * example, identifiers to accept to reset the user's account
+     * password.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
      */
     public abstract void
-    media_download([CCode (delegate_target_pos = 1.5, scope = "async", destroy_notify_pos = -1)]
-                   owned Matrix.API.Callback? @callback,
-                   string server_name,
-                   string media_id)
+    get_3pids([CCode (scope = "async")]
+              owned Matrix.API.Callback? @callback)
         throws Matrix.Error;
 
     /**
-     * Download a thumbnail of the content from the content
-     * repository. The actual thumbnail may not match the size
-     * specified.
+     * Add contact information to the user's account.
      *
-     * If @param server_name or @param media_id is {{{null}}}, this
+     * If @param threepid_creds is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param bind_creds whether the homeserver should also bind this
+     *                   third party identifier to the account's
+     *                   Matrix ID with the passed Identity Server.
+     * @param threepid_creds the credentials to associate with the
+     *                       account
+     */
+    public abstract void
+    add_3pid([CCode (delegate_target_pos = 1.5, scope = "async")]
+             owned Matrix.API.Callback? @callback,
+             bool bind_creds,
+             Matrix.3PidCredential threepid_creds)
+        throws Matrix.Error;
+
+    /**
+     * Deactivate the account.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param session optional session token provided by the server
+     * @param login_type the login type the client is trying to complete
+     */
+    public abstract void
+    deactivate_account([CCode (delegate_target_pos = 1.5, scope = "async")]
+                       owned Matrix.API.Callback? @callback,
+                       string? session,
+                       string? login_type)
+        throws Matrix.Error;
+
+    /**
+     * Change the active user's password.
+     *
+     * If @param new_password is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param new_password the new password for the account
+     */
+    public abstract void
+    change_password([CCode (delegate_target_pos = 1.5, scope = "async")]
+                    owned Matrix.API.Callback? @callback,
+                    string new_password)
+        throws Matrix.Error;
+
+    /**
+     * Get a user's profile.
+     *
+     * If @param user_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user whose profile to get
+     */
+    public abstract void
+    get_profile([CCode (delegate_target_pos = 1.5, scope = "async")]
+                owned Matrix.API.Callback? @callback,
+                string user_id)
+        throws Matrix.Error;
+
+    /**
+     * Get the URL of the specified user's avatar.
+     *
+     * If @param user_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user whose avatar URL to get
+     */
+    public abstract void
+    get_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")]
+                   owned Matrix.API.Callback? @callback,
+                   string user_id)
+        throws Matrix.Error;
+
+    /**
+     * Set the user's avatar URL.
+     *
+     * If @param user_id or @param avatar_url is {{{null}}}, this
      * function returns immediately, and throws
      * Matrix.Error.INCOMPLETE.
      *
-     * @param callback a function to call when the request is finished
-     * @param server_name the server name from the `mxc:` URI
-     * @param media_id the media ID from the `mxc:` URI
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user whose avatar URL to set
+     * @param avatar_url the avatar URL info
      */
     public abstract void
-    media_thumbnail([CCode (delegate_target_pos = 1.5, scope = "async")]
-                    owned Matrix.API.Callback? @callback,
-                    string server_name,
-                    string media_id,
-                    uint width,
-                    uint height,
-                    Matrix.ResizeMethod method)
+    set_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")]
+                   owned Matrix.API.Callback? @callback,
+                   string user_id,
+                   string avatar_url)
         throws Matrix.Error;
 
     /**
-     * Upload some content to the content repository.
-     *
-     * If @param content is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param content_type the type of the content to be uploaded
-     * @param content the content to be uploaded
-     */
-    public abstract void
-    media_upload([CCode (delegate_target_pos = 1.5, scope = "async")]
-                 owned Matrix.API.Callback? @callback,
-                 string? content_type,
-                 owned GLib.ByteArray content)
-        throws Matrix.Error;
-
-    /* Presence */
-
-    /**
-     * Retrieve a list of presence events for every user on this list.
-     *
-     * If @param user_id is {{{null}}}, this function returns immediately,
-     * and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param user_id the user whose presence list should be retrieved
-     */
-    public abstract void
-    get_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")]
-                      owned Matrix.API.Callback? @callback,
-                      string user_id)
-        throws Matrix.Error;
-
-    /**
-     * Add or remove users from the specified user's presence list.
-     *
-     * If @param user_id, or both @param drop_ids and @param
-     * invite_ids are {{{null}}}, this function returns immediately,
-     * and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param user_id the user whose presence list is being modified
-     * @param drop_ids a list of user IDs to remove from the list
-     * @param invite_ids a list of user IDs to add to the list
-     */
-    public abstract void
-    update_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")]
-                         owned Matrix.API.Callback? @callback,
-                         string user_id,
-                         string[] drop_ids,
-                         string[] invite_ids)
-        throws Matrix.Error;
-
-    /**
-     * Get the given user's presence state.
+     * Get the user's display name.
      *
      * If @param user_id is {{{null}}}, this function returns
      * immediately, and throws Matrix.Error.INCOMPLETE.
      *
-     * @param user_id the user whose presence list is being modified
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user whose display name to get
      */
     public abstract void
-    get_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
-                      owned Matrix.API.Callback? @callback,
-                      string user_id)
+    get_display_name([CCode (delegate_target_pos = 1.5, scope = "async")]
+                     owned Matrix.API.Callback? @callback,
+                     string user_id)
         throws Matrix.Error;
 
     /**
-     * Set the given user's presence. You cannot set the presence of
-     * another user.
+     * Set the user's display name.
      *
-     * If @param user_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param user_id  the user whose presence list is being modified
-     * @param presence the new presence state
-     * @param status_message a status message attached to this state
-     */
-    public abstract void
-    set_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
-                      owned Matrix.API.Callback? @callback,
-                      string user_id,
-                      Matrix.Presence presence,
-                      string? status_message)
-        throws Matrix.Error;
-
-    /* Push notifications */
-
-    /**
-     * Create, update or delete a pusher for the active user on this
-     * homeserver.
-     *
-     * If @param pusher is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     */
-    public abstract void
-    update_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
-                  owned Matrix.API.Callback? @callback,
-                  Matrix.Pusher pusher)
-        throws Matrix.Error;
-
-    /**
-     * Retrieve all push rulesets.
-     */
-    public abstract void
-    get_pushers([CCode (scope = "async")]
-                owned Matrix.API.Callback? @callback)
-        throws Matrix.Error;
-
-    /**
-     * Delete a push rule.
-     *
-     * If @param scope or @param rule_id is {{{null}}}, this function
-     * returns immediately, and throws
+     * If @param user_id or @param display_name is {{{null}}}, this
+     * function returns immediately, and throws
      * Matrix.Error.INCOMPLETE.
      *
-     * @param callback a function to call when the request is finished
-     * @param scope either {{{global}}} to specify global rules, or
-     *              {{{device/&lt;profile tag&gt;}}} for rules for a
-     *              given {{{profile tag}}}
-     * @param kind the kind of rule
-     * @param rule_id an identifier for the rule
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user whose display name to set
+     * @param display_name the display name info
      */
     public abstract void
-    delete_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
-                  owned Matrix.API.Callback? @callback,
-                  string scope,
-                  Matrix.PusherKind kind,
-                  string rule_id)
+    set_display_name([CCode (delegate_target_pos = 1.5, scope = "async")]
+                     owned Matrix.API.Callback? @callback,
+                     string user_id,
+                     string display_name)
         throws Matrix.Error;
 
     /**
-     * Retrieve a specific push rule.
+     * Attempt to register an account with the homeserver using @param
+     * username and @param password.
      *
-     * If @param scope or @param rule_id is {{{null}}}, this function
-     * returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
+     * Implementations of this method must set the token property on a
+     * successful login.
      *
-     * @param callback a function to call when the request is finished
-     * @param scope either {{{global}}} to specify global rules, or
-     *              {{{device/&lt;profile tag&gt;}}} for rules for a
-     *              given {{{profile tag}}}.
-     * @param kind the kind of rule
-     * @param rule_id an identifier for the rule
+     * If @param password is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param account_kind the type of account to register
+     * @param bind_email if {{{true}}}, the server binds the e-mail
+     *                   used for authentication to the Matrix ID with
+     *                   the ID server
+     * @param username the local part of the desired Matrix ID. If
+     *                 omitted, the server will generate a local part
+     * @param password the desired password for the account
      */
     public abstract void
-    get_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
-               owned Matrix.API.Callback? @callback,
-               string scope,
-               Matrix.PusherKind kind,
-               string rule_id)
+    register_account([CCode (delegate_target_pos = 1.5, scope = "async")]
+                     owned Matrix.API.Callback? @callback,
+                     Matrix.AccountKind account_kind,
+                     bool bind_email,
+                     string? username,
+                     string password)
         throws Matrix.Error;
 
     /**
-     * Add or change a push rule.
+     * Set some account data for the client. This config is only
+     * visible to the user who set the account data. The config will
+     * be synced to clients in the top-level account data.
      *
-     * If either @param scope, @param rule_id or @param actions are
+     * If @param user_id, @param event_type or @param content is
      * {{{null}}}, this function returns immediately, and throws
      * Matrix.Error.INCOMPLETE.
      *
-     * @param callback a function to call when the request is finished
-     * @param scope either {{{global}}} to specify global rules, or
-     *              {{{device/&lt;profile tag&gt;}}} for rules for a
-     *              given {{{profile tag}}}
-     * @param kind the kind of rule
-     * @param rule_id an identifier for the rule
-     * @param before make the new rule the next-most important than
-     *               this rule ID
-     * @param after make the new rule the next-less important than
-     *              this rule ID
-     * @param actions the actions to perform when the conditions for
-     *                this rule are met
-     * @param conditions the conditions that must hold true for an
-     *                   event for a rule to be applied. A rule with
-     *                   no conditions always matches
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user to set account data for. An access
+     *                token must be present and be authorized to make
+     *                requests for this user ID
+     * @param room_id the room to set account data for. If {{{null}}},
+     *                the account data will be set globally
+     * @param event_type the event type of the account data to
+     *                   set. Custom types should be namespaced to
+     *                   avoid clashes
+     * @param content the content of the account data
      */
     public abstract void
-    add_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
-               owned Matrix.API.Callback? @callback,
-               string scope,
-               Matrix.PusherKind kind,
-               string rule_id,
-               string? before,
-               string? after,
-               string[] actions,
-               Matrix.PusherConditionKind[] conditions)
+    set_account_data([CCode (delegate_target_pos = 1.5, scope = "async")]
+                     owned Matrix.API.Callback? @callback,
+                     string user_id,
+                     string? room_id,
+                     string event_type,
+                     owned Json.Node content)
         throws Matrix.Error;
 
     /**
-     * Enable or disable the specified push rule.
+     * List the tags set by a user on a room.
      *
-     * If @scope or @rule_id is %NULL, this function returns immediately,
-     * and fills @error with %MATRIX_ERROR_INCOMPLETE.
+     * If @param user_id or @param room_id is {{{null}}}, this
+     * function returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
      *
-     * @param callback a function to call when the request is finished
-     * @param scope either {{{global}}} to specify global rules, or
-     *             {{{device/&lt;profile tag&gt;}}} for rules for a
-     *             given {{{profile tag}}}
-     * @param kind the kind of rule
-     * @param rule_id an identifier for the rule
-     * @param enabled if {{{true}}}, the rule will be enabled,
-     *                otherwise it gets disabled
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the ID of the user to get the tags for. An
+     *                access token must be set, and it must be
+     *                authorised to make requests for this user ID
+     * @param room_id the room to get tags for
      */
     public abstract void
-    toggle_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
+    get_room_tags([CCode (delegate_target_pos = 1.5, scope = "async")]
                   owned Matrix.API.Callback? @callback,
-                  string scope,
-                  Matrix.PusherKind kind,
-                  string rule_id,
-                  bool enabled)
+                  string user_id,
+                  string room_id)
+        throws Matrix.Error;
+
+    /**
+     * Remove a tag from the room.
+     *
+     * If @param user_id, @param room_id or @param tag is {{{null}}},
+     * this function returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the id of the user to remove a tag for
+     * @param room_id the id of the room to remove the tag from
+     * @param tag the tag to remove
+     */
+    public abstract void
+    delete_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")]
+                    owned Matrix.API.Callback? @callback,
+                    string user_id,
+                    string room_id,
+                    string tag)
+        throws Matrix.Error;
+
+    /**
+     * Add a tag to the room.
+     *
+     * If @param user_id, @param room_id or @param tag is {{{null}}},
+     * this function returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the ID of the user to add the tag for
+     * @param room_id the ID of the room to add the tag for
+     * @param tag the tag to add
+     * @param content extra data for the tag, e.g. ordering
+     */
+    public abstract void
+    add_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")]
+                 owned Matrix.API.Callback? @callback,
+                 string user_id,
+                 string room_id,
+                 string tag,
+                 owned Json.Node? content)
+        throws Matrix.Error;
+
+    /* Server administration */
+
+    /**
+     * Get information about a particular user.
+     *
+     * If @param user_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param user_id the user ID to look up
+     */
+    public abstract void
+    whois([CCode (delegate_target_pos = 1.5, scope = "async")]
+          owned Matrix.API.Callback? @callback,
+          string user_id)
+        throws Matrix.Error;
+
+    /**
+     * Get the versions of the specification supported by the server.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     */
+    public abstract void
+    versions([CCode (scope = "async")]
+             owned Matrix.API.Callback? @callback)
         throws Matrix.Error;
 
     /* Room creation */
@@ -419,141 +479,6 @@ public interface Matrix.API : GLib.Object {
                       string room_alias)
         throws Matrix.Error;
 
-    /* Room discovery */
-
-    /**
-     * List the public rooms on the server.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     */
-    public abstract void
-    list_public_rooms([CCode (scope = "async")]
-                      owned Matrix.API.Callback? @callback)
-        throws Matrix.Error;
-
-    /* Room membership */
-
-    /**
-     * Ban the specified user from the specified room. An optional reason
-     * can be specified.
-     *
-     * If @param room_id or @param user_id is {{{null}}}, this
-     * function returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID where the user should be banned
-     * @param user_id the user ID to ban
-     * @param reason the reason of the ban
-     */
-    public abstract void
-    ban_user([CCode (delegate_target_pos = 1.5, scope = "async")]
-             owned Matrix.API.Callback? @callback,
-             string room_id,
-             string user_id, string? reason)
-        throws Matrix.Error;
-
-    /**
-     * Stop the requesting user remembering about a particular room.
-     *
-     * In general, history is a first class citizen in Matrix. After this
-     * API is called, however, a user will no longer be able to retrieve
-     * history for this room. If all users on a homeserver forget a room,
-     * the room is eligible for deletion from that homeserver.
-     *
-     * If the user is currently joined to the room, they will implicitly
-     * leave the room as part of this API call.
-     *
-     * If @param room_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID to forget
-     */
-    public abstract void
-    forget_room([CCode (delegate_target_pos = 1.5, scope = "async")]
-                owned Matrix.API.Callback? @callback,
-                string room_id)
-        throws Matrix.Error;
-
-    /**
-     * Invite a user to the room by a 3rd party identifier. They do not
-     * start participating in the room until they actually join the room.
-     *
-     * If the identity server does not know a Matrix user identifier for
-     * the passed third party identifier, the homeserver will issue an
-     * invitation which can be accepted upon providing proof of ownership
-     * of the third party identifier.
-     *
-     * If @param credential is {{{null}}}, this function immediately
-     * returns, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID to which to invite the user
-     * @param credential a {@link Matrix.3PidCredential} that
-     *                   identifies a user to invite
-     */
-    public abstract void
-    invite_user_3rdparty([CCode (delegate_target_pos = 1.5, scope = "async")]
-                         owned Matrix.API.Callback? @callback,
-                         string room_id,
-                         Matrix.3PidCredential credential)
-        throws Matrix.Error;
-
-    /**
-     * Invite a user to a room.
-     *
-     * If @room_id or @user_id is %NULL, this function returns
-     * immediately, and fills @error with %MATRIX_ERROR_INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID to invite the user to
-     * @param user_id the user ID to invite
-     */
-    public abstract void
-    invite_user([CCode (delegate_target_pos = 1.5, scope = "async")]
-                owned Matrix.API.Callback? @callback,
-                string room_id,
-                string user_id)
-        throws Matrix.Error;
-
-    /**
-     * Join a room.
-     *
-     * If @param room_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID to join to
-     */
-    public abstract void
-    join_room([CCode (delegate_target_pos = 1.5, scope = "async")]
-              owned Matrix.API.Callback? @callback,
-              string room_id)
-        throws Matrix.Error;
-
-    /**
-     * Leave a room.
-     *
-     * If @param room_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param room_id the room ID to kick the user from
-     */
-    public abstract void
-    leave_room([CCode (delegate_target_pos = 1.5, scope = "async")]
-               owned Matrix.API.Callback? @callback,
-               string room_id)
-        throws Matrix.Error;
-
     /* Room participation */
 
     /**
@@ -564,6 +489,7 @@ public interface Matrix.API : GLib.Object {
      * @param from_token events will be listed from this token
      * @param timeout timeout of the request
      */
+    [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
     public abstract void
     event_stream([CCode (delegate_target_pos = 1.5, scope = "async")]
                  owned Matrix.API.Callback? @callback,
@@ -581,6 +507,7 @@ public interface Matrix.API : GLib.Object {
      *                 finished
      * @param event_id the event ID to get
      */
+    [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
     public abstract void
     get_event([CCode (delegate_target_pos = 1.5, scope = "async")]
               owned Matrix.API.Callback? @callback,
@@ -595,6 +522,7 @@ public interface Matrix.API : GLib.Object {
      * @param limit the maximum number of events to get
      * @param archived whether to include rooms that the user has left
      */
+    [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
     public abstract void
     initial_sync([CCode (delegate_target_pos = 1.5, scope = "async")]
                  owned Matrix.API.Callback? @callback,
@@ -637,6 +565,7 @@ public interface Matrix.API : GLib.Object {
      *                 finished
      * @param room_id the room to get the data for
      */
+    [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
     public abstract void
     initial_sync_room([CCode (delegate_target_pos = 1.5, scope = "async")]
                       owned Matrix.API.Callback? @callback,
@@ -938,51 +867,172 @@ public interface Matrix.API : GLib.Object {
                     string filter_id)
         throws Matrix.Error;
 
-    /* Search */
+    /* Room membership */
 
-    /**
-     * Perform a server side search.
-     *
-     * @param next_batch the point to return events from. If given,
-     *                   this should be a next_batch result from a
-     *                   previous call to this method
-     * @param search_categories describes which categories to search,
-     *                          and their criteria
+    /** Join a room by a room ID or an alias
      */
     public abstract void
-    search([CCode (delegate_target_pos = 1.5, scope = "async")]
-           owned Matrix.API.Callback? @callback,
-           string? next_batch,
-           SearchCategories search_categories)
+    join_room_id_or_alias([CCode (delegate_target_pos = 1.5, scope = "async")]
+                          owned Matrix.API.Callback? @callback,
+                          string room_id_or_alias)
         throws Matrix.Error;
 
-    /* Server administration */
+    /**
+     * Ban the specified user from the specified room. An optional reason
+     * can be specified.
+     *
+     * If @param room_id or @param user_id is {{{null}}}, this
+     * function returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID where the user should be banned
+     * @param user_id the user ID to ban
+     * @param reason the reason of the ban
+     */
+    public abstract void
+    ban_user([CCode (delegate_target_pos = 1.5, scope = "async")]
+             owned Matrix.API.Callback? @callback,
+             string room_id,
+             string user_id, string? reason)
+        throws Matrix.Error;
 
     /**
-     * Get information about a particular user.
+     * Stop the requesting user remembering about a particular room.
      *
-     * If @param user_id is {{{null}}}, this function returns
+     * In general, history is a first class citizen in Matrix. After this
+     * API is called, however, a user will no longer be able to retrieve
+     * history for this room. If all users on a homeserver forget a room,
+     * the room is eligible for deletion from that homeserver.
+     *
+     * If the user is currently joined to the room, they will implicitly
+     * leave the room as part of this API call.
+     *
+     * If @param room_id is {{{null}}}, this function returns
      * immediately, and throws Matrix.Error.INCOMPLETE.
      *
      * @param callback the function to call when the request is
      *                 finished
-     * @param user_id the user ID to look up
+     * @param room_id the room ID to forget
      */
     public abstract void
-    whois([CCode (delegate_target_pos = 1.5, scope = "async")]
-          owned Matrix.API.Callback? @callback,
-          string user_id)
+    forget_room([CCode (delegate_target_pos = 1.5, scope = "async")]
+                owned Matrix.API.Callback? @callback,
+                string room_id)
         throws Matrix.Error;
 
     /**
-     * Get the versions of the specification supported by the server.
+     * Invite a user to the room by a 3rd party identifier. They do not
+     * start participating in the room until they actually join the room.
+     *
+     * If the identity server does not know a Matrix user identifier for
+     * the passed third party identifier, the homeserver will issue an
+     * invitation which can be accepted upon providing proof of ownership
+     * of the third party identifier.
+     *
+     * If @param credential is {{{null}}}, this function immediately
+     * returns, and throws Matrix.Error.INCOMPLETE.
      *
      * @param callback the function to call when the request is
      *                 finished
+     * @param room_id the room ID to which to invite the user
+     * @param credential a {@link Matrix.3PidCredential} that
+     *                   identifies a user to invite
      */
     public abstract void
-    versions([CCode (scope = "async")]
-             owned Matrix.API.Callback? @callback)
+    invite_user_3rdparty([CCode (delegate_target_pos = 1.5, scope = "async")]
+                         owned Matrix.API.Callback? @callback,
+                         string room_id,
+                         Matrix.3PidCredential credential)
+        throws Matrix.Error;
+
+    /**
+     * Invite a user to a room.
+     *
+     * If @room_id or @user_id is %NULL, this function returns
+     * immediately, and fills @error with %MATRIX_ERROR_INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID to invite the user to
+     * @param user_id the user ID to invite
+     */
+    public abstract void
+    invite_user([CCode (delegate_target_pos = 1.5, scope = "async")]
+                owned Matrix.API.Callback? @callback,
+                string room_id,
+                string user_id)
+        throws Matrix.Error;
+
+    /**
+     * Join a room.
+     *
+     * If @param room_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID to join to
+     */
+    public abstract void
+    join_room([CCode (delegate_target_pos = 1.5, scope = "async")]
+              owned Matrix.API.Callback? @callback,
+              string room_id)
+        throws Matrix.Error;
+
+    /**
+     * Kick a user from a room
+     *
+     * If @param room_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID to kick the user from
+     * @param user_id the user ID to kick from the room
+     * @param reason a reason
+     */
+    public abstract void
+    kick_user([CCode (delegate_target_pos = 1.5, scope = "async")]
+              owned Matrix.API.Callback? @callback,
+              string room_id,
+              string user_id,
+              string? reason)
+        throws Matrix.Error;
+
+    /**
+     * Leave a room.
+     *
+     * If @param room_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID to kick the user from
+     */
+    public abstract void
+    leave_room([CCode (delegate_target_pos = 1.5, scope = "async")]
+               owned Matrix.API.Callback? @callback,
+               string room_id)
+        throws Matrix.Error;
+
+    /**
+     * Unban a user from a room
+     *
+     * If @param room_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     * @param room_id the room ID to unban the user from
+     * @param user_id the user ID to unban from the room
+     */
+    public abstract void
+    unban_user([CCode (delegate_target_pos = 1.5, scope = "async")]
+                owned Matrix.API.Callback? @callback,
+                string room_id,
+                string user_id)
         throws Matrix.Error;
 
     /* Session management */
@@ -1008,6 +1058,17 @@ public interface Matrix.API : GLib.Object {
         throws Matrix.Error;
 
     /**
+     * Logout from the current session, invalidating the access token
+     *
+     * @param callback the function to call when the request is
+     *                 finished
+     */
+    public abstract void
+    logout([CCode (delegate_target_pos = 1.5, scope = "async")]
+           owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+    /**
      * Exchanges a refresh token for a new access token. This is
      * intended to be used if the access token has expired. If @param
      * refresh_token is {{{null}}}, implementations MUST send the
@@ -1025,272 +1086,240 @@ public interface Matrix.API : GLib.Object {
                   string? refresh_token)
         throws Matrix.Error;
 
-    /* User data */
+    /* Presence */
 
     /**
-     * Get a list of the third party identifiers that a homeserver has
-     * associated with the user's account.
+     * Retrieve a list of presence events for every user on this list.
      *
-     * This is not the same as the list of third party identifiers bound
-     * to the user's Matrix ID in Identity Servers.
+     * If @param user_id is {{{null}}}, this function returns immediately,
+     * and throws Matrix.Error.INCOMPLETE.
      *
-     * Identifiers in this list may be used by the homeserver as, for
-     * example, identifiers to accept to reset the user's account
-     * password.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
+     * @param user_id the user whose presence list should be retrieved
      */
     public abstract void
-    get_3pids([CCode (scope = "async")]
-              owned Matrix.API.Callback? @callback)
+    get_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")]
+                      owned Matrix.API.Callback? @callback,
+                      string user_id)
         throws Matrix.Error;
 
     /**
-     * Add contact information to the user's account.
+     * Add or remove users from the specified user's presence list.
      *
-     * If @param threepid_creds is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
+     * If @param user_id, or both @param drop_ids and @param
+     * invite_ids are {{{null}}}, this function returns immediately,
+     * and throws Matrix.Error.INCOMPLETE.
      *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param bind_creds whether the homeserver should also bind this
-     *                   third party identifier to the account's
-     *                   Matrix ID with the passed Identity Server.
-     * @param threepid_creds the credentials to associate with the
-     *                       account
+     * @param user_id the user whose presence list is being modified
+     * @param drop_ids a list of user IDs to remove from the list
+     * @param invite_ids a list of user IDs to add to the list
      */
     public abstract void
-    add_3pid([CCode (delegate_target_pos = 1.5, scope = "async")]
-             owned Matrix.API.Callback? @callback,
-             bool bind_creds,
-             Matrix.3PidCredential threepid_creds)
+    update_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")]
+                         owned Matrix.API.Callback? @callback,
+                         string user_id,
+                         string[] drop_ids,
+                         string[] invite_ids)
         throws Matrix.Error;
 
     /**
-     * Change the active user's password.
+     * Get the given user's presence state.
      *
-     * If @param new_password is {{{null}}}, this function returns
+     * If @param user_id is {{{null}}}, this function returns
      * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param user_id the user whose presence list is being modified
+     */
+    public abstract void
+    get_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
+                      owned Matrix.API.Callback? @callback,
+                      string user_id)
+        throws Matrix.Error;
+
+    /**
+     * Set the given user's presence. You cannot set the presence of
+     * another user.
+     *
+     * If @param user_id is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param user_id  the user whose presence list is being modified
+     * @param presence the new presence state
+     * @param status_message a status message attached to this state
+     */
+    public abstract void
+    set_presence([CCode (delegate_target_pos = 1.5, scope = "async")]
+                      owned Matrix.API.Callback? @callback,
+                      string user_id,
+                      Matrix.Presence presence,
+                      string? status_message)
+        throws Matrix.Error;
+
+    /* Room discovery */
+
+    /**
+     * List the public rooms on the server.
      *
      * @param callback the function to call when the request is
      *                 finished
-     * @param new_password the new password for the account
      */
     public abstract void
-    change_password([CCode (delegate_target_pos = 1.5, scope = "async")]
+    list_public_rooms([CCode (scope = "async")]
+                      owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+    /* Push notifications */
+
+    /**
+     * Retrieve all push rulesets.
+     */
+    public abstract void
+    get_pushers([CCode (scope = "async")]
+                owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+    /**
+     * Create, update or delete a pusher for the active user on this
+     * homeserver.
+     *
+     * If @param pusher is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     */
+    public abstract void
+    update_pusher([CCode (delegate_target_pos = 1.5, scope = "async")]
+                  owned Matrix.API.Callback? @callback,
+                  Matrix.Pusher pusher)
+        throws Matrix.Error;
+
+    /**
+     * Retrieve all push rulesets
+     *
+     * @param callback a function to call when the request is
+     *                 finished
+     */
+    public abstract void
+    get_pushrules([CCode (delegate_target_pos = 1.5, scope = "async")]
+                  owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+    /**
+     * Delete a push rule.
+     *
+     * If @param scope or @param rule_id is {{{null}}}, this function
+     * returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
+     *
+     * @param callback a function to call when the request is finished
+     * @param scope either {{{global}}} to specify global rules, or
+     *              {{{device/&lt;profile tag&gt;}}} for rules for a
+     *              given {{{profile tag}}}
+     * @param kind the kind of rule
+     * @param rule_id an identifier for the rule
+     */
+    public abstract void
+    delete_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")]
                     owned Matrix.API.Callback? @callback,
-                    string new_password)
+                    string scope,
+                    Matrix.PusherKind kind,
+                    string rule_id)
         throws Matrix.Error;
 
     /**
-     * Get a user's profile.
+     * Retrieve a specific push rule.
      *
-     * If @param user_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user whose profile to get
-     */
-    public abstract void
-    get_profile([CCode (delegate_target_pos = 1.5, scope = "async")]
-                owned Matrix.API.Callback? @callback,
-                string user_id)
-        throws Matrix.Error;
-
-    /**
-     * Get the URL of the specified user's avatar.
-     *
-     * If @param user_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user whose avatar URL to get
-     */
-    public abstract void
-    get_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")]
-                   owned Matrix.API.Callback? @callback,
-                   string user_id)
-        throws Matrix.Error;
-
-    /**
-     * Set the user's avatar URL.
-     *
-     * If @param user_id or @param avatar_url is {{{null}}}, this
-     * function returns immediately, and throws
+     * If @param scope or @param rule_id is {{{null}}}, this function
+     * returns immediately, and throws
      * Matrix.Error.INCOMPLETE.
      *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user whose avatar URL to set
-     * @param avatar_url the avatar URL info
+     * @param callback a function to call when the request is finished
+     * @param scope either {{{global}}} to specify global rules, or
+     *              {{{device/&lt;profile tag&gt;}}} for rules for a
+     *              given {{{profile tag}}}.
+     * @param kind the kind of rule
+     * @param rule_id an identifier for the rule
      */
     public abstract void
-    set_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")]
-                   owned Matrix.API.Callback? @callback,
-                   string user_id,
-                   string avatar_url)
+    get_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")]
+                 owned Matrix.API.Callback? @callback,
+                 string scope,
+                 Matrix.PusherKind kind,
+                 string rule_id)
         throws Matrix.Error;
 
     /**
-     * Get the user's display name.
+     * Add or change a push rule.
      *
-     * If @param user_id is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user whose display name to get
-     */
-    public abstract void
-    get_display_name([CCode (delegate_target_pos = 1.5, scope = "async")]
-                     owned Matrix.API.Callback? @callback,
-                     string user_id)
-        throws Matrix.Error;
-
-    /**
-     * Set the user's display name.
-     *
-     * If @param user_id or @param display_name is {{{null}}}, this
-     * function returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user whose display name to set
-     * @param display_name the display name info
-     */
-    public abstract void
-    set_display_name([CCode (delegate_target_pos = 1.5, scope = "async")]
-                     owned Matrix.API.Callback? @callback,
-                     string user_id,
-                     string display_name)
-        throws Matrix.Error;
-
-    /**
-     * Attempt to register an account with the homeserver using @param
-     * username and @param password.
-     *
-     * Implementations of this method must set the token property on a
-     * successful login.
-     *
-     * If @param password is {{{null}}}, this function returns
-     * immediately, and throws Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param account_kind the type of account to register
-     * @param bind_email if {{{true}}}, the server binds the e-mail
-     *                   used for authentication to the Matrix ID with
-     *                   the ID server
-     * @param username the local part of the desired Matrix ID. If
-     *                 omitted, the server will generate a local part
-     * @param password the desired password for the account
-     */
-    public abstract void
-    register_account([CCode (delegate_target_pos = 1.5, scope = "async")]
-                     owned Matrix.API.Callback? @callback,
-                     Matrix.AccountKind account_kind,
-                     bool bind_email,
-                     string? username,
-                     string password)
-        throws Matrix.Error;
-
-    /**
-     * Set some account data for the client. This config is only
-     * visible to the user who set the account data. The config will
-     * be synced to clients in the top-level account data.
-     *
-     * If @param user_id, @param event_type or @param content is
+     * If either @param scope, @param rule_id or @param actions are
      * {{{null}}}, this function returns immediately, and throws
      * Matrix.Error.INCOMPLETE.
      *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the user to set account data for. An access
-     *                token must be present and be authorized to make
-     *                requests for this user ID
-     * @param room_id the room to set account data for. If {{{null}}},
-     *                the account data will be set globally
-     * @param event_type the event type of the account data to
-     *                   set. Custom types should be namespaced to
-     *                   avoid clashes
-     * @param content the content of the account data
+     * @param callback a function to call when the request is finished
+     * @param scope either {{{global}}} to specify global rules, or
+     *              {{{device/&lt;profile tag&gt;}}} for rules for a
+     *              given {{{profile tag}}}
+     * @param kind the kind of rule
+     * @param rule_id an identifier for the rule
+     * @param before make the new rule the next-most important than
+     *               this rule ID
+     * @param after make the new rule the next-less important than
+     *              this rule ID
+     * @param actions the actions to perform when the conditions for
+     *                this rule are met
+     * @param conditions the conditions that must hold true for an
+     *                   event for a rule to be applied. A rule with
+     *                   no conditions always matches
      */
     public abstract void
-    set_account_data([CCode (delegate_target_pos = 1.5, scope = "async")]
-                     owned Matrix.API.Callback? @callback,
-                     string user_id,
-                     string? room_id,
-                     string event_type,
-                     owned Json.Node content)
-        throws Matrix.Error;
-
-    /**
-     * List the tags set by a user on a room.
-     *
-     * If @param user_id or @param room_id is {{{null}}}, this
-     * function returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the ID of the user to get the tags for. An
-     *                access token must be set, and it must be
-     *                authorised to make requests for this user ID
-     * @param room_id the room to get tags for
-     */
-    public abstract void
-    get_room_tags([CCode (delegate_target_pos = 1.5, scope = "async")]
-                  owned Matrix.API.Callback? @callback,
-                  string user_id,
-                  string room_id)
-        throws Matrix.Error;
-
-    /**
-     * Remove a tag from the room.
-     *
-     * If @param user_id, @param room_id or @param tag is {{{null}}},
-     * this function returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the id of the user to remove a tag for
-     * @param room_id the id of the room to remove the tag from
-     * @param tag the tag to remove
-     */
-    public abstract void
-    delete_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")]
-                    owned Matrix.API.Callback? @callback,
-                    string user_id,
-                    string room_id,
-                    string tag)
-        throws Matrix.Error;
-
-    /**
-     * Add a tag to the room.
-     *
-     * If @param user_id, @param room_id or @param tag is {{{null}}},
-     * this function returns immediately, and throws
-     * Matrix.Error.INCOMPLETE.
-     *
-     * @param callback the function to call when the request is
-     *                 finished
-     * @param user_id the ID of the user to add the tag for
-     * @param room_id the ID of the room to add the tag for
-     * @param tag the tag to add
-     * @param content extra data for the tag, e.g. ordering
-     */
-    public abstract void
-    add_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")]
+    add_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")]
                  owned Matrix.API.Callback? @callback,
-                 string user_id,
-                 string room_id,
-                 string tag,
-                 owned Json.Node? content)
+                 string scope,
+                 Matrix.PusherKind kind,
+                 string rule_id,
+                 string? before,
+                 string? after,
+                 string[] actions,
+                 Matrix.PusherConditionKind[] conditions)
+        throws Matrix.Error;
+
+    /**
+     * Enable or disable the specified push rule.
+     *
+     * If @scope or @rule_id is %NULL, this function returns immediately,
+     * and fills @error with %MATRIX_ERROR_INCOMPLETE.
+     *
+     * @param callback a function to call when the request is finished
+     * @param scope either {{{global}}} to specify global rules, or
+     *             {{{device/&lt;profile tag&gt;}}} for rules for a
+     *             given {{{profile tag}}}
+     * @param kind the kind of rule
+     * @param rule_id an identifier for the rule
+     * @param enabled if {{{true}}}, the rule will be enabled,
+     *                otherwise it gets disabled
+     */
+    public abstract void
+    toggle_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")]
+                    owned Matrix.API.Callback? @callback,
+                    string scope,
+                    Matrix.PusherKind kind,
+                    string rule_id,
+                    bool enabled)
+        throws Matrix.Error;
+
+    /* Search */
+
+    /**
+     * Perform a server side search.
+     *
+     * @param next_batch the point to return events from. If given,
+     *                   this should be a next_batch result from a
+     *                   previous call to this method
+     * @param search_categories describes which categories to search,
+     *                          and their criteria
+     */
+    public abstract void
+    search([CCode (delegate_target_pos = 1.5, scope = "async")]
+           owned Matrix.API.Callback? @callback,
+           string? next_batch,
+           SearchCategories search_categories)
         throws Matrix.Error;
 
     /* VoIP */
@@ -1304,5 +1333,63 @@ public interface Matrix.API : GLib.Object {
     public abstract void
     get_turn_server([CCode (scope = "async")]
                     owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+    /* Media */
+
+    /**
+     * Download content from the content repository.
+     *
+     * Implementors: If server_name or media_id is {{{null}}},
+     * implementations MUST throw Matrix.Error.INCOMPLETE.
+     *
+     * @param callback a function to call when the request is finished
+     * @param server_name the server name from the `mxc:` URI
+     * @param media_id the media ID from the `mxc:` URI
+     */
+    public abstract void
+    media_download([CCode (delegate_target_pos = 1.5, scope = "async", destroy_notify_pos = -1)]
+                   owned Matrix.API.Callback? @callback,
+                   string server_name,
+                   string media_id)
+        throws Matrix.Error;
+
+    /**
+     * Download a thumbnail of the content from the content
+     * repository. The actual thumbnail may not match the size
+     * specified.
+     *
+     * If @param server_name or @param media_id is {{{null}}}, this
+     * function returns immediately, and throws
+     * Matrix.Error.INCOMPLETE.
+     *
+     * @param callback a function to call when the request is finished
+     * @param server_name the server name from the `mxc:` URI
+     * @param media_id the media ID from the `mxc:` URI
+     */
+    public abstract void
+    media_thumbnail([CCode (delegate_target_pos = 1.5, scope = "async")]
+                    owned Matrix.API.Callback? @callback,
+                    string server_name,
+                    string media_id,
+                    uint width,
+                    uint height,
+                    Matrix.ResizeMethod method)
+        throws Matrix.Error;
+
+    /**
+     * Upload some content to the content repository.
+     *
+     * If @param content is {{{null}}}, this function returns
+     * immediately, and throws Matrix.Error.INCOMPLETE.
+     *
+     * @param content_type the type of the content to be uploaded
+     * @param content the content to be uploaded
+     */
+    public abstract void
+    media_upload([CCode (delegate_target_pos = 1.5, scope = "async")]
+                 owned Matrix.API.Callback? @callback,
+                 string? content_type,
+                 owned GLib.ByteArray content)
         throws Matrix.Error;
 }
