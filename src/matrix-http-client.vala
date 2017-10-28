@@ -73,13 +73,16 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                 false, username, password);
     }
 
-    public void
+    public new void
     logout()
         throws Matrix.Error
     {
-        token = null;
-        refresh_token = null;
-        abort_pending();
+        ((Matrix.API)this).logout(
+            () => {
+                token = null;
+                refresh_token = null;
+                abort_pending();
+            });
     }
 
     private void
