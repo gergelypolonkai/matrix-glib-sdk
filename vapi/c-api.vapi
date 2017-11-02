@@ -147,6 +147,15 @@ namespace Matrix {
         PRIVATE;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_JOIN_RULES_")]
+    public enum JoinRules {
+        UNKNOWN,
+        PUBLIC,
+        INVITE,
+        PRIVATE,
+        KNOCK;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

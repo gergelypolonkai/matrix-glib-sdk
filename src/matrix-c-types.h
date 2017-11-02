@@ -146,4 +146,12 @@ typedef enum {
     MATRIX_ROOM_VISIBILITY_PRIVATE
 } MatrixRoomVisibility;
 
+typedef enum {
+    MATRIX_JOIN_RULES_UNKNOWN,
+    MATRIX_JOIN_RULES_PUBLIC,
+    MATRIX_JOIN_RULES_INVITE,
+    MATRIX_JOIN_RULES_PRIVATE,
+    MATRIX_JOIN_RULES_KNOCK
+} MatrixJoinRules;
+
 #endif  /* __MATRIX_TYPE_H__ */

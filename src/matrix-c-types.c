@@ -209,3 +209,14 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Visibility values for room creation. Not to be confused with join rules.
  */
+
+/**
+ * MatrixJoinRules:
+ * @MATRIX_JOIN_RULES_UNKNOWN: a value unknown to this library
+ * @MATRIX_JOIN_RULES_PUBLIC: anyone can join
+ * @MATRIX_JOIN_RULES_INVITE: users may join upon invite
+ * @MATRIX_JOIN_RULES_PRIVATE: reserved word, not usable yet
+ * @MATRIX_JOIN_RULES_KNOCK: reserved word, not usable yet
+ *
+ * Room join rules.
+ */

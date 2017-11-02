@@ -18,36 +18,6 @@
 
 namespace Matrix {
     /**
-     * Room join rules.
-     */
-    public enum JoinRules {
-        /**
-         * a value unknown to this library
-         */
-        UNKNOWN,
-
-        /**
-         * anyone can join
-         */
-        PUBLIC,
-
-        /**
-         * users may join upon invite
-         */
-        INVITE,
-
-        /**
-         * reserved word, not usable yet
-         */
-        PRIVATE,
-
-        /**
-         * reserved word, not usable yet
-         */
-        KNOCK;
-    }
-
-    /**
      * Search ordering.
      */
     public enum SearchOrder {
