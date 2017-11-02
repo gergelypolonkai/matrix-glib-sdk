@@ -18,39 +18,6 @@
 
 namespace Matrix {
     /**
-     * Pusher types.
-     */
-    public enum PusherKind {
-        /**
-         * highest priority rules
-         */
-        OVERRIDE,
-
-        /**
-         * for (unencrypted) messages that match certain patterns
-         */
-        SENDER,
-
-        /**
-         * for all messages for a given room. The rule ID of a room
-         * rule is always the ID of the room that it affects
-         */
-        ROOM,
-
-        /**
-         * for messages from a specific Matrix user ID. The rule ID of
-         * such rules is always the Matrix ID of the user whose
-         * messages they'd apply to
-         */
-        CONTENT,
-
-        /**
-         * lowest priority rules
-         */
-        UNDERRIDE;
-    }
-
-    /**
      * Receipt types of acknowledgment.
      */
     public enum ReceiptType {

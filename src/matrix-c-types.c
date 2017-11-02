@@ -142,3 +142,16 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Condition types for pushers.
  */
+
+/**
+ * MatrixPusherKind:
+ * @MATRIX_PUSHER_KIND_OVERRIDE: highest priority rules
+ * @MATRIX_PUSHER_KIND_SENDER: for (unencrypted) messages that match certain patterns
+ * @MATRIX_PUSHER_KIND_ROOM: for all messages for a given room. The rule ID of a room rule is
+ *     always the ID of the room that it affects
+ * @MATRIX_PUSHER_KIND_CONTENT: for messages from a specific Matrix user ID. The rule ID of such
+ *     rules is always the Matrix ID of the user whose messages they'd apply to
+ * @MATRIX_PUSHER_KIND_UNDERRIDE: lowest priority rules
+ *
+ * Pusher types.
+ */

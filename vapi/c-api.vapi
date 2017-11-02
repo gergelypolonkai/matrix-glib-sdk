@@ -101,6 +101,15 @@ namespace Matrix {
         ROOM_MEMBER_COUNT;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PUSHER_KIND_")]
+    public enum PusherKind {
+        OVERRIDE,
+        SENDER,
+        ROOM,
+        CONTENT,
+        UNDERRIDE;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
