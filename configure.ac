@@ -194,6 +194,7 @@ AC_SUBST([MATRIX_GLIB_MICRO_VERSION], matrix_glib_micro_version)
 AC_SUBST([MATRIX_GLIB_API_VERSION], matrix_glib_api_version)
 
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
 
 AC_CONFIG_FILES([
     Makefile

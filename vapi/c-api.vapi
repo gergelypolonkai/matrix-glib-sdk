@@ -18,6 +18,50 @@
 
 [CCode (cprefix = "Matrix", gir_namespace = "Matrix", gir_version = "0.0", lower_case_cprefix = "matrix_")]
 namespace Matrix {
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ERROR_")]
+    public errordomain Error {
+        NONE,
+        COMMUNICATION_ERROR,
+        INCOMPLETE,
+        BAD_REQUEST,
+        BAD_RESPONSE,
+        INVALID_ROOM_ID,
+        UNKNOWN_VALUE,
+        INVALID_TYPE,
+        UNSUPPORTED,
+        INVALID_FORMAT,
+        UNAVAILABLE,
+        NOT_FOUND,
+        ALREADY_EXISTS,
+        M_MISSING_TOKEN,
+        M_FORBIDDEN,
+        M_UNKNOWN,
+        M_UNKNOWN_TOKEN,
+        M_NOT_JSON,
+        M_UNRECOGNIZED,
+        M_UNAUTHORIZED,
+        M_BAD_JSON,
+        M_USER_IN_USE,
+        M_ROOM_IN_USE,
+        M_BAD_PAGINATION,
+        M_BAD_STATE,
+        M_NOT_FOUND,
+        M_GUEST_ACCESS_FORBIDDEN,
+        M_LIMIT_EXCEEDED,
+        M_CAPTCHA_NEEDED,
+        M_CAPTCHA_INVALID,
+        M_MISSING_PARAM,
+        M_TOO_LARGE,
+        M_EXCLUSIVE,
+        M_THREEPID_AUTH_FAILED,
+        M_THREEPID_IN_USE,
+        M_INVALID_USERNAME,
+        UNSPECIFIED,
+        UNKNOWN_ERROR;
+
+        public static GLib.Quark quark ();
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
