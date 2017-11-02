@@ -18,28 +18,6 @@
 
 namespace Matrix {
     /**
-     * Visibility values for room creation. Not to be confused with
-     * join rules.
-     */
-    public enum RoomVisibility {
-        /**
-         * use a server-assigned value (usually
-         * {@link Matrix.RoomVisibility.PRIVATE})
-         */
-        DEFAULT,
-
-        /**
-         * make the room visible in the public room list
-         */
-        PUBLIC,
-
-        /**
-         * hide the room from the public room list
-         */
-        PRIVATE;
-    }
-
-    /**
      * Room join rules.
      */
     public enum JoinRules {

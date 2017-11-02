@@ -140,6 +140,13 @@ namespace Matrix {
         PUBLIC;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_VISIBILITY_")]
+    public enum RoomVisibility {
+        DEFAULT,
+        PUBLIC,
+        PRIVATE;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

@@ -140,4 +140,10 @@ typedef enum {
     MATRIX_ROOM_PRESET_PUBLIC
 } MatrixRoomPreset;
 
+typedef enum {
+    MATRIX_ROOM_VISIBILITY_DEFAULT,
+    MATRIX_ROOM_VISIBILITY_PUBLIC,
+    MATRIX_ROOM_VISIBILITY_PRIVATE
+} MatrixRoomVisibility;
+
 #endif  /* __MATRIX_TYPE_H__ */
