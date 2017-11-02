@@ -118,4 +118,10 @@ typedef enum {
     MATRIX_RECEIPT_TYPE_READ
 } MatrixReceiptType;
 
+typedef enum {
+    MATRIX_RESIZE_METHOD_DEFAULT,
+    MATRIX_RESIZE_METHOD_CROP,
+    MATRIX_RESIZE_METHOD_SCALE
+} MatrixResizeMethod;
+
 #endif  /* __MATRIX_TYPE_H__ */

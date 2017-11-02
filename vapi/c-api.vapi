@@ -115,6 +115,13 @@ namespace Matrix {
         READ;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_RESIZE_METHOD_")]
+    public enum ResizeMethod {
+        DEFAULT,
+        CROP,
+        SCALE;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

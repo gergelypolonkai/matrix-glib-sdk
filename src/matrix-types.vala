@@ -18,26 +18,6 @@
 
 namespace Matrix {
     /**
-     * Resizing methods for matrix_api_media_thumbnail().
-     */
-    public enum ResizeMethod {
-        /**
-         * use the server default value
-         */
-        DEFAULT,
-
-        /**
-         * crop thumbnail to the requested size
-         */
-        CROP,
-
-        /**
-         * scale thumbnail to the requested size
-         */
-        SCALE;
-    }
-
-    /**
      * Room membership types.
      */
     public enum RoomMembership {
