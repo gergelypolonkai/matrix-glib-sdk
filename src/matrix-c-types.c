@@ -267,3 +267,12 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Room history visibility
  */
+
+/**
+ * MatrixGuestAccess:
+ * @MATRIX_GUEST_ACCESS_UNKNOWN: represents a value unknown to this library
+ * @MATRIX_GUEST_ACCESS_CAN_JOIN: guest users are allowed to access the room
+ * @MATRIX_GUEST_ACCESS_FORBIDDEN: guest users are not allowed to access the room
+ *
+ * Room guest access
+ */

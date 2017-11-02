@@ -18,26 +18,6 @@
 
 namespace Matrix {
     /**
-     * Room guest access
-     */
-    public enum GuestAccess {
-        /**
-         * represents a value unknown to this library
-         */
-        UNKNOWN,
-
-        /**
-         * guest users are allowed to access the room
-         */
-        CAN_JOIN,
-
-        /**
-         * guest users are not allowed to access the room
-         */
-        FORBIDDEN;
-    }
-
-    /**
      * Call offer types
      */
     public enum CallOfferType {

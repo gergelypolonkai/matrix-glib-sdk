@@ -185,6 +185,13 @@ namespace Matrix {
         WORLD_READABLE;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_GUEST_ACCESS_")]
+    public enum GuestAccess {
+        UNKNOWN,
+        CAN_JOIN,
+        FORBIDDEN;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

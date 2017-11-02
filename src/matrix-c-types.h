@@ -179,4 +179,10 @@ typedef enum {
     MATRIX_HISTORY_VISIBILITY_WORLD_READABLE
 } MatrixHistoryVisibility;
 
+typedef enum {
+    MATRIX_GUEST_ACCESS_UNKNOWN,
+    MATRIX_GUEST_ACCESS_CAN_JOIN,
+    MATRIX_GUEST_ACCESS_FORBIDDEN
+} MatrixGuestAccess;
+
 #endif  /* __MATRIX_TYPE_H__ */
