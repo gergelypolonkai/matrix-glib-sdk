@@ -18,21 +18,6 @@
 
 namespace Matrix {
     /**
-     * Search ordering.
-     */
-    public enum SearchOrder {
-        /**
-         * order messages as they arrived
-         */
-        RECENT,
-
-        /**
-         * order messages by relevance
-         */
-        RANK;
-    }
-
-    /**
      * Search keys.
      */
     public enum SearchKey {

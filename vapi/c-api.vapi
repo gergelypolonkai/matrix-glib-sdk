@@ -156,6 +156,12 @@ namespace Matrix {
         KNOCK;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_SEARCH_ORDER_")]
+    public enum SearchOrder {
+        RECENT,
+        RANK;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

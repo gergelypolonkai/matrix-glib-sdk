@@ -220,3 +220,11 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Room join rules.
  */
+
+/**
+ * MatrixSearchOrder:
+ * @MATRIX_SEARCH_ORDER_RECENT: order messages as they arrived
+ * @MATRIX_SEARCH_ORDER_RANK: order messages by relevance
+ *
+ * Search ordering.
+ */

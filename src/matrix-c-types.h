@@ -154,4 +154,9 @@ typedef enum {
     MATRIX_JOIN_RULES_KNOCK
 } MatrixJoinRules;
 
+typedef enum {
+    MATRIX_SEARCH_ORDER_RECENT,
+    MATRIX_SEARCH_ORDER_RANK
+} MatrixSearchOrder;
+
 #endif  /* __MATRIX_TYPE_H__ */
