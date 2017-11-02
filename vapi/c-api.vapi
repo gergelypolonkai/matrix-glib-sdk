@@ -192,6 +192,12 @@ namespace Matrix {
         FORBIDDEN;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_CALL_OFFER_TYPE_")]
+    public enum CallOfferType {
+        UNKNOWN,
+        OFFER;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

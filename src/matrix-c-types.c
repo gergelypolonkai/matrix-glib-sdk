@@ -276,3 +276,11 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Room guest access
  */
+
+/**
+ * MatrixCallOfferType:
+ * @MATRIX_CALL_OFFER_TYPE_UNKNOWN: represents a value unknown to this library
+ * @MATRIX_CALL_OFFER_TYPE_OFFER: call offer
+ *
+ * Call offer types
+ */

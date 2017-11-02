@@ -18,21 +18,6 @@
 
 namespace Matrix {
     /**
-     * Call offer types
-     */
-    public enum CallOfferType {
-        /**
-         * represents a value unknown to this library
-         */
-        UNKNOWN,
-
-        /**
-         * call offer
-         */
-        OFFER;
-    }
-
-    /**
      * Call answer types
      */
     public enum CallAnswerType {

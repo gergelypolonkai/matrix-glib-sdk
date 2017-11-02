@@ -185,4 +185,9 @@ typedef enum {
     MATRIX_GUEST_ACCESS_FORBIDDEN
 } MatrixGuestAccess;
 
+typedef enum {
+    MATRIX_CALL_OFFER_TYPE_UNKNOWN,
+    MATRIX_CALL_OFFER_TYPE_OFFER
+} MatrixCallOfferType;
+
 #endif  /* __MATRIX_TYPE_H__ */
