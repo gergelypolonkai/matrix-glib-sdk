@@ -84,6 +84,15 @@ namespace Matrix {
         FEDERATION;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PRESENCE_")]
+    public enum Presence {
+        UNKNOWN,
+        ONLINE,
+        OFFLINE,
+        UNAVAILABLE,
+        FREE_FOR_CHAT;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

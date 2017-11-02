@@ -18,37 +18,6 @@
 
 namespace Matrix {
     /**
-     * Presence values for matrix_api_set_user_presence() and other
-     * presence related queries.
-     */
-    public enum Presence {
-        /**
-         * user's presence is unknown
-         */
-        UNKNOWN,
-
-        /**
-         * user is online
-         */
-        ONLINE,
-
-        /**
-         * user is offline
-         */
-        OFFLINE,
-
-        /**
-         * user is unavailable (i.e. busy)
-         */
-        UNAVAILABLE,
-
-        /**
-         * user is free for chat
-         */
-        FREE_FOR_CHAT;
-    }
-
-    /**
      * Condition types for pushers.
      */
     public enum PusherConditionKind {

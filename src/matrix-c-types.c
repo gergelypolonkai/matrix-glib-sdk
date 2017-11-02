@@ -116,3 +116,14 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Event format received when synchronizing.
  */
+
+/**
+ * MatrixPresence:
+ * @MATRIX_PRESENCE_UNKNOWN: user's presence is unknown
+ * @MATRIX_PRESENCE_ONLINE: user is online
+ * @MATRIX_PRESENCE_OFFLINE: user is offline
+ * @MATRIX_PRESENCE_UNAVAILABLE: user is unavailable (i.e. busy)
+ * @MATRIX_PRESENCE_FREE_FOR_CHAT: user is free for chat
+ *
+ * Presence values for matrix_api_set_presence() and other presence related queries.
+ */
