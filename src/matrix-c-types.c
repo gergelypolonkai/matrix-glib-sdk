@@ -127,3 +127,18 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Presence values for matrix_api_set_presence() and other presence related queries.
  */
+
+/**
+ * MatrixPusherConditionKind:
+ * @MATRIX_PUSHER_CONDITION_KIND_EVENT_MATCH: glob pattern match on a field of the event.
+ *     Requires a `key` and a `pattern` parameter
+ * @MATRIX_PUSHER_CONDITION_KIND_PROFILE_TAG: matches the profile tag of the device that the
+ *     notification would be delivered to.  Requires a `profile_tag` parameter
+ * @MATRIX_PUSHER_CONDITION_KIND_CONTAINS_DISPLAY_NAME: matches unencrypted messages where the
+ *     content's body contains the owner's display name in that room.
+ * @MATRIX_PUSHER_CONDITION_KIND_ROOM_MEMBER_COUNT: matches the current number of members in the
+ *     room.  Requires an `is` parameter, which must be an integer, optionally prefixed by `==`,
+ *     `<`, `>`, `<=` or `>=`.  If the prefix is omitted, it defaults to `==`
+ *
+ * Condition types for pushers.
+ */

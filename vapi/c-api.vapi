@@ -93,6 +93,14 @@ namespace Matrix {
         FREE_FOR_CHAT;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_PUSHER_CONDITION_KIND_")]
+    public enum PusherConditionKind {
+        EVENT_MATCH,
+        PROFILE_TAG,
+        CONTAINS_DISPLAY_NAME,
+        ROOM_MEMBER_COUNT;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

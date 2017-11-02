@@ -18,38 +18,6 @@
 
 namespace Matrix {
     /**
-     * Condition types for pushers.
-     */
-    public enum PusherConditionKind {
-        /**
-         * glob pattern match on a field of the event. Requires a
-         * {{{key}}} and a {{{pattern}}} parameter
-         */
-        EVENT_MATCH,
-
-        /**
-         * matches the profile tag of the device that the notification
-         * would be delivered to. Requires a {{{profile_tag}}}
-         * parameter
-         */
-        PROFILE_TAG,
-
-        /**
-         * matches unencrypted messages where the content's body
-         * contains the owner's display name in that room.
-         */
-        CONTAINS_DISPLAY_NAME,
-
-        /**
-         * matches the current number of members in the room. Requires
-         * an {{{is}}} parameter, which must be an integer, optionally
-         * prefixed by {{{==}}}, {{{<}}}, {{{>}}}, {{{<=}}} or
-         * {{{>=}}}. If the prefix is omitted, it defaults to {{{==}}}
-         */
-        ROOM_MEMBER_COUNT;
-    }
-
-    /**
      * Pusher types.
      */
     public enum PusherKind {
