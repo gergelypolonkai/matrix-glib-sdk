@@ -133,4 +133,11 @@ typedef enum {
     MATRIX_ROOM_MEMBERSHIP_KNOCK
 } MatrixRoomMembership;
 
+typedef enum {
+    MATRIX_ROOM_PRESET_NONE,
+    MATRIX_ROOM_PRESET_PRIVATE,
+    MATRIX_ROOM_PRESET_TRUSTED_PRIVATE,
+    MATRIX_ROOM_PRESET_PUBLIC
+} MatrixRoomPreset;
+
 #endif  /* __MATRIX_TYPE_H__ */

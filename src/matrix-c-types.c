@@ -188,3 +188,14 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Room membership types.
  */
+
+/**
+ * MatrixRoomPreset:
+ * @MATRIX_ROOM_PRESET_NONE: no preset
+ * @MATRIX_ROOM_PRESET_PRIVATE: preset for private rooms
+ * @MATRIX_ROOM_PRESET_TRUSTED_PRIVATE: same as private rooms, but all users get the same power
+ *     level as the room creator
+ * @MATRIX_ROOM_PRESET_PUBLIC: preset for public rooms
+ *
+ * Preset values for matrix_api_create_room() calls.
+ */

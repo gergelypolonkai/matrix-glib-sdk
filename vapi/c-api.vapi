@@ -132,6 +132,14 @@ namespace Matrix {
         KNOCK;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_PRESET_")]
+    public enum RoomPreset {
+        NONE,
+        PRIVATE,
+        TRUSTED_PRIVATE,
+        PUBLIC;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

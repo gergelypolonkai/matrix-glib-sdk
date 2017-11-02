@@ -18,32 +18,6 @@
 
 namespace Matrix {
     /**
-     * Preset values for matrix_api_create_room() calls.
-     */
-    public enum RoomPreset {
-        /**
-         * no preset
-         */
-        NONE,
-
-        /**
-         * preset for private rooms
-         */
-        PRIVATE,
-
-        /**
-         * same as private rooms, but all users get the same power
-         * level as the room creator
-         */
-        TRUSTED_PRIVATE,
-
-        /**
-         * preset for public rooms
-         */
-        PUBLIC;
-    }
-
-    /**
      * Visibility values for room creation. Not to be confused with
      * join rules.
      */
