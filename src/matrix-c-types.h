@@ -85,4 +85,10 @@ typedef enum {
     MATRIX_EVENT_DIRECTION_BACKWARD
 } MatrixEventDirection;
 
+typedef enum {
+    MATRIX_EVENT_FORMAT_DEFAULT,
+    MATRIX_EVENT_FORMAT_CLIENT,
+    MATRIX_EVENT_FORMAT_FEDERATION
+} MatrixEventFormat;
+
 #endif  /* __MATRIX_TYPE_H__ */

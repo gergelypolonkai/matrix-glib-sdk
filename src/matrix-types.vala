@@ -18,28 +18,6 @@
 
 namespace Matrix {
     /**
-     * Event format received when synchronizing.
-     */
-    public enum EventFormat {
-        /**
-         * event format will be omitted from the filter, so the server
-         * will use its default (usually
-         * {@link Matrix.EventFormat.FEDERATION})
-         */
-        DEFAULT,
-
-        /**
-         * return the events in a format suitable for clients
-         */
-        CLIENT,
-
-        /**
-         * return the raw event as receieved over federation
-         */
-        FEDERATION;
-    }
-
-    /**
      * Presence values for matrix_api_set_user_presence() and other
      * presence related queries.
      */

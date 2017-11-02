@@ -77,6 +77,13 @@ namespace Matrix {
         BACKWARD;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_EVENT_FORMAT_")]
+    public enum EventFormat {
+        DEFAULT,
+        CLIENT,
+        FEDERATION;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
