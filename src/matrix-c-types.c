@@ -171,3 +171,20 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Resizing methods for matrix_api_media_thumbnail().
  */
+
+/**
+ * MatrixRoomMembership:
+ * @MATRIX_ROOM_MEMBERSHIP_UNKNOWN: the membership sent by the server is unknown to this SDK
+ * @MATRIX_ROOM_MEMBERSHIP_INVITE: the user has been invited to join a room, but has not yet
+ *     joined it. They may not participate in the room until they join
+ * @MATRIX_ROOM_MEMBERSHIP_JOIN: the user has joined the room (possibly after accepting an invite),
+ *     and may participate in it
+ * @MATRIX_ROOM_MEMBERSHIP_LEAVE: the user was once joined to the room, but has since left
+ *     (possibly by choice, or possibly by being kicked)
+ * @MATRIX_ROOM_MEMBERSHIP_BAN: the user has been banned from the room, and is no longer allowed
+ *     to join it until they are un-banned from the room (by having their membership state set
+ *     to a value other than MATRIX_ROOM_MEMBERSHIP_BAN)
+ * @MATRIX_ROOM_MEMBERSHIP_KNOCK: this is a reserved word, which currently has no meaning
+ *
+ * Room membership types.
+ */

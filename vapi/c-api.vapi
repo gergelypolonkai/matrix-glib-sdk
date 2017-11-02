@@ -122,6 +122,16 @@ namespace Matrix {
         SCALE;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ROOM_MEMBERSHIP_")]
+    public enum RoomMembership {
+        UNKNOWN,
+        INVITE,
+        JOIN,
+        LEAVE,
+        BAN,
+        KNOCK;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
