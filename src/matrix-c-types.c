@@ -253,3 +253,17 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  * event_ids that are in that group, as well as potentially other
  * metadata about the group.
  */
+
+/**
+ * MatrixHistoryVisibility:
+ * @MATRIX_HISTORY_VISIBILITY_UNKNOWN: represents a value unknown to this library
+ * @MATRIX_HISTORY_VISIBILITY_INVITED: only room members can see the room history, and only what
+ *     happened after they got an invitation
+ * @MATRIX_HISTORY_VISIBILITY_JOINED: only room members can see the room history, and only what
+ *     happened after they joined
+ * @MATRIX_HISTORY_VISIBILITY_SHARED: only room members can see the room history, but they see all
+ *     of it
+ * @MATRIX_HISTORY_VISIBILITY_WORLD_READABLE: anyone can see the room history
+ *
+ * Room history visibility
+ */

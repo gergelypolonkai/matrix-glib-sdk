@@ -176,6 +176,15 @@ namespace Matrix {
         SENDER;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_HISTORY_VISIBILITY_")]
+    public enum HistoryVisibility {
+        UNKNOWN,
+        INVITED,
+        JOINED,
+        SHARED,
+        WORLD_READABLE;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
