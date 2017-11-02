@@ -62,6 +62,15 @@ namespace Matrix {
         public static GLib.Quark quark ();
     }
 
+    public const int MATRIX_ERROR;
+
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_ACCOUNT_KIND_")]
+    public enum AccountKind {
+        DEFAULT,
+        USER,
+        GUEST;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

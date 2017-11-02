@@ -74,4 +74,10 @@ typedef enum {
 # define MATRIX_ERROR matrix_error_quark()
 GQuark matrix_error_quark(void);
 
+typedef enum {
+    MATRIX_ACCOUNT_KIND_DEFAULT,
+    MATRIX_ACCOUNT_KIND_USER,
+    MATRIX_ACCOUNT_KIND_GUEST
+} MatrixAccountKind;
+
 #endif  /* __MATRIX_TYPE_H__ */

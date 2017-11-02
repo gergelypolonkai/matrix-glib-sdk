@@ -18,27 +18,6 @@
 
 namespace Matrix {
     /**
-     * User account types.
-     */
-    public enum AccountKind {
-        /**
-         * use the server default (usually
-         * {@link Matrix.AccountKind.USER})
-         */
-        DEFAULT,
-
-        /**
-         * normal user
-         */
-        USER,
-
-        /**
-         * guest user
-         */
-        GUEST;
-    }
-
-    /**
      * Direction of events when requesting an event context.
      */
     public enum EventDirection {
