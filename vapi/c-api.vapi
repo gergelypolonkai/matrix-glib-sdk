@@ -162,6 +162,13 @@ namespace Matrix {
         RANK;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_SEARCH_KEY_")]
+    public enum SearchKey {
+        CONTENT_BODY,
+        CONTENT_NAME,
+        CONTENT_TOPIC;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

@@ -228,3 +228,12 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Search ordering.
  */
+
+/**
+ * MatrixSearchKey:
+ * @MATRIX_SEARCH_KEY_CONTENT_BODY: search in the body of a message
+ * @MATRIX_SEARCH_KEY_CONTENT_NAME: search in the name of rooms
+ * @MATRIX_SEARCH_KEY_CONTENT_TOPIC: search in the topic of rooms
+ *
+ * Search keys.
+ */

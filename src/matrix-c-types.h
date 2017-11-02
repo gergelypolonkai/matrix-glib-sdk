@@ -159,4 +159,10 @@ typedef enum {
     MATRIX_SEARCH_ORDER_RANK
 } MatrixSearchOrder;
 
+typedef enum {
+    MATRIX_SEARCH_KEY_CONTENT_BODY,
+    MATRIX_SEARCH_KEY_CONTENT_NAME,
+    MATRIX_SEARCH_KEY_CONTENT_TOPIC
+} MatrixSearchKey;
+
 #endif  /* __MATRIX_TYPE_H__ */

@@ -18,26 +18,6 @@
 
 namespace Matrix {
     /**
-     * Search keys.
-     */
-    public enum SearchKey {
-        /**
-         * search in the body of a message
-         */
-        CONTENT_BODY,
-
-        /**
-         * search in the name of rooms
-         */
-        CONTENT_NAME,
-
-        /**
-         * search in the topic of rooms
-         */
-        CONTENT_TOPIC;
-    }
-
-    /**
      * Search grouping
      *
      * The client can request that the results are returned along with
