@@ -18,21 +18,6 @@
 
 namespace Matrix {
     /**
-     * Call answer types
-     */
-    public enum CallAnswerType {
-        /**
-         * represents a value unknown to this library
-         */
-        UNKNOWN,
-
-        /**
-         * call answer
-         */
-        ANSWER;
-    }
-
-    /**
      * Information about the file referred to in a URL.
      */
     public struct FileInfo {

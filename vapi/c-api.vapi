@@ -198,6 +198,12 @@ namespace Matrix {
         OFFER;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_CALL_ANSWER_TYPE_")]
+    public enum CallAnswerType {
+        UNKNOWN,
+        ANSWER;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

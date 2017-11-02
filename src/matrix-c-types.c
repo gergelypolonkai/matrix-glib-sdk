@@ -284,3 +284,11 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Call offer types
  */
+
+/**
+ * MatrixCallAnswerType:
+ * @MATRIX_CALL_ANSWER_TYPE_UNKNOWN: represents a value unknown to this library
+ * @MATRIX_CALL_ANSWER_TYPE_ANSWER: call answer
+ *
+ * Call answer types
+ */

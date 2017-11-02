@@ -190,4 +190,9 @@ typedef enum {
     MATRIX_CALL_OFFER_TYPE_OFFER
 } MatrixCallOfferType;
 
+typedef enum {
+    MATRIX_CALL_ANSWER_TYPE_UNKNOWN,
+    MATRIX_CALL_ANSWER_TYPE_ANSWER
+} MatrixCallAnswerType;
+
 #endif  /* __MATRIX_TYPE_H__ */
