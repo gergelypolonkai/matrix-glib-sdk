@@ -98,3 +98,11 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * User account types.
  */
+
+/**
+ * MatrixEventDirection:
+ * @MATRIX_EVENT_DIRECTION_FORWARD: list events after the specified one
+ * @MATRIX_EVENT_DIRECTION_BACKWARD: list events before the specified one
+ *
+ * Direction of events when requesting an event context.
+ */

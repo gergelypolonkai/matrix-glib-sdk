@@ -80,4 +80,9 @@ typedef enum {
     MATRIX_ACCOUNT_KIND_GUEST
 } MatrixAccountKind;
 
+typedef enum {
+    MATRIX_EVENT_DIRECTION_FORWARD,
+    MATRIX_EVENT_DIRECTION_BACKWARD
+} MatrixEventDirection;
+
 #endif  /* __MATRIX_TYPE_H__ */

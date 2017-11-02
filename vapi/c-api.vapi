@@ -71,6 +71,12 @@ namespace Matrix {
         GUEST;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_EVENT_DIRECTION_")]
+    public enum EventDirection {
+        FORWARD,
+        BACKWARD;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
