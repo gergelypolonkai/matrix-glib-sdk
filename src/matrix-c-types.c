@@ -155,3 +155,10 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Pusher types.
  */
+
+/**
+ * MatrixReceiptType:
+ * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
+ *
+ * Receipt types of acknowledgment.
+ */

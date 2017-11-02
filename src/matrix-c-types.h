@@ -114,4 +114,8 @@ typedef enum {
     MATRIX_PUSHER_KIND_UNDERRIDE
 } MatrixPusherKind;
 
+typedef enum {
+    MATRIX_RECEIPT_TYPE_READ
+} MatrixReceiptType;
+
 #endif  /* __MATRIX_TYPE_H__ */

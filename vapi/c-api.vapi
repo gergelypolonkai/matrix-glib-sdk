@@ -110,6 +110,11 @@ namespace Matrix {
         UNDERRIDE;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_RECEIPT_TYPE_")]
+    public enum ReceiptType {
+        READ;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

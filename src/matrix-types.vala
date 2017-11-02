@@ -18,16 +18,6 @@
 
 namespace Matrix {
     /**
-     * Receipt types of acknowledgment.
-     */
-    public enum ReceiptType {
-        /**
-         * indicate that the message has been read
-         */
-        READ;
-    }
-
-    /**
      * Resizing methods for matrix_api_media_thumbnail().
      */
     public enum ResizeMethod {
