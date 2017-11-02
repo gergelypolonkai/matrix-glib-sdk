@@ -30,7 +30,7 @@ public class Matrix.Event.Receipt : Matrix.Event.Base {
         string user;
     }
 
-    private Gee.HashMap<ReceiptData?, ulong?> _receipt_data = null;
+    private HashTable<ReceiptData?, ulong?> _receipt_data = null;
 
     private static bool
     _rd_equal(ReceiptData k1, ReceiptData k2)
@@ -43,7 +43,7 @@ public class Matrix.Event.Receipt : Matrix.Event.Base {
     private void
     _init_receipt_data()
     {
-        _receipt_data = new Gee.HashMap<ReceiptData?, ulong?>(null, (Gee.EqualDataFunc)_rd_equal);
+        _receipt_data = new HashTable<ReceiptData?, ulong?>(null, (EqualFunc)_rd_equal);
     }
 
     protected override void
@@ -90,7 +90,7 @@ public class Matrix.Event.Receipt : Matrix.Event.Base {
     to_json(Json.Node json_data)
         throws Matrix.Error
     {
-        Json.Node? node;
+        Json.Node? node = null;
 
         if (_room_id == null) {
             throw new Matrix.Error.INCOMPLETE(
@@ -100,57 +100,63 @@ public class Matrix.Event.Receipt : Matrix.Event.Base {
         var root = json_data.get_object();
         var content_root = root.get_member("content").get_object();
         int i = 0;
+        Matrix.Error? error = null;
 
-        foreach (var entry in _receipt_data.entries) {
-            Json.Object event_object;
-            Json.Object type_object;
-            Json.Object user_object;
+        _receipt_data.foreach(
+            (key, value) => {
+                Json.Object event_object;
+                Json.Object type_object;
+                Json.Object user_object;
 
-            if (entry.key.event_id == null) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate a m.receipt event with an empty event ID");
-            }
+                if (key.event_id == null) {
+                    error = new Matrix.Error.INCOMPLETE(
+                            "Won't generate a m.receipt event with an empty event ID");
+                }
 
-            if (entry.key.typ == null) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate a m.receipt event with an empty receipt type");
-            }
+                if (key.typ == null) {
+                    error = new Matrix.Error.INCOMPLETE(
+                            "Won't generate a m.receipt event with an empty receipt type");
+                }
 
-            if (entry.key.user == null) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate a m.receipt event with an empty user ID");
-            }
+                if (key.user == null) {
+                    error = new Matrix.Error.INCOMPLETE(
+                            "Won't generate a m.receipt event with an empty user ID");
+                }
 
-            i++;
+                i++;
 
-            if ((node = content_root.get_member(entry.key.event_id)) == null) {
-                event_object = new Json.Object();
-                node = new Json.Node(Json.NodeType.OBJECT);
-                node.set_object(event_object);
-                content_root.set_member(entry.key.event_id, node);
-            } else {
-                event_object = node.get_object();
-            }
+                if ((node = content_root.get_member(key.event_id)) == null) {
+                    event_object = new Json.Object();
+                    node = new Json.Node(Json.NodeType.OBJECT);
+                    node.set_object(event_object);
+                    content_root.set_member(key.event_id, node);
+                } else {
+                    event_object = node.get_object();
+                }
 
-            if ((node = event_object.get_member(entry.key.typ)) == null) {
-                type_object = new Json.Object();
-                node = new Json.Node(Json.NodeType.OBJECT);
-                node.set_object(type_object);
-                event_object.set_member(entry.key.typ, node);
-            } else {
-                type_object = node.get_object();
-            }
+                if ((node = event_object.get_member(key.typ)) == null) {
+                    type_object = new Json.Object();
+                    node = new Json.Node(Json.NodeType.OBJECT);
+                    node.set_object(type_object);
+                    event_object.set_member(key.typ, node);
+                } else {
+                    type_object = node.get_object();
+                }
 
-            if ((node = type_object.get_member(entry.key.user)) == null) {
-                user_object = new Json.Object();
-                node = new Json.Node(Json.NodeType.OBJECT);
-                node.set_object(user_object);
-                type_object.set_member(entry.key.user, node);
-            } else {
-                user_object = node.get_object();
-            }
+                if ((node = type_object.get_member(key.user)) == null) {
+                    user_object = new Json.Object();
+                    node = new Json.Node(Json.NodeType.OBJECT);
+                    node.set_object(user_object);
+                    type_object.set_member(key.user, node);
+                } else {
+                    user_object = node.get_object();
+                }
 
-            user_object.set_int_member("ts", entry.value);
+                user_object.set_int_member("ts", value);
+            });
+
+        if (error != null) {
+            throw error;
         }
 
         if (i == 0) {

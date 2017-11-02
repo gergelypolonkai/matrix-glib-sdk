@@ -73,7 +73,7 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
     /**
      * A hash map to store the required level to send specific events.
      */
-    public Gee.HashMap<string, int?> event_levels {
+    public HashTable<string, int?> event_levels {
         get {
             return _event_levels;
         }
@@ -82,17 +82,17 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
     /**
      * A hash map to store current level for individual users.
      */
-    public Gee.HashMap<string, int?> user_levels {
+    public HashTable<string, int?> user_levels {
         get {
             return _user_levels;
         }
     }
 
-    private Gee.HashMap<string, int?> _event_levels =
-        new Gee.HashMap<string, int?>();
+    private HashTable<string, int?> _event_levels =
+        new HashTable<string, int?>(str_hash, str_equal);
 
-    private Gee.HashMap<string, int?> _user_levels =
-        new Gee.HashMap<string, int?>();
+    private HashTable<string, int?> _user_levels =
+        new HashTable<string, int?>(str_hash, str_equal);
 
     protected override void
     from_json(Json.Node json_data)
@@ -147,7 +147,7 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("events")) != null) {
-            _event_levels.clear();
+            _event_levels.remove_all();
 
             node.get_object().foreach_member((obj, event_name, event_node) => {
                     _event_levels[event_name] = (int)event_node.get_int();
@@ -155,7 +155,7 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("users")) != null) {
-            _user_levels.clear();
+            _user_levels.remove_all();
 
             node.get_object().foreach_member((obj, user_id, user_node) => {
                     _user_levels[user_id] = (int)user_node.get_int();
@@ -197,9 +197,10 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         var user_node = new Json.Node(Json.NodeType.OBJECT);
         user_node.set_object(user_obj);
 
-        foreach (var entry in _user_levels.entries) {
-            user_obj.set_int_member(entry.key, entry.value);
-        }
+        _user_levels.foreach(
+            (key, value) => {
+                user_obj.set_int_member(key, value);
+            });
 
         content_root.set_member("users", user_node);
 
@@ -207,9 +208,10 @@ public class Matrix.Event.RoomPowerLevels : Matrix.Event.State {
         var events_node = new Json.Node(Json.NodeType.OBJECT);
         events_node.set_object(events_obj);
 
-        foreach (var entry in _event_levels.entries) {
-            events_obj.set_int_member(entry.key, entry.value);
-        }
+        _event_levels.foreach(
+            (key, value) => {
+                events_obj.set_int_member(key, value);
+            });
 
         content_root.set_member("users", events_node);
 

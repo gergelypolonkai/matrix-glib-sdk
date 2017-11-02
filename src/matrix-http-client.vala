@@ -24,12 +24,12 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     private bool _polling = false;
     private ulong _event_timeout = 30000;
     private string? _last_sync_token;
-    private Gee.HashMap<string, Profile> _user_global_profiles =
-        new Gee.HashMap<string, Profile>();
-    private Gee.HashMap<string, Presence> _user_global_presence =
-        new Gee.HashMap<string, Presence>();
-    private Gee.HashMap<string, Room> _rooms =
-        new Gee.HashMap<string, Room>();
+    private HashTable<string, Profile> _user_global_profiles =
+        new HashTable<string, Profile>(str_hash, str_equal);
+    private HashTable<string, Presence> _user_global_presence =
+        new HashTable<string, Presence>(str_hash, str_equal);
+    private HashTable<string, Room> _rooms =
+        new HashTable<string, Room>(str_hash, str_equal);
     private ulong _last_txn_id = 0;
 
     public
@@ -211,13 +211,15 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
                     room.clear_user_levels();
                     room.clear_event_levels();
 
-                    foreach (var entry in levt.user_levels.entries) {
-                        room.set_user_level(entry.key, entry.value);
-                    }
+                    levt.user_levels.foreach(
+                        (key, value) => {
+                            room.set_user_level(key, value);
+                        });
 
-                    foreach (var entry in levt.event_levels.entries) {
-                        room.set_event_level(entry.key, entry.value);
-                    }
+                    levt.event_levels.foreach(
+                        (key, value) => {
+                            room.set_event_level(key, value);
+                        });
                 } else if (evt is Matrix.Event.RoomTopic) {
                     var tevt = (Matrix.Event.RoomTopic)evt;
 
@@ -501,16 +503,21 @@ public class Matrix.HTTPClient : Matrix.HTTPAPI, Matrix.Client {
     get_room_by_alias(string room_alias)
         throws Matrix.Error
     {
-        foreach (var entry in _rooms.entries) {
-            var room = entry.value;
+        Room? room_found = _rooms.find(
+            (key, room) => {
+                if (room.canonical_alias == room_alias) {
+                    return true;
+                }
 
-            if (room.canonical_alias == room_alias) {
-                return room;
-            }
+                if (room_alias in room.aliases) {
+                    return true;
+                }
 
-            if (room_alias in room.aliases) {
-                return room;
-            }
+                return false;
+            });
+
+        if (room_found != null) {
+            return room_found;
         }
 
         throw new Matrix.Error.UNAVAILABLE(

@@ -141,19 +141,19 @@ public class Matrix.Room : GLib.Object {
      */
     public string[] typing_users { get; set; }
 
-    private Gee.HashMap<string, int?> _event_levels =
-        new Gee.HashMap<string, int?>();
+    private HashTable<string, int?> _event_levels =
+        new HashTable<string, int?>(str_hash, str_equal);
 
-    private Gee.HashMap<string, int?> _user_levels =
-        new Gee.HashMap<string, int?>();
+    private HashTable<string, int?> _user_levels =
+        new HashTable<string, int?>(str_hash, str_equal);
 
     private struct MemberData {
         Profile profile;
         bool thirdparty;
     }
 
-    private Gee.HashMap<string, MemberData?> _members =
-        new Gee.HashMap<string, MemberData?>();
+    private HashTable<string, MemberData?> _members =
+        new HashTable<string, MemberData?>(str_hash, str_equal);
 
     /**
      * Create a new Room object.
@@ -260,7 +260,7 @@ public class Matrix.Room : GLib.Object {
                     "No such room member");
         }
 
-        _members.unset(user_id);
+        _members.remove(user_id);
     }
 
     /**
@@ -270,7 +270,7 @@ public class Matrix.Room : GLib.Object {
     public void
     clear_user_levels()
     {
-        _user_levels.clear();
+        _user_levels.remove_all();
     }
 
     /**
@@ -312,7 +312,7 @@ public class Matrix.Room : GLib.Object {
     public void
     clear_event_levels()
     {
-        _event_levels.clear();
+        _event_levels.remove_all();
     }
 
     /**
