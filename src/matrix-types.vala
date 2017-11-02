@@ -18,33 +18,6 @@
 
 namespace Matrix {
     /**
-     * Search grouping
-     *
-     * The client can request that the results are returned along with
-     * grouping information, e.g. grouped by room_id. In this case the
-     * response will contain a group entry for each distinct value of
-     * room_id. Each group entry contains at least a list of the
-     * event_ids that are in that group, as well as potentially other
-     * metadata about the group.
-     */
-    public enum SearchGroupBy {
-        /**
-         * no grouping
-         */
-        NONE,
-
-        /**
-         * group by room ID
-         */
-        ROOM_ID,
-
-        /**
-         * group by sender
-         */
-        SENDER;
-    }
-
-    /**
      * Room history visibility
      */
     public enum HistoryVisibility {

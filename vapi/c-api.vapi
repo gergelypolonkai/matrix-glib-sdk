@@ -169,6 +169,13 @@ namespace Matrix {
         CONTENT_TOPIC;
     }
 
+    [CCode (cheader_filename = "matrix-enumtypes.h", cprefix = "MATRIX_SEARCH_GROUP_BY_")]
+    public enum SearchGroupBy {
+        NONE,
+        ROOM_ID,
+        SENDER;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

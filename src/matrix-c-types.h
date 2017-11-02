@@ -165,4 +165,10 @@ typedef enum {
     MATRIX_SEARCH_KEY_CONTENT_TOPIC
 } MatrixSearchKey;
 
+typedef enum {
+    MATRIX_SEARCH_GROUP_BY_NONE,
+    MATRIX_SEARCH_GROUP_BY_ROOM_ID,
+    MATRIX_SEARCH_GROUP_BY_SENDER
+} MatrixSearchGroupBy;
+
 #endif  /* __MATRIX_TYPE_H__ */

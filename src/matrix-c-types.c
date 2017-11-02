@@ -237,3 +237,19 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Search keys.
  */
+
+/**
+ * MatrixSearchGroupBy:
+ * @MATRIX_SEARCH_GROUP_BY_NONE: no grouping
+ * @MATRIX_SEARCH_GROUP_BY_ROOM_ID: group by room ID
+ * @MATRIX_SEARCH_GROUP_BY_SENDER: group by sender
+ *
+ * Search grouping
+ *
+ * The client can request that the results are returned along with
+ * grouping information, e.g. grouped by room_id. In this case the
+ * response will contain a group entry for each distinct value of
+ * room_id. Each group entry contains at least a list of the
+ * event_ids that are in that group, as well as potentially other
+ * metadata about the group.
+ */
