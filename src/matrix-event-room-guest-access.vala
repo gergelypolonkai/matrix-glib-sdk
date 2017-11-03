@@ -56,8 +56,10 @@ public class Matrix.Event.RoomGuestAccess : Matrix.Event.State {
             } else {
                 _guest_access = GuestAccess.UNKNOWN;
 
-                warning("Unknown value '%s' in a m.room.guest_access event",
-                        node.get_string());
+                if (Config.DEBUG) {
+                    warning("Unknown value '%s' in a m.room.guest_access event",
+                            node.get_string());
+                }
             }
         } else {
             warning("content.guest_access is missing from a m.room.guest_access event");

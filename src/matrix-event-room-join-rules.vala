@@ -51,8 +51,10 @@ public class Matrix.Event.RoomJoinRules : Matrix.Event.State {
             } else {
                 _join_rules = Matrix.JoinRules.UNKNOWN;
 
-                warning("Unknown value %s in a m.room.join_rules event",
-                        node.get_string());
+                if (Config.DEBUG) {
+                    warning("Unknown value %s in a m.room.join_rules event",
+                            node.get_string());
+                }
             }
         } else {
             _join_rules = Matrix.JoinRules.UNKNOWN;

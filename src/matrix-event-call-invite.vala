@@ -57,8 +57,11 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
                     _offer_type = typ;
                 } else {
                     _offer_type = CallOfferType.UNKNOWN;
-                    warning("Unknown value %s in content.offer.type of a m.call.invite event",
-                            node.get_string());
+
+                    if (Config.DEBUG) {
+                        warning("Unknown value %s in content.offer.type of a m.call.invite event",
+                                node.get_string());
+                    }
                 }
             } else {
                 warning("content.offer.type is missing from a m.call.invite event");

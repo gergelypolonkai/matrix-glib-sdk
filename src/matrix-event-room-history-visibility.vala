@@ -55,6 +55,10 @@ public class Matrix.Event.RoomHistoryVisibility : Matrix.Event.State {
                 _visibility = vis;
             } else {
                 _visibility = Matrix.HistoryVisibility.UNKNOWN;
+
+                if (Config.DEBUG) {
+                    warning("Unknown history_visibility value %s", node.get_string());
+                }
             }
         }
 

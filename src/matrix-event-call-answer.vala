@@ -49,8 +49,11 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Call {
                     _answer_type = typ;
                 } else {
                     _answer_type = CallAnswerType.UNKNOWN;
-                    warning("Unknown value %s for content.answer.type in a m.call.answer event",
-                            node.get_string());
+
+                    if (Config.DEBUG) {
+                        warning("Unknown value %s for content.answer.type in a m.call.answer event",
+                                node.get_string());
+                    }
                 }
             } else {
                 warning("content.answer.type is missing from a m.call.answer event");
