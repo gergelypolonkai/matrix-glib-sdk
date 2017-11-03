@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "matrix-c-types.h"
 
 /**
@@ -292,3 +293,205 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
  *
  * Call answer types
  */
+
+/**
+ * MatrixFileInfo: (ref-func matrix_file_info_ref) (unref-func matrix_file_info_unref)
+ *
+ * Information about the file referred to in a URL.
+ */
+struct _MatrixFileInfo {
+    gssize size;
+    gchar *mimetype;
+
+    volatile int refcount;
+};
+G_DEFINE_BOXED_TYPE(MatrixFileInfo, matrix_file_info, (GBoxedCopyFunc)matrix_file_info_ref, (GBoxedFreeFunc)matrix_file_info_unref);
+
+/**
+ * matrix_file_info_new:
+ *
+ * Create a new #MatrixFileInfo object with a reference count of 1.
+ *
+ * Returns: (transfer full): A new #MatrixFileInfo object.
+ */
+MatrixFileInfo *
+matrix_file_info_new(void)
+{
+    MatrixFileInfo *ret = g_new0(MatrixFileInfo, 1);
+
+    ret->refcount = 1;
+    ret->size = -1;
+
+    return ret;
+}
+
+static void
+matrix_file_info_destroy(MatrixFileInfo *file_info)
+{
+    g_free(file_info->mimetype);
+}
+
+/**
+ * matrix_file_info_ref:
+ * @file_info: (nullable): a #MatrixFileInfo object
+ *
+ * Increment reference count on @file_info.
+ *
+ * Returns: (transfer full): @file_info
+ */
+MatrixFileInfo *
+matrix_file_info_ref(MatrixFileInfo *file_info)
+{
+    g_return_val_if_fail(file_info != NULL, NULL);
+
+    file_info->refcount++;
+
+    return file_info;
+}
+
+/**
+ * matrix_file_info_unref:
+ * @file_info: (nullable) (transfer full): a #MatrixFileInfo object
+ *
+ * Decrement reference count on @file_info.  If reference count reaches zero, destroy the whole
+ * object.
+ */
+void
+matrix_file_info_unref(MatrixFileInfo *matrix_file_info)
+{
+    g_return_if_fail(matrix_file_info != NULL);
+
+    if (--(matrix_file_info->refcount) == 0) {
+        matrix_file_info_destroy(matrix_file_info);
+        g_free(matrix_file_info);
+    }
+}
+
+/**
+ * matrix_file_info_set_size:
+ * @file_info: (nullable): a #MatrixFileInfo object
+ * @size: the size to set
+ *
+ * Set the size of the file described by @file_info.
+ */
+void
+matrix_file_info_set_size(MatrixFileInfo *matrix_file_info, gssize size)
+{
+    g_return_if_fail(matrix_file_info != NULL);
+
+    matrix_file_info->size = size;
+}
+
+/**
+ * matrix_file_info_get_size:
+ * @file_info: (nullable): A #MatrixFileInfo object
+ *
+ * Get the size of the file described by @file_info.
+ *
+ * Returns: the file size.
+ */
+gssize
+matrix_file_info_get_size(MatrixFileInfo *matrix_file_info)
+{
+    g_return_val_if_fail(matrix_file_info != NULL, -1);
+
+    return matrix_file_info->size;
+}
+
+/**
+ * matrix_file_info_set_mimetype:
+ * @file_info: (nullable): A #MatrixFileInfo object
+ * @mimetype: the MIME type to set
+ *
+ * Set the MIME type of the file described by @file_info.
+ */
+void
+matrix_file_info_set_mimetype(MatrixFileInfo *matrix_file_info, const gchar *mimetype)
+{
+    g_return_if_fail(matrix_file_info != NULL);
+
+    g_free(matrix_file_info->mimetype);
+    matrix_file_info->mimetype = g_strdup(mimetype);
+}
+
+/**
+ * matrix_file_info_get_mimetype:
+ * @file_info: (nullable): A #MatrixFileInfo object
+ *
+ * Get the MIME type of the file described by @file_info.
+ *
+ * Returns: (nullable) (transfer none): the MIME type.  The value is owned by @file_info and
+ * shouldn’t be freed.
+ */
+const gchar *
+matrix_file_info_get_mimetype(MatrixFileInfo *matrix_file_info)
+{
+    g_return_val_if_fail(matrix_file_info != NULL, NULL);
+
+    return matrix_file_info->mimetype;
+}
+
+/**
+ * matrix_file_info_set_from_json:
+ * @file_info: (nullable): A #MatrixFileInfo object
+ * @json_data: (nullable): a #JsonNode object
+ *
+ * Load the data in @json_data into the fields of @file_info.  @json_data must hold a valid Matrix
+ * file info object with a size and mimetype fields.
+ */
+void
+matrix_file_info_set_from_json(MatrixFileInfo *file_info, JsonNode *json_data)
+{
+    JsonNode *node;
+    JsonObject *root;
+
+    g_return_if_fail(file_info != NULL);
+    g_return_if_fail(json_data != NULL);
+
+    root = json_node_get_object(json_data);
+
+    if ((node = json_object_get_member(root, "size"))) {
+        file_info->size = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("size is missing from a FileInfo");
+    }
+
+    if ((node = json_object_get_member(root, "mimetype"))) {
+        g_free(file_info->mimetype);
+        file_info->mimetype = g_strdup(json_node_get_string(node));
+    } else if (DEBUG) {
+        g_warning("mimetype is missing from a FileInfo");
+    }
+}
+
+/**
+ * matrix_file_info_get_json_node:
+ * @file_info: (nullable): a #MatrixFileInfo object
+ * @error: (nullable): a #GError, or NULL to ignore
+ *
+ * Convert @file_info to a #JsonNode.  If the file size is negative or the MIME type is not set,
+ * this function returns NULL and @error is set to #MATRIX_ERROR_INCOMPLETE.
+ *
+ * Returns: (transfer full) (nullable): a #JsonNode with a valid Matrix file info object
+ */
+JsonNode *
+matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error)
+{
+    JsonNode *node;
+    JsonObject *obj;
+
+    if ((file_info->size == -1) || (file_info->mimetype == NULL)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "Won't generate a FileInfo without all fields set.");
+        return NULL;
+    }
+
+    node = json_node_new(JSON_NODE_OBJECT);
+    obj = json_object_new();
+    json_node_set_object(node, obj);
+
+    json_object_set_int_member(obj, "size", file_info->size);
+    json_object_set_string_member(obj, "mimetype", file_info->mimetype);
+
+    return node;
+}
