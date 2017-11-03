@@ -211,4 +211,24 @@ const gchar *matrix_file_info_get_mimetype(MatrixFileInfo *file_info);
 void matrix_file_info_set_from_json(MatrixFileInfo *file_info, JsonNode *json_data);
 JsonNode *matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error);
 
+typedef struct _MatrixImageInfo MatrixImageInfo;
+
+GType matrix_image_info_get_type(void);
+# define MATRIX_TYPE_IMAGE_INFO matrix_image_info_get_type()
+
+MatrixImageInfo *matrix_image_info_new(void);
+MatrixImageInfo *matrix_image_info_ref(MatrixImageInfo *image_info);
+void matrix_image_info_unref(MatrixImageInfo *image_info);
+void matrix_image_info_set_size(MatrixImageInfo *image_info, gssize size);
+gssize matrix_image_info_get_size(MatrixImageInfo *image_info);
+void matrix_image_info_set_height(MatrixImageInfo *image_info, gint height);
+gint matrix_image_info_get_height(MatrixImageInfo *image_info);
+void matrix_image_info_set_width(MatrixImageInfo *image_info, gint width);
+gint matrix_image_info_get_width(MatrixImageInfo *image_info);
+void matrix_image_info_set_mimetype(MatrixImageInfo *image_info, const gchar *mimetype);
+const gchar *matrix_image_info_get_mimetype(MatrixImageInfo *image_info);
+void matrix_image_info_set_from_json(MatrixImageInfo *image_info, JsonNode *json_data);
+JsonNode *matrix_image_info_get_json_node(MatrixImageInfo *image_info, GError **error);
+gboolean matrix_image_info_differs(MatrixImageInfo *image_info, MatrixImageInfo *other);
+
 #endif  /* __MATRIX_TYPE_H__ */

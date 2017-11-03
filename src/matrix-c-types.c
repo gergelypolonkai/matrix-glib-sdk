@@ -495,3 +495,329 @@ matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error)
 
     return node;
 }
+
+/**
+ * MatrixImageInfo: (ref-func matrix_image_info_ref) (unref-func matrix_image_info_unref)
+ *
+ * Information about an image referred to in an URL.
+ */
+struct _MatrixImageInfo {
+    gssize size;
+    gint height;
+    gint width;
+    gchar *mimetype;
+
+    volatile int refcount;
+};
+G_DEFINE_BOXED_TYPE(MatrixImageInfo, matrix_image_info, (GBoxedCopyFunc)matrix_image_info_ref, (GBoxedFreeFunc)matrix_image_info_unref);
+
+/**
+ * matrix_image_info_new:
+ *
+ * Create a new #MatrixImageInfo object with a reference count of 1.
+ *
+ * Returns: (transfer full): A new #MatrixImageInfo object.
+ */
+MatrixImageInfo *
+matrix_image_info_new()
+{
+    MatrixImageInfo *image_info = g_new0(MatrixImageInfo, 1);
+
+    image_info->refcount = 1;
+    image_info->size = -1;
+    image_info->height = -1;
+    image_info->width = -1;
+
+    return image_info;
+}
+
+/**
+ * matrix_image_info_ref:
+ * @image_info: (nullable): A #MatrixImageInfo object
+ *
+ * Increment reference count on @image_info.
+ *
+ * Returns: (transfer full): @image_info
+ */
+MatrixImageInfo *
+matrix_image_info_ref(MatrixImageInfo *matrix_image_info)
+{
+    g_return_val_if_fail(matrix_image_info != NULL, NULL);
+
+    matrix_image_info->refcount++;
+
+    return matrix_image_info;
+}
+
+static void
+matrix_image_info_destroy(MatrixImageInfo *image_info)
+{
+    g_free(image_info->mimetype);
+}
+
+/**
+ * matrix_image_info_unref:
+ * @image_info: (nullable) (transfer full): a #MatrixImageInfo object
+ *
+ * Decrement reference count on @image_info.  If reference count reaches zero, destroy the whole
+ * object.
+ */
+void
+matrix_image_info_unref(MatrixImageInfo *matrix_image_info)
+{
+    g_return_if_fail(matrix_image_info != NULL);
+
+    if (--(matrix_image_info->refcount) == 0) {
+        matrix_image_info_destroy(matrix_image_info);
+        g_free(matrix_image_info);
+    }
+}
+
+/**
+ * matrix_image_info_set_size:
+ * @image_info: a #MatrixImageInfo object
+ * @size: the size to set
+ *
+ * Set the size of the image described by @image_info.
+ *
+ * -1 is considered an invalid value by matrix_image_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_image_info_set_size(MatrixImageInfo *matrix_image_info, gssize size)
+{
+    g_return_if_fail(matrix_image_info != NULL);
+
+    matrix_image_info->size = size;
+}
+
+/**
+ * matrix_image_info_get_size:
+ * @image_info: A #MatrixImageInfo object
+ *
+ * Get the size of the image described by @image_info.
+ *
+ * Returns: the image size or -1 if not set
+ */
+gssize
+matrix_image_info_get_size(MatrixImageInfo *matrix_image_info)
+{
+    g_return_val_if_fail(matrix_image_info != NULL, -1);
+
+    return matrix_image_info->size;
+}
+
+/**
+ * matrix_image_info_set_height:
+ * @image_info: A #MatrixImageInfo object
+ * @height: The height of the image, in pixels
+ *
+ * Set the height of the image described by @image_info.
+ *
+ * -1 is considered an invalid value by matrix_image_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_image_info_set_height(MatrixImageInfo *matrix_image_info, gint height)
+{
+    g_return_if_fail(matrix_image_info != NULL);
+
+    matrix_image_info->height = height;
+}
+
+/**
+ * matrix_image_info_get_heiht:
+ * @image_info: A #MatrixImageInfo object
+ *
+ * Get the height of the image described by @image_info.
+ *
+ * Returns: the height, or -1 if not set.
+ */
+gint
+matrix_image_info_get_height(MatrixImageInfo *matrix_image_info)
+{
+    g_return_val_if_fail(matrix_image_info != NULL, -1);
+
+    return matrix_image_info->height;
+}
+
+/**
+ * matrix_image_info_set_width:
+ * @image_info: A #MatrixImageInfo object
+ * @width: the width of the image, in pixels
+ *
+ * Set the width of the image described by @image_info.
+ *
+ * -1 is considered an invalid value by matrix_image_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_image_info_set_width(MatrixImageInfo *matrix_image_info, gint width)
+{
+    g_return_if_fail(matrix_image_info != NULL);
+
+    matrix_image_info->width = width;
+}
+
+/**
+ * matrix_image_info_get_width:
+ * @image_info: A #MatrixImageInfo object
+ *
+ * Get the width of the image described by @image_info.
+ *
+ * Returns: the width, or -1 if not set.
+ */
+gint
+matrix_image_info_get_width(MatrixImageInfo *matrix_image_info)
+{
+    g_return_val_if_fail(matrix_image_info != NULL, -1);
+
+    return matrix_image_info->height;
+}
+
+/**
+ * matrix_image_info_set_mimetype:
+ * @image_info: A #MatrixImageInfo object
+ * @mimetype: (transfer none) (nullable): the MIME type of the image
+ *
+ * Set the MIME type of the image described by @image_info.
+ *
+ * NULL is considered an invalid value by matrix_image_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_image_info_set_mimetype(MatrixImageInfo *matrix_image_info, const gchar *mimetype)
+{
+    g_return_if_fail(matrix_image_info != NULL);
+
+    g_free(matrix_image_info->mimetype);
+    matrix_image_info->mimetype = g_strdup(mimetype);
+}
+
+/**
+ * matrix_image_info_get_mimetype:
+ * @image_info: A #MatrixImageInfo object
+ *
+ * Get the MIME type of the image described by @image_info.
+ *
+ * Returns: (transfer none) (nullable): the MIME type, or NULL if not set.
+ */
+const gchar *
+matrix_image_info_get_mimetype(MatrixImageInfo *matrix_image_info)
+{
+    g_return_val_if_fail(matrix_image_info != NULL, NULL);
+
+    return matrix_image_info->mimetype;
+}
+
+/**
+ * matrix_image_info_set_from_json:
+ * @image_info: A #MatrixImageInfo object
+ * @json_data: (nullable): a #JsonNode object
+ *
+ * Load the data in @json_data into the fields of @image_info_info.  @json_data must hold a valid Matrix
+ * image info object with a size and mimetype fields.
+ */
+void
+matrix_image_info_set_from_json(MatrixImageInfo *image_info, JsonNode *json_data)
+{
+    JsonObject *root = NULL;
+    JsonNode * node;
+
+    root = json_node_get_object(json_data);
+
+    if ((node = json_object_get_member(root, "w"))) {
+        image_info->width = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("w is missing from an ImageInfo");
+    }
+
+    if ((node = json_object_get_member(root, "h"))) {
+        image_info->height = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("h is missing from an ImageInfo");
+    }
+
+    if ((node = json_object_get_member(root, "size"))) {
+        image_info->size = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("size is missing from an ImageInfo");
+    }
+
+    if ((node = json_object_get_member(root, "mimetype"))) {
+        g_free(image_info->mimetype);
+        image_info->mimetype = g_strdup(json_node_get_string(node));
+    } else if (DEBUG) {
+        g_warning("mimetype is missing from an ImageInfo");
+    }
+}
+
+/**
+ * matrix_image_info_get_json_node:
+ * @image_info: a #MatrixImageInfo object
+ * @error: (nullable): a #GError, or NULL to ignore
+ *
+ * Convert @image_info to a #JsonNode.  If the file size is negative or the MIME type is not set,
+ * this function returns NULL and @error is set to #MATRIX_ERROR_INCOMPLETE.
+ *
+ * Returns: (transfer full) (nullable): a #JsonNode with a valid Matrix image info object, or NULL
+ *     if any of the fields are invalid.
+ */
+JsonNode *
+matrix_image_info_get_json_node(MatrixImageInfo *image_info, GError **error)
+{
+    JsonNode *node;
+    JsonObject *obj;
+
+    if ((image_info->size == -1)
+        || (image_info->height == -1)
+        || (image_info->width == -1)
+        || (image_info->mimetype == NULL)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "Won't generate an ImageInfo without all fields set.");
+
+        return NULL;
+    }
+
+    node = json_node_new(JSON_NODE_OBJECT);
+    obj = json_object_new();
+    json_node_set_object(node, obj);
+
+    json_object_set_int_member(obj, "size", image_info->size);
+    json_object_set_int_member(obj, "h", image_info->height);
+    json_object_set_int_member(obj, "w", image_info->width);
+    json_object_set_string_member(obj, "mimetype", image_info->mimetype);
+
+    return node;
+}
+
+/**
+ * matrix_image_info_differs:
+ * @image_info: A #MatrixImageInfo object
+ * @other: A #MatrixImageInfo object to compare @image_info with
+ *
+ * Check if the two ImageInfo objects are identical (ie. hold the same data).
+ *
+ * Returns: TRUE if the two objects hold the same values, FALSE otherwise
+ */
+gboolean
+matrix_image_info_differs(MatrixImageInfo *image_info, MatrixImageInfo *other)
+{
+    // If we compare image_info with itself, they will obviously not differ
+    if (G_UNLIKELY(image_info == other)) {
+        return FALSE;
+    }
+
+    // If we compare NULL and non-NULL values, it obviously differs
+    if ((image_info == NULL) || (other == NULL)) {
+        return TRUE;
+    }
+
+    // At this point, we are definitely comparing two different structs,
+    // let’s compare field by field
+
+    return ((image_info->size == other->size) ||
+            (image_info->width == other->width) ||
+            (image_info->height == other->height) ||
+            (g_strcmp0(image_info->mimetype, other->mimetype) != 0));
+}

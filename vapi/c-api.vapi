@@ -218,6 +218,24 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-types.h")]
+    public struct ImageInfo {
+        public ssize get_size();
+        public void set_size(ssize size);
+        public int get_height();
+        public void set_height(int height);
+        public int get_width();
+        public void set_width(int width);
+        string? mimetype;
+
+        public void set_from_json(Json.Node json_data);
+
+        public Json.Node get_json_node()
+            throws Matrix.Error;
+
+        public bool differs(ImageInfo other);
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);
