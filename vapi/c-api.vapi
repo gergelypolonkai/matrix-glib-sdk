@@ -292,6 +292,15 @@ namespace Matrix {
     public int _g_enum_nick_to_value(GLib.Type enum_type, string nick)
         throws Matrix.Error;
 
+    [CCode (cheader_filename = "matrix-profile.h")]
+    public class Profile : GLib.Object {
+        public GLib.TimeSpan age {get;}
+        public string? avatar_url {get; set;}
+        public string? display_name {get; set;}
+
+        public Profile();
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

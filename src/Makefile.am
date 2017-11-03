@@ -58,7 +58,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-message-audio.vala \
 	matrix-message-video.vala \
 	matrix-message-location.vala \
-	matrix-profile.vala \
 	matrix-room.vala \
 	$(NULL)
 
@@ -115,6 +114,7 @@ bin_PROGRAMS = test-api-client test-client
 INST_H_SRC_FILES = \
 	matrix-types.h \
 	utils.h \
+	matrix-profile.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
@@ -134,6 +134,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-types.c \
 	matrix-version.c \
 	matrix-types.c \
+	matrix-profile.c \
 	utils.c \
 	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
