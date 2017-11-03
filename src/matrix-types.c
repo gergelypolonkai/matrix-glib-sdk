@@ -17,7 +17,7 @@
  */
 
 #include "config.h"
-#include "matrix-c-types.h"
+#include "matrix-types.h"
 
 /**
  * SECTION:matrix-types
@@ -1072,4 +1072,443 @@ matrix_image_info_differs(MatrixImageInfo *image_info, MatrixImageInfo *other)
             (image_info->width == other->width) ||
             (image_info->height == other->height) ||
             (g_strcmp0(image_info->mimetype, other->mimetype) != 0));
+}
+
+struct _MatrixVideoInfo {
+    gssize size;
+    gchar *mimetype;
+    gint duration;
+    gint width;
+    gint height;
+    gchar *thumbnail_url;
+    MatrixImageInfo *thumbnail_info;
+
+    volatile int refcount;
+};
+
+/**
+ * MatrixVideoInfo: (ref-func matrix_video_info_ref) (unref-func matrix_video_info_unref)
+ *
+ * Information about a video file referred to by an URL.
+ */
+G_DEFINE_BOXED_TYPE(MatrixVideoInfo, matrix_video_info, (GBoxedCopyFunc)matrix_video_info_ref, (GBoxedFreeFunc)matrix_video_info_unref);
+
+/**
+ * matrix_video_info_new:
+ *
+ * Create a new #MatrixVideoInfo object with a reference count of 1.
+ */
+MatrixVideoInfo *
+matrix_video_info_new(void)
+{
+    MatrixVideoInfo *ret = g_new0(MatrixVideoInfo, 1);
+
+    ret->refcount = 1;
+    ret->size = -1;
+    ret->duration = -1;
+    ret->width = -1;
+    ret->height = -1;
+
+    return ret;
+}
+
+/**
+ * matrix_video_info_ref:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Increment reference count of @video_info by 1.
+ *
+ * Returns: (transfer full): @video_info
+ */
+MatrixVideoInfo *
+matrix_video_info_ref(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, NULL);
+
+    matrix_video_info->refcount++;
+
+    return matrix_video_info;
+}
+
+static void
+matrix_video_info_destroy(MatrixVideoInfo *video_info)
+{
+    g_free(video_info->mimetype);
+    g_free(video_info->thumbnail_url);
+    matrix_image_info_unref(video_info->thumbnail_info);
+}
+
+/**
+ * matrix_video_info_unref:
+ * @video_info: (transfer full): a #MatrixVideoInfo object
+ *
+ * Decrement reference count on @video_info by 1.
+ *
+ * If reference count reaches 0, the object is freed.
+ */
+void
+matrix_video_info_unref(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    if (--(matrix_video_info->refcount) == 0) {
+        matrix_video_info_destroy(matrix_video_info);
+        g_free(matrix_video_info);
+    }
+}
+
+/**
+ * matrix_video_info_set_size:
+ * @video_info: a #MatrixVideoInfo object
+ * @size: the size of the file, in bytes
+ *
+ * Set the size of the video file described by @video_info.
+ *
+ * -1 is considered an invalid value by matrix_video_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_video_info_set_size(MatrixVideoInfo *matrix_video_info, gsize size)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    matrix_video_info->size = size;
+}
+
+/**
+ * matrix_video_info_get_size:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the size of the video file described by @video_info, in bytes.
+ *
+ * Returns: the file size
+ */
+gsize
+matrix_video_info_get_size(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, -1);
+
+    return matrix_video_info->size;
+}
+
+/**
+ * matrix_video_info_set_mimetype:
+ * @video_info: a #MatrixVideoInfo object
+ * @mimetype: (transfer none): a MIME type
+ *
+ * Set the MIME type of the video file described by @video_info.
+ *
+ * NULL is considered an invalid value by matrix_video_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_video_info_set_mimetype(MatrixVideoInfo *matrix_video_info, const gchar *mimetype)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    g_free(matrix_video_info->mimetype);
+    matrix_video_info->mimetype = g_strdup(mimetype);
+}
+
+/**
+ * matrix_video_info_get_mimetype:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the MIME type of the video file described by @video_info.
+ *
+ * Returns: (transfer none) (nullable): the MIME type, or %NULL if not set
+ */
+const gchar *
+matrix_video_info_get_mimetype(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, NULL);
+
+    return matrix_video_info->mimetype;
+}
+
+/**
+ * matrix_video_info_set_duration:
+ * @video_info: a #MatrixVideoInfo object
+ * @duration: the duration of the video, in seconds
+ *
+ * Set the duration of the video file described by @video_info.
+ *
+ * -1 is considered an invalid value by matrix_video_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_video_info_set_duration(MatrixVideoInfo *matrix_video_info, gint duration)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    matrix_video_info->duration = duration;
+}
+
+/**
+ * matrix_video_info_get_duration:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the duration of the video file described by @video_info, in seconds.
+ *
+ * Returns: the duration
+ */
+gint
+matrix_video_info_get_duration(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, -1);
+
+    return matrix_video_info->duration;
+}
+
+/**
+ * matrix_video_info_set_width:
+ * @video_info: a #MatrixVideoInfo object
+ * @width: the width of the video, in pixels
+ *
+ * Set the width of the video file described by @video_info.
+ *
+ * -1 is considered an invalid value by matrix_video_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_video_info_set_width(MatrixVideoInfo *matrix_video_info, gint width)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    matrix_video_info->width = width;
+}
+
+/**
+ * matrix_video_info_get_width:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the width of the video file described by @video_info, in pixels.
+ *
+ * Returns: the video width
+ */
+gint
+matrix_video_info_get_width(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, -1);
+
+    return matrix_video_info->width;
+}
+
+/**
+ * matrix_video_info_set_height:
+ * @video_info: a #MatrixVideoInfo object
+ * @height: the height of the video, in pixels
+ *
+ * Set the width of the video file described by @video_info.
+ *
+ * -1 is considered an invalid value by matrix_video_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_video_info_set_height(MatrixVideoInfo *matrix_video_info, gint height)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    matrix_video_info->height = height;
+}
+
+/**
+ * matrix_video_info_get_height:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the height of the video file described by @video_info, in pixels.
+ *
+ * Returns: the video height
+ */
+gint
+matrix_video_info_get_height(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, -1);
+
+    return matrix_video_info->height;
+}
+
+/**
+ * matrix_video_info_set_thumbnail_url:
+ * @video_info: a #MatrixVideoInfo object
+ * @thumbnail_url: (transfer none): the URL of the thumbnail image for the video
+ *
+ * Set the thumbnail image URL for the video described by @video_info.
+ */
+void
+matrix_video_info_set_thumbnail_url(MatrixVideoInfo *matrix_video_info, const gchar *thumbnail_url)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    g_free(matrix_video_info->thumbnail_url);
+    matrix_video_info->thumbnail_url = g_strdup(thumbnail_url);
+}
+
+/**
+ * matrix_video_info_get_thumbnail_url:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the thumbnail URL for the video described by @video_info.
+ *
+ * Returns: (transfer none) (nullable): the thumbnail URL
+ */
+const gchar *
+matrix_video_info_get_thumbnail_url(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, NULL);
+
+    return matrix_video_info->thumbnail_url;
+}
+
+/**
+ * matrix_video_info_set_thumbnail_info:
+ * @video_info: a #MatrixVideoInfo object
+ * @thumbnail_info: (transfer none): a #MatrixImageInfo object describing the video’s thumbnail
+ *     image
+ *
+ * Set the image info for the video’s thumbnail image, referred to by the URL set with
+ * matrix_video_info_set_thumbnail_url().
+ */
+void
+matrix_video_info_set_thumbnail_info(MatrixVideoInfo *matrix_video_info, const MatrixImageInfo *thumbnail_info)
+{
+    g_return_if_fail(matrix_video_info != NULL);
+
+    matrix_image_info_unref(matrix_video_info->thumbnail_info);
+    matrix_video_info->thumbnail_info = matrix_image_info_ref((MatrixImageInfo *)thumbnail_info);
+}
+
+/**
+ * matrix_video_info_get_thumbnail_info:
+ * @video_info: a #MatrixVideoInfo object
+ *
+ * Get the image info for the video’s thumbnail image, referred to by the URL that can be
+ * retrieved with matrix_video_info_get_thumbnail_url().
+ *
+ * Returns: (transfer none): a #MatrixImageInfo object, or %NULL if not set
+ */
+const MatrixImageInfo *
+matrix_video_info_get_thumbnail_info(MatrixVideoInfo *matrix_video_info)
+{
+    g_return_val_if_fail(matrix_video_info != NULL, NULL);
+
+    return matrix_video_info->thumbnail_info;
+}
+
+/**
+ * matrix_video_info_set_from_json:
+ * @video_info: A #MatrixVideoInfo object
+ * @json_data: (nullable): a #JsonNode object
+ *
+ * Load the data in @json_data into the fields of @video_info.  @json_data must hold a valid
+ * Matrix video info object with a size, duration, width, height, and mimetype fields.
+ */
+void
+matrix_video_info_set_from_json(MatrixVideoInfo *video_info, JsonNode *json_data)
+{
+    JsonObject *root = NULL;
+    JsonNode *node;
+
+    root = json_node_get_object(json_data);
+
+    if ((node = json_object_get_member(root, "size"))) {
+        video_info->size = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("size is missing from an VideoInfo");
+    }
+
+    if ((node = json_object_get_member(root, "mimetype"))) {
+        g_free(video_info->mimetype);
+        video_info->mimetype = g_strdup(json_node_get_string(node));
+    } else if (DEBUG) {
+        g_warning("mimetype is missing from an VideoInfo");
+    }
+
+    if ((node = json_object_get_member(root, "duration"))) {
+        video_info->duration = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("duration is missing from an VideoInfo");
+    }
+
+    if ((node = json_object_get_member(root, "w"))) {
+        video_info->width = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("w is missing from a VideoInfo");
+    }
+
+    if ((node = json_object_get_member(root, "h"))) {
+        video_info->height = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("h is missing from a VideoInfo");
+    }
+
+    if ((node = json_object_get_member(root, "thumbnail_url"))) {
+        g_free(video_info->thumbnail_url);
+        video_info->thumbnail_url = g_strdup(json_node_get_string(node));
+    }
+
+    if ((node = json_object_get_member(root, "thumbnail_info"))) {
+        matrix_image_info_unref(video_info->thumbnail_info);
+        video_info->thumbnail_info = matrix_image_info_new();
+        matrix_image_info_set_from_json(video_info->thumbnail_info, node);
+    }
+}
+
+/**
+ * matrix_video_info_get_json_node:
+ * @video_info: a #MatrixImageInfo object
+ * @error: (nullable): a #GError, or NULL to ignore
+ *
+ * Convert @video_info to a #JsonNode.  If the file size, duration, width, or height is negative,
+ * or the MIME type is not set, this function returns NULL and @error is set to
+ * #MATRIX_ERROR_INCOMPLETE.
+ *
+ * Returns: (transfer full) (nullable): a #JsonNode with a valid Matrix video info object, or NULL
+ *     if any of the fields are invalid.
+ */
+JsonNode *
+matrix_video_info_get_json_node(MatrixVideoInfo *video_info, GError **error)
+{
+    JsonNode *node;
+    JsonObject *obj;
+
+    if ((video_info->size == -1)
+        || (video_info->mimetype == NULL)
+        || (video_info->duration == -1)
+        || (video_info->width == -1)
+        || (video_info->height == -1)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "Won't generate a VideoInfo without all the fields set.");
+        return NULL;
+    }
+
+    node = json_node_new(JSON_NODE_OBJECT);
+    obj = json_object_new();
+    json_node_set_object(node, obj);
+
+    json_object_set_int_member(obj, "size", video_info->size);
+    json_object_set_string_member(obj, "mimetype", video_info->mimetype);
+    json_object_set_int_member(obj, "duration", (video_info->duration));
+    json_object_set_int_member(obj, "w", video_info->width);
+    json_object_set_int_member(obj, "h", video_info->height);
+
+    if(video_info->thumbnail_url && video_info->thumbnail_info) {
+        GError *here_error = NULL;
+        JsonNode *thumbnail_info = matrix_image_info_get_json_node(video_info->thumbnail_info, &here_error);
+
+        if (here_error) {
+            g_propagate_error(error, here_error);
+
+            json_node_free(node);
+
+            return NULL;
+        }
+
+        json_object_set_string_member(obj, "thumbnail_url", video_info->thumbnail_url);
+        json_object_set_member(obj, "thumbnail_info", thumbnail_info);
+
+        json_node_unref(thumbnail_info);
+    }
+
+    return node;
 }
