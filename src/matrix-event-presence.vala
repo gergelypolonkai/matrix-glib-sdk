@@ -95,12 +95,10 @@ public class Matrix.Event.Presence : Matrix.Event.Base {
         }
 
         if ((node = content_root.get_member("presence")) != null) {
-            Matrix.Presence? pres = (Matrix.Presence?)_g_enum_nick_to_value(
-                    typeof(Matrix.Presence), node.get_string());
-
-            if (pres != null) {
-                _presence = pres;
-            } else {
+            try {
+                _presence = (Matrix.Presence)_g_enum_nick_to_value(
+                        typeof(Matrix.Presence), node.get_string());
+            } catch (Matrix.Error e) {
                 _presence = Matrix.Presence.UNKNOWN;
 
                 if (Config.DEBUG) {

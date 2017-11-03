@@ -42,12 +42,10 @@ public class Matrix.Event.CallAnswer : Matrix.Event.Call {
             var answer_root = node.get_object();
 
             if ((node = answer_root.get_member("type")) != null) {
-                CallAnswerType? typ = (CallAnswerType?)_g_enum_nick_to_value(
-                        typeof(CallAnswerType), node.get_string());
-
-                if (typ != null) {
-                    _answer_type = typ;
-                } else {
+                try {
+                    _answer_type = (CallAnswerType)_g_enum_nick_to_value(
+                            typeof(CallAnswerType), node.get_string());
+                } catch (Matrix.Error e) {
                     _answer_type = CallAnswerType.UNKNOWN;
 
                     if (Config.DEBUG) {

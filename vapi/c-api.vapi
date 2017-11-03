@@ -208,6 +208,10 @@ namespace Matrix {
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);
 
+    [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_nick_to_value")]
+    public int _g_enum_nick_to_value(GLib.Type enum_type, string nick)
+        throws Matrix.Error;
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */

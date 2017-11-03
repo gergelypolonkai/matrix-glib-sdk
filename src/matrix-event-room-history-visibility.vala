@@ -47,13 +47,10 @@ public class Matrix.Event.RoomHistoryVisibility : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("history_visibility")) != null) {
-            Matrix.HistoryVisibility? vis = (Matrix.HistoryVisibility?)_g_enum_nick_to_value(
-                    typeof(Matrix.HistoryVisibility),
-                    node.get_string());
-
-            if (vis != null) {
-                _visibility = vis;
-            } else {
+            try {
+                _visibility = (Matrix.HistoryVisibility)_g_enum_nick_to_value(
+                        typeof(Matrix.HistoryVisibility), node.get_string());
+            } catch (Matrix.Error e) {
                 _visibility = Matrix.HistoryVisibility.UNKNOWN;
 
                 if (Config.DEBUG) {

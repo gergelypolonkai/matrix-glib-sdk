@@ -138,12 +138,15 @@ public class Matrix.Event.RoomMember : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("membership")) != null) {
-            Matrix.RoomMembership? mship = (Matrix.RoomMembership?)_g_enum_nick_to_value(
-                    typeof(Matrix.RoomMembership),
-                    node.get_string());
+            try {
+                _membership = (Matrix.RoomMembership)_g_enum_nick_to_value(
+                        typeof(Matrix.RoomMembership), node.get_string());
+            } catch (Matrix.Error e) {
+                _membership = Matrix.RoomMembership.UNKNOWN;
 
-            if (mship != null) {
-                _membership = mship;
+                if (Config.DEBUG) {
+                    warning("Unknown membership value %s", node.get_string());
+                }
             }
         } else if (Config.DEBUG) {
             warning("membership key is missing from the m.room.member event");

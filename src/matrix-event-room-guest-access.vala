@@ -48,12 +48,10 @@ public class Matrix.Event.RoomGuestAccess : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("guest_access")) != null) {
-            GuestAccess? rules = (GuestAccess?)_g_enum_nick_to_value(
-                    typeof(GuestAccess), node.get_string());
-
-            if (rules != null) {
-                _guest_access = rules;
-            } else {
+            try {
+                _guest_access = (GuestAccess)_g_enum_nick_to_value(
+                        typeof(GuestAccess), node.get_string());
+            } catch (Matrix.Error e) {
                 _guest_access = GuestAccess.UNKNOWN;
 
                 if (Config.DEBUG) {

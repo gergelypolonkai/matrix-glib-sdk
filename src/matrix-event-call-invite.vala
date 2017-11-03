@@ -50,12 +50,10 @@ public class Matrix.Event.CallInvite : Matrix.Event.Call {
             var offer_node = node.get_object();
 
             if ((node = offer_node.get_member("type")) != null) {
-                CallOfferType? typ = (CallOfferType?)_g_enum_nick_to_value(
-                        typeof(CallOfferType), node.get_string());
-
-                if (typ != null) {
-                    _offer_type = typ;
-                } else {
+                try {
+                    _offer_type = (CallOfferType)_g_enum_nick_to_value(
+                            typeof(CallOfferType), node.get_string());
+                } catch (Matrix.Error e) {
                     _offer_type = CallOfferType.UNKNOWN;
 
                     if (Config.DEBUG) {
