@@ -308,25 +308,4 @@ namespace Matrix {
             return null;
         }
     }
-
-    private string?
-    _g_enum_value_to_nick(Type enum_type,
-                          int value,
-                          bool convert_dashes = true)
-    {
-        EnumClass enum_class = (EnumClass)enum_type.class_ref();
-        unowned EnumValue? enum_val = enum_class.get_value(value);
-
-        if (enum_val != null) {
-            var nick = enum_val.value_nick;
-
-            if (convert_dashes) {
-                return nick.replace("-", "_");
-            }
-
-            return nick;
-        } else {
-            return null;
-        }
-    }
 }

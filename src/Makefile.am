@@ -115,6 +115,7 @@ bin_PROGRAMS = test-api-client test-client
 
 INST_H_SRC_FILES = \
 	matrix-c-types.h \
+	utils.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
@@ -134,6 +135,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-types.c \
 	matrix-version.c \
 	matrix-c-types.c \
+	utils.c \
 	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
 	$(NULL)
