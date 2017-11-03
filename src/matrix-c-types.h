@@ -20,6 +20,7 @@
 # define __MATRIX_TYPE_H__
 
 # include <glib-object.h>
+# include <json-glib/json-glib.h>
 
 typedef enum {
     MATRIX_ERROR_NONE,
@@ -194,5 +195,20 @@ typedef enum {
     MATRIX_CALL_ANSWER_TYPE_UNKNOWN,
     MATRIX_CALL_ANSWER_TYPE_ANSWER
 } MatrixCallAnswerType;
+
+typedef struct _MatrixFileInfo MatrixFileInfo;
+
+GType matrix_file_info_get_type(void);
+# define MATRIX_TYPE_FILE_INFO matrix_file_info_get_type()
+
+MatrixFileInfo *matrix_file_info_new(void);
+MatrixFileInfo *matrix_file_info_ref(MatrixFileInfo *file_info);
+void matrix_file_info_unref(MatrixFileInfo *file_info);
+void matrix_file_info_set_size(MatrixFileInfo *file_info, gssize size);
+gssize matrix_file_info_get_size(MatrixFileInfo *file_info);
+void matrix_file_info_set_mimetype(MatrixFileInfo *file_info, const gchar *mimetype);
+const gchar *matrix_file_info_get_mimetype(MatrixFileInfo *file_info);
+void matrix_file_info_set_from_json(MatrixFileInfo *file_info, JsonNode *json_data);
+JsonNode *matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error);
 
 #endif  /* __MATRIX_TYPE_H__ */

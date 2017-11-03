@@ -204,6 +204,20 @@ namespace Matrix {
         ANSWER;
     }
 
+    [CCode (cheader_filename = "matrix-c-types.h")]
+    public struct FileInfo {
+        public void set_size(ssize size);
+        public ssize get_size();
+
+        public void set_mimetype(string? mimetype);
+        public string? get_mimetype();
+
+        public void set_from_json(Json.Node json_data);
+
+        public Json.Node get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

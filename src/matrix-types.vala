@@ -17,56 +17,6 @@
  */
 
 namespace Matrix {
-    /**
-     * Information about the file referred to in a URL.
-     */
-    public struct FileInfo {
-        int? size;
-        string? mimetype;
-
-        public void
-        set_from_json(Json.Node json_data)
-        {
-            size = null;
-            mimetype = null;
-
-            var root = json_data.get_object();
-            Json.Node? node;
-
-            if ((node = root.get_member("size")) != null) {
-                size = (int)node.get_int();
-            } else if (Config.DEBUG) {
-                warning("size is missing from a FileInfo");
-            }
-
-            if ((node = root.get_member("mimetype")) != null) {
-                mimetype = node.get_string();
-            } else if (Config.DEBUG) {
-                warning("mimetype is missing from a FileInfo");
-            }
-        }
-
-        public Json.Node
-        get_json_node()
-            throws Matrix.Error
-        {
-            if ((size == null)
-                || (mimetype == null)) {
-                throw new Matrix.Error.INCOMPLETE(
-                        "Won't generate a FileInfo without all fields set.");
-            }
-
-            var node = new Json.Node(Json.NodeType.OBJECT);
-            var obj = new Json.Object();
-            node.set_object(obj);
-
-            obj.set_int_member("size", size);
-            obj.set_string_member("mimetype", mimetype);
-
-            return node;
-        }
-    }
-
     public struct ImageInfo {
         int? size;
         int? height;
