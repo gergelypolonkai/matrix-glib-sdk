@@ -211,6 +211,23 @@ const gchar *matrix_file_info_get_mimetype(MatrixFileInfo *file_info);
 void matrix_file_info_set_from_json(MatrixFileInfo *file_info, JsonNode *json_data);
 JsonNode *matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error);
 
+typedef struct _MatrixAudioInfo MatrixAudioInfo;
+
+GType matrix_audio_info_get_type(void);
+# define MATRIX_TYPE_AUDIO_INFO matrix_audio_info_get_type()
+
+MatrixAudioInfo *matrix_audio_info_new(void);
+MatrixAudioInfo *matrix_audio_info_ref(MatrixAudioInfo *audio_info);
+void matrix_audio_info_unref(MatrixAudioInfo *audio_info);
+void matrix_audio_info_set_size(MatrixAudioInfo *audio_info, gssize size);
+gssize matrix_audio_info_get_size(MatrixAudioInfo *audio_info);
+void matrix_audio_info_set_mimetype(MatrixAudioInfo *audio_info, const gchar *mimetype);
+const gchar *matrix_audio_info_get_mimetype(MatrixAudioInfo *audio_info);
+void matrix_audio_info_set_duration(MatrixAudioInfo *audio_info, gint duration);
+gint matrix_audio_info_get_duration(MatrixAudioInfo *audio_info);
+void matrix_audio_info_set_from_json(MatrixAudioInfo *audio_info, JsonNode *json_data);
+JsonNode *matrix_audio_info_get_json_node(MatrixAudioInfo *audio_info, GError **error);
+
 typedef struct _MatrixImageInfo MatrixImageInfo;
 
 GType matrix_image_info_get_type(void);

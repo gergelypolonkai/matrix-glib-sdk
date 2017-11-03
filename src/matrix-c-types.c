@@ -497,6 +497,258 @@ matrix_file_info_get_json_node(MatrixFileInfo *file_info, GError **error)
 }
 
 /**
+ * MatrixAudioInfo: (ref-func matrix_audio_info_ref) (unref-func matrix_audio_info_unref)
+ *
+ * Information about an audio file referred to by an URL.
+ */
+
+struct _MatrixAudioInfo {
+    gssize size;
+    gchar *mimetype;
+    gint duration;
+
+    volatile int refcount;
+};
+G_DEFINE_BOXED_TYPE(MatrixAudioInfo, matrix_audio_info, (GBoxedCopyFunc)matrix_audio_info_ref, (GBoxedFreeFunc)matrix_audio_info_unref);
+
+/**
+ * matrix_audio_info_new:
+ *
+ * Creates a new #MatrixAudioInfo object with a reference count of 1.
+ *
+ * Returns: (transfer full): A new #MatrixAudioInfo object
+ */
+MatrixAudioInfo *
+matrix_audio_info_new(void)
+{
+    MatrixAudioInfo *ret = g_new0(MatrixAudioInfo, 1);
+
+    ret->refcount = 1;
+    ret->size = -1;
+    ret->duration = -1;
+
+    return ret;
+}
+
+/**
+ * matrix_audio_info_ref:
+ * @audio_info: (nullable): A #MatrixAudioInfo object
+ *
+ * Increment reference count on @audio_info by one.
+ *
+ * Returns: (transfer full): the same object
+ */
+MatrixAudioInfo *
+matrix_audio_info_ref(MatrixAudioInfo *matrix_audio_info)
+{
+    g_return_val_if_fail(matrix_audio_info != NULL, NULL);
+
+    matrix_audio_info->refcount++;
+
+    return matrix_audio_info;
+}
+
+static void
+matrix_audio_info_destroy(MatrixAudioInfo *audio_info)
+{
+    g_free(audio_info->mimetype);
+}
+
+/**
+ * matrix_audio_info_unref:
+ * @audio_info: (nullable): A #MatrixAudioInfo object
+ *
+ * Decrement reference count on @audio_info by one.
+ *
+ * If reference count reaches zero, the whole object is freed.
+ */
+void
+matrix_audio_info_unref(MatrixAudioInfo *matrix_audio_info)
+{
+    g_return_if_fail(matrix_audio_info != NULL);
+
+    if (--(matrix_audio_info->refcount) == 0) {
+        matrix_audio_info_destroy(matrix_audio_info);
+        g_free(matrix_audio_info);
+    }
+}
+
+/**
+ * matrix_audio_info_set_size:
+ * @audio_info: A #MatrixAudioInfo object
+ * @size: the size of the audio file, in bytes
+ *
+ * Set the size of the audio file described by @audio_info.
+ *
+ * -1 is considered an invalid value by matrix_audio_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_audio_info_set_size(MatrixAudioInfo *matrix_audio_info, gssize size)
+{
+    g_return_if_fail(matrix_audio_info != NULL);
+
+    matrix_audio_info->size = size;
+}
+
+/**
+ * matrix_audio_info_get_size:
+ * @audio_info: A #MatrixAudioInfo object
+ *
+ * Get the size of the audio file described by @audio_info.
+ *
+ * Returns: the size of the file, or -1 if unset.
+ */
+gssize
+matrix_audio_info_get_size(MatrixAudioInfo *matrix_audio_info)
+{
+    g_return_val_if_fail(matrix_audio_info != NULL, -1);
+
+    return matrix_audio_info->size;
+}
+
+/**
+ * matrix_audio_info_set_mimetype:
+ * @audio_info: a #MatrixAudioInfo object
+ * @mimetype: (nullable) (transfer none): a MIME type
+ *
+ * Set the MIME type of the audio file described by @audio_info.
+ *
+ * NULL is considered an invalid value by matrix_audio_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_audio_info_set_mimetype(MatrixAudioInfo *matrix_audio_info, const gchar *mimetype)
+{
+    g_return_if_fail(matrix_audio_info != NULL);
+
+    g_free(matrix_audio_info->mimetype);
+    matrix_audio_info->mimetype = g_strdup(mimetype);
+}
+
+/**
+ * matrix_audio_info_get_mimetype:
+ * @audio_info: a #MatrixAudioInfo object
+ *
+ * Get the MIME type of the audio file described by @audio_info.
+ *
+ * The returned value is owned by @audio_info, and should not be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): the MIME type, or NULL if not set
+ */
+const gchar *
+matrix_audio_info_get_mimetype(MatrixAudioInfo *matrix_audio_info)
+{
+    g_return_val_if_fail(matrix_audio_info != NULL, NULL);
+
+    return matrix_audio_info->mimetype;
+}
+
+/**
+ * matrix_audio_info_set_duration:
+ * @audio_info: a #MatrixAudioInfo object
+ * @duration: a duration in seconds
+ *
+ * Set the duration of the audio file described by @audio_info.
+ *
+ * -1 is considered an invalid value by matrix_audio_info_get_json_node(), but can be set to
+ * indicate incompleteness.
+ */
+void
+matrix_audio_info_set_duration(MatrixAudioInfo *matrix_audio_info, gint duration)
+{
+    g_return_if_fail(matrix_audio_info != NULL);
+
+    matrix_audio_info->duration = duration;
+}
+
+/**
+ * matrix_audio_info_get_duration:
+ * @audio_info: a #MatrixAudioInfo object
+ *
+ * Get the duration of the audio file described by @audio_info, in seconds.
+ *
+ * Returns: the duration
+ */
+gint
+matrix_audio_info_get_duration(MatrixAudioInfo *matrix_audio_info)
+{
+    g_return_val_if_fail(matrix_audio_info != NULL, -1);
+
+    return matrix_audio_info->duration;
+}
+
+/**
+ * matrix_audio_info_set_from_json:
+ * @audio_info: A #MatrixAudioInfo object
+ * @json_data: a #JsonNode object
+ *
+ * Load the data in @json_data into the fields of @audio_info.  @json_data must hold a valid Matrix
+ * audio info object with a size, duration, and mimetype fields.
+ */
+void
+matrix_audio_info_set_from_json(MatrixAudioInfo *audio_info, JsonNode *json_data)
+{
+    JsonNode *node;
+    JsonObject *root;
+
+    root = json_node_get_object(json_data);
+
+    if ((node = json_object_get_member(root, "size"))) {
+        audio_info->size = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("size is missing from an ImageInfo");
+    }
+
+    if ((node = json_object_get_member(root, "mimetype"))) {
+        audio_info->mimetype = g_strdup(json_node_get_string(node));
+    } else if (DEBUG) {
+        g_warning("mimetype is missing from an ImageInfo");
+    }
+
+    if ((node = json_object_get_member(root, "duration"))) {
+        audio_info->duration = json_node_get_int(node);
+    } else if (DEBUG) {
+        g_warning("duration is missing from an ImageInfo");
+    }
+}
+
+/**
+ * matrix_audio_info_get_json_node:
+ * @audio_info: a #MatrixAudioInfo object
+ * @error: (nullable): a #GError, or NULL to ignore
+ *
+ * Convert @audio_info to a #JsonNode.  If the file size or the duration is negative, or the MIME
+ * type is not set, this function returns NULL and @error is set to #MATRIX_ERROR_INCOMPLETE.
+ *
+ * Returns: (transfer full) (nullable): a #JsonNode with a valid Matrix audio info object
+ */
+JsonNode *
+matrix_audio_info_get_json_node(MatrixAudioInfo *audio_info, GError **error)
+{
+    JsonNode * node;
+    JsonObject *obj;
+
+    if ((audio_info->size == -1)
+        || (audio_info->mimetype == NULL)
+        || (audio_info->duration == -1)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "Won't generate an ImageInfo without all fields set.");
+        return NULL;
+    }
+
+    node = json_node_new(JSON_NODE_OBJECT);
+    obj = json_object_new();
+    json_node_set_object(node, obj);
+
+    json_object_set_int_member(obj, "size", audio_info->size);
+    json_object_set_string_member(obj, "mimetype", audio_info->mimetype);
+    json_object_set_int_member(obj, "duration", audio_info->duration);
+
+    return node;
+}
+
+/**
  * MatrixImageInfo: (ref-func matrix_image_info_ref) (unref-func matrix_image_info_unref)
  *
  * Information about an image referred to in an URL.

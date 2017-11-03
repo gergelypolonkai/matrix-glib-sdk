@@ -219,6 +219,23 @@ namespace Matrix {
     }
 
     [CCode (cheader_filename = "matrix-c-types.h")]
+    public struct AudioInfo {
+        public ssize get_size();
+        public void set_size(ssize size);
+
+        public string? get_mimetype();
+        public void set_mimetype(string? mimetype);
+
+        public int get_duration();
+        public void set_duration(int duration);
+
+        public void set_from_json(Json.Node json_data);
+
+        public Json.Node get_json_node()
+            throws Matrix.Error;
+    }
+
+    [CCode (cheader_filename = "matrix-c-types.h")]
     public struct ImageInfo {
         public ssize get_size();
         public void set_size(ssize size);
