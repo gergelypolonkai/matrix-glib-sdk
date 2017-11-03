@@ -204,7 +204,7 @@ namespace Matrix {
         ANSWER;
     }
 
-    [CCode (cheader_filename = "matrix-c-types.h")]
+    [CCode (cheader_filename = "matrix-types.h")]
     public struct FileInfo {
         public void set_size(ssize size);
         public ssize get_size();
@@ -218,7 +218,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-types.h")]
+    [CCode (cheader_filename = "matrix-types.h")]
     public struct AudioInfo {
         public ssize get_size();
         public void set_size(ssize size);
@@ -235,7 +235,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-types.h")]
+    [CCode (cheader_filename = "matrix-types.h")]
     public struct ImageInfo {
         public ssize get_size();
         public void set_size(ssize size);
@@ -251,6 +251,37 @@ namespace Matrix {
             throws Matrix.Error;
 
         public bool differs(ImageInfo other);
+    }
+
+    [CCode (cheader_filename = "matrix-types.h")]
+    public struct VideoInfo {
+        public ssize get_size();
+        public void set_size(ssize size);
+
+        public string? get_mimetype();
+        public void set_mimetype(string? mimetype);
+
+        public int get_duration();
+        public void set_duration(int duration);
+
+        public int get_width();
+        public void set_width(int witdh);
+
+        public int get_height();
+        public void set_height(int height);
+
+        public string? get_thumbnail_url();
+        public void set_thumbnail_url();
+
+        public ImageInfo? get_thumbnail_info();
+        public void set_image_info(ImageInfo? image_info);
+
+        public void
+        set_from_json(Json.Node json_data);
+
+        public Json.Node
+        get_json_node()
+        throws Matrix.Error;
     }
 
     /* Utilities */

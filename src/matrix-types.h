@@ -248,4 +248,29 @@ void matrix_image_info_set_from_json(MatrixImageInfo *image_info, JsonNode *json
 JsonNode *matrix_image_info_get_json_node(MatrixImageInfo *image_info, GError **error);
 gboolean matrix_image_info_differs(MatrixImageInfo *image_info, MatrixImageInfo *other);
 
+typedef struct _MatrixVideoInfo MatrixVideoInfo;
+
+GType matrix_video_info_get_type(void) G_GNUC_CONST;
+# define MATRIX_TYPE_VIDEO_INFO matrix_video_info_get_type()
+
+MatrixVideoInfo *matrix_video_info_new(void);
+MatrixVideoInfo *matrix_video_info_ref(MatrixVideoInfo *video_info);
+void matrix_video_info_unref(MatrixVideoInfo *video_info);
+void matrix_video_info_set_size(MatrixVideoInfo *video_info, gsize size);
+gsize matrix_video_info_get_size(MatrixVideoInfo *video_info);
+void matrix_video_info_set_mimetype(MatrixVideoInfo *video_info, const gchar *mimetype);
+const gchar *matrix_video_info_get_mimetype(MatrixVideoInfo *video_info);
+void matrix_video_info_set_duration(MatrixVideoInfo *video_info, gint duration);
+gint matrix_video_info_get_duration(MatrixVideoInfo *video_info);
+void matrix_video_info_set_width(MatrixVideoInfo *video_info, gint width);
+gint matrix_video_info_get_width(MatrixVideoInfo *video_info);
+void matrix_video_info_set_height(MatrixVideoInfo *video_info, gint height);
+gint matrix_video_info_get_height(MatrixVideoInfo *video_info);
+void matrix_video_info_set_thumbnail_url(MatrixVideoInfo *video_info, const gchar *thumbnail_url);
+const gchar *matrix_video_info_get_thumbnail_url(MatrixVideoInfo *video_info);
+void matrix_video_info_set_thumbnail_info(MatrixVideoInfo *video_info, const MatrixImageInfo *thumbnail_info);
+const MatrixImageInfo *matrix_video_info_get_thumbnail_info(MatrixVideoInfo *video_info);
+void matrix_video_info_set_from_json(MatrixVideoInfo *video_info, JsonNode *json_data);
+JsonNode *matrix_video_info_get_json_node(MatrixVideoInfo *video_info, GError **error);
+
 #endif  /* __MATRIX_TYPE_H__ */

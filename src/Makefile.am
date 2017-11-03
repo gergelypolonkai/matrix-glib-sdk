@@ -19,7 +19,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	namespace-info.vala \
 	matrix-api.vala \
 	matrix-client.vala \
-	matrix-types.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
 	matrix-compacts.vala \
@@ -114,7 +113,7 @@ $(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c): vala-stamp
 bin_PROGRAMS = test-api-client test-client
 
 INST_H_SRC_FILES = \
-	matrix-c-types.h \
+	matrix-types.h \
 	utils.h \
 	$(NULL)
 
@@ -125,7 +124,7 @@ INST_H_BUILT_FILES = \
 	$(NULL)
 
 matrix_enum_headers = \
-	matrix-c-types.h \
+	matrix-types.h \
 	$(NULL)
 
 libmatrix_glib_0_0_la_SOURCES = \
@@ -134,7 +133,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-event-types.c \
 	matrix-version.c \
-	matrix-c-types.c \
+	matrix-types.c \
 	utils.c \
 	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
