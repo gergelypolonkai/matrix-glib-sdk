@@ -295,17 +295,4 @@ namespace Matrix {
             return node;
         }
     }
-
-    private int?
-    _g_enum_nick_to_value(Type enum_type, string nick)
-    {
-        EnumClass enum_class = (EnumClass)enum_type.class_ref();
-        unowned EnumValue? enum_val = enum_class.get_value_by_nick(nick);
-
-        if (enum_val != null) {
-            return enum_val.value;
-        } else {
-            return null;
-        }
-    }
 }

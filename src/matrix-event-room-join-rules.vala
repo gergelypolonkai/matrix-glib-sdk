@@ -43,12 +43,10 @@ public class Matrix.Event.RoomJoinRules : Matrix.Event.State {
         }
 
         if ((node = content_root.get_member("join_rule")) != null) {
-            Matrix.JoinRules? rules = (Matrix.JoinRules)_g_enum_nick_to_value(
-                    typeof(Matrix.JoinRules), node.get_string());
-
-            if (rules != null) {
-                _join_rules = rules;
-            } else {
+            try {
+                _join_rules = (JoinRules)_g_enum_nick_to_value(
+                        typeof(JoinRules), node.get_string());
+            } catch (Matrix.Error e) {
                 _join_rules = Matrix.JoinRules.UNKNOWN;
 
                 if (Config.DEBUG) {

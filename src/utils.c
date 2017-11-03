@@ -17,6 +17,7 @@
  */
 
 #include "utils.h"
+#include "matrix-types.h"
 
 // GTK-Doc looking comments in this file intentionally do not begin with a double star, as the
 // functions here are internal
@@ -57,4 +58,51 @@ _matrix_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
     g_type_class_unref(enum_class);
 
     return nick;
+}
+
+/*
+ * _matrix_g_enum_nick_to_value:
+ *
+ * @enum_type: a #GEnumType
+ * @nick: a value nick registered in @enum_type
+ * @error: a #GError, or NULL to ignore errors
+ *
+ * Get the integer value of the enum nick @nick from @enum_type.  If the nick contains underscores
+ * (`_`), they will be converted to dashes (`-`) first.
+ *
+ * If @nick cannot be found in @enum_type, this function returns NULL, and sets @error to
+ * #MATRIX_ERROR_UNKNOWN_VALUE.
+ *
+ * Returns: the integer value of @nick, or 0 if not found
+ */
+gint
+_matrix_g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error)
+{
+    GEnumClass *enum_class = g_type_class_ref(enum_type);
+    GEnumValue *enum_value;
+    gchar *nick_c = NULL;
+    gchar *a;
+    gint ret = 0;
+
+    nick_c = g_strdup(nick);
+
+    for (a = nick_c; *a; a++) {
+        if (*a == '_') {
+            *a = '-';
+        }
+    }
+
+    enum_value = g_enum_get_value_by_nick(enum_class, nick_c);
+    g_free(nick_c);
+
+    if (enum_value) {
+        ret = enum_value->value;
+    } else {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_UNKNOWN_VALUE,
+                    "Value %s is unknown", nick);
+    }
+
+    g_type_class_unref(enum_class);
+
+    return ret;
 }
