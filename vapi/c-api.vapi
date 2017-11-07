@@ -284,6 +284,18 @@ namespace Matrix {
         throws Matrix.Error;
     }
 
+    /* Compact classes */
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public abstract class JsonCompact {
+        public JsonCompact();
+
+        public abstract Json.Node? get_json_node()
+            throws Matrix.Error;
+
+        public string get_json_data(out size_t datalen)
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

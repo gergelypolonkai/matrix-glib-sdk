@@ -17,25 +17,6 @@
  */
 
 namespace Matrix {
-    /**
-     * Abstract parent class for classes that can be saved to JSON.
-     */
-    public abstract class JsonCompact {
-        public abstract Json.Node?
-        get_json_node()
-            throws Matrix.Error;
-
-        public string
-        get_json_data(out size_t datalen)
-            throws Matrix.Error
-        {
-            var generator = new Json.Generator();
-
-            generator.set_root(get_json_node());
-
-            return generator.to_data(out datalen);
-        }
-    }
 
     /**
      * Class to hold a filter.
