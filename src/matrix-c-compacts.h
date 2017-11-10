@@ -118,6 +118,22 @@ void matrix_filter_set_presence_filter(MatrixFilter *filter, MatrixFilterRules *
 MatrixRoomFilter *matrix_filter_get_room_filter(MatrixFilter *filter);
 void matrix_filter_set_room_filter(MatrixFilter *filter, MatrixRoomFilter *room_filter);
 
+# define MATRIX_TYPE_3PID_CREDENTIAL matrix_3pid_credential_get_type()
+G_DECLARE_DERIVABLE_TYPE(Matrix3PidCredential, matrix_3pid_credential, MATRIX, 3PID_CREDENTIAL, MatrixJsonCompact);
+
+struct _Matrix3PidCredentialClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+Matrix3PidCredential *matrix_3pid_credential_new(void);
+Matrix3PidCredential *matrix_3pid_credential_construct(GType object_type);
+const gchar *matrix_3pid_credential_get_id_server(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_id_server(Matrix3PidCredential *credential, const gchar *id_server);
+const gchar *matrix_3pid_credential_get_session_id(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_session_id(Matrix3PidCredential *credential, const gchar *session_id);
+const gchar *matrix_3pid_credential_get_client_secret(Matrix3PidCredential *credential);
+void matrix_3pid_credential_set_client_secret(Matrix3PidCredential *credential, const gchar *client_secret);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */

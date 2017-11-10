@@ -1301,3 +1301,231 @@ matrix_filter_init(MatrixFilter *matrix_filter)
     priv->_presence_filter = NULL;
     priv->_room_filter = NULL;
 }
+
+typedef struct {
+    gchar *_id_server;
+    gchar *_session_id;
+    gchar *_client_secret;
+} Matrix3PidCredentialPrivate;
+
+/**
+ * Matrix3PidCredential:
+ *
+ * Class to hold 3rd party credential related data.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(Matrix3PidCredential, matrix_3pid_credential, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_3pid_credential_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    Matrix3PidCredentialPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *node;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(MATRIX_3PID_CREDENTIAL(matrix_json_compact));
+
+    if ((priv->_id_server == NULL)
+        || (priv->_session_id == NULL)
+        || (priv->_client_secret == NULL)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "All fields of a 3PID credential must be set!");
+
+        return NULL;
+    }
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "id_server");
+    json_builder_add_string_value(builder, priv->_id_server);
+
+    json_builder_set_member_name(builder, "session_id");
+    json_builder_add_string_value(builder, priv->_session_id);
+
+    json_builder_set_member_name(builder, "client_secret");
+    json_builder_add_string_value(builder, priv->_client_secret);
+
+    json_builder_end_object(builder);
+
+    node = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return node;
+}
+
+Matrix3PidCredential *
+matrix_3pid_credential_construct(GType object_type)
+{
+    return (Matrix3PidCredential *)matrix_json_compact_construct(object_type);
+}
+
+/**
+ * matrix_3pid_credential_new:
+ *
+ * Create a new #Matrix3PidCredential object.
+ *
+ * Returns: (transfer full): a new #Matrix3PidCredential object
+ */
+Matrix3PidCredential *
+matrix_3pid_credential_new(void)
+{
+    return matrix_3pid_credential_construct (MATRIX_TYPE_3PID_CREDENTIAL);
+}
+
+/**
+ * matrix_3pid_credential_get_id_server:
+ * @credential: a #Matrix3PidCredential object
+ *
+ * Get the address of the Identity Server that generated this credential.
+ *
+ * The returned value is owned by @credential, and should not be freed.
+ *
+ * Returns: (transfer none): the address of the Identity Server
+ */
+const gchar *
+matrix_3pid_credential_get_id_server(Matrix3PidCredential *matrix_3pid_credential)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_val_if_fail(matrix_3pid_credential != NULL, NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    return priv->_id_server;
+}
+
+/**
+ * matrix_3pid_credential_set_id_server:
+ * @credential: a #Matrix3PidCredential object
+ * @id_server: (transfer none): the address of the Identity Server
+ *
+ * Set the address of the Identity server for the 3rd party credential.
+ */
+void
+matrix_3pid_credential_set_id_server(Matrix3PidCredential *matrix_3pid_credential, const gchar *id_server)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_if_fail(matrix_3pid_credential != NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    g_free(priv->_id_server);
+    priv->_id_server = g_strdup(id_server);
+}
+
+/**
+ * matrix_3pid_credential_get_session_id:
+ * @credential: a #Matrix3PidCredential object
+ *
+ * Get the sessiod ID received from the Identity Server with this credential.
+ *
+ * The returned value is owned by @credential, and should not be freed.
+ *
+ * Returns: (transfer none): the session ID
+ */
+const gchar *
+matrix_3pid_credential_get_session_id(Matrix3PidCredential *matrix_3pid_credential)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_val_if_fail(matrix_3pid_credential != NULL, NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    return priv->_session_id;
+}
+
+/**
+ * matrix_3pid_credential_set_session_id:
+ * @credential: a #Matrix3PidCredential object
+ * @session_id: (transfer none): an Identity Server session ID
+ *
+ * Set the session ID to be used during communication with the Identity Server for @credential.
+ */
+void
+matrix_3pid_credential_set_session_id(Matrix3PidCredential *matrix_3pid_credential, const gchar *session_id)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_if_fail(matrix_3pid_credential != NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    g_free(priv->_session_id);
+    priv->_session_id = g_strdup(session_id);
+}
+
+/**
+ * matrix_3pid_credential_get_client_secret:
+ * @credential: a #Matrix3PidCredential object
+ *
+ * Get the client secret that was used in the session with the Identity Server.
+ *
+ * The returned value is owned by @credential, and should not be freed.
+ *
+ * Returns: (transfer none): the client secret
+ */
+const gchar *
+matrix_3pid_credential_get_client_secret(Matrix3PidCredential *matrix_3pid_credential)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_val_if_fail(matrix_3pid_credential != NULL, NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    return priv->_client_secret;
+}
+
+/**
+ * matrix_3pid_credential_set_client_secret:
+ * @credential: a #Matrix3PidCredential object
+ * @client_secret: (transfer none): an Identity Server client secret
+ *
+ * Set the client secret to be used in the session with the Identity Server.
+ */
+void
+matrix_3pid_credential_set_client_secret(Matrix3PidCredential *matrix_3pid_credential, const gchar *client_secret)
+{
+    Matrix3PidCredentialPrivate *priv;
+
+    g_return_if_fail(matrix_3pid_credential != NULL);
+
+    priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    g_free(priv->_client_secret);
+    priv->_client_secret = g_strdup(client_secret);
+}
+
+static void
+matrix_3pid_credential_finalize(MatrixJsonCompact* matrix_json_compact)
+{
+    Matrix3PidCredentialPrivate *priv = matrix_3pid_credential_get_instance_private(MATRIX_3PID_CREDENTIAL(matrix_json_compact));
+
+    g_free(priv->_id_server);
+    g_free(priv->_session_id);
+    g_free(priv->_client_secret);
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_3pid_credential_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_3pid_credential_class_init(Matrix3PidCredentialClass* klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_3pid_credential_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_3pid_credential_get_json_node;
+}
+
+static void
+matrix_3pid_credential_init(Matrix3PidCredential* matrix_3pid_credential)
+{
+    Matrix3PidCredentialPrivate *priv = matrix_3pid_credential_get_instance_private(matrix_3pid_credential);
+
+    priv->_id_server = NULL;
+    priv->_session_id = NULL;
+    priv->_client_secret = NULL;
+}
