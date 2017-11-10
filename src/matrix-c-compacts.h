@@ -22,6 +22,8 @@
 # include <glib-object.h>
 # include <json-glib/json-glib.h>
 
+# include "matrix-types.h"
+
 G_BEGIN_DECLS
 
 # define MATRIX_TYPE_JSON_COMPACT matrix_json_compact_get_type()
@@ -55,6 +57,30 @@ MatrixJsonCompact *matrix_json_compact_construct(GType object_type);
 MatrixJsonCompact *matrix_json_compact_ref(MatrixJsonCompact *json_compact);
 JsonNode *matrix_json_compact_get_json_node(MatrixJsonCompact *json_compact, GError **error);
 gchar *matrix_json_compact_get_json_data(MatrixJsonCompact *json_compact, gsize *datalen, GError **error);
+
+#define MATRIX_TYPE_FILTER_RULES matrix_filter_rules_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixFilterRules, matrix_filter_rules, MATRIX, FILTER_RULES, MatrixJsonCompact)
+
+struct _MatrixFilterRulesClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixFilterRules *matrix_filter_rules_new(void);
+MatrixFilterRules *matrix_filter_rules_construct(GType object_type);
+void matrix_filter_rules_set_limit(MatrixFilterRules *filter_rules, guint limit);
+guint matrix_filter_rules_get_limit(MatrixFilterRules *filter_rules);
+void matrix_filter_rules_set_types(MatrixFilterRules *filter_rules, gchar **types, int n_types);
+gchar **matrix_filter_rules_get_types(MatrixFilterRules *filter_rules, int *n_types);
+void matrix_filter_rules_set_excluded_types(MatrixFilterRules *filter_rules, gchar **excluded_types, int n_excluded_types);
+gchar **matrix_filter_rules_get_excluded_types(MatrixFilterRules *filter_rules, int *n_excluded_types);
+void matrix_filter_rules_set_senders(MatrixFilterRules *filter_rules, gchar **senders, int n_senders);
+gchar **matrix_filter_rules_get_senders(MatrixFilterRules *filter_rules, int *n_senders);
+void matrix_filter_rules_set_excluded_senders(MatrixFilterRules *filter_rules, gchar **excluded_senders, int n_excluded_senders);
+gchar **matrix_filter_rules_get_excluded_senders(MatrixFilterRules *filter_rules, int *n_excluded_senders);
+void matrix_filter_rules_set_rooms(MatrixFilterRules *filter_rules, gchar **rooms, int n_rooms);
+gchar **matrix_filter_rules_get_rooms(MatrixFilterRules *filter_rules, int *n_rooms);
+void matrix_filter_rules_set_excluded_rooms(MatrixFilterRules *filter_rules, gchar **excluded_rooms, int n_excluded_rooms);
+gchar **matrix_filter_rules_get_excluded_rooms(MatrixFilterRules *filter_rules, int *n_excluded_rooms);
 
 G_END_DECLS
 

@@ -291,3 +291,418 @@ matrix_json_compact_get_type(void)
 
     return matrix_json_compact_type_id__volatile;
 }
+
+typedef struct {
+    guint64 _limit;
+    gchar **_types;
+    guint _types_len;
+    gchar **_excluded_types;
+    guint _excluded_types_len;
+    gchar **_senders;
+    guint _senders_len;
+    gchar **_excluded_senders;
+    guint _excluded_senders_len;
+    gchar **_rooms;
+    guint _rooms_len;
+    gchar **_excluded_rooms;
+    guint _excluded_rooms_len;
+} MatrixFilterRulesPrivate;
+
+/**
+ * MatrixFilterRules:
+ *
+ * Class to hold filtering rules.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixFilterRules, matrix_filter_rules, MATRIX_TYPE_JSON_COMPACT)
+
+/*
+ * STR_ARRAY_TO_JSON:
+ * @PRIV: (not nullable): a variable that holds a #MatrixFilterRulesPrivate struct
+ * @BUILDER: (not nullable): A #JsonBuilder object to use for array building.  It must have an
+ *     object opened with json_builder_begin_object()
+ * @NAME: (not nullable) (transfer none): the name of the array within the opened object
+ *
+ * Creates a new array with @NAME in the currently open object of @BUILDER.  To do so, it will
+ * use the field of the same name from @PRIV.
+ */
+#define STR_ARRAY_TO_JSON(PRIV, BUILDER, NAME)                                   \
+    if ((PRIV)->_ ## NAME ## _len != 0) {                                        \
+        guint i;                                                                 \
+                                                                                 \
+        json_builder_set_member_name((BUILDER), #NAME);                         \
+        json_builder_begin_array((BUILDER));                                    \
+                                                                                 \
+        for (i = 0; i < (PRIV)->_ ## NAME ## _len; i++) {                        \
+            json_builder_add_string_value((BUILDER), (PRIV)->_ ## NAME [i]);    \
+        };                                                                       \
+                                                                                 \
+        json_builder_end_array((BUILDER));                                      \
+    }                                                                            \
+                                                                                 \
+    if ((PRIV)->_excluded_ ## NAME ## _len != 0) {                               \
+        guint i;                                                                 \
+                                                                                 \
+        json_builder_set_member_name((BUILDER), "not_" #NAME);                  \
+        json_builder_begin_array((BUILDER));                                    \
+                                                                                 \
+        for (i = 0; i < (PRIV)->_excluded_ ## NAME ## _len; i++) {               \
+            json_builder_add_string_value((BUILDER), (PRIV)->_excluded_ ## NAME [i]); \
+        };                                                                       \
+                                                                                 \
+        json_builder_end_array((BUILDER));                                      \
+    }
+
+
+static JsonNode *
+matrix_filter_rules_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixFilterRules *matrix_filter_rules;
+    MatrixFilterRulesPrivate *priv;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    matrix_filter_rules = (MatrixFilterRules *)matrix_json_compact;
+    priv = matrix_filter_rules_get_instance_private(matrix_filter_rules);
+
+    JsonNode* result = NULL;
+    JsonBuilder* builder = NULL;
+
+    builder = json_builder_new ();
+    json_builder_begin_object (builder);
+    json_builder_set_member_name (builder, "limit");
+    json_builder_add_int_value (builder, (gint64)priv->_limit);
+
+    STR_ARRAY_TO_JSON(priv, builder, rooms);
+    STR_ARRAY_TO_JSON(priv, builder, senders);
+    STR_ARRAY_TO_JSON(priv, builder, types);
+
+    json_builder_end_object(builder);
+    result = json_builder_get_root (builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+#undef STR_ARRAY_TO_JSON
+
+/**
+ * matrix_filter_rules_construct:
+ * @object_type: the #GType of the object to construct.  This must be derived from
+ *     #MatrixJsonCompact.
+ *
+ * Construct a new #MatrixFilterRules object.
+ *
+ * Returns: (transfer full): a new #MatrixFilterRules object
+ */
+MatrixFilterRules *
+matrix_filter_rules_construct(GType object_type)
+{
+    return (MatrixFilterRules *)matrix_json_compact_construct(object_type);
+}
+
+/**
+ * matrix_filter_rules_new:
+ *
+ * Create a new #MatrixFilterRules object with a reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixFilterRules object
+ */
+MatrixFilterRules *
+matrix_filter_rules_new(void)
+{
+    return matrix_filter_rules_construct(MATRIX_TYPE_FILTER_RULES);
+}
+
+/**
+ * matrix_filter_rules_get_limit:
+ * @filter_rules: a #MatrixFilterRules object
+ *
+ * Get the message count limit defined in @filter_rules.
+ *
+ * Returns: the message count limit
+ */
+guint
+matrix_filter_rules_get_limit(MatrixFilterRules *matrix_filter_rules)
+{
+    MatrixFilterRulesPrivate *priv;
+
+    g_return_val_if_fail(matrix_filter_rules != NULL, 0);
+
+    priv = matrix_filter_rules_get_instance_private(matrix_filter_rules);
+
+    return priv->_limit;
+}
+
+/**
+ * matrix_filter_rules_set_limit:
+ * @filter_rules: a #MatrixFilterRules object
+ * @limit: the message count limit
+ *
+ * Set the message count limit in @filter_rules.
+ */
+void
+matrix_filter_rules_set_limit(MatrixFilterRules *matrix_filter_rules, guint limit)
+{
+    MatrixFilterRulesPrivate *priv;
+
+    g_return_if_fail(matrix_filter_rules != NULL);
+
+    priv = matrix_filter_rules_get_instance_private(matrix_filter_rules);
+
+    priv->_limit = limit;
+}
+
+static inline gchar **
+copy_str_array(gchar **src, gint n_src)
+{
+    gchar **dst;
+
+    if (src == NULL) {
+        return NULL;
+    }
+
+    dst = g_new0(gchar *, n_src);
+
+    for (gint i = 0; i < n_src; i++) {
+        dst[i] = g_strdup(src[i]);
+    }
+
+    return dst;
+}
+
+static inline void
+free_str_array(gchar **list, gint n_list)
+{
+    gint i = 0;
+
+    if (list == NULL) {
+        return;
+    }
+
+    g_return_if_fail(list != NULL);
+
+    for (i = 0; i < n_list; i++) {
+        g_free(list[i]);
+    }
+}
+
+/*
+ * STR_ARRAY_GETTER:
+ * @NAME: the name of a string array in #MatrixFilterRulesPrivate
+ *
+ * Create a getter function for @NAME in #MatrixFilterRulesPrivate.
+ */
+#define STR_ARRAY_GETTER(NAME)                                          \
+    gchar **                                                            \
+    matrix_filter_rules_get_ ## NAME (MatrixFilterRules *matrix_filter_rules, gint *n_ ## NAME) \
+    {                                                                   \
+        MatrixFilterRulesPrivate * priv;                             \
+                                                                        \
+        g_return_val_if_fail(matrix_filter_rules != NULL, NULL);       \
+                                                                        \
+        priv = matrix_filter_rules_get_instance_private(matrix_filter_rules); \
+                                                                        \
+        if (n_ ## NAME != NULL) {                                       \
+            *n_ ## NAME = priv->_ ## NAME ## _len;                      \
+        }                                                               \
+                                                                        \
+        return priv->_ ## NAME;                                             \
+    }
+
+/*
+ * STR_ARRAY_SETTER:
+ * @NAME: the name of a string array in #MatrixFilterRulesPrivate
+ *
+ * Create a setter function for @NAME in #MatrixFilterRulesPrivate
+ */
+#define STR_ARRAY_SETTER(NAME)                                          \
+    void                                                                \
+    matrix_filter_rules_set_ ## NAME (MatrixFilterRules *matrix_filter_rules, gchar ** NAME, gint n_ ## NAME) \
+    {                                                                   \
+        MatrixFilterRulesPrivate * priv;                             \
+                                                                        \
+        g_return_if_fail(matrix_filter_rules != NULL);                 \
+                                                                        \
+        priv = matrix_filter_rules_get_instance_private(matrix_filter_rules); \
+                                                                        \
+        free_str_array(priv->_ ## NAME, priv->_ ## NAME ##_len);       \
+        priv->_ ## NAME = copy_str_array(NAME, n_ ## NAME);            \
+        priv->_ ## NAME ## _len = n_ ## NAME;                           \
+    }
+
+/**
+ * matrix_filter_rules_get_types:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_types: (nullable): placeholder for the length of the returned list, or %NULL to ignore
+ *
+ * Get the list of message types to be included in the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (nullable) (transfer none): a list of message types
+ */
+STR_ARRAY_GETTER(types);
+
+/**
+ * matrix_filter_rules_set_types:
+ * @filter_rules: a #MatrixFilterRules object
+ * @types: (nullable): a list of message types
+ * @n_types: the number of items in @types
+ *
+ * Set the list of message types to be included in the filtered results.
+ */
+STR_ARRAY_SETTER(types);
+
+/**
+ * matrix_filter_rules_get_excluded_types:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_excluded_types: (nullable): placeholder for the length of the returned list, or %NULL to ignore
+ *
+ * Get the list of message types to be excluded in the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): a list of message types to exclude
+ */
+STR_ARRAY_GETTER(excluded_types);
+
+/**
+ * matrix_filter_rules_set_excluded_types:
+ * @filter_rules: a #MatrixFilterRules object
+ * @excluded_types: (nullable): a list of types to exclude
+ * @n_excluded_types: the number of items in @excluded_types
+ *
+ * Set the list of message types to be excluded in the filtered results.  The message types in
+ * this list will be excluded even if they would be explicitly included (ie. set with
+ * matrix_filter_rules_set_types()).
+ */
+STR_ARRAY_SETTER(excluded_types)
+
+/**
+ * matrix_filter_rules_get_senders:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_senders: (nullable): placeholder for the length of the returned list, or %NULL to ignore
+ *
+ * Get the list of senders whose messages should to be included in the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): a list of sender Matrix IDs
+ */
+STR_ARRAY_GETTER(senders);
+
+/**
+ * matrix_filter_rules_set_senders:
+ * @filter_rules: a #MatrixFilterRules object
+ * @senders: (nullable): a list of Matrix IDs
+ * @n_senders: the number of items in @senders
+ *
+ * Set the list of Matrix IDs whose messages should be included in the filtered results.
+ */
+STR_ARRAY_SETTER(senders);
+
+/**
+ * matrix_filter_rules_get_excluded_senders:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_excluded_senders: (nullable): placeholder for the length of the returned list, or %NULL
+ *     to ignore
+ *
+ * Get the list of sender Matrix IDs to be excluded from the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): a list of Matrix IDs to exclude
+ */
+STR_ARRAY_GETTER(excluded_senders);
+
+/**
+ * matrix_filter_rules_set_excluded_senders:
+ * @filter_rules: a #MatrixFilterRules object
+ * @excluded_senders: (nullable): a list of Matrix IDs to exclude
+ * @n_excluded_senders: the number of items in @excluded_senders
+ *
+ * Set the list of Matrix IDs whose messages should be excluded from the filtered results.
+ * Messages from Matrix IDs in this list will be excluded even if they would be explicitly
+ * included (ie. set with matrix_filter_rules_set_senders()).
+ */
+STR_ARRAY_SETTER(excluded_senders);
+
+/**
+ * matrix_filter_rules_get_rooms:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_rooms: (nullable): placeholder for the length of the returned list, or %NULL to ignore
+ *
+ * Get the list of rooms to be included in the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): a list of rooms
+ */
+STR_ARRAY_GETTER(rooms);
+
+/**
+ * matrix_filter_rules_set_rooms:
+ * @filter_rules: a #MatrixFilterRules object
+ * @rooms: (nullable): a list of room IDs
+ * @n_rooms: the number of items in @rooms
+ *
+ * Set the list of rooms to be included in the filtered results.
+ */
+STR_ARRAY_SETTER(rooms);
+
+/**
+ * matrix_filter_rules_get_excluded_rooms:
+ * @filter_rules: a #MatrixFilterRules object
+ * @n_excluded_rooms: (nullable): placeholder for the length of the returned list, or %NULL to ignore
+ *
+ * Get the list of room IDs to be excluded in the filtered results.
+ *
+ * The returned value is owned by @filter_rules and shouldn’t be freed nor modified.
+ *
+ * Returns: (transfer none) (nullable): a list of room IDs to exclude
+ */
+STR_ARRAY_GETTER(excluded_rooms);
+
+/**
+ * matrix_filter_rules_set_excluded_rooms:
+ * @filter_rules: a #MatrixFilterRules object
+ * @excluded_rooms: (nullable): a list of room IDs to exclude
+ * @n_excluded_rooms: the number of items in @excluded_rooms
+ *
+ * Set the list of room IDs to be excluded from the filtered results.  The room IDs in this
+ * list will be excluded even if they would be explicitly included (ie. set with
+ * matrix_filter_rules_set_rooms()).
+ */
+STR_ARRAY_SETTER(excluded_rooms);
+
+static void
+matrix_filter_rules_finalize (MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixFilterRules *matrix_filter_rules;
+    MatrixFilterRulesPrivate *priv;
+
+    g_return_if_fail(matrix_json_compact != NULL);
+
+    matrix_filter_rules = MATRIX_FILTER_RULES(matrix_json_compact);
+    priv = matrix_filter_rules_get_instance_private(matrix_filter_rules);
+    priv->_types = (free_str_array(priv->_types, priv->_types_len), NULL);
+    priv->_excluded_types = (free_str_array(priv->_excluded_types, priv->_excluded_types_len), NULL);
+    priv->_senders = (free_str_array(priv->_senders, priv->_senders_len), NULL);
+    priv->_excluded_senders = (free_str_array(priv->_excluded_senders, priv->_excluded_senders_len), NULL);
+    priv->_rooms = (free_str_array(priv->_rooms, priv->_rooms_len), NULL);
+    priv->_excluded_rooms = (free_str_array(priv->_excluded_rooms, priv->_excluded_rooms_len), NULL);
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_filter_rules_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_filter_rules_class_init(MatrixFilterRulesClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_filter_rules_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = (JsonNode* (*) (MatrixJsonCompact *, GError**)) matrix_filter_rules_get_json_node;
+}
+
+
+static void
+matrix_filter_rules_init(MatrixFilterRules *matrix_filter_rules)
+{}
