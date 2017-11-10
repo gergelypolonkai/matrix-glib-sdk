@@ -82,6 +82,23 @@ gchar **matrix_filter_rules_get_rooms(MatrixFilterRules *filter_rules, int *n_ro
 void matrix_filter_rules_set_excluded_rooms(MatrixFilterRules *filter_rules, gchar **excluded_rooms, int n_excluded_rooms);
 gchar **matrix_filter_rules_get_excluded_rooms(MatrixFilterRules *filter_rules, int *n_excluded_rooms);
 
+# define MATRIX_TYPE_ROOM_FILTER matrix_room_filter_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixRoomFilter, matrix_room_filter, MATRIX, ROOM_FILTER, MatrixJsonCompact)
+
+struct _MatrixRoomFilterClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixRoomFilter *matrix_room_filter_new(void);
+gboolean matrix_room_filter_get_include_leave(MatrixRoomFilter *room_filter);
+void matrix_room_filter_set_include_leave(MatrixRoomFilter *room_filter, gboolean include_leave);
+MatrixFilterRules *matrix_room_filter_get_ephemeral(MatrixRoomFilter *room_filter);
+void matrix_room_filter_set_ephemeral(MatrixRoomFilter *room_filter, MatrixFilterRules *ephemeral_rules);
+MatrixFilterRules *matrix_room_filter_get_state(MatrixRoomFilter *room_filter);
+void matrix_room_filter_set_state(MatrixRoomFilter *room_filter, MatrixFilterRules *state_rules);
+MatrixFilterRules *matrix_room_filter_get_timeline(MatrixRoomFilter *room_filter);
+void matrix_room_filter_set_timeline(MatrixRoomFilter *room_filter, MatrixFilterRules *timeline_rules);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */
