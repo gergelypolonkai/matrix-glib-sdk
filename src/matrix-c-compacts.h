@@ -202,6 +202,32 @@ MatrixSearchGroupings *matrix_search_groupings_construct(GType object_type);
 MatrixSearchGrouping **matrix_search_groupings_get_group_by(MatrixSearchGroupings *search_groupings, int *n_group_by);
 void matrix_search_groupings_set_group_by(MatrixSearchGroupings *search_groupings, MatrixSearchGrouping **group_by, int n_group_by);
 
+# define MATRIX_TYPE_SEARCH_ROOM_EVENTS matrix_search_room_events_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixSearchRoomEvents, matrix_search_room_events, MATRIX, SEARCH_ROOM_EVENTS, MatrixJsonCompact);
+
+struct _MatrixSearchRoomEventsClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixSearchRoomEvents *matrix_search_room_events_new(void);
+MatrixSearchRoomEvents *matrix_search_room_events_construct(GType object_type);
+MatrixSearchOrder matrix_search_room_events_get_order_by(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_order_by(MatrixSearchRoomEvents *search_room_events, MatrixSearchOrder order_by);
+MatrixSearchKey *matrix_search_room_events_get_keys(MatrixSearchRoomEvents *search_room_events, guint *n_keys);
+void matrix_search_room_events_set_keys(MatrixSearchRoomEvents *search_room_events, MatrixSearchKey *keys, guint n_keys);
+MatrixEventContext *matrix_search_room_events_get_event_context(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_event_context(MatrixSearchRoomEvents *search_room_events, MatrixEventContext *event_context);
+gboolean matrix_search_room_events_get_include_state(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_include_state(MatrixSearchRoomEvents *search_room_events, gboolean include_state);
+const gchar *matrix_search_room_events_get_filter_id(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_filter_id(MatrixSearchRoomEvents *search_room_events, const gchar *filter_id);
+MatrixFilter *matrix_search_room_events_get_filter(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_filter(MatrixSearchRoomEvents *search_room_events, MatrixFilter *filter);
+const gchar *matrix_search_room_events_get_search_term(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_search_term(MatrixSearchRoomEvents *search_room_events, const gchar *search_term);
+MatrixSearchGroupings *matrix_search_room_events_get_groupings(MatrixSearchRoomEvents *search_room_events);
+void matrix_search_room_events_set_groupings(MatrixSearchRoomEvents *search_room_events, MatrixSearchGroupings *groupings);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */
