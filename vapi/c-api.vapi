@@ -355,6 +355,16 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class EventContext : JsonCompact {
+        public int before_limit { get; set; default = -1; }
+        public int after_limit { get; set; default = -1; }
+        public bool include_profile { get; set; default = false; }
+
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+     }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

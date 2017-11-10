@@ -17,38 +17,6 @@
  */
 
 namespace Matrix {
-    public class EventContext : JsonCompact {
-        public int before_limit { get; set; default = -1; }
-        public int after_limit { get; set; default = -1; }
-        public bool include_profile { get; set; default = false; }
-
-        public override Json.Node?
-        get_json_node()
-            throws Matrix.Error
-        {
-            var builder = new Json.Builder();
-
-            builder.begin_object();
-
-            if (before_limit >= 0) {
-                builder.set_member_name("before_limit");
-                builder.add_int_value(before_limit);
-            }
-
-            if (after_limit >= 0) {
-                builder.set_member_name("after_limit");
-                builder.add_int_value(after_limit);
-            }
-
-            builder.set_member_name("include_profile");
-            builder.add_boolean_value(include_profile);
-
-            builder.end_object();
-
-            return builder.get_root();
-        }
-     }
-
     public class SearchGrouping : JsonCompact {
         public SearchGroupBy key { get; set; default = SearchGroupBy.NONE; }
 

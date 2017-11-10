@@ -162,6 +162,22 @@ void matrix_pusher_set_pushkey(MatrixPusher *pusher, const gchar *pushkey);
 JsonNode *matrix_pusher_get_data(MatrixPusher *pusher);
 void matrix_pusher_set_data(MatrixPusher *pusher, JsonNode *data);
 
+# define MATRIX_TYPE_EVENT_CONTEXT matrix_event_context_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixEventContext, matrix_event_context, MATRIX, EVENT_CONTEXT, MatrixJsonCompact);
+
+struct _MatrixEventContextClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixEventContext *matrix_event_context_new (void);
+MatrixEventContext *matrix_event_context_construct (GType object_type);
+gint matrix_event_context_get_before_limit (MatrixEventContext *event_context);
+void matrix_event_context_set_before_limit (MatrixEventContext *event_context, gint before_limit);
+gint matrix_event_context_get_after_limit (MatrixEventContext *event_context);
+void matrix_event_context_set_after_limit (MatrixEventContext *event_context, gint after_limit);
+gboolean matrix_event_context_get_include_profile (MatrixEventContext *event_context);
+void matrix_event_context_set_include_profile (MatrixEventContext *event_context, gboolean include_profile);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */
