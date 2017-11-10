@@ -474,19 +474,19 @@ copy_str_array(gchar **src, gint n_src)
 }
 
 static inline void
-free_str_array(gchar **list, gint n_list)
+free_array(gpointer *list, gint n_list, GDestroyNotify free_func)
 {
-    gint i = 0;
-
     if (list == NULL) {
         return;
     }
 
-    g_return_if_fail(list != NULL);
-
-    for (i = 0; i < n_list; i++) {
-        g_free(list[i]);
+    if (free_func) {
+        for (gint i = 0; i < n_list; i++ ) {
+            free_func(list[i]);
+        }
     }
+
+    g_free(list);
 }
 
 /*
@@ -528,7 +528,7 @@ free_str_array(gchar **list, gint n_list)
                                                                         \
         priv = matrix_filter_rules_get_instance_private(matrix_filter_rules); \
                                                                         \
-        free_str_array(priv->_ ## NAME, priv->_ ## NAME ##_len);       \
+        free_array((gpointer * )priv->_ ## NAME, priv->_ ## NAME ##_len, g_free);  \
         priv->_ ## NAME = copy_str_array(NAME, n_ ## NAME);            \
         priv->_ ## NAME ## _len = n_ ## NAME;                           \
     }
@@ -688,12 +688,12 @@ matrix_filter_rules_finalize (MatrixJsonCompact *matrix_json_compact)
 
     matrix_filter_rules = MATRIX_FILTER_RULES(matrix_json_compact);
     priv = matrix_filter_rules_get_instance_private(matrix_filter_rules);
-    priv->_types = (free_str_array(priv->_types, priv->_types_len), NULL);
-    priv->_excluded_types = (free_str_array(priv->_excluded_types, priv->_excluded_types_len), NULL);
-    priv->_senders = (free_str_array(priv->_senders, priv->_senders_len), NULL);
-    priv->_excluded_senders = (free_str_array(priv->_excluded_senders, priv->_excluded_senders_len), NULL);
-    priv->_rooms = (free_str_array(priv->_rooms, priv->_rooms_len), NULL);
-    priv->_excluded_rooms = (free_str_array(priv->_excluded_rooms, priv->_excluded_rooms_len), NULL);
+    priv->_types = (free_array((gpointer *)priv->_types, priv->_types_len, g_free), NULL);
+    priv->_excluded_types = (free_array((gpointer *)priv->_excluded_types, priv->_excluded_types_len, g_free), NULL);
+    priv->_senders = (free_array((gpointer *)priv->_senders, priv->_senders_len, g_free), NULL);
+    priv->_excluded_senders = (free_array((gpointer *)priv->_excluded_senders, priv->_excluded_senders_len, g_free), NULL);
+    priv->_rooms = (free_array((gpointer *)priv->_rooms, priv->_rooms_len, g_free), NULL);
+    priv->_excluded_rooms = (free_array((gpointer *)priv->_excluded_rooms, priv->_excluded_rooms_len, g_free), NULL);
 
     MATRIX_JSON_COMPACT_CLASS(matrix_filter_rules_parent_class)->finalize(matrix_json_compact);
 }
@@ -1136,7 +1136,7 @@ matrix_filter_set_event_fields(MatrixFilter *matrix_filter, gchar **event_fields
 
     priv = matrix_filter_get_instance_private(matrix_filter);
 
-    free_str_array(priv->_event_fields, priv->_event_fields_len);
+    free_array((gpointer *)priv->_event_fields, priv->_event_fields_len, g_free);
     priv->_event_fields = copy_str_array(event_fields, n_event_fields);
     priv->_event_fields_len = n_event_fields;
 }
@@ -1269,7 +1269,7 @@ matrix_filter_finalize(MatrixJsonCompact *matrix_json_compact)
 {
     MatrixFilterPrivate *priv = matrix_filter_get_instance_private(MATRIX_FILTER(matrix_json_compact));
 
-    priv->_event_fields = (free_str_array(priv->_event_fields, priv->_event_fields_len), NULL);
+    priv->_event_fields = (free_array((gpointer *)priv->_event_fields, priv->_event_fields_len, g_free), NULL);
     matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_presence_filter));
     matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_room_filter));
 
