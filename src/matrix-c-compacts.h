@@ -220,6 +220,17 @@ void matrix_search_room_events_set_search_term(MatrixSearchRoomEvents *search_ro
 MatrixSearchGroupings *matrix_search_room_events_get_groupings(MatrixSearchRoomEvents *search_room_events);
 void matrix_search_room_events_set_groupings(MatrixSearchRoomEvents *search_room_events, MatrixSearchGroupings *groupings);
 
+# define MATRIX_TYPE_SEARCH_CATEGORIES matrix_search_categories_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixSearchCategories, matrix_search_categories, MATRIX, SEARCH_CATEGORIES, MatrixJsonCompact)
+
+struct _MatrixSearchCategoriesClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixSearchCategories *matrix_search_categories_new(void);
+MatrixSearchRoomEvents *matrix_search_categories_get_room_events(MatrixSearchCategories *search_categories);
+void matrix_search_categories_set_room_events(MatrixSearchCategories *search_categories, MatrixSearchRoomEvents *room_events);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */
