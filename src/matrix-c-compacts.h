@@ -100,6 +100,24 @@ void matrix_room_filter_set_state(MatrixRoomFilter *room_filter, MatrixFilterRul
 MatrixFilterRules *matrix_room_filter_get_timeline(MatrixRoomFilter *room_filter);
 void matrix_room_filter_set_timeline(MatrixRoomFilter *room_filter, MatrixFilterRules *timeline_rules);
 
+# define MATRIX_TYPE_FILTER matrix_filter_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixFilter, matrix_filter, MATRIX, FILTER, MatrixJsonCompact);
+
+struct _MatrixFilterClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixFilter *matrix_filter_new(void);
+MatrixFilter *matrix_filter_construct(GType object_type);
+gchar **matrix_filter_get_event_fields(MatrixFilter *filter, int *n_event_fields);
+void matrix_filter_set_event_fields(MatrixFilter *filter, gchar **event_fields, int n_event_fields);
+MatrixEventFormat matrix_filter_get_event_format(MatrixFilter *filter);
+void matrix_filter_set_event_format(MatrixFilter *filter, MatrixEventFormat event_format);
+MatrixFilterRules *matrix_filter_get_presence_filter(MatrixFilter *filter);
+void matrix_filter_set_presence_filter(MatrixFilter *filter, MatrixFilterRules *presence_filter);
+MatrixRoomFilter *matrix_filter_get_room_filter(MatrixFilter *filter);
+void matrix_filter_set_room_filter(MatrixFilter *filter, MatrixRoomFilter *room_filter);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */

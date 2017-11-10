@@ -18,7 +18,9 @@
 
 #include <gobject/gvaluecollector.h>
 #include "matrix-c-compacts.h"
+#include "matrix-enumtypes.h"
 #include "matrix-types.h"
+#include "utils.h"
 
 static JsonNode * matrix_json_compact_get_json_node_impl(MatrixJsonCompact *matrix_json_compact,
                                                          GError **error);
@@ -1003,4 +1005,299 @@ matrix_room_filter_init(MatrixRoomFilter *matrix_room_filter)
     priv->_ephemeral = NULL;
     priv->_state = NULL;
     priv->_timeline = NULL;
+}
+
+typedef struct {
+    gchar **_event_fields;
+    guint _event_fields_len;
+    MatrixEventFormat _event_format;
+    MatrixFilterRules *_presence_filter;
+    MatrixRoomFilter*_room_filter;
+} MatrixFilterPrivate;
+
+/**
+ * MatrixFilter:
+ *
+ * Class to hold a message filter, eg. to be used with matrix_api_sync().
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixFilter, matrix_filter, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_filter_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixFilterPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *node;
+    GError *inner_error = NULL;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_filter_get_instance_private(MATRIX_FILTER(matrix_json_compact));
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "event_fields");
+    json_builder_begin_array(builder);
+
+    for (guint i = 0; i < priv->_event_fields_len; i++) {
+        json_builder_add_string_value(builder, priv->_event_fields[i]);
+    }
+
+    json_builder_end_array(builder);
+
+    json_builder_set_member_name(builder, "event_format");
+    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_EVENT_FORMAT, priv->_event_format, TRUE));
+
+    json_builder_set_member_name(builder, "presence");
+    node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_presence_filter), &inner_error);
+
+    if (inner_error != NULL) {
+        g_propagate_error(error, inner_error);
+        g_object_unref(builder);
+
+        return NULL;
+    }
+    json_builder_add_value(builder, node);
+
+    json_builder_set_member_name(builder, "room");
+    node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_room_filter), &inner_error);
+
+    if (inner_error != NULL) {
+        g_propagate_error(error, inner_error);
+        g_object_unref(builder);
+
+        return NULL;
+    }
+
+    json_builder_add_value(builder, node);
+
+    json_builder_end_object(builder);
+
+    node = json_builder_get_root(builder);
+
+    g_object_unref(builder);
+
+    return node;
+}
+
+MatrixFilter *
+matrix_filter_construct(GType object_type)
+{
+    return (MatrixFilter *)matrix_json_compact_construct(object_type);
+}
+
+/**
+ * matrix_filter_new:
+ *
+ * Create a new #MatrixFilter object.
+ *
+ * Returns: (transfer full): a new #MatrixFilter object
+ */
+MatrixFilter *
+matrix_filter_new(void)
+{
+    return matrix_filter_construct(MATRIX_TYPE_FILTER);
+}
+
+/**
+ * matrix_filter_get_event_fields:
+ * @filter: a #MatrixFilter object
+ * @n_event_fields: (nullable): placeholder for the length of the result, or %NULL to ignore
+ *
+ * Get the fields to be included in the filtered events.
+ *
+ * The returned value is owned by @filter and should not be freed.
+ *
+ * Returns: (transfer none): the list of fields to include
+ */
+gchar **
+matrix_filter_get_event_fields(MatrixFilter *matrix_filter, int *n_event_fields)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_filter != NULL, NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    if (n_event_fields != NULL) {
+        *n_event_fields = priv->_event_fields_len;
+    }
+
+    return priv->_event_fields;
+}
+
+/**
+ * matrix_filter_set_event_fields:
+ * @filter: a #MatrixFilter object
+ * @event_fields: (transfer none) (nullable): a list of event field names
+ * @n_event_fields: the number of elements in @event_fields
+ *
+ * Set the event fields to be included in the filtered events.
+ */
+void
+matrix_filter_set_event_fields(MatrixFilter *matrix_filter, gchar **event_fields, int n_event_fields)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_if_fail(matrix_filter != NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    free_str_array(priv->_event_fields, priv->_event_fields_len);
+    priv->_event_fields = copy_str_array(event_fields, n_event_fields);
+    priv->_event_fields_len = n_event_fields;
+}
+
+/**
+ * matrix_filter_get_event_format:
+ * @filter: a #MatrixFilter object
+ *
+ * Get the format that will be used to represent the filtered events.
+ *
+ * Returns: a #MatrixEventFormat value
+ */
+MatrixEventFormat
+matrix_filter_get_event_format(MatrixFilter *matrix_filter)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_filter != NULL, 0);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    return priv->_event_format;
+}
+
+/**
+ * matrix_filter_set_event_format:
+ * @filter: a #MatrixFilter object
+ * @event_format: the event format to use
+ *
+ * Set the desired event format for the filtered events (eg. for used with matrix_api_sync())
+ */
+void
+matrix_filter_set_event_format(MatrixFilter *matrix_filter, MatrixEventFormat event_format)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_if_fail(matrix_filter != NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    priv->_event_format = event_format;
+}
+
+/**
+ * matrix_filter_get_presence_filter:
+ * @filter: a #MatrixFilter object
+ *
+ * Get the filtering ruleset for presence events.
+ *
+ * The returned value is owned by @filter and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): a #MatrixFilterRules object
+ */
+MatrixFilterRules *
+matrix_filter_get_presence_filter(MatrixFilter *matrix_filter)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_filter != NULL, NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    return priv->_presence_filter;
+}
+
+/**
+ * matrix_filter_set_presence_filter:
+ * @filter: a #MatrixFilter object
+ * @presence_filter: (transfer none): a #MatrixFilterRules object to be applied to presence events
+ *
+ * Set a filtering ruleset for presence events.
+ */
+void
+matrix_filter_set_presence_filter(MatrixFilter *matrix_filter, MatrixFilterRules *presence_filter)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_if_fail(matrix_filter != NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_presence_filter));
+    priv->_presence_filter = (MatrixFilterRules *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(presence_filter));
+}
+
+/**
+ * matrix_filter_get_room_filter:
+ * @filter: a #MatrixFilter object
+ *
+ * Get the filtering ruleset to be applied to room events.
+ *
+ * The returned value is owned by @filter and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): a #MatrixRoomFilter object
+ */
+MatrixRoomFilter *
+matrix_filter_get_room_filter(MatrixFilter *matrix_filter)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_filter != NULL, NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    return priv->_room_filter;
+}
+
+/**
+ * matrix_filter_set_room_filter:
+ * @filter: a #MatrixFilter object
+ * @room_filter: a #MatrixRoomFilter to be applied to room events
+ *
+ * Set the filtering ruleset for room events.
+ */
+void
+matrix_filter_set_room_filter(MatrixFilter *matrix_filter, MatrixRoomFilter *room_filter)
+{
+    MatrixFilterPrivate *priv;
+
+    g_return_if_fail(matrix_filter != NULL);
+
+    priv = matrix_filter_get_instance_private(matrix_filter);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_room_filter));
+    priv->_room_filter = (MatrixRoomFilter *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(room_filter));
+}
+
+static void
+matrix_filter_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixFilterPrivate *priv = matrix_filter_get_instance_private(MATRIX_FILTER(matrix_json_compact));
+
+    priv->_event_fields = (free_str_array(priv->_event_fields, priv->_event_fields_len), NULL);
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_presence_filter));
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_room_filter));
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_filter_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_filter_class_init(MatrixFilterClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_filter_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_filter_get_json_node;
+}
+
+static void
+matrix_filter_init(MatrixFilter *matrix_filter)
+{
+    MatrixFilterPrivate *priv = matrix_filter_get_instance_private(matrix_filter);
+
+    priv->_event_format = MATRIX_EVENT_FORMAT_CLIENT;
+    priv->_presence_filter = NULL;
+    priv->_room_filter = NULL;
 }

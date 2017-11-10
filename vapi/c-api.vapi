@@ -320,6 +320,16 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class Filter : JsonCompact {
+        public string[] event_fields { get; set; }
+        public EventFormat event_format { get; set; default = Matrix.EventFormat.CLIENT; }
+        public FilterRules? presence_filter { get; set; default = null; }
+        public RoomFilter? room_filter { get; set; default = null; }
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);
