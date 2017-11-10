@@ -296,6 +296,19 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class FilterRules : JsonCompact {
+        public uint limit { get; set; }
+        public string[] types { get; set; }
+        public string[] excluded_types { get; set; }
+        public string[] senders { get; set; }
+        public string[] excluded_senders { get; set; }
+        public string[] rooms { get; set; }
+        public string[] excluded_rooms { get; set; }
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);
