@@ -173,6 +173,17 @@ void matrix_event_context_set_after_limit (MatrixEventContext *event_context, gi
 gboolean matrix_event_context_get_include_profile (MatrixEventContext *event_context);
 void matrix_event_context_set_include_profile (MatrixEventContext *event_context, gboolean include_profile);
 
+# define MATRIX_TYPE_SEARCH_GROUPING matrix_search_grouping_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixSearchGrouping, matrix_search_grouping, MATRIX, SEARCH_GROUPING, MatrixJsonCompact)
+
+struct _MatrixSearchGroupingClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixSearchGrouping *matrix_search_grouping_new(void);
+MatrixSearchGroupBy matrix_search_grouping_get_key(MatrixSearchGrouping *search_grouping);
+void matrix_search_grouping_set_key(MatrixSearchGrouping *search_grouping, MatrixSearchGroupBy key);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */

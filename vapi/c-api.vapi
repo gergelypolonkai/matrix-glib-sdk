@@ -365,6 +365,14 @@ namespace Matrix {
             throws Matrix.Error;
      }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class SearchGrouping : JsonCompact {
+        public SearchGroupBy key { get; set; default = SearchGroupBy.NONE; }
+
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

@@ -17,31 +17,6 @@
  */
 
 namespace Matrix {
-    public class SearchGrouping : JsonCompact {
-        public SearchGroupBy key { get; set; default = SearchGroupBy.NONE; }
-
-        public override Json.Node?
-        get_json_node()
-            throws Matrix.Error
-        {
-            if (key == SearchGroupBy.NONE) {
-                return null;
-            }
-
-            var builder = new Json.Builder();
-
-            builder.begin_object();
-
-            builder.set_member_name("key");
-            builder.add_string_value(
-                    _g_enum_value_to_nick(typeof(SearchGroupBy), key, true));
-
-            builder.end_object();
-
-            return builder.get_root();
-        }
-    }
-
     public class SearchGroupings : JsonCompact {
         public SearchGrouping[] group_by { get; set; }
 
