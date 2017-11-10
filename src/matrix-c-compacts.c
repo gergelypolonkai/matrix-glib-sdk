@@ -1049,7 +1049,7 @@ matrix_filter_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **err
     json_builder_end_array(builder);
 
     json_builder_set_member_name(builder, "event_format");
-    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_EVENT_FORMAT, priv->_event_format, TRUE));
+    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_EVENT_FORMAT, priv->_event_format, '_'));
 
     json_builder_set_member_name(builder, "presence");
     node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_presence_filter), &inner_error);
@@ -2231,7 +2231,7 @@ matrix_search_grouping_get_json_node(MatrixJsonCompact *matrix_json_compact, GEr
 
 
     json_builder_set_member_name(builder, "key");
-    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_SEARCH_GROUP_BY, priv->_key, TRUE));
+    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_SEARCH_GROUP_BY, priv->_key, '_'));
 
     json_builder_end_object(builder);
 

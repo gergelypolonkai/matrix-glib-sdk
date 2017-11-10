@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-gchar *_matrix_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes);
+gchar *_matrix_g_enum_to_string(GType enum_type, gint value, gchar convert_dashes);
 gint _matrix_g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error);
 
 G_END_DECLS

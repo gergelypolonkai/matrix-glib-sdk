@@ -35,7 +35,7 @@
  * Returns: (transfer full) the converted enum name, which must be freed
  */
 gchar *
-_matrix_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
+_matrix_g_enum_to_string(GType enum_type, gint value, gchar convert_dashes)
 {
     GEnumClass *enum_class = g_type_class_ref(enum_type);
     GEnumValue *enum_value = g_enum_get_value(enum_class, value);
@@ -49,7 +49,7 @@ _matrix_g_enum_to_string(GType enum_type, gint value, gboolean convert_dashes)
 
             for (a = nick; *a; a++) {
                 if (*a == '-') {
-                    *a = '_';
+                    *a = convert_dashes;
                 }
             }
         }

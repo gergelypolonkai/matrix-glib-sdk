@@ -384,7 +384,7 @@ namespace Matrix {
 
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
-    public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);
+    public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, char convert_dashes = '_');
 
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_nick_to_value")]
     public int _g_enum_nick_to_value(GLib.Type enum_type, string nick)
