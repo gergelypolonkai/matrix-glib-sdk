@@ -1961,3 +1961,207 @@ matrix_pusher_init(MatrixPusher *matrix_pusher)
     priv->_pushkey = NULL;
     priv->_data = NULL;
 }
+
+typedef struct {
+    gint _before_limit;
+    gint _after_limit;
+    gboolean _include_profile;
+} MatrixEventContextPrivate;
+
+/**
+ * MatrixEventContext:
+ *
+ * Class to hold event context settings for searches.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixEventContext, matrix_event_context, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_event_context_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixEventContextPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *result;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_event_context_get_instance_private(MATRIX_EVENT_CONTEXT(matrix_json_compact));
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    if (priv->_before_limit >= 0) {
+        json_builder_set_member_name(builder, "before_limit");
+        json_builder_add_int_value(builder, priv->_before_limit);
+    }
+
+    if (priv->_after_limit >= 0) {
+        json_builder_set_member_name(builder, "after_limit");
+        json_builder_add_int_value(builder, priv->_after_limit);
+    }
+
+    json_builder_set_member_name(builder, "include_profile");
+    json_builder_add_boolean_value(builder, priv->_include_profile);
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+/**
+ * matrix_event_context_new:
+ *
+ * Create a new #MatrixEventContext object.
+ *
+ * Returns: (transfer full): a new #MatrixEventContext object
+ */
+MatrixEventContext *
+matrix_event_context_new(void)
+{
+    return (MatrixEventContext *)matrix_json_compact_construct(MATRIX_TYPE_EVENT_CONTEXT);
+}
+
+/**
+ * matrix_event_context_get_before_limit:
+ * @event_context: a #MatrixEventContext object
+ *
+ * Get the limit of messages before search results.
+ *
+ * Returns: the number of messages that will appear before the one in the result
+ */
+gint
+matrix_event_context_get_before_limit(MatrixEventContext *matrix_event_context)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_val_if_fail(matrix_event_context != NULL, 0);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    return priv->_before_limit;
+}
+
+/**
+ * matrix_event_context_set_before_limit:
+ * @event_context: a #MatrixEventContext object
+ * @before_limit: the number of messages to appear before search results
+ *
+ * Set the limit of messages to display before search results.
+ */
+void
+matrix_event_context_set_before_limit(MatrixEventContext *matrix_event_context, gint before_limit)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_if_fail(matrix_event_context != NULL);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    priv->_before_limit = before_limit;
+}
+
+/**
+ * matrix_event_context_get_after_limit:
+ * @event_context: a #MatrixEventContext object
+ *
+ * Get the limit of messages after search results.
+ *
+ * Returns: the number of messages that will appear after the one in the result
+ */
+gint
+matrix_event_context_get_after_limit(MatrixEventContext *matrix_event_context)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_val_if_fail(matrix_event_context != NULL, 0);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    return priv->_after_limit;
+}
+
+/**
+ * matrix_event_context_after_before_limit:
+ * @event_context: a #MatrixEventContext object
+ * @before_limit: the number of messages to appear after search results
+ *
+ * Set the limit of messages to display after search results.
+ */
+void
+matrix_event_context_set_after_limit(MatrixEventContext *matrix_event_context, gint after_limit)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_if_fail(matrix_event_context != NULL);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    priv->_after_limit = after_limit;
+}
+
+/**
+ * matrix_event_context_get_include_profile:
+ * @event_context: a #MatrixEventContext object
+ *
+ * If this function returns %TRUE, profile data will be included with each message in the
+ * result set.
+ *
+ * Returns: %TRUE or %FALSE indicating if profile data should be included
+ */
+gboolean
+matrix_event_context_get_include_profile(MatrixEventContext *matrix_event_context)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_val_if_fail(matrix_event_context != NULL, 0);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    return priv->_include_profile;
+}
+
+/**
+ * matrix_event_context_set_include_profile:
+ * @event_context: a #MatrixEventContext object
+ * @include_profile: a boolean value indicating if profile data should be included in the results
+ *
+ * Set this to %TRUE if you want profile data to be included in the search results.
+ */
+void
+matrix_event_context_set_include_profile(MatrixEventContext *matrix_event_context, gboolean include_profile)
+{
+    MatrixEventContextPrivate *priv;
+
+    g_return_if_fail(matrix_event_context != NULL);
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+
+    priv->_include_profile = include_profile;
+}
+
+static void
+matrix_event_context_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MATRIX_JSON_COMPACT_CLASS (matrix_event_context_parent_class)->finalize (matrix_json_compact);
+}
+
+static void
+matrix_event_context_class_init(MatrixEventContextClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_event_context_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_event_context_get_json_node;
+}
+
+static void
+matrix_event_context_init(MatrixEventContext *matrix_event_context)
+{
+    MatrixEventContextPrivate *priv;
+
+    priv = matrix_event_context_get_instance_private(matrix_event_context);
+    priv->_before_limit = -1;
+    priv->_after_limit = -1;
+    priv->_include_profile = FALSE;
+}
