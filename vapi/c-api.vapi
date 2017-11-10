@@ -382,6 +382,21 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class SearchRoomEvents : JsonCompact {
+        public SearchOrder order_by { get; set; default = SearchOrder.RECENT; }
+        public SearchKey[] keys { get; set; }
+        public EventContext? event_context { get; set; default = null; }
+        public bool include_state { get; set; default = false; }
+        public string? filter_id { get; set; default = null; }
+        public Filter? filter { get; set; default = null; }
+        public string search_term { get; set; }
+        public SearchGroupings? groupings { get; set; default = null; }
+
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, char convert_dashes = '_');

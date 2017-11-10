@@ -2445,3 +2445,515 @@ matrix_search_groupings_class_init(MatrixSearchGroupingsClass *klass)
 static void
 matrix_search_groupings_init(MatrixSearchGroupings *matrix_search_groupings)
 {}
+
+typedef struct {
+    MatrixSearchOrder _order_by;
+    MatrixSearchKey *_keys;
+    guint _keys_len;
+    MatrixEventContext *_event_context;
+    gboolean _include_state;
+    gchar *_filter_id;
+    MatrixFilter *_filter;
+    gchar *_search_term;
+    MatrixSearchGroupings *_groupings;
+} MatrixSearchRoomEventsPrivate;
+
+/**
+ * MatrixSearchRoomEvents:
+ *
+ * Class to hold room event search rules.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixSearchRoomEvents, matrix_search_room_events, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_search_room_events_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    JsonBuilder *builder;
+    JsonNode *result = NULL;
+    GError *inner_error = NULL;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(MATRIX_SEARCH_ROOM_EVENTS(matrix_json_compact));
+
+    if ((priv->_filter_id != NULL) && (priv->_filter != NULL)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE,
+                    "filter and filter_id is exclusive to each other");
+
+        return NULL;
+    }
+
+    priv = matrix_search_room_events_get_instance_private(MATRIX_SEARCH_ROOM_EVENTS(matrix_json_compact));
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "order_by");
+    json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_SEARCH_ORDER, priv->_order_by, '_'));
+
+    if (priv->_keys_len > 0) {
+        json_builder_set_member_name(builder, "keys");
+        json_builder_begin_array(builder);
+
+        for (guint i = 0; i < priv->_keys_len; i++) {
+            json_builder_add_string_value(builder, _matrix_g_enum_to_string(MATRIX_TYPE_SEARCH_KEY, priv->_keys[i], '.'));
+        }
+
+        json_builder_end_array(builder);
+    }
+
+    if (priv->_event_context != NULL) {
+        JsonNode *node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_event_context), &inner_error);
+
+        if (inner_error != NULL) {
+            g_propagate_error(error, inner_error);
+            g_object_unref(builder);
+
+            return NULL;
+        }
+
+        json_builder_set_member_name(builder, "event_context");
+        json_builder_add_value(builder, node);
+    }
+
+    json_builder_set_member_name(builder, "include_state");
+    json_builder_add_boolean_value(builder, priv->_include_state);
+
+    if (priv->_filter != NULL) {
+        JsonNode * node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_filter), &inner_error);
+
+        if (inner_error != NULL) {
+            g_propagate_error(error, inner_error);
+            g_object_unref(builder);
+
+            return NULL;
+        }
+
+        json_builder_set_member_name(builder, "filter");
+        json_builder_add_value(builder, node);
+    }
+
+    if (priv->_filter_id != NULL) {
+        json_builder_set_member_name(builder, "filter");
+        json_builder_add_string_value(builder, priv->_filter_id);
+    }
+
+    json_builder_set_member_name(builder, "search_term");
+    json_builder_add_string_value(builder, priv->_search_term);
+
+    if (priv->_groupings != NULL) {
+        JsonNode *node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_groupings), &inner_error);
+
+        if (inner_error != NULL) {
+            g_propagate_error(error, inner_error);
+            g_object_unref(builder);
+
+            return NULL;
+        }
+
+        json_builder_set_member_name(builder, "groupings");
+        json_builder_add_value(builder, node);
+    }
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+/**
+ * matrix_search_room_events_new:
+ *
+ * Create a new #MatrixSearchRoomEvents object.
+ *
+ * Returns: (transfer full): a new #MatrixSearchRoomEvents object
+ */
+MatrixSearchRoomEvents *
+matrix_search_room_events_new(void)
+{
+    return (MatrixSearchRoomEvents *)matrix_json_compact_construct(MATRIX_TYPE_SEARCH_ROOM_EVENTS);
+}
+
+/**
+ * matrix_search_room_events_get_order_by:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the order of the events set for this ruleset.
+ *
+ * Returns: the order of the result set
+ */
+MatrixSearchOrder
+matrix_search_room_events_get_order_by(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, 0);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_order_by;
+}
+
+/**
+ * matrix_search_room_events_set_order_by:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @order_by: a #MatrixSearchOrder value
+ *
+ * Set the desired order of the events in the search results.
+ */
+void
+matrix_search_room_events_set_order_by(MatrixSearchRoomEvents *matrix_search_room_events, MatrixSearchOrder order_by)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    priv->_order_by = order_by;
+}
+
+/**
+ * matrix_search_room_events_get_keys:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @n_keys: placeholder for the length of the results, or %NULL to ignore
+ *
+ * Get the list of keys in this ruleset.  If @n_keys is not %NULL, the length of the list is
+ * stored there.
+ *
+ * The returned value is owned by @search_room_events and should not be modified nor freed.
+ *
+ * Returns: (transfer none): the list of search keys
+ */
+MatrixSearchKey *
+matrix_search_room_events_get_keys(MatrixSearchRoomEvents *matrix_search_room_events, guint *n_keys)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    if (n_keys != NULL) {
+        *n_keys = priv->_keys_len;
+    }
+
+    return priv->_keys;
+}
+
+/**
+ * matrix_search_room_events_set_keys:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @keys: a list of search terms
+ * @n_keys: the length of @keys
+ *
+ * Set the list of keys to search in.
+ */
+void
+matrix_search_room_events_set_keys(MatrixSearchRoomEvents *matrix_search_room_events, MatrixSearchKey *keys, guint n_keys)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    free_array((gpointer *)priv->_keys, priv->_keys_len, NULL);
+    priv->_keys = (MatrixSearchKey *)g_new(MatrixSearchKey, (gsize)n_keys);
+
+    for (guint i = 0; i < n_keys; i++) {
+        priv->_keys[i] = keys[i];
+    }
+}
+
+/**
+ * matrix_search_room_events_get_event_context:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the event context settings for this search ruleset.
+ *
+ * The returned value is owned by @search_room_events and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): the event context for this ruleset
+ */
+MatrixEventContext *
+matrix_search_room_events_get_event_context(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_event_context;
+}
+
+/**
+ * matrix_search_room_events_set_event_context:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @event_context: (transfer none) (nullable): a #MatrixEventContext object
+ *
+ * Set the event context settings for this search ruleset.
+ *
+ * This function creates a reference for @event_context, so it can be released by the caller.
+ */
+void
+matrix_search_room_events_set_event_context(MatrixSearchRoomEvents *matrix_search_room_events, MatrixEventContext *event_context)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_event_context));
+    priv->_event_context = (MatrixEventContext *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(event_context));
+}
+
+/**
+ * matrix_search_room_events_get_include_state:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * If this function returns %TRUE, state events will be also included in the search results.
+ *
+ * Returns: %TRUE if state events will be included, %FALSE otherwise
+ */
+gboolean
+matrix_search_room_events_get_include_state(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, FALSE);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_include_state;
+}
+
+/**
+ * matrix_search_room_events_set_include_state:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @include_state: %TRUE if the caller wants to include state events in the search results
+ *
+ * If set te %TRUE, search results will include state events.
+ */
+void
+matrix_search_room_events_set_include_state(MatrixSearchRoomEvents *matrix_search_room_events, gboolean include_state)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    priv->_include_state = include_state;
+}
+
+/**
+ * matrix_search_room_events_get_filter_id:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the ID of the filter that will be used in the search.
+ *
+ * Returns: (transfer none) (nullable): the ID of the filter to be used
+ */
+const gchar *
+matrix_search_room_events_get_filter_id(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_filter_id;
+}
+
+/**
+ * matrix_search_room_events_set_filter_id:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @filter_id: (transfer none) (nullable): a filter ID to be used during search
+ *
+ * Set the filter ID to be used during the search.  The homeserver must have a filter
+ * with this ID.
+ *
+ * Setting the filter ID and a filter object (using matrix_search_room_events_set_filter())
+ * is considered invalid, but won’s result in an error until
+ * matrix_json_compact_get_json_node() is called.
+ */
+void
+matrix_search_room_events_set_filter_id(MatrixSearchRoomEvents *matrix_search_room_events, const gchar *filter_id)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    g_free(priv->_filter_id);
+    priv->_filter_id = g_strdup(filter_id);
+}
+
+/**
+ * matrix_search_room_events_get_filter:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the #MatrixFilter object that will be used during the search.
+ *
+ * Returns: (transfer none) (nullable): a #MatrixFilter object
+ */
+MatrixFilter *
+matrix_search_room_events_get_filter(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_filter;
+}
+
+/**
+ * matrix_search_room_events_set_filter:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @filter: a #MatrixFilter object
+ *
+ * Setting both a filter object and the filter ID (using
+ * matrix_search_room_events_set_filter_id()) is considered invalid, but won’s result in an
+ * error until matrix_json_compact_get_json_node() is called.
+ */
+void
+matrix_search_room_events_set_filter(MatrixSearchRoomEvents *matrix_search_room_events, MatrixFilter *filter)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_filter));
+    priv->_filter = (MatrixFilter *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(filter));
+}
+
+/**
+ * matrix_search_room_events_get_search_term:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the search term of the ruleset.
+ *
+ * Returns: (transfer none) (nullable): the search term
+ */
+const gchar *
+matrix_search_room_events_get_search_term(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_search_term;
+}
+
+/**
+ * matrix_search_room_events_set_search_term:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @search_term: (transfer none) (nullable): the search term
+ *
+ * Set the search term in the ruleset.
+ */
+void
+matrix_search_room_events_set_search_term(MatrixSearchRoomEvents *matrix_search_room_events, const gchar *search_term)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    g_free(priv->_search_term);
+    priv->_search_term = g_strdup(search_term);
+}
+
+/**
+ * matrix_search_room_events_get_groupings:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ *
+ * Get the grouping rules for this ruleset.
+ *
+ * The returned value is owned by @search_room_events and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): the grouping rules
+ */
+MatrixSearchGroupings *
+matrix_search_room_events_get_groupings(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_room_events != NULL, NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    return priv->_groupings;
+}
+
+/**
+ * matrix_search_room_events_set_groupings:
+ * @search_room_events: a #MatrixSearchRoomEvents object
+ * @groupings: a #MatrixSearchGroupings object
+ *
+ * Set the grouping rules for this ruleset.
+ */
+void
+matrix_search_room_events_set_groupings(MatrixSearchRoomEvents *matrix_search_room_events, MatrixSearchGroupings *groupings)
+{
+    MatrixSearchRoomEventsPrivate *priv;
+
+    g_return_if_fail(matrix_search_room_events != NULL);
+
+    priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_groupings));
+    priv->_groupings = (MatrixSearchGroupings *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(groupings));
+}
+
+static void
+matrix_search_room_events_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixSearchRoomEventsPrivate *priv = matrix_search_room_events_get_instance_private(MATRIX_SEARCH_ROOM_EVENTS(matrix_json_compact));
+
+    priv->_keys = (g_free(priv->_keys), NULL);
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_event_context));
+    priv->_filter_id = (g_free(priv->_filter_id), NULL);
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_filter));
+    priv->_search_term = (g_free(priv->_search_term), NULL);
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_groupings));
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_search_room_events_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_search_room_events_class_init(MatrixSearchRoomEventsClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_search_room_events_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_search_room_events_get_json_node;
+}
+
+static void
+matrix_search_room_events_init(MatrixSearchRoomEvents *matrix_search_room_events)
+{
+    MatrixSearchRoomEventsPrivate *priv = matrix_search_room_events_get_instance_private(matrix_search_room_events);
+
+    priv->_order_by = MATRIX_SEARCH_ORDER_RECENT;
+    priv->_event_context = NULL;
+    priv->_include_state = FALSE;
+    priv->_filter_id = NULL;
+    priv->_filter = NULL;
+    priv->_groupings = NULL;
+}
