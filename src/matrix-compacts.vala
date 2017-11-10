@@ -17,33 +17,6 @@
  */
 
 namespace Matrix {
-    public class SearchCategories : JsonCompact {
-        public SearchRoomEvents? room_events { get; set; default = null; }
-
-        public override Json.Node?
-        get_json_node()
-            throws Matrix.Error
-        {
-            Json.Node? node = null;
-
-            if ((room_events == null)
-                && ((node = room_events.get_json_node()) != null)) {
-                return null;
-            }
-
-            var builder = new Json.Builder();
-
-            builder.begin_object();
-
-            builder.set_member_name("room_events");
-            builder.add_value(node);
-
-            builder.end_object();
-
-            return builder.get_root();
-        }
-    }
-
     public Json.Node?
     _json_node_deep_copy(Json.Node? node)
     {

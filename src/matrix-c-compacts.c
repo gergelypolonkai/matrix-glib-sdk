@@ -3003,3 +3003,143 @@ matrix_search_room_events_init(MatrixSearchRoomEvents *matrix_search_room_events
     priv->_filter = NULL;
     priv->_groupings = NULL;
 }
+
+typedef struct {
+    MatrixSearchRoomEvents *_room_events;
+} MatrixSearchCategoriesPrivate;
+
+/**
+ * MatrixSearchCategories:
+ *
+ * Class to hold search categories.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixSearchCategories, matrix_search_categories, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_search_categories_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixSearchCategoriesPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *result;
+    JsonNode *node;
+    GError *inner_error = NULL;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_search_categories_get_instance_private(MATRIX_SEARCH_CATEGORIES(matrix_json_compact));
+
+    if (priv->_room_events == NULL) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE, "room_events filter must be filled");
+
+        return NULL;
+    }
+
+    node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_room_events), &inner_error);
+
+    if (inner_error != NULL) {
+        g_propagate_error(error, inner_error);
+
+        return NULL;
+    }
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "room_events");
+    json_builder_add_value(builder, node);
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+MatrixSearchCategories *
+matrix_search_categories_construct(GType object_type)
+{
+    return (MatrixSearchCategories *)matrix_json_compact_construct(object_type);
+}
+
+/**
+ * matrix_search_categories_new:
+ *
+ * Create a new #MatrixSearchCategories object.
+ *
+ * Returns: (transfer full): a new #MatrixSearchCategories object
+ */
+MatrixSearchCategories *
+matrix_search_categories_new(void)
+{
+    return matrix_search_categories_construct(MATRIX_TYPE_SEARCH_CATEGORIES);
+}
+
+/**
+ * matrix_search_categories_get_room_events:
+ * @search_categories: a #MatrixSearchCategories object
+ *
+ * Get the search ruleset from @search_categories.
+ *
+ * The returned value is owned by @search_categories and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): the search ruleset
+ */
+MatrixSearchRoomEvents *
+matrix_search_categories_get_room_events(MatrixSearchCategories *matrix_search_categories)
+{
+    MatrixSearchCategoriesPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_categories != NULL, NULL);
+
+    priv = matrix_search_categories_get_instance_private(matrix_search_categories);
+
+    return priv->_room_events;
+}
+
+/**
+ * matrix_search_categories_set_room_events:
+ * @search_categories: a #MatrixSearchCategories object
+ * @room_events: (transfer none) (nullable): a #MatrixSearchRoomEvents object
+ *
+ * Set the ruleset to use during a search.  Null is considered an invalid value, but doesn’t
+ * result in an error until matrix_json_compact_get_json_node() is called.
+ *
+ * This function gets a reference on @search_categories, so it can be unreffed after the call.
+ */
+void
+matrix_search_categories_set_room_events(MatrixSearchCategories *matrix_search_categories, MatrixSearchRoomEvents *room_events)
+{
+    MatrixSearchCategoriesPrivate *priv;
+
+    g_return_if_fail(matrix_search_categories != NULL);
+
+    priv = matrix_search_categories_get_instance_private(matrix_search_categories);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_room_events));
+    priv->_room_events = (MatrixSearchRoomEvents *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(room_events));
+}
+
+static void
+matrix_search_categories_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixSearchCategoriesPrivate *priv = matrix_search_categories_get_instance_private(MATRIX_SEARCH_CATEGORIES(matrix_json_compact));
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_room_events));
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_search_categories_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_search_categories_class_init(MatrixSearchCategoriesClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_search_categories_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_search_categories_get_json_node;
+}
+
+static void
+matrix_search_categories_init(MatrixSearchCategories *matrix_search_categories)
+{
+    MatrixSearchCategoriesPrivate *priv = matrix_search_categories_get_instance_private(matrix_search_categories);
+    priv->_room_events = NULL;
+}
