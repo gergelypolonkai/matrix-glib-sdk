@@ -16,6 +16,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <gobject/gvaluecollector.h>
 #include "matrix-c-compacts.h"
 #include "matrix-enumtypes.h"
@@ -1528,4 +1529,457 @@ matrix_3pid_credential_init(Matrix3PidCredential* matrix_3pid_credential)
     priv->_id_server = NULL;
     priv->_session_id = NULL;
     priv->_client_secret = NULL;
+}
+
+typedef struct {
+    gchar *_device_display_name;
+    gchar *_app_display_name;
+    gchar *_app_id;
+    gboolean _append;
+    gchar *_kind;
+    gchar *_lang;
+    gchar *_profile_tag;
+    gchar *_pushkey;
+    JsonNode *_data;
+} MatrixPusherPrivate;
+
+/**
+ * MatrixPusher:
+ *
+ * Class to hold pusher related data.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixPusher, matrix_pusher, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_pusher_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixPusherPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *result;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_pusher_get_instance_private(MATRIX_PUSHER(matrix_json_compact));
+
+    if ((priv->_device_display_name == NULL)
+        || (priv->_app_display_name == NULL)
+        || (priv->_app_id == NULL)
+        || (priv->_data == NULL)
+        || (priv->_kind == NULL)
+        || (priv->_lang == NULL)
+        || (priv->_profile_tag == NULL)
+        || (priv->_pushkey == NULL)) {
+        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_INCOMPLETE, "Pusher data incomplete");
+
+        return NULL;
+    }
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "device_display_name");
+    json_builder_add_string_value(builder, priv->_device_display_name);
+
+    json_builder_set_member_name(builder, "app_display_name");
+    json_builder_add_string_value(builder, priv->_app_display_name);
+
+    json_builder_set_member_name(builder, "app_id");
+    json_builder_add_string_value(builder, priv->_app_id);
+
+    json_builder_set_member_name(builder, "append");
+    json_builder_add_boolean_value(builder, priv->_append);
+
+    json_builder_set_member_name(builder, "kind");
+    json_builder_add_string_value(builder, priv->_kind);
+
+    json_builder_set_member_name(builder, "lang");
+    json_builder_add_string_value(builder, priv->_lang);
+
+    json_builder_set_member_name(builder, "profile_tag");
+    json_builder_add_string_value(builder, priv->_profile_tag);
+
+    json_builder_set_member_name(builder, "pushkey");
+    json_builder_add_string_value(builder, priv->_pushkey);
+
+    json_builder_set_member_name(builder, "data");
+    json_builder_add_value(builder, priv->_data);
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+MatrixPusher *
+matrix_pusher_construct(GType object_type)
+{
+    return (MatrixPusher *)matrix_json_compact_construct(object_type);
+}
+
+/**
+ * matrix_pusher_new:
+ *
+ * Create a new #MatrixPusher object
+ *
+ * Returns: (transfer full): a new #MatrixPusher object
+ */
+MatrixPusher *
+matrix_pusher_new(void)
+{
+    return matrix_pusher_construct(MATRIX_TYPE_PUSHER);
+}
+
+/*
+ * STR_GETTER:
+ * @NAME: the property the generated function is a getter for
+ *
+ * Generate a function to get a string property from a #MatrixPusher object.
+ */
+# define STR_GETTER(NAME)                                          \
+    const gchar *                                                  \
+    matrix_pusher_get_ ## NAME (MatrixPusher *matrix_pusher)      \
+    {                                                              \
+        MatrixPusherPrivate *priv;                               \
+                                                                   \
+        g_return_val_if_fail(matrix_pusher != NULL, NULL);        \
+                                                                   \
+        priv = matrix_pusher_get_instance_private(matrix_pusher); \
+                                                                   \
+        return priv->_ ## NAME ;                                   \
+    }
+
+/*
+ * STR_SETTER:
+ * @NAME: the property the generated function is a setter for
+ *
+ * Generate a function to set a string property of a #MatrixPusher object
+ */
+# define STR_SETTER(NAME)                                                             \
+    void                                                                              \
+    matrix_pusher_set_ ## NAME (MatrixPusher * matrix_pusher, const gchar *NAME) \
+    {                                                                                 \
+        MatrixPusherPrivate *priv;                                                  \
+                                                                                      \
+        g_return_if_fail(matrix_pusher != NULL);                                     \
+                                                                                      \
+        priv = matrix_pusher_get_instance_private(matrix_pusher);                    \
+                                                                                      \
+        g_free(priv->_ ## NAME);                                                     \
+        priv->_ ## NAME = g_strdup(NAME);                                            \
+    }
+
+/**
+ * matrix_pusher_get_device_display_name:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the device display name of @pusher.
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the device display name
+ */
+STR_GETTER(device_display_name);
+
+/**
+ * matrix_pusher_set_device_display_name:
+ * @pusher: a #MatrixPusher object
+ * @device_display_name: (transfer none): a device display name
+ *
+ * Set the device display name in @pusher
+ */
+STR_SETTER(device_display_name);
+
+/**
+ * matrix_pusher_get_app_display_name:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the app display name of @pusher.
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the app display name
+ */
+STR_GETTER(app_display_name);
+
+/**
+ * matrix_pusher_set_app_display_name:
+ * @pusher: a #MatrixPusher object
+ * @app_display_name: (transfer none): an app display name
+ *
+ * Set the app display name in @pusher
+ */
+STR_SETTER(app_display_name);
+
+/**
+ * matrix_pusher_get_app_id:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the application ID of @pusher.
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the application ID
+ */
+STR_GETTER(app_id);
+
+/**
+ * matrix_pusher_set_app_id:
+ * @pusher: a #MatrixPusher object
+ * @app_id: (transfer none): an application ID
+ *
+ * Set the application ID in @pusher
+ */
+STR_SETTER(app_id);
+
+/**
+ * matrix_pusher_get_append:
+ * @pusher: a #MatrixPusher object
+ *
+ * If this function returns %TRUE, this pusher will tell the homeserver to add another pusher
+ * with the given push key instead of replacing the old one.
+ *
+ * Returns: %TRUE or %FALSE
+ */
+gboolean
+matrix_pusher_get_append(MatrixPusher *matrix_pusher)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_val_if_fail(matrix_pusher != NULL, FALSE);
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    return priv->_append;
+}
+
+/**
+ * matrix_pusher_set_append:
+ * @pusher: a #MatrixPusher object
+ * @append: a boolean value indicating if existing pushers should be overwritten
+ *
+ * If @append is #TRUE, the homeserver should add another pusher with the given push key and
+ * app ID in addition to any others with different user IDs. Otherwise, the homeserver must
+ * remove any other pushers with the same App ID and pushkey for different users.
+ */
+void
+matrix_pusher_set_append(MatrixPusher *matrix_pusher, gboolean append)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_if_fail(matrix_pusher != NULL);
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    priv->_append = append;
+}
+
+/**
+ * matrix_pusher_get_kind:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the type of @pusher.  For available types, see matrix_pusher_set_kind().
+ */
+STR_GETTER(kind);
+
+/**
+ * matrix_pusher_set_kind:
+ * @pusher: a #MatrixPusher object
+ * @kind: the kind of @pusher
+ *
+ * Set the type of the pusher.  For example, `"http"` makes a pusher that sends HTTP pokes.
+ *
+ * If set to %NULL, the pusher will be deleted.
+ */
+STR_SETTER(kind);
+
+/**
+ * matrix_pusher_get_lang:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the preferred language of the notifications sent by this pusher.
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the preferred language
+ */
+STR_GETTER(lang);
+
+/**
+ * matrix_pusher_set_lang:
+ * @pusher: a #MatrixPusher object
+ * @lang: (transfer none): a language code
+ *
+ * The preferred language for receiving notifications.  @lang should be an ISO code like
+ * `"en"` `"en-US"`.
+ */
+STR_SETTER(lang);
+
+/**
+ * matrix_pusher_get_profile_tag:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the profile tag of @pusher.  For details, see matrix_pusher_set_profile_tag().
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the profile tag
+ */
+STR_GETTER(profile_tag);
+
+/**
+ * matrix_pusher_set_profile_tag:
+ * @pusher: a #MatrixPusher object
+ * @profile_tag: (transfer none) (nullable): a profile tag
+ *
+ * A profile tag is a string that determines what set of device rules will be matched when
+ * evaluating push rules for this pusher.  It is an arbitrary string.  Multiple devices may
+ * use the same profile tag.  It is advised that when an app’s data is copied or restored to a
+ * different device, this value remain the same.  Client apps should offer ways to change the
+ * profile tag, optionally copying rules from the old profile tag.  Maximum length is 32 bytes.
+ * If the profile tag is longer than this, it will be truncated.
+ */
+void
+matrix_pusher_set_profile_tag(MatrixPusher *matrix_pusher, const gchar *profile_tag)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_if_fail(matrix_pusher != NULL);
+
+    if ((profile_tag != NULL) && (strlen(profile_tag) > 32)) {
+        g_warning("profile_key can’t be longer than 32 bytes. Truncating.");
+    }
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    g_free(priv->_profile_tag);
+    priv->_profile_tag = g_strndup(profile_tag, 32);
+}
+
+/**
+ * matrix_pusher_get_pushkey:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the push key of @pusher.  For details, see matrix_pusher_set_pushkey().
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ */
+STR_GETTER(pushkey);
+
+/**
+ * matrix_pusher_set_pushkey:
+ * @pusher: a #MatrixPusher object
+ * @pushkey: (transfer none) (nullable): a push key
+ *
+ * A push key is a unique identifier for a pusher.  The value you should use for this is the
+ * routing or destination address information for the notification, for example, the APNS token
+ * for APNS or the Registration ID for GCM.  If your notification client has no such concept,
+ * use any unique identifier.  Maximum length is 512 bytes.  If @pushkey is longer than this,
+ * it will be truncated
+ */
+void
+matrix_pusher_set_pushkey(MatrixPusher *matrix_pusher, const gchar *pushkey)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_if_fail(matrix_pusher != NULL);
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    g_free(priv->_pushkey);
+    priv->_pushkey = g_strndup(pushkey, 512);
+}
+
+/**
+ * matrix_pusher_get_data:
+ * @pusher: a #MatrixPusher object
+ *
+ * Get the associated data for @pusher.  For details, see matrix_pusher_set_data().
+ *
+ * The returned value is owned by @pusher, and should not be freed.
+ *
+ * Returns: (transfer none): the data associated with @pusher
+ */
+JsonNode *
+matrix_pusher_get_data(MatrixPusher *matrix_pusher)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_val_if_fail(matrix_pusher != NULL, FALSE);
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    return priv->_data;
+}
+
+/**
+ * matrix_pusher_set_data:
+ * @pusher: a #MatrixPusher object
+ * @data: (transfer none): a JSON node holding extra data for @pusher
+ *
+ * Set a dictionary of information for the pusher implementation itself.
+ *
+ * For example, if kind (set by matrix_pusher_set_kind()) is `"http"`, this should contain an
+ * `"url"` member, which is the URL to use to send notifications to.  The function gets a
+ * reference on @data, but doesn’t copy the object in it.
+ */
+void
+matrix_pusher_set_data(MatrixPusher *matrix_pusher, JsonNode *data)
+{
+    MatrixPusherPrivate *priv;
+
+    g_return_if_fail(matrix_pusher != NULL);
+
+    priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    if (priv->_data != NULL) {
+        json_node_unref(priv->_data);
+    }
+
+    priv->_data = json_node_ref(data);
+}
+
+static void
+matrix_pusher_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixPusherPrivate *priv = matrix_pusher_get_instance_private(MATRIX_PUSHER(matrix_json_compact));
+
+    g_free(priv->_device_display_name);
+    g_free(priv->_app_display_name);
+    g_free(priv->_app_id);
+    g_free(priv->_kind);
+    g_free(priv->_lang);
+    g_free(priv->_profile_tag);
+    g_free(priv->_pushkey);
+
+    if (priv->_data) {
+        json_node_unref(priv->_data);
+    }
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_pusher_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_pusher_class_init(MatrixPusherClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_pusher_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_pusher_get_json_node;
+}
+
+static void
+matrix_pusher_init(MatrixPusher *matrix_pusher)
+{
+    MatrixPusherPrivate *priv = matrix_pusher_get_instance_private(matrix_pusher);
+
+    priv->_device_display_name = NULL;
+    priv->_app_display_name = NULL;
+    priv->_app_id = NULL;
+    priv->_append = TRUE;
+    priv->_kind = NULL;
+    priv->_lang = NULL;
+    priv->_profile_tag = NULL;
+    priv->_pushkey = NULL;
+    priv->_data = NULL;
 }

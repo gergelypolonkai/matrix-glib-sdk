@@ -340,6 +340,21 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class Pusher : JsonCompact {
+        public string? device_display_name { get; set; default = null; }
+        public string? app_display_name { get; set; default = null; }
+        public string? app_id { get; set; default = null; }
+        public bool append { get; set; default = true; }
+        public string? kind { get; set; default = null; }
+        public string? lang { get; set; default = null; }
+        public string? profile_tag { get; set; default = null; }
+        public string? pushkey { get; set; default = null; }
+        public Json.Node? data { get; set; default = null; }
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

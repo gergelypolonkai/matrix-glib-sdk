@@ -134,6 +134,34 @@ void matrix_3pid_credential_set_session_id(Matrix3PidCredential *credential, con
 const gchar *matrix_3pid_credential_get_client_secret(Matrix3PidCredential *credential);
 void matrix_3pid_credential_set_client_secret(Matrix3PidCredential *credential, const gchar *client_secret);
 
+# define MATRIX_TYPE_PUSHER matrix_pusher_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixPusher, matrix_pusher, MATRIX, PUSHER, MatrixJsonCompact);
+
+struct _MatrixPusherClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixPusher *matrix_pusher_new(void);
+MatrixPusher *matrix_pusher_construct(GType object_type);
+const gchar *matrix_pusher_get_device_display_name(MatrixPusher *pusher);
+void matrix_pusher_set_device_display_name(MatrixPusher *pusher, const gchar *device_display_name);
+const gchar *matrix_pusher_get_app_display_name(MatrixPusher *pusher);
+void matrix_pusher_set_app_display_name(MatrixPusher *pusher, const gchar *app_display_name);
+const gchar *matrix_pusher_get_app_id(MatrixPusher *pusher);
+void matrix_pusher_set_app_id(MatrixPusher *pusher, const gchar *app_id);
+gboolean matrix_pusher_get_append(MatrixPusher *pusher);
+void matrix_pusher_set_append(MatrixPusher *pusher, gboolean append);
+const gchar *matrix_pusher_get_kind(MatrixPusher *pusher);
+void matrix_pusher_set_kind(MatrixPusher *pusher, const gchar *kind);
+const gchar *matrix_pusher_get_lang(MatrixPusher *pusher);
+void matrix_pusher_set_lang(MatrixPusher *pusher, const gchar *lang);
+const gchar *matrix_pusher_get_profile_tag(MatrixPusher *pusher);
+void matrix_pusher_set_profile_tag(MatrixPusher *pusher, const gchar *profile_tag);
+const gchar *matrix_pusher_get_pushkey(MatrixPusher *pusher);
+void matrix_pusher_set_pushkey(MatrixPusher *pusher, const gchar *pushkey);
+JsonNode *matrix_pusher_get_data(MatrixPusher *pusher);
+void matrix_pusher_set_data(MatrixPusher *pusher, JsonNode *data);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */
