@@ -309,6 +309,17 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    public class RoomFilter : JsonCompact {
+        public bool include_leave { get; set; default=true; }
+        public FilterRules? ephemeral { get; set; default = null; }
+        public FilterRules? state { get; set; default = null; }
+        public FilterRules? timeline { get; set; default = null; }
+
+        public override Json.Node? get_json_node()
+            throws Matrix.Error;
+    }
+
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, bool convert_dashes = true);

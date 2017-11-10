@@ -700,3 +700,307 @@ matrix_filter_rules_class_init(MatrixFilterRulesClass *klass)
 static void
 matrix_filter_rules_init(MatrixFilterRules *matrix_filter_rules)
 {}
+
+typedef struct {
+    gboolean _include_leave;
+    MatrixFilterRules *_ephemeral;
+    MatrixFilterRules *_state;
+    MatrixFilterRules *_timeline;
+} MatrixRoomFilterPrivate;
+
+/**
+ * MatrixRoomFilter:
+ *
+ * Class to hold room filters.
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixRoomFilter, matrix_room_filter, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_room_filter_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixRoomFilterPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *result;
+    JsonNode *node;
+    GError *inner_error = NULL;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_room_filter_get_instance_private(MATRIX_ROOM_FILTER(matrix_json_compact));
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "include_leave");
+    json_builder_add_boolean_value(builder, priv->_include_leave);
+
+    if (priv->_ephemeral != NULL) {
+        json_builder_set_member_name(builder, "ephemeral");
+        node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_ephemeral), &inner_error);
+
+        if (inner_error) {
+            g_object_unref(builder);
+            g_propagate_error(error, inner_error);
+
+            return NULL;
+        }
+
+        json_builder_add_value(builder, node);
+    }
+
+    if (priv->_state != NULL) {
+        json_builder_set_member_name(builder, "state");
+        node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_state), &inner_error);
+
+        if (inner_error) {
+            g_object_unref(builder);
+            g_propagate_error(error, inner_error);
+
+            return NULL;
+        }
+
+        json_builder_add_value(builder, node);
+    }
+
+    if (priv->_timeline != NULL) {
+        json_builder_set_member_name(builder, "timeline");
+        node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_timeline), &inner_error);
+
+        if (inner_error) {
+            g_object_unref(builder);
+            g_propagate_error(error, inner_error);
+
+            return NULL;
+        }
+
+        json_builder_add_value(builder, node);
+    }
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+MatrixRoomFilter *
+matrix_room_filter_construct(GType object_type)
+{
+    MatrixRoomFilter *matrix_room_filter = NULL;
+
+    matrix_room_filter = (MatrixRoomFilter *)matrix_json_compact_construct(object_type);
+
+    return matrix_room_filter;
+}
+
+/**
+ * matrix_room_filter_new:
+ *
+ * Create a new #MatrixRoomFilter object with a reference count of 1.
+ *
+ * Returns: (transfer full): a new #MatrixRoomFilter object
+ */
+MatrixRoomFilter *
+matrix_room_filter_new(void)
+{
+    return matrix_room_filter_construct(MATRIX_TYPE_ROOM_FILTER);
+}
+
+/**
+ * matrix_room_filter_get_include_leave:
+ * @room_filter: a #MatrixRoomFilter
+ *
+ * Returns: %TRUE if events for rooms the user has left will be included, %FALSE otherwise
+ */
+gboolean
+matrix_room_filter_get_include_leave(MatrixRoomFilter *matrix_room_filter) {
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_room_filter != NULL, FALSE);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    return priv->_include_leave;
+}
+
+/**
+ * matrix_room_filter_set_include_leave:
+ * @room_filter: a #MatrixRoomFilter object
+ * @include_leave: a boolean value
+ *
+ * If @include_leave is %TRUE,  events for rooms that the user has left will
+ * be included in the filtered event list.
+ */
+void
+matrix_room_filter_set_include_leave(MatrixRoomFilter *matrix_room_filter, gboolean include_leave)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_if_fail(matrix_room_filter != NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+    priv->_include_leave = include_leave;
+}
+
+/**
+ * matrix_room_filter_get_ephemeral:
+ * @room_filter: a #MatrixRoomFilter object
+ *
+ * Get the filtering rules for ephemeral events, like typing notifications and event receipts
+ * will also be included in the results.
+ *
+ * The returned value is owwned by @room_filter and shouldn’t be freed.
+ *
+ * Returns: (transfer none) (nullable): the filtering rules to be used on ephemeral events
+ */
+MatrixFilterRules *
+matrix_room_filter_get_ephemeral(MatrixRoomFilter *matrix_room_filter)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_room_filter != NULL, NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    return priv->_ephemeral;
+}
+
+/**
+ * matrix_room_filter_set_ephemeral:
+ * @room_filter: a #MatrixRoomFilter object
+ * @ephemeral_rules: (transfer none) (nullable): a #MatrixFilterRules to apply to ephemeral events
+ *
+ * Set filtering rules for ephemeral events (events that are not recorded in the room history,
+ * like typing notifications, event receipts, etc.)
+ */
+void
+matrix_room_filter_set_ephemeral(MatrixRoomFilter *matrix_room_filter, MatrixFilterRules *ephemeral)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_if_fail(matrix_room_filter != NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_ephemeral));
+    priv->_ephemeral = (MatrixFilterRules *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(ephemeral));
+}
+
+/**
+ * matrix_room_filter_get_state:
+ * @room_filter: a #MatrixRoomFilter object
+ *
+ * Get the filtering rules for state events.
+ *
+ * The returned value is owned by @room_filter and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): the filtering rules for state events.
+ */
+MatrixFilterRules *
+matrix_room_filter_get_state(MatrixRoomFilter *matrix_room_filter)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_room_filter != NULL, NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    return priv->_state;
+}
+
+/**
+ * matrix_room_filter_set_state:
+ * @room_filter: a #MatrixRoomFilter object
+ * @state_rules: (transfer none) (nullable): a #MatrixFilterRules object to apply to state events
+ *
+ * Set filtering rules for state events.
+ */
+void
+matrix_room_filter_set_state(MatrixRoomFilter *matrix_room_filter, MatrixFilterRules *state)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_if_fail(matrix_room_filter != NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_state));
+    priv->_state = (MatrixFilterRules *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(state));
+}
+
+/**
+ * matrix_room_filter_get_timeline:
+ * @room_filter: a #MatrixRoomFilter object
+ *
+ * Get the filtering rules for timeline events (like messages).
+ *
+ * The returned value is owned by @room_filter, and shouldn’t be freed.
+ *
+ * Returns: (transfer none) (nullable): the filtering rules for timeline events.
+ */
+MatrixFilterRules *
+matrix_room_filter_get_timeline(MatrixRoomFilter *matrix_room_filter)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_val_if_fail(matrix_room_filter != NULL, NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    return priv->_timeline;
+}
+
+/**
+ * matrix_room_filter_set_timeline:
+ * @room_filter: a #MatrixRoomFilter object
+ * @timeline_rules: (transfer none) (nullable): a #MatrixFilterRules to apply to timeline events
+ *
+ * Set filtering rules for timeline events.
+ */
+void
+matrix_room_filter_set_timeline(MatrixRoomFilter *matrix_room_filter, MatrixFilterRules *timeline)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    g_return_if_fail(matrix_room_filter != NULL);
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_timeline));
+    priv->_timeline = (MatrixFilterRules *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(timeline));
+}
+
+static void
+matrix_room_filter_finalize(MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    priv = matrix_room_filter_get_instance_private(MATRIX_ROOM_FILTER(matrix_json_compact));
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_ephemeral));
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_state));
+    matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_timeline));
+
+    MATRIX_JSON_COMPACT_CLASS (matrix_room_filter_parent_class)->finalize (matrix_json_compact);
+}
+
+static void
+matrix_room_filter_class_init(MatrixRoomFilterClass* klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_room_filter_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_room_filter_get_json_node;
+}
+
+static void
+matrix_room_filter_init(MatrixRoomFilter *matrix_room_filter)
+{
+    MatrixRoomFilterPrivate *priv;
+
+    priv = matrix_room_filter_get_instance_private(matrix_room_filter);
+
+    priv->_include_leave = TRUE;
+    priv->_ephemeral = NULL;
+    priv->_state = NULL;
+    priv->_timeline = NULL;
+}
