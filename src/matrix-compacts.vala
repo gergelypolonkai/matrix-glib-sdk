@@ -17,47 +17,6 @@
  */
 
 namespace Matrix {
-    public class SearchGroupings : JsonCompact {
-        public SearchGrouping[] group_by { get; set; }
-
-        public override Json.Node?
-        get_json_node()
-            throws Matrix.Error
-        {
-            if (group_by == null) {
-                return null;
-            }
-
-            var builder = new Json.Builder();
-
-            builder.begin_object();
-
-            builder.set_member_name("group_by");
-            builder.begin_array();
-
-            int count = 0;
-
-            foreach (var entry in group_by) {
-                var node = entry.get_json_node();
-
-                if (node != null) {
-                    count++;
-                    builder.add_value(node);
-                }
-            }
-
-            if (count == 0) {
-                return null;
-            }
-
-            builder.end_array();
-
-            builder.end_object();
-
-            return builder.get_root();
-        }
-    }
-
     public class SearchRoomEvents : JsonCompact {
         public SearchOrder order_by { get; set; default = SearchOrder.RECENT; }
         public SearchKey[] keys { get; set; }

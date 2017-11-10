@@ -184,6 +184,17 @@ MatrixSearchGrouping *matrix_search_grouping_new(void);
 MatrixSearchGroupBy matrix_search_grouping_get_key(MatrixSearchGrouping *search_grouping);
 void matrix_search_grouping_set_key(MatrixSearchGrouping *search_grouping, MatrixSearchGroupBy key);
 
+# define MATRIX_TYPE_SEARCH_GROUPINGS matrix_search_groupings_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixSearchGroupings, matrix_search_groupings, MATRIX, SEARCH_GROUPINGS, MatrixJsonCompact)
+
+struct _MatrixSearchGroupingsClass {
+    MatrixJsonCompactClass parent_class;
+};
+
+MatrixSearchGroupings *matrix_search_groupings_new(void);
+MatrixSearchGrouping **matrix_search_groupings_get_group_by(MatrixSearchGroupings *search_groupings, int *n_group_by);
+void matrix_search_groupings_set_group_by(MatrixSearchGroupings *search_groupings, MatrixSearchGrouping **group_by, int n_group_by);
+
 G_END_DECLS
 
 #endif  /* __MATRIX_GLIB_SDK_COMPACTS_H__ */

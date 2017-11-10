@@ -2287,3 +2287,161 @@ matrix_search_grouping_init(MatrixSearchGrouping *matrix_search_grouping)
 
     priv->_key = MATRIX_SEARCH_GROUP_BY_NONE;
 }
+
+typedef struct {
+    MatrixSearchGrouping **_group_by;
+    guint _group_by_len;
+} MatrixSearchGroupingsPrivate;
+
+/**
+ * MatrixSearchGroupings:
+ *
+ * Class to hold a list of grouping rules for search results.
+ *
+ * <note><para>
+ * Not to be confused with #MatrixSearchGrouping, for which this is essentially a container class.
+ * </para></note>
+ */
+G_DEFINE_TYPE_WITH_PRIVATE(MatrixSearchGroupings, matrix_search_groupings, MATRIX_TYPE_JSON_COMPACT);
+
+static JsonNode *
+matrix_search_groupings_get_json_node(MatrixJsonCompact *matrix_json_compact, GError **error)
+{
+    MatrixSearchGroupingsPrivate *priv;
+    JsonBuilder *builder;
+    JsonNode *result;
+    gint count = 0;
+
+    g_return_val_if_fail(matrix_json_compact != NULL, NULL);
+
+    priv = matrix_search_groupings_get_instance_private(MATRIX_SEARCH_GROUPINGS(matrix_json_compact));
+
+    if (priv->_group_by == NULL) {
+        return NULL;
+    }
+
+    builder = json_builder_new();
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "group_by");
+    json_builder_begin_array(builder);
+
+    for (guint i = 0; i < priv->_group_by_len; i++) {
+        GError *inner_error = NULL;
+        JsonNode *node = matrix_json_compact_get_json_node(MATRIX_JSON_COMPACT(priv->_group_by[i]), &inner_error);
+
+        if (node == NULL) {
+            g_propagate_error(error, inner_error);
+            g_object_unref(builder);
+
+            return NULL;
+        }
+
+        count++;
+        json_builder_add_value(builder, node);
+    }
+
+    json_builder_end_array(builder);
+
+    json_builder_end_object(builder);
+
+    result = json_builder_get_root(builder);
+    g_object_unref(builder);
+
+    return result;
+}
+
+/**
+ * matrix_search_groupings_new:
+ *
+ * Create a new #MatrixSearchGroupings object
+ *
+ * Returns: (transfer full): a new #MatrixSearchGroupings object
+ */
+MatrixSearchGroupings *
+matrix_search_groupings_new(void)
+{
+    return (MatrixSearchGroupings *)matrix_json_compact_construct(MATRIX_TYPE_SEARCH_GROUPINGS);
+}
+
+/**
+ * matrix_search_groupings_get_group_by:
+ * @search_groupings: a #MatrixSearchGroupings object
+ * @n_group_by: (nullable): a placeholder for the length of the result, or %NULL to ignore
+ *
+ * Get the list of groupings from the ruleset @search_groupings.
+ *
+ * If @n_group_by is not %NULL, the length of the list will be storee there.
+ *
+ * The returned value is owned by @search_groupings and should not be freed.
+ *
+ * Returns: (transfer none) (nullable): the list of groupings in this ruleset
+ */
+MatrixSearchGrouping **
+matrix_search_groupings_get_group_by(MatrixSearchGroupings *matrix_search_groupings, int *n_group_by)
+{
+    MatrixSearchGroupingsPrivate *priv;
+
+    g_return_val_if_fail(matrix_search_groupings != NULL, NULL);
+
+    priv = matrix_search_groupings_get_instance_private(matrix_search_groupings);
+
+    if (n_group_by != NULL) {
+        *n_group_by = priv->_group_by_len;
+    }
+
+    return priv->_group_by;
+}
+
+/**
+ * matrix_search_groupings_set_group_by:
+ * @search_groupings: a #MatrixSearchGroupings object
+ * @group_by: (nullable): a list of #MatrixSearchGrouping objects
+ * @n_group_by: the length of @group_by
+ *
+ * Set the list of search grouping rules to be used when presenting the results.
+ */
+void
+matrix_search_groupings_set_group_by(MatrixSearchGroupings *matrix_search_groupings, MatrixSearchGrouping **group_by, int n_group_by)
+{
+    MatrixSearchGroupingsPrivate *priv;
+
+    g_return_if_fail(matrix_search_groupings != NULL);
+
+    priv = matrix_search_groupings_get_instance_private(matrix_search_groupings);
+
+    if (priv->_group_by != NULL) {
+        for (guint i = 0; i < priv->_group_by_len; i++) {
+            matrix_json_compact_unref(MATRIX_JSON_COMPACT(priv->_group_by[i]));
+        }
+
+        g_free(priv->_group_by);
+    }
+
+    priv->_group_by = g_new(MatrixSearchGrouping *, n_group_by);
+
+    for (gint i = 0; i < n_group_by; i++) {
+        priv->_group_by[i] = (MatrixSearchGrouping *)matrix_json_compact_ref(MATRIX_JSON_COMPACT(group_by[i]));
+    }
+}
+
+static void
+matrix_search_groupings_finalize (MatrixJsonCompact *matrix_json_compact)
+{
+    MatrixSearchGroupingsPrivate *priv = matrix_search_groupings_get_instance_private(MATRIX_SEARCH_GROUPINGS(matrix_json_compact));
+
+    priv->_group_by = (free_array((gpointer *)priv->_group_by, priv->_group_by_len, (GDestroyNotify)matrix_json_compact_unref), NULL);
+
+    MATRIX_JSON_COMPACT_CLASS(matrix_search_groupings_parent_class)->finalize(matrix_json_compact);
+}
+
+static void
+matrix_search_groupings_class_init(MatrixSearchGroupingsClass *klass)
+{
+    ((MatrixJsonCompactClass *)klass)->finalize = matrix_search_groupings_finalize;
+    ((MatrixJsonCompactClass *)klass)->get_json_node = matrix_search_groupings_get_json_node;
+}
+
+static void
+matrix_search_groupings_init(MatrixSearchGroupings *matrix_search_groupings)
+{}
