@@ -106,3 +106,71 @@ _matrix_g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error)
 
     return ret;
 }
+
+static void
+_copy_obj_member(JsonObject *old_obj, const gchar *member_name, JsonNode *member_node, gpointer user_data)
+{
+    JsonObject *new_obj = user_data;
+
+    json_object_set_member(new_obj, member_name, _matrix_json_node_deep_copy(member_node));
+}
+
+static void
+_copy_ary_member(JsonArray *old_ary, guint idx, JsonNode *element_node, gpointer user_data)
+{
+    JsonArray *new_ary = user_data;
+
+    json_array_add_element(new_ary, _matrix_json_node_deep_copy(element_node));
+}
+
+JsonNode *
+_matrix_json_node_deep_copy(JsonNode *node)
+{
+    JsonNode *ret;
+    JsonNodeType node_type;
+
+    g_return_val_if_fail(node != NULL, NULL);
+
+    node_type = json_node_get_node_type(node);
+    ret = json_node_new(node_type);
+
+    switch (node_type) {
+        case JSON_NODE_OBJECT:
+        {
+            JsonObject *new_obj = json_object_new();
+            JsonObject *old_obj = json_node_get_object(node);
+
+            json_object_foreach_member(old_obj, _copy_obj_member, new_obj);
+
+            json_node_set_object(ret, new_obj);
+
+            break;
+        }
+        case JSON_NODE_ARRAY:
+        {
+            JsonArray *new_ary = json_array_new();
+            JsonArray *old_ary = json_node_get_array(node);
+
+            json_array_foreach_element(old_ary, _copy_ary_member, new_ary);
+
+            json_node_set_array(ret, new_ary);
+
+            break;
+        }
+        case JSON_NODE_VALUE:
+        {
+            GValue node_value = G_VALUE_INIT;
+
+            json_node_get_value(node, &node_value);
+            json_node_set_value(ret, &node_value);
+
+            g_value_unset(&node_value);
+
+            break;
+        }
+        case JSON_NODE_NULL:
+            break;
+    }
+
+    return ret;
+}

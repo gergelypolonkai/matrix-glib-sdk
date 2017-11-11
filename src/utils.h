@@ -20,11 +20,13 @@
 # define __MATRIX_GLIB_SDK_UTILS_H__
 
 # include <glib-object.h>
+# include <json-glib/json-glib.h>
 
 G_BEGIN_DECLS
 
 gchar *_matrix_g_enum_to_string(GType enum_type, gint value, gchar convert_dashes);
 gint _matrix_g_enum_nick_to_value(GType enum_type, const gchar *nick, GError **error);
+JsonNode *_matrix_json_node_deep_copy(JsonNode *node);
 
 G_END_DECLS
 

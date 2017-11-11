@@ -18,7 +18,7 @@
 
 #include <string.h>
 #include <gobject/gvaluecollector.h>
-#include "matrix-c-compacts.h"
+#include "matrix-compacts.h"
 #include "matrix-enumtypes.h"
 #include "matrix-types.h"
 #include "utils.h"

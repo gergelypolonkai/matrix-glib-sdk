@@ -51,7 +51,6 @@ Makefile.in
 /src/matrix-client.c
 /src/matrix-http-api.c
 /src/matrix-http-client.c
-/src/matrix-compacts.c
 /src/matrix-event-base.c
 /src/matrix-event-presence.c
 /src/matrix-event-room-base.c
