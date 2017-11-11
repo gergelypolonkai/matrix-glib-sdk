@@ -285,7 +285,7 @@ namespace Matrix {
     }
 
     /* Compact classes */
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public abstract class JsonCompact {
         public JsonCompact();
 
@@ -296,7 +296,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class FilterRules : JsonCompact {
         public uint limit { get; set; }
         public string[] types { get; set; }
@@ -309,7 +309,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class RoomFilter : JsonCompact {
         public bool include_leave { get; set; default=true; }
         public FilterRules? ephemeral { get; set; default = null; }
@@ -320,7 +320,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class Filter : JsonCompact {
         public string[] event_fields { get; set; }
         public EventFormat event_format { get; set; default = Matrix.EventFormat.CLIENT; }
@@ -330,7 +330,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class @3PidCredential : JsonCompact {
         public string? id_server { get; set; default = null; }
         public string? session_id { get; set; default = null; }
@@ -340,7 +340,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class Pusher : JsonCompact {
         public string? device_display_name { get; set; default = null; }
         public string? app_display_name { get; set; default = null; }
@@ -355,7 +355,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class EventContext : JsonCompact {
         public int before_limit { get; set; default = -1; }
         public int after_limit { get; set; default = -1; }
@@ -365,7 +365,7 @@ namespace Matrix {
             throws Matrix.Error;
      }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class SearchGrouping : JsonCompact {
         public SearchGroupBy key { get; set; default = SearchGroupBy.NONE; }
 
@@ -373,7 +373,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class SearchGroupings : JsonCompact {
         public SearchGrouping[] group_by { get; set; }
 
@@ -382,7 +382,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class SearchRoomEvents : JsonCompact {
         public SearchOrder order_by { get; set; default = SearchOrder.RECENT; }
         public SearchKey[] keys { get; set; }
@@ -397,7 +397,7 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
-    [CCode (cheader_filename = "matrix-c-compacts.h")]
+    [CCode (cheader_filename = "matrix-compacts.h")]
     public class SearchCategories : JsonCompact {
         public SearchRoomEvents? room_events { get; set; default = null; }
 
@@ -412,6 +412,9 @@ namespace Matrix {
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_nick_to_value")]
     public int _g_enum_nick_to_value(GLib.Type enum_type, string nick)
         throws Matrix.Error;
+
+    [CCode (cheader_filename = "utils.h", cname = "_matrix_json_node_deep_copy")]
+    public Json.Node? _json_node_deep_copy(Json.Node? node);
 
     [CCode (cheader_filename = "matrix-profile.h")]
     public class Profile : GLib.Object {
