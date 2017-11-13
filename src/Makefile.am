@@ -31,7 +31,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-room-history-visibility.vala \
 	matrix-event-room-join-rules.vala \
 	matrix-event-room-name.vala \
-	matrix-event-tag.vala \
 	matrix-event-room-canonical-alias.vala \
 	matrix-event-room-create.vala \
 	matrix-event-room-power-levels.vala \
@@ -113,6 +112,7 @@ INST_H_SRC_FILES = \
 	matrix-event-base.h \
 	matrix-event-room-base.h \
 	matrix-event-state-base.h \
+	matrix-event-tag.h \
 	utils.h \
 	matrix-profile.h \
 	$(NULL)
@@ -136,6 +136,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-types.c \
 	matrix-compacts.c \
 	matrix-event-base.c \
+	matrix-event-tag.c \
 	matrix-event-room-base.c \
 	matrix-event-state-base.c \
 	matrix-profile.c \

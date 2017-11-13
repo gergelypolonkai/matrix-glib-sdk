@@ -63,7 +63,6 @@ Makefile.in
 /src/matrix-event-room-history-visibility.c
 /src/matrix-event-room-join-rules.c
 /src/matrix-event-room-name.c
-/src/matrix-event-tag.c
 /src/matrix-event-room-canonical-alias.c
 /src/matrix-event-room-create.c
 /src/matrix-event-room-power-levels.c
