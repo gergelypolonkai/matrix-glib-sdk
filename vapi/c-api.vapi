@@ -507,5 +507,22 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-state-base.h")]
+        public abstract class State : Matrix.Event.Room {
+            protected string? _state_key;
+            public string? state_key { get; set; default = null; }
+            public Json.Node? prev_content { get; set; default = null; }
+
+            public State();
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_node)
+            throws Matrix.Error;
+
+            public Json.Node? get_stripped_node();
+        }
     }
 }

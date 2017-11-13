@@ -21,7 +21,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
-	matrix-event-state-base.vala \
 	matrix-event-presence.vala \
 	matrix-event-room-member.vala \
 	matrix-event-room-message.vala \
@@ -113,6 +112,7 @@ INST_H_SRC_FILES = \
 	matrix-compacts.h \
 	matrix-event-base.h \
 	matrix-event-room-base.h \
+	matrix-event-state-base.h \
 	utils.h \
 	matrix-profile.h \
 	$(NULL)
@@ -137,6 +137,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-compacts.c \
 	matrix-event-base.c \
 	matrix-event-room-base.c \
+	matrix-event-state-base.c \
 	matrix-profile.c \
 	utils.c \
 	matrix-enumtypes.c \
