@@ -489,5 +489,23 @@ namespace Matrix {
 
         [CCode (cheader_filename = "matrix-event-base.h")]
         public static void unregister_type(string event_type);
+
+        [CCode (cheader_filename = "matrix-event-room-base.h")]
+        public abstract class Room : Matrix.Event.Base {
+            public string? event_id { get; set; default = null; }
+            public string? room_id { get; set; default = null; }
+            public string? sender { get; set; default = null; }
+            public long age { get; set; default = 0; }
+            public string? redacted_because { get; set; default = null; }
+            public string? transaction_id { get; set; default = null; }
+
+            public Room();
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
