@@ -21,7 +21,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
-	matrix-event-base.vala \
 	matrix-event-room-base.vala \
 	matrix-event-state-base.vala \
 	matrix-event-presence.vala \
@@ -113,6 +112,7 @@ bin_PROGRAMS = test-api-client test-client
 INST_H_SRC_FILES = \
 	matrix-types.h \
 	matrix-compacts.h \
+	matrix-event-base.h \
 	utils.h \
 	matrix-profile.h \
 	$(NULL)
@@ -135,6 +135,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-version.c \
 	matrix-types.c \
 	matrix-compacts.c \
+	matrix-event-base.c \
 	matrix-profile.c \
 	utils.c \
 	matrix-enumtypes.c \

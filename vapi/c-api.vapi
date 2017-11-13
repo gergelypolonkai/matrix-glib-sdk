@@ -456,4 +456,38 @@ namespace Matrix {
     public bool glib_check_version(uint required_major,
                                    uint required_minor,
                                    uint required_micro);
+
+    [CCode (gir_namespace = "MatrixEvent", gir_version = "0.0")]
+    namespace Event {
+        [CCode (cheader_filename = "matrix-event-base.h")]
+        public abstract class Base : GLib.Object, GLib.Initable {
+            protected string? _event_type;
+            public string? event_type { get; construct; default = null; }
+            public Json.Node? json { get; set; default = null; }
+
+            public Base();
+
+            public bool init(GLib.Cancellable? cancellable = null)
+                throws Error, Matrix.Error;
+
+            public virtual void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public virtual void to_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public static Base? new_from_json(owned string? event_type = null, Json.Node? json_data = null)
+                throws Matrix.Error, GLib.Error;
+        }
+
+        [CCode (cheader_filename = "matrix-event-base.h")]
+        public static GLib.Type? get_handler(string event_type);
+
+        [CCode (cheader_filename = "matrix-event-base.h")]
+        public static void register_type(string event_type, GLib.Type event_gtype)
+            throws Matrix.Error;
+
+        [CCode (cheader_filename = "matrix-event-base.h")]
+        public static void unregister_type(string event_type);
+    }
 }
