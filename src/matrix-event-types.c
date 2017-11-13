@@ -18,6 +18,7 @@
 
 #include "matrix-glib.h"
 #include "matrix-marshalers.h"
+#include "matrix-event-tag.h"
 
 /*
   Borrowed from GLib

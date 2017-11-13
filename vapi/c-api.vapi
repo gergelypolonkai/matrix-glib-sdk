@@ -524,5 +524,14 @@ namespace Matrix {
 
             public Json.Node? get_stripped_node();
         }
+
+        [CCode (cheader_filename = "matrix-event-tag.h")]
+        public class Tag : Base {
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
