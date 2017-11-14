@@ -20,6 +20,7 @@
 #include <glib/gprintf.h>
 
 #include "matrix-glib.h"
+#include "matrix-event-presence.h"
 
 static gchar *user = NULL;
 static gchar *password = NULL;

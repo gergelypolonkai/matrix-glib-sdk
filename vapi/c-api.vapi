@@ -533,5 +533,21 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-presence.h")]
+        public class Presence : Base {
+            public string? avatar_url { get; set; }
+            public string? display_name { get; set; }
+            public long last_active_ago { get; set; default = -1; }
+            public string? user_id { get; set; default = null; }
+            public string? event_id { get; set; default = null; }
+            public Matrix.Presence presence { get; set; default = Matrix.Presence.UNKNOWN; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
