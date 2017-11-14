@@ -549,5 +549,26 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-member.h")]
+        public class RoomMember : State {
+            public RoomMembership membership { get; set; default = RoomMembership.UNKNOWN; }
+            public string? avatar_url { get; set; default = null; }
+            public string? display_name { get; set; default = null; }
+            public string? tpi_display_name { get; set; default = null; }
+            public string? tpi_signed_mxid { get; set; default = null; }
+            public string? tpi_signed_token { get; set; default = null; }
+            public Json.Node? tpi_signature { get; set; default = null; }
+            public Matrix.Event.State[] invite_room_state { get; set; }
+            public string? user_id { get; set; default = null; }
+
+            protected override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
