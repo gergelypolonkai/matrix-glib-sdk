@@ -570,5 +570,17 @@ namespace Matrix {
             to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-typing.h")]
+        public class Typing : Base {
+            public string? room_id { get; set; default = null; }
+            public string[] user_ids { get; set; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }

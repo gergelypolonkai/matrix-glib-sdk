@@ -23,7 +23,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-http-client.vala \
 	matrix-event-room-message.vala \
 	matrix-event-room-topic.vala \
-	matrix-event-typing.vala \
 	matrix-event-room-aliases.vala \
 	matrix-event-receipt.vala \
 	matrix-event-room-history-visibility.vala \
@@ -113,6 +112,7 @@ INST_H_SRC_FILES = \
 	matrix-event-tag.h \
 	matrix-event-presence.h \
 	matrix-event-room-member.h \
+	matrix-event-typing.h \
 	utils.h \
 	matrix-profile.h \
 	$(NULL)
@@ -139,6 +139,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-tag.c \
 	matrix-event-presence.c \
 	matrix-event-room-member.c \
+	matrix-event-typing.c \
 	matrix-event-room-base.c \
 	matrix-event-state-base.c \
 	matrix-profile.c \

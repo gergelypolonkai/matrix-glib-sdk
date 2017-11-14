@@ -20,6 +20,7 @@
 #include "matrix-marshalers.h"
 #include "matrix-event-tag.h"
 #include "matrix-event-presence.h"
+#include "matrix-event-typing.h"
 #include "matrix-event-room-member.h"
 
 /*
