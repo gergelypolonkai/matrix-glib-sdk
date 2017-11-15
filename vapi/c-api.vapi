@@ -593,5 +593,16 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-aliases.h")]
+        public class RoomAliases : State {
+            public string[] aliases { get; set; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 }
