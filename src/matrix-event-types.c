@@ -24,6 +24,7 @@
 #include "matrix-event-room-member.h"
 #include "matrix-event-receipt.h"
 #include "matrix-event-room-topic.h"
+#include "matrix-event-room-aliases.h"
 
 /*
   Borrowed from GLib

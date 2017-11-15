@@ -54,7 +54,6 @@ Makefile.in
 /src/matrix-event-room-message.c
 /src/namespace-info.vala
 /src/namespace-info.c
-/src/matrix-event-room-aliases.c
 /src/matrix-event-room-history-visibility.c
 /src/matrix-event-room-join-rules.c
 /src/matrix-event-room-name.c
