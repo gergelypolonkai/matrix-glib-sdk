@@ -23,6 +23,7 @@
 #include "matrix-event-typing.h"
 #include "matrix-event-room-member.h"
 #include "matrix-event-receipt.h"
+#include "matrix-event-room-topic.h"
 
 /*
   Borrowed from GLib
