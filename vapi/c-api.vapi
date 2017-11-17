@@ -605,4 +605,41 @@ namespace Matrix {
             throws Matrix.Error;
         }
     }
+
+    [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
+    namespace Message {
+        [CCode (cname = "matrix_message_get_handler")]
+        public static GLib.Type? get_handler(string message_type);
+
+        [CCode (cname = "matrix_message_register_type")]
+        public static void register_type(string message_type, GLib.Type message_gtype)
+            throws Matrix.Error;
+
+        [CCode (cname = "matrix_message_unregister_type")]
+        public void unregister_type(string message_type);
+
+        [CCode (cheader_filename = "matrix-message-base.h")]
+        public abstract class Base : GLib.Object, GLib.Initable {
+            public string? message_type { get; set; default = null; }
+            public string? body { get; set; default = null; }
+            public Json.Node? json { get; construct; }
+
+            public Base();
+
+            public bool init(GLib.Cancellable? cancellable = null)
+                throws GLib.Error;
+
+            private void initialize_from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public static Matrix.Message.Base? new_from_json(Json.Node json_data)
+                throws Matrix.Error, GLib.Error;
+
+            public virtual void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public virtual void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
+    }
 }
