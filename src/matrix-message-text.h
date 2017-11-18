@@ -16,23 +16,24 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Message handler for plain text messages
- *
- * Handle plain text messages.
- */
-public class Matrix.Message.Text : Matrix.Message.Base {
-    public override void
-    from_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.from_json(json_data);
-    }
+#ifndef __MATRIX_GLIB_SDK_MESSAGE_TEXT_H__
+# define __MATRIX_GLIB_SDK_MESSAGE_TEXT_H__
 
-    public override void
-    to_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.to_json(json_data);
-    }
-}
+# include <glib-object.h>
+# include "matrix-message-base.h"
+
+G_BEGIN_DECLS
+
+# define MATRIX_MESSAGE_TYPE_TEXT matrix_message_text_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixMessageText, matrix_message_text, MATRIX_MESSAGE, TEXT, MatrixMessageBase);
+
+struct _MatrixMessageTextClass {
+    MatrixMessageBaseClass parent_class;
+};
+
+MatrixMessageText* matrix_message_text_new (void);
+MatrixMessageText* matrix_message_text_construct (GType object_type);
+
+G_END_DECLS
+
+#endif  /* __MATRIX_GLIB_SDK_MESSAGE_TEXT_H__ */

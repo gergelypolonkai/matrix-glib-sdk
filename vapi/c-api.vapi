@@ -641,5 +641,14 @@ namespace Matrix {
             public virtual void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-message-text.h")]
+        public class Text : Base {
+            public override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
