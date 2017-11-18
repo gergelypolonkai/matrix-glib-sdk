@@ -650,5 +650,20 @@ namespace Matrix {
             public override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-message-location.h")]
+        public class Location : Base {
+            public string? geo_uri { get; set; default = null; }
+            public string? thumbnail_url { get; set; default = null; }
+            public Matrix.ImageInfo? thumbnail_info { get; set; default = null; }
+
+            protected override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }

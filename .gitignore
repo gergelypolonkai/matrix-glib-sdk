@@ -77,5 +77,4 @@ Makefile.in
 /src/matrix-message-image.c
 /src/matrix-message-audio.c
 /src/matrix-message-video.c
-/src/matrix-message-location.c
 /src/matrix-room.c

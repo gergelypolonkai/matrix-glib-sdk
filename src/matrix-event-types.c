@@ -27,6 +27,7 @@
 #include "matrix-event-room-aliases.h"
 
 #include "matrix-message-text.h"
+#include "matrix-message-location.h"
 
 /*
   Borrowed from GLib
