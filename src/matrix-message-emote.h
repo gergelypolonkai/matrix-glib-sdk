@@ -16,27 +16,25 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-/**
- * The emote message type
- *
- * This message is similar to `m.text` except that the sender is
- * 'performing' the action contained in the `body` key, similar to
- * `/me` in IRC. This message should be prefixed by the name of the
- * sender. This message could also be represented in a different
- * colour to distinguish it from regular `m.text` messages.
- */
-public class Matrix.Message.Emote : Matrix.Message.Base {
-    public override void
-    from_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.from_json(json_data);
-    }
+#ifndef __MATRIX_GLIB_SDK_MESSAGE_EMOTE_H___
+# define __MATRIX_GLIB_SDK_MESSAGE_EMOTE_H___
 
-    public override void
-    to_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.to_json(json_data);
-    }
-}
+# include <glib-object.h>
+# include "matrix-message-base.h"
+
+G_BEGIN_DECLS
+
+# define MATRIX_MESSAGE_TYPE_EMOTE matrix_message_emote_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixMessageEmote, matrix_message_emote, MATRIX_MESSAGE, EMOTE, MatrixMessageBase);
+
+struct _MatrixMessageEmoteClass {
+    MatrixMessageBaseClass parent_class;
+};
+
+MatrixMessageEmote *matrix_message_emote_new(void);
+MatrixMessageEmote *matrix_message_emote_construct(GType object_type);
+
+G_END_DECLS
+
+
+#endif  /* __MATRIX_GLIB_SDK_MESSAGE_EMOTE_H___ */
