@@ -60,7 +60,6 @@ Makefile.in
 /src/matrix-event-room-canonical-alias.c
 /src/matrix-event-room-create.c
 /src/matrix-event-room-power-levels.c
-/src/matrix-event-room-avatar.c
 /src/matrix-event-room-message-feedback.c
 /src/matrix-event-room-guest-access.c
 /src/matrix-event-room-redaction.c
