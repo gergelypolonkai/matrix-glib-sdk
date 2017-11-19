@@ -26,6 +26,7 @@
 #include "matrix-event-room-topic.h"
 #include "matrix-event-room-aliases.h"
 #include "matrix-event-room-avatar.h"
+#include "matrix-event-room-name.h"
 
 #include "matrix-message-text.h"
 #include "matrix-message-location.h"
