@@ -633,6 +633,24 @@ namespace Matrix {
             to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-call-base.h")]
+        public abstract class Call : Room {
+            public string? call_id { get; set; default = null; }
+            public int version { get; set; default = -1; }
+
+            public Call();
+
+            protected override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error
+            {
+            }
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
