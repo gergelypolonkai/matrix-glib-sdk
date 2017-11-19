@@ -206,8 +206,8 @@ namespace Matrix {
 
     [CCode (cheader_filename = "matrix-types.h")]
     public struct FileInfo {
-        public void set_size(ssize size);
-        public ssize get_size();
+        public void set_size(int64 size);
+        public int64 get_size();
 
         public void set_mimetype(string? mimetype);
         public string? get_mimetype();
@@ -220,8 +220,8 @@ namespace Matrix {
 
     [CCode (cheader_filename = "matrix-types.h")]
     public struct AudioInfo {
-        public ssize get_size();
-        public void set_size(ssize size);
+        public int64 get_size();
+        public void set_size(int64 size);
 
         public string? get_mimetype();
         public void set_mimetype(string? mimetype);
@@ -237,8 +237,8 @@ namespace Matrix {
 
     [CCode (cheader_filename = "matrix-types.h")]
     public struct ImageInfo {
-        public ssize get_size();
-        public void set_size(ssize size);
+        public int64 get_size();
+        public void set_size(int64 size);
         public int get_height();
         public void set_height(int height);
         public int get_width();
@@ -255,8 +255,8 @@ namespace Matrix {
 
     [CCode (cheader_filename = "matrix-types.h")]
     public struct VideoInfo {
-        public ssize get_size();
-        public void set_size(ssize size);
+        public int64 get_size();
+        public void set_size(int64 size);
 
         public string? get_mimetype();
         public void set_mimetype(string? mimetype);
@@ -603,6 +603,22 @@ namespace Matrix {
 
             protected override void to_json(Json.Node json_data)
             throws Matrix.Error;
+        }
+
+        [CCode (cheader_filename = "matrix-event-room-avatar.h")]
+        public class RoomAvatar : State {
+            public string? url { get; set; default = null; }
+            public string? thumbnail_url { get; set; default = null; }
+            public ImageInfo? info { get; set; default = null; }
+            public ImageInfo? thumbnail_info { get; set; default = null; }
+
+            protected override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error;
         }
     }
 
