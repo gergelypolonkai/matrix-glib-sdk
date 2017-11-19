@@ -31,7 +31,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-room-guest-access.vala \
 	matrix-event-room-redaction.vala \
 	matrix-event-room-third-party-invite.vala \
-	matrix-event-call-base.vala \
 	matrix-event-call-invite.vala \
 	matrix-event-call-candidates.vala \
 	matrix-event-call-answer.vala \
@@ -98,6 +97,7 @@ INST_H_SRC_FILES = \
 	matrix-types.h \
 	matrix-compacts.h \
 	matrix-event-base.h \
+	matrix-event-call-base.h \
 	matrix-message-base.h \
 	matrix-message-text.h \
 	matrix-message-location.h \
@@ -136,6 +136,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-types.c \
 	matrix-compacts.c \
 	matrix-event-base.c \
+	matrix-event-call-base.c \
 	matrix-message-base.c \
 	matrix-message-text.c \
 	matrix-message-location.c \
