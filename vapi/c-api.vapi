@@ -721,5 +721,22 @@ namespace Matrix {
             public override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-message-file.h")]
+        public class File : Base {
+            public string? filename { get; set; default = null; }
+            public string? url { get; set; default = null; }
+            public Matrix.FileInfo? info { get; set; default = null; }
+            public string? thumbnail_url {get; set; default = null; }
+            public Matrix.ImageInfo? thumbnail_info { get; set; default = null; }
+
+            protected override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }
