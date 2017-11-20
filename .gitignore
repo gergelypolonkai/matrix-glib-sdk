@@ -68,4 +68,3 @@ Makefile.in
 /src/matrix-event-call-answer.c
 /src/matrix-event-call-hangup.c
 /src/matrix-glib-0.0.pc
-/src/matrix-message-notice.c

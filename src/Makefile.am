@@ -35,7 +35,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-call-candidates.vala \
 	matrix-event-call-answer.vala \
 	matrix-event-call-hangup.vala \
-	matrix-message-notice.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -101,6 +100,7 @@ INST_H_SRC_FILES = \
 	matrix-message-image.h \
 	matrix-message-audio.h \
 	matrix-message-video.h \
+	matrix-message-notice.h \
 	matrix-event-room-base.h \
 	matrix-event-state-base.h \
 	matrix-event-tag.h \
@@ -145,6 +145,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-message-image.c \
 	matrix-message-audio.c \
 	matrix-message-video.c \
+	matrix-message-notice.c \
 	matrix-event-tag.c \
 	matrix-event-presence.c \
 	matrix-event-room-member.c \
