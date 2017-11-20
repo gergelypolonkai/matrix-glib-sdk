@@ -32,6 +32,7 @@
 #include "matrix-message-location.h"
 #include "matrix-message-emote.h"
 #include "matrix-message-file.h"
+#include "matrix-message-image.h"
 
 /*
   Borrowed from GLib
