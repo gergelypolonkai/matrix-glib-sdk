@@ -69,6 +69,5 @@ Makefile.in
 /src/matrix-event-call-hangup.c
 /src/matrix-glib-0.0.pc
 /src/matrix-message-notice.c
-/src/matrix-message-audio.c
 /src/matrix-message-video.c
 /src/matrix-room.c
