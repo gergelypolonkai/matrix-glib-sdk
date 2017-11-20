@@ -36,7 +36,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-call-answer.vala \
 	matrix-event-call-hangup.vala \
 	matrix-message-notice.vala \
-	matrix-message-video.vala \
 	matrix-room.vala \
 	$(NULL)
 
@@ -102,6 +101,7 @@ INST_H_SRC_FILES = \
 	matrix-message-file.h \
 	matrix-message-image.h \
 	matrix-message-audio.h \
+	matrix-message-video.h \
 	matrix-event-room-base.h \
 	matrix-event-state-base.h \
 	matrix-event-tag.h \
@@ -144,6 +144,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-message-file.c \
 	matrix-message-image.c \
 	matrix-message-audio.c \
+	matrix-message-video.c \
 	matrix-event-tag.c \
 	matrix-event-presence.c \
 	matrix-event-room-member.c \
