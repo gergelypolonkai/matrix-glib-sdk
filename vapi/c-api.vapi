@@ -405,6 +405,61 @@ namespace Matrix {
             throws Matrix.Error;
     }
 
+    [CCode (cheader_filename = "matrix-room.h")]
+    public class Room : GLib.Object {
+        public string room_id { get; construct; }
+        public string[] aliases { get; set; }
+        public string? avatar_url { get; set; default = null; }
+        public Matrix.ImageInfo? avatar_info { get; set; default = null; }
+        public string? avatar_thumbnail_url { get; set; default = null; }
+        public Matrix.ImageInfo? avatar_thumbnail_info { get; set; default = null; }
+        public string? canonical_alias { get; set; default = null; }
+        public string? creator { get; set; default = null; }
+        public bool federate { get; set; default = false; }
+        public Matrix.GuestAccess guest_access { get; set; default = Matrix.GuestAccess.UNKNOWN; }
+        public Matrix.HistoryVisibility history_visibility { get; set; default = Matrix.HistoryVisibility.UNKNOWN; }
+        public Matrix.JoinRules join_rules { get; set; default = Matrix.JoinRules.UNKNOWN; }
+        public string? name { get; set; default = null; }
+        public int default_power_level { get; set; default = 0; }
+        public int default_event_level { get; set; default = 0; }
+        public int default_state_level { get; set; default = 10; }
+        public int ban_level { get; set; default = 5; }
+        public int kick_level { get; set; default = 5; }
+        public int redact_level { get; set; default = 20; }
+        public int invite_level { get; set; default = 0; }
+        public string? topic { get; set; default = null; }
+        public string[] typing_users { get; set; }
+
+        public Room(string room_id);
+
+        public void add_member(string user_id, Profile? profile, bool third_party)
+        throws Matrix.Error;
+
+        public Profile
+        get_or_add_member(string user_id, bool third_party = false)
+        throws Matrix.Error;
+
+        public Profile
+        get_member(string user_id, out bool third_party)
+        throws Matrix.Error;
+
+        public void
+        remove_member(string user_id)
+        throws Matrix.Error;
+
+        public void clear_user_levels();
+
+        public void set_user_level(string user_id, int level);
+
+        public int get_user_level(string user_id)
+        throws Matrix.Error;
+
+        public void clear_event_levels();
+
+        public void set_event_level(string event_type, int level);
+
+        public int? get_event_level(string event_type);
+    }
     /* Utilities */
     [CCode (cheader_filename = "utils.h", cname = "_matrix_g_enum_to_string")]
     public string? _g_enum_value_to_nick(GLib.Type enum_type, int value, char convert_dashes = '_');

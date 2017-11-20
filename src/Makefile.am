@@ -36,7 +36,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-event-call-answer.vala \
 	matrix-event-call-hangup.vala \
 	matrix-message-notice.vala \
-	matrix-room.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -115,6 +114,7 @@ INST_H_SRC_FILES = \
 	matrix-event-receipt.h \
 	utils.h \
 	matrix-profile.h \
+	matrix-room.h \
 	$(NULL)
 
 INST_H_BUILT_FILES = \
@@ -157,6 +157,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-room-avatar.c \
 	matrix-event-room-name.c \
 	matrix-profile.c \
+	matrix-room.c \
 	utils.c \
 	matrix-enumtypes.c \
 	$(INST_H_SRC_FILES) \
