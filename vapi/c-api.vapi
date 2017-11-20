@@ -754,5 +754,19 @@ namespace Matrix {
             to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-message-audio.h")]
+        public class Audio : Base {
+            public string? url { get; set; default = null; }
+            public Matrix.AudioInfo? info { get; set; default = null; }
+
+            protected override void
+            from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 }
