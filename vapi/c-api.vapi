@@ -837,5 +837,16 @@ namespace Matrix {
             to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-message-notice.h")]
+        public class Notice : Base {
+            public override void
+            from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            public override void
+            to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 }

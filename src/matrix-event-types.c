@@ -35,6 +35,7 @@
 #include "matrix-message-image.h"
 #include "matrix-message-audio.h"
 #include "matrix-message-video.h"
+#include "matrix-message-notice.h"
 
 /*
   Borrowed from GLib
