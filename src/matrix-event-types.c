@@ -32,6 +32,7 @@
 #include "matrix-event-room-join-rules.h"
 #include "matrix-event-call-answer.h"
 #include "matrix-event-call-hangup.h"
+#include "matrix-event-call-invite.h"
 
 #include "matrix-message-text.h"
 #include "matrix-message-location.h"
