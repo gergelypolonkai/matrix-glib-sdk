@@ -785,6 +785,19 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-create.h")]
+        public class RoomCreate : State {
+            public string? creator { get; set; default = null; }
+            public bool federate { get; set; default = false; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void
+            to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
