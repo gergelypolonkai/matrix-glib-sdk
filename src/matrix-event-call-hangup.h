@@ -16,23 +16,24 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Sent by either party to signal their termination of the call. This
- * can be sent either once the call has has been established or before
- * to abort the call.
- */
-public class Matrix.Event.CallHangup : Matrix.Event.Call {
-    protected override void
-    from_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.from_json(json_data);
-    }
+#ifndef __MATRIX_GLIB_SDK_EVENT_CALL_HANGUP_H__
+# define __MATRIX_GLIB_SDK_EVENT_CALL_HANGUP_H__
 
-    protected override void
-    to_json(Json.Node json_data)
-        throws Matrix.Error
-    {
-        base.to_json(json_data);
-    }
-}
+# include <glib-object.h>
+# include "matrix-event-call-base.h"
+
+G_BEGIN_DECLS
+
+# define MATRIX_EVENT_TYPE_CALL_HANGUP matrix_event_call_hangup_get_type()
+G_DECLARE_DERIVABLE_TYPE(MatrixEventCallHangup, matrix_event_call_hangup, MATRIX_EVENT, CALL_HANGUP, MatrixEventCall);
+
+struct _MatrixEventCallHangupClass {
+    MatrixEventCallClass parent_class;
+};
+
+MatrixEventCallHangup* matrix_event_call_hangup_new (void);
+MatrixEventCallHangup* matrix_event_call_hangup_construct (GType object_type);
+
+G_END_DECLS
+
+#endif  /* __MATRIX_GLIB_SDK_EVENT_CALL_HANGUP_H__ */
