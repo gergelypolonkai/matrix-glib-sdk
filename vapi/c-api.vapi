@@ -706,6 +706,18 @@ namespace Matrix {
             {
             }
         }
+
+        [CCode (cheader_filename = "matrix-event-room-message.h")]
+        public class RoomMessage : Room {
+            public Matrix.Message.Base? message { get; set; default = null; }
+            public Json.Node? fallback_content { get; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
