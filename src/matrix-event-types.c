@@ -28,6 +28,7 @@
 #include "matrix-event-room-avatar.h"
 #include "matrix-event-room-name.h"
 #include "matrix-event-room-message.h"
+#include "matrix-event-room-history-visibility.h"
 
 #include "matrix-message-text.h"
 #include "matrix-message-location.h"
