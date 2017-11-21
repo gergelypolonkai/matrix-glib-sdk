@@ -22,6 +22,7 @@
 #include "matrix-glib.h"
 #include "matrix-event-presence.h"
 #include "matrix-event-room-member.h"
+#include "matrix-event-room-message.h"
 
 static gchar *user = NULL;
 static gchar *password = NULL;
