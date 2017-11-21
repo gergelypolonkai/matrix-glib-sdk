@@ -21,7 +21,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
-	matrix-event-room-canonical-alias.vala \
 	matrix-event-room-create.vala \
 	matrix-event-room-power-levels.vala \
 	matrix-event-room-message-feedback.vala \
@@ -110,6 +109,7 @@ INST_H_SRC_FILES = \
 	matrix-event-room-message.h \
 	matrix-event-room-history-visibility.h \
 	matrix-event-room-join-rules.h \
+	matrix-event-room-canonical-alias.h \
 	matrix-event-typing.h \
 	matrix-event-receipt.h \
 	utils.h \
@@ -163,6 +163,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-room-message.c \
 	matrix-event-room-history-visibility.c \
 	matrix-event-room-join-rules.c \
+	matrix-event-room-canonical-alias.c \
 	matrix-profile.c \
 	matrix-room.c \
 	utils.c \
