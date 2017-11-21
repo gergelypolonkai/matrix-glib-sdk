@@ -740,6 +740,18 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-call-answer.h")]
+        public class CallAnswer : Call {
+            public Matrix.CallAnswerType answer_type { get; set; default = Matrix.CallAnswerType.UNKNOWN; }
+            public string? answer_sdp { get; set; default = null; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
