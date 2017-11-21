@@ -30,9 +30,9 @@ static gboolean no_validate_certs = FALSE;
 static gchar **homeserver = NULL;
 
 static GOptionEntry entries[] = {
-    {"user", 'u', 0, G_OPTION_ARG_STRING, &user},
-    {"password", 'p', 0, G_OPTION_ARG_STRING, &password},
-    {"no-validate-certs", 'n', 0, G_OPTION_ARG_NONE, &no_validate_certs},
+    {"user", 'u', 0, G_OPTION_ARG_STRING, &user, "The username to login with", "username"},
+    {"password", 'p', 0, G_OPTION_ARG_STRING, &password, "The password to login with", "password"},
+    {"no-validate-certs", 'n', 0, G_OPTION_ARG_NONE, &no_validate_certs, "If set, certificates won’t be validated", NULL},
     {G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &homeserver, "The homeserver to connect to", "homeserver"},
 };
 
