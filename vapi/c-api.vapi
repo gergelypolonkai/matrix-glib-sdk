@@ -718,6 +718,17 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-history-visibility.h")]
+        public class RoomHistoryVisibility : State {
+            public Matrix.HistoryVisibility visibility { get; set; default = Matrix.HistoryVisibility.UNKNOWN; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
