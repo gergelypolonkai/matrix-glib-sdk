@@ -729,6 +729,17 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-join-rules.h")]
+        public class RoomJoinRules : State {
+            public Matrix.JoinRules join_rules { get; set; default = Matrix.JoinRules.UNKNOWN; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
