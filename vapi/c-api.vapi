@@ -844,6 +844,18 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
                 throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-redaction.h")]
+        public class RoomRedaction : Room {
+            public string? reason { get; set; default = null; }
+            public string? redacted_event_id { get; set; default = null; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]

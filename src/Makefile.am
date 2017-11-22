@@ -21,7 +21,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
-	matrix-event-room-redaction.vala \
 	matrix-event-room-third-party-invite.vala \
 	matrix-event-call-candidates.vala \
 	$(NULL)
@@ -110,6 +109,7 @@ INST_H_SRC_FILES = \
 	matrix-event-room-power-levels.h \
 	matrix-event-room-guest-access.h \
 	matrix-event-room-message-feedback.h \
+	matrix-event-room-redaction.h \
 	matrix-event-typing.h \
 	matrix-event-receipt.h \
 	utils.h \
@@ -167,6 +167,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-room-create.c \
 	matrix-event-room-power-levels.c \
 	matrix-event-room-message-feedback.c \
+	matrix-event-room-redaction.c \
 	matrix-event-room-guest-access.c \
 	matrix-profile.c \
 	matrix-room.c \
