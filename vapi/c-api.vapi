@@ -821,6 +821,18 @@ namespace Matrix {
 
             public void set_event_level(string event_type, int level);
         }
+
+        [CCode (cheader_filename = "matrix-event-room-message-feedback.h")]
+        public class RoomMessageFeedback : Room {
+            public string? feedback_type { get; set; default = null; }
+            public string? target_event_id { get; set; default = null; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
