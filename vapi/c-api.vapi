@@ -284,6 +284,9 @@ namespace Matrix {
         throws Matrix.Error;
     }
 
+    public struct ThirdPartyInvitePublicKey {
+    }
+
     /* Compact classes */
     [CCode (cheader_filename = "matrix-compacts.h")]
     public abstract class JsonCompact {
@@ -849,6 +852,26 @@ namespace Matrix {
         public class RoomRedaction : Room {
             public string? reason { get; set; default = null; }
             public string? redacted_event_id { get; set; default = null; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+        }
+
+        [CCode (cheader_filename = "matrix-event-room-third-party-invite.h")]
+        public class RoomThirdPartyInvite : State {
+            public struct PublicKey {
+                string? key;
+                string? validity_url;
+            }
+
+            public string? display_name { get; set; default = null; }
+            public string? key_validity_url { get; set; default = null; }
+            public string? public_key { get; set; default = null;}
+            public Matrix.ThirdPartyInvitePublicKey[] public_keys { get; set; }
+            public string? token { get; set; default = null;}
 
             protected override void from_json(Json.Node json_data)
             throws Matrix.Error;
