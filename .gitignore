@@ -53,7 +53,6 @@ Makefile.in
 /src/matrix-http-client.c
 /src/namespace-info.vala
 /src/namespace-info.c
-/src/matrix-event-room-power-levels.c
 /src/matrix-event-room-message-feedback.c
 /src/matrix-event-room-guest-access.c
 /src/matrix-event-room-redaction.c

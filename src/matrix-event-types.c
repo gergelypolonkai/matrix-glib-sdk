@@ -32,6 +32,7 @@
 #include "matrix-event-room-join-rules.h"
 #include "matrix-event-room-canonical-alias.h"
 #include "matrix-event-room-create.h"
+#include "matrix-event-room-power-levels.h"
 #include "matrix-event-call-answer.h"
 #include "matrix-event-call-hangup.h"
 #include "matrix-event-call-invite.h"
