@@ -798,6 +798,29 @@ namespace Matrix {
             to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-power-levels.h")]
+        public class RoomPowerLevels : State {
+            public int users_default { get; set; default = 0; }
+            public int events_default { get; set; default = 0; }
+            public int state_default { get; set; default = 10; }
+            public int ban { get; set; default = 5; }
+            public int kick { get; set; default = 5; }
+            public int redact { get; set; default = 20; }
+            public int invite { get; set; default = 0; }
+            public GLib.HashTable<string, int?> event_levels { get; }
+            public GLib.HashTable<string, int?> user_levels { get; }
+
+            protected override void from_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+            throws Matrix.Error;
+
+            public void set_user_level(string user_id, int level);
+
+            public void set_event_level(string event_type, int level);
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
