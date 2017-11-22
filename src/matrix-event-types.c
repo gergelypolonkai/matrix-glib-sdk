@@ -36,6 +36,7 @@
 #include "matrix-event-room-guest-access.h"
 #include "matrix-event-room-message-feedback.h"
 #include "matrix-event-room-redaction.h"
+#include "matrix-event-room-third-party-invite.h"
 #include "matrix-event-call-answer.h"
 #include "matrix-event-call-hangup.h"
 #include "matrix-event-call-invite.h"
