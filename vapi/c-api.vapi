@@ -833,6 +833,17 @@ namespace Matrix {
             protected override void to_json(Json.Node json_data)
             throws Matrix.Error;
         }
+
+        [CCode (cheader_filename = "matrix-event-room-guest-access.h")]
+        public class RoomGuestAccess : State {
+            public Matrix.GuestAccess guest_access { get; set; default = Matrix.GuestAccess.UNKNOWN; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
+        }
     }
 
     [CCode (gir_namespace = "MatrixMessage", gir_version = "0.0")]
