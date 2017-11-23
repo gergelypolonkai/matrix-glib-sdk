@@ -21,7 +21,6 @@ libmatrix_glib_0_0_la_VALA_SOURCES = \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
-	matrix-event-call-candidates.vala \
 	$(NULL)
 
 AM_CPPFLAGS += \
@@ -82,6 +81,7 @@ INST_H_SRC_FILES = \
 	matrix-event-call-answer.h \
 	matrix-event-call-hangup.h \
 	matrix-event-call-invite.h \
+	matrix-event-call-candidates.h \
 	matrix-message-base.h \
 	matrix-message-text.h \
 	matrix-message-location.h \
@@ -140,6 +140,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	matrix-event-call-answer.c \
 	matrix-event-call-hangup.c \
 	matrix-event-call-invite.c \
+	matrix-event-call-candidates.c \
 	matrix-message-base.c \
 	matrix-message-text.c \
 	matrix-message-location.c \

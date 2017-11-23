@@ -40,6 +40,7 @@
 #include "matrix-event-call-answer.h"
 #include "matrix-event-call-hangup.h"
 #include "matrix-event-call-invite.h"
+#include "matrix-event-call-candidates.h"
 
 #include "matrix-message-text.h"
 #include "matrix-message-location.h"

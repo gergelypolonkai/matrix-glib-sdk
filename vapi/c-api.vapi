@@ -287,6 +287,9 @@ namespace Matrix {
     public struct ThirdPartyInvitePublicKey {
     }
 
+    public struct CallCandidate {
+    }
+
     /* Compact classes */
     [CCode (cheader_filename = "matrix-compacts.h")]
     public abstract class JsonCompact {
@@ -878,6 +881,17 @@ namespace Matrix {
 
             protected override void to_json(Json.Node json_data)
             throws Matrix.Error;
+        }
+
+        [CCode (cheader_filename = "matrix-event-call-candidates.h")]
+        public class CallCandidates : Call {
+            public Matrix.CallCandidate[] candidates { get; set; }
+
+            protected override void from_json(Json.Node json_data)
+                throws Matrix.Error;
+
+            protected override void to_json(Json.Node json_data)
+                throws Matrix.Error;
         }
     }
 
