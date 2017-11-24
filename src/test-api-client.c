@@ -46,7 +46,7 @@ initial_sync_finished(MatrixAPI *api,
 {
     g_printf("initialSync finished\n");
 
-    matrix_api_event_stream(api, NULL, NULL, NULL, 0, NULL);
+    matrix_api_event_stream(api, NULL, 0, NULL, NULL, NULL);
 }
 
 static void
@@ -90,9 +90,9 @@ get_presence_finished(MatrixAPI *api,
            soup_uri_get_host(avatar_uri),
            soup_uri_get_path(avatar_uri));
     matrix_api_media_download(api,
-                              NULL, NULL,
                               soup_uri_get_host(avatar_uri),
                               soup_uri_get_path(avatar_uri) + 1,
+                              NULL, NULL,
                               NULL);
     soup_uri_free(avatar_uri);
 }
@@ -132,20 +132,25 @@ login_finished(MatrixAPI *api,
         g_printf("Logged in as %s\n", user_id);
 
         matrix_api_initial_sync(api,
-                                initial_sync_finished,
-                                data, 10, TRUE,
+                                10, TRUE,
+                                initial_sync_finished, data,
                                 NULL);
         matrix_api_create_room (api,
-                                create_room_finished, NULL,
                                 MATRIX_ROOM_PRESET_PUBLIC,
                                 "GLib SDK test room", "matrix-glib-sdk-test",
                                 "GLib SDK test room",
                                 MATRIX_ROOM_VISIBILITY_DEFAULT,
-                                NULL, NULL, 0, NULL, 0, NULL, 0, NULL);
-        matrix_api_get_presence_list(api, NULL, NULL, user_id, NULL);
+                                NULL, NULL, 0, NULL, 0, NULL, 0,
+                                create_room_finished, NULL,
+                                NULL);
+        matrix_api_get_presence_list(api,
+                                     user_id,
+                                     NULL, NULL,
+                                     NULL);
         matrix_api_get_presence(api,
-                                     get_presence_finished, NULL,
-                                     user_id, NULL);
+                                user_id,
+                                get_presence_finished, NULL,
+                                NULL);
     } else {
         g_printf("Login unsuccessful!\n");
 
@@ -197,9 +202,9 @@ main(int argc, char *argv[])
 
     g_debug("Logging in");
     matrix_api_login(api,
-                     login_finished, loop,
                      "m.login.password",
                      login_content,
+                     login_finished, loop,
                      &err);
 
     if (err) {

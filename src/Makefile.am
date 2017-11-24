@@ -17,7 +17,6 @@ lib_LTLIBRARIES = libmatrix-glib-0.0.la
 # Vala source files
 libmatrix_glib_0_0_la_VALA_SOURCES = \
 	namespace-info.vala \
-	matrix-api.vala \
 	matrix-client.vala \
 	matrix-http-api.vala \
 	matrix-http-client.vala \
@@ -76,6 +75,7 @@ bin_PROGRAMS = test-api-client test-client
 INST_H_SRC_FILES = \
 	matrix-types.h \
 	matrix-compacts.h \
+	matrix-api.h \
 	matrix-event-base.h \
 	matrix-event-call-base.h \
 	matrix-event-call-answer.h \
@@ -133,6 +133,7 @@ libmatrix_glib_0_0_la_SOURCES = \
 	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-event-types.c \
 	matrix-version.c \
+	matrix-api.c \
 	matrix-types.c \
 	matrix-compacts.c \
 	matrix-event-base.c \
