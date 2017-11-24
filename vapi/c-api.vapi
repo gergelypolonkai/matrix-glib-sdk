@@ -486,6 +486,224 @@ namespace Matrix {
         public Profile();
     }
 
+    [CCode (cheader_filename = "matrix-api.h", type_cname = "MatrixAPIInterface")]
+    public interface API : GLib.Object {
+        public abstract string? token { get; set; default = null; }
+        public abstract string? refresh_token { get; set; default = null; }
+        public abstract string? user_id { get; default = null; }
+        public abstract string? homeserver { get; default = null; }
+
+        public delegate void
+        Callback(Matrix.API api,
+                 string content_type,
+                 Json.Node? json_content,
+                 GLib.ByteArray? raw_content,
+                 Matrix.Error? err);
+
+        public abstract void abort_pending();
+
+        /* User data */
+
+        public abstract void get_3pids([CCode (scope = "async")]owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void add_3pid([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, bool bind_creds, Matrix.3PidCredential threepid_creds)
+        throws Matrix.Error;
+
+        public abstract void deactivate_account([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? session, string? login_type)
+        throws Matrix.Error;
+
+        public abstract void change_password([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string new_password)
+        throws Matrix.Error;
+
+        public abstract void get_profile([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void get_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void set_avatar_url([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string avatar_url)
+        throws Matrix.Error;
+
+        public abstract void get_display_name([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void set_display_name([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string display_name)
+        throws Matrix.Error;
+
+        public abstract void register_account([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, Matrix.AccountKind account_kind, bool bind_email, string? username, string password)
+        throws Matrix.Error;
+
+        public abstract void set_account_data([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string? room_id, string event_type, owned Json.Node content)
+        throws Matrix.Error;
+
+        public abstract void get_room_tags([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string room_id)
+        throws Matrix.Error;
+
+        public abstract void delete_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string room_id, string tag)
+        throws Matrix.Error;
+
+        public abstract void add_room_tag([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string room_id, string tag, owned Json.Node? content)
+        throws Matrix.Error;
+
+        public abstract void whois([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void versions([CCode (scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void create_room([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, Matrix.RoomPreset preset, string? room_name, string? room_alias, string? topic, Matrix.RoomVisibility visibility, Json.Node? creation_content, Matrix.Event.State[] initial_state, string[] invitees, Matrix.3PidCredential[] invite_3pids)
+        throws Matrix.Error;
+
+        public abstract void delete_room_alias([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_alias)
+        throws Matrix.Error;
+
+        public abstract void get_room_id([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_alias)
+        throws Matrix.Error;
+
+        public abstract void create_room_alias([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string room_alias)
+        throws Matrix.Error;
+
+        [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
+        public abstract void event_stream([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? from_token, ulong timeout)
+        throws Matrix.Error;
+
+        [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
+        public abstract void get_event([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string event_id)
+        throws Matrix.Error;
+
+        [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
+        public abstract void initial_sync([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, uint limit, bool archived)
+        throws Matrix.Error;
+
+        public abstract void get_event_context([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? callback, string room_id, string event_id, uint limit)
+        throws Matrix.Error;
+
+        [Version (deprecated = true, deprecated_since = "v0", replacement = "sync")]
+        public abstract void initial_sync_room([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id)
+        throws Matrix.Error;
+
+        public abstract void list_room_members([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id)
+        throws Matrix.Error;
+
+        public abstract void list_room_messages([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string from_token, Matrix.EventDirection direction, uint limit)
+        throws Matrix.Error;
+
+        public abstract void send_event_receipt([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, Matrix.ReceiptType receipt_type, string event_id, Json.Node receipt)
+        throws Matrix.Error;
+
+        public abstract void redact_event([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string event_id, string txn_id, string? reason)
+        throws Matrix.Error;
+
+        public abstract void send_event([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string event_type, string txn_id, owned Json.Node content)
+        throws Matrix.Error;
+
+        public abstract void get_room_state([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string? event_type, string? state_key)
+        throws Matrix.Error;
+
+        public abstract void send_state_event([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string event_type, string? state_key, owned Json.Node content)
+        throws Matrix.Error;
+
+        public abstract void notify_room_typing([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string room_id, uint timeout, bool typing)
+        throws Matrix.Error;
+
+        public abstract void sync([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? filter_id, Matrix.Filter? filter, string? since, bool full_state, bool set_presence, ulong timeout)
+        throws Matrix.Error;
+
+        public abstract void create_filter([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, Matrix.Filter filter)
+        throws Matrix.Error;
+
+        public abstract void download_filter([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string filter_id)
+        throws Matrix.Error;
+
+        public abstract void join_room_id_or_alias([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id_or_alias)
+        throws Matrix.Error;
+
+        public abstract void ban_user([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string user_id, string? reason)
+        throws Matrix.Error;
+
+        public abstract void forget_room([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id)
+        throws Matrix.Error;
+
+        public abstract void invite_user_3rdparty([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, Matrix.3PidCredential credential)
+        throws Matrix.Error;
+
+        public abstract void invite_user([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string user_id)
+        throws Matrix.Error;
+
+        public abstract void join_room([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id)
+        throws Matrix.Error;
+
+        public abstract void kick_user([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string user_id, string? reason)
+        throws Matrix.Error;
+
+        public abstract void leave_room([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id)
+        throws Matrix.Error;
+
+        public abstract void unban_user([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string room_id, string user_id)
+        throws Matrix.Error;
+
+        public abstract void login([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string login_type, Json.Node? content)
+        throws Matrix.Error;
+
+        public abstract void logout([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void token_refresh([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? refresh_token)
+        throws Matrix.Error;
+
+        public abstract void get_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void update_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, string[] drop_ids, string[] invite_ids)
+        throws Matrix.Error;
+
+        public abstract void get_presence([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
+        throws Matrix.Error;
+
+        public abstract void set_presence([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id, Matrix.Presence presence, string? status_message)
+        throws Matrix.Error;
+
+        public abstract void list_public_rooms([CCode (scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void get_pushers([CCode (scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void update_pusher([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, Matrix.Pusher pusher)
+        throws Matrix.Error;
+
+        public abstract void get_pushrules([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void delete_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string scope, Matrix.PusherKind kind, string rule_id)
+        throws Matrix.Error;
+
+        public abstract void get_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string scope, Matrix.PusherKind kind, string rule_id)
+        throws Matrix.Error;
+
+        public abstract void add_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string scope, Matrix.PusherKind kind, string rule_id, string? before, string? after, string[] actions, Matrix.PusherConditionKind[] conditions)
+        throws Matrix.Error;
+
+        public abstract void toggle_pushrule([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string scope, Matrix.PusherKind kind, string rule_id, bool enabled)
+        throws Matrix.Error;
+
+        public abstract void search([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? next_batch, SearchCategories search_categories)
+        throws Matrix.Error;
+
+        public abstract void get_turn_server([CCode (scope = "async")] owned Matrix.API.Callback? @callback)
+        throws Matrix.Error;
+
+        public abstract void media_download([CCode (delegate_target_pos = 1.5, scope = "async", destroy_notify_pos = -1)] owned Matrix.API.Callback? @callback, string server_name, string media_id)
+        throws Matrix.Error;
+
+        public abstract void media_thumbnail([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string server_name, string media_id, uint width, uint height, Matrix.ResizeMethod method)
+        throws Matrix.Error;
+
+        public abstract void media_upload([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? content_type, owned GLib.ByteArray content)
+        throws Matrix.Error;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
