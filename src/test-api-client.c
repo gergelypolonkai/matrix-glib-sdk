@@ -20,7 +20,7 @@
 #include <json-glib/json-glib.h>
 #include <libsoup/soup.h>
 
-#include "matrix-glib.h"
+#include "matrix-http-api.h"
 
 #define LOG_DOMAIN "Matrix-Test-Client"
 
