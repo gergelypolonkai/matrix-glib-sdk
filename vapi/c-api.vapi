@@ -704,6 +704,250 @@ namespace Matrix {
         throws Matrix.Error;
     }
 
+    [CCode (lower_case_csuffix = "http_api", cheader_filename = "matrix-http-api.h")]
+    public class HTTPAPI : GLib.Object, API {
+        public string base_url { get; set; }
+        public bool validate_certificate { get; set; }
+        protected string? _user_id;
+        public string? user_id { get; default = null; }
+        public string? token { get; set; default = null; }
+        public string? refresh_token { get; set; default = null; }
+        protected string? _homeserver;
+        public string? homeserver { get; default = null; }
+
+        protected HTTPAPI(string base_url, string? token = null, string? refresh_token = null);
+
+        /* Media */
+
+        public void media_download(API.Callback? cb, string server_name, string media_id)
+        throws Matrix.Error;
+
+        public void media_thumbnail(API.Callback? cb, string server_name, string media_id, uint width, uint height, ResizeMethod method)
+        throws Matrix.Error;
+
+        public void media_upload(API.Callback? cb, string? content_type, owned GLib.ByteArray content)
+        throws Matrix.Error;
+
+        /* Presence */
+
+        public void get_presence_list(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void
+        update_presence_list(API.Callback? cb, string user_id, string[] drop_ids, string[] invite_ids)
+        throws Matrix.Error;
+
+        public void get_presence(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void set_presence(API.Callback? cb, string user_id, Presence presence, string? status_message)
+        throws Matrix.Error;
+
+        /* Push notifications */
+
+        public void update_pusher(API.Callback? cb, Matrix.Pusher pusher)
+        throws Matrix.Error;
+
+        public void get_pushers(API.Callback? cb)
+        throws Matrix.Error;
+
+
+        private void _pusher_modif(API.Callback? cb, string method, string scope, PusherKind kind, string rule_id)
+        throws Matrix.Error;
+
+        public void delete_pushrule(API.Callback? cb, string scope, PusherKind kind, string rule_id)
+        throws Matrix.Error;
+
+        public void get_pushrule(API.Callback? cb, string scope, PusherKind kind, string rule_id)
+        throws Matrix.Error;
+
+        public void add_pushrule(API.Callback? cb, string scope, PusherKind kind, string rule_id, string? before, string? after, string[] actions, PusherConditionKind[] conditions)
+        throws Matrix.Error;
+
+        public void toggle_pushrule(API.Callback? cb, string scope, PusherKind kind, string rule_id, bool enabled)
+        throws Matrix.Error;
+
+        public void get_pushrules(API.Callback? cb)
+        throws Matrix.Error;
+
+        /* Room creation */
+
+        public void create_room(API.Callback? cb, RoomPreset preset, string? room_name, string? room_alias, string? topic, RoomVisibility visibility, Json.Node? creation_content, Matrix.Event.State[] initial_state, string[] invitees, 3PidCredential[] invite_3pids)
+        throws Matrix.Error;
+
+        /* Room directory */
+
+        public void delete_room_alias(API.Callback? cb, string room_alias)
+        throws Matrix.Error;
+
+        public void get_room_id(API.Callback? cb, string room_alias)
+        throws Matrix.Error;
+
+        public void create_room_alias(API.Callback? cb, string room_id, string room_alias)
+        throws Matrix.Error;
+
+        /* Room discovery */
+
+        public void list_public_rooms(API.Callback? cb)
+        throws Matrix.Error;
+
+        /* Room membership */
+
+        public void ban_user(API.Callback? cb, string room_id, string user_id, string? reason)
+        throws Matrix.Error;
+
+        public void unban_user(API.Callback? cb, string room_id, string user_id)
+        throws Matrix.Error;
+
+        public void forget_room(API.Callback? cb, string room_id)
+        throws Matrix.Error;
+
+        public void invite_user_3rdparty(API.Callback? cb, string room_id, Matrix.3PidCredential credential)
+        throws Matrix.Error;
+
+        public void invite_user(API.Callback? cb, string room_id, string user_id)
+        throws Matrix.Error;
+
+        public void join_room(API.Callback? cb, string room_id)
+        throws Matrix.Error;
+
+        public void leave_room(API.Callback? cb, string room_id)
+        throws Matrix.Error;
+
+        public void join_room_id_or_alias(API.Callback? cb, string room_id_or_alias)
+        throws Matrix.Error;
+
+        public void kick_user(API.Callback? cb, string room_id, string user_id, string? reason)
+        throws Matrix.Error;
+
+        /* Room participation */
+
+        public void event_stream(API.Callback? cb, string? from_token, ulong timeout)
+        throws Matrix.Error;
+
+        public void get_event(API.Callback? cb, string event_id)
+        throws Matrix.Error;
+
+        public void initial_sync(API.Callback? cb, uint limit, bool archived)
+        throws Matrix.Error;
+
+        public void get_event_context(API.Callback? cb, string room_id, string event_id, uint limit)
+        throws Matrix.Error;
+
+        public void initial_sync_room(API.Callback? cb, string room_id)
+        throws Matrix.Error;
+
+        public void list_room_members(API.Callback? cb, string room_id)
+        throws Matrix.Error;
+
+        public void list_room_messages(API.Callback? cb, string room_id, string from_token, EventDirection direction, uint limit)
+        throws Matrix.Error;
+
+        public void send_event_receipt(API.Callback? cb, string room_id, ReceiptType receipt_type, string event_id, Json.Node receipt)
+        throws Matrix.Error;
+
+        public void redact_event(API.Callback? cb, string room_id, string event_id, string txn_id, string? reason)
+        throws Matrix.Error;
+
+        public void send_event(API.Callback? cb, string room_id, string event_type, string txn_id, owned Json.Node content)
+        throws Matrix.Error;
+
+        public void get_room_state(API.Callback? cb, string room_id, string? event_type, string? state_key)
+        throws Matrix.Error;
+
+        public void send_state_event(API.Callback? cb, string room_id, string event_type, string? state_key, owned Json.Node content)
+        throws Matrix.Error;
+
+        public void notify_room_typing(API.Callback? cb, string user_id, string room_id, uint timeout, bool typing)
+        throws Matrix.Error;
+
+        public void sync(API.Callback? cb, string? filter_id, Filter? filter, string? since, bool full_state, bool set_presence, ulong timeout)
+        throws Matrix.Error;
+
+        public void create_filter(API.Callback? cb, string user_id, Filter filter)
+        throws Matrix.Error;
+
+        public void download_filter(API.Callback? cb, string user_id, string filter_id)
+        throws Matrix.Error;
+
+        /* Search */
+
+        public void search(Matrix.API.Callback? cb, string? next_batch, SearchCategories search_categories)
+        throws Matrix.Error;
+
+        /* Server administration */
+
+        public void whois(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void versions(API.Callback? cb)
+        throws Matrix.Error;
+
+        /* Session management */
+
+        public void login(API.Callback? cb, string login_type, Json.Node? content)
+        throws Matrix.Error;
+
+        public void token_refresh(API.Callback? cb, string? refresh_token)
+        throws Matrix.Error;
+
+        public void logout(API.Callback? cb)
+        throws Matrix.Error;
+
+        /* User data */
+
+        public void get_3pids(API.Callback? cb)
+        throws Matrix.Error;
+
+        public void add_3pid(API.Callback? cb, bool bind_creds, Matrix.3PidCredential creds)
+        throws Matrix.Error;
+
+        public void change_password(API.Callback? cb, string new_password)
+        throws Matrix.Error;
+
+        public void get_profile(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void get_avatar_url(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void set_avatar_url(API.Callback? cb, string user_id, string avatar_url)
+        throws Matrix.Error;
+
+        public void get_display_name(API.Callback? cb, string user_id)
+        throws Matrix.Error;
+
+        public void set_display_name(API.Callback? cb, string user_name, string display_name)
+        throws Matrix.Error;
+
+        public void register_account(API.Callback? cb, AccountKind account_kind, bool bind_email, string? username, string password)
+        throws Matrix.Error;
+
+        public void set_account_data(API.Callback? cb, string user_id, string? room_id, string event_type, owned Json.Node content)
+        throws Matrix.Error;
+
+        public void get_room_tags(API.Callback? cb, string user_id, string room_id)
+        throws Matrix.Error;
+
+        public void delete_room_tag(API.Callback? cb, string user_id, string room_id, string tag)
+        throws Matrix.Error;
+
+        public void add_room_tag(API.Callback? cb, string user_id, string room_id, string tag, owned Json.Node? content)
+        throws Matrix.Error;
+
+        public void deactivate_account(API.Callback? cb, string? session, string? login_type)
+        throws Matrix.Error;
+
+        /* VoIP */
+
+        public void get_turn_server(API.Callback? cb)
+        throws Matrix.Error;
+
+        /* Non-spec methods */
+
+        public void abort_pending();
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
