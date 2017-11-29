@@ -948,6 +948,76 @@ namespace Matrix {
         public void abort_pending();
     }
 
+    [CCode (cheader_filename = "matrix-client.h", type_cname = "MatrixClientInterface")]
+    public interface Client : GLib.Object {
+        public virtual signal void login_finished(bool success);
+
+        [Signal (detailed=true)]
+        public virtual signal void @event(string? room_id, Json.Node raw_event, Matrix.Event.Base? matrix_event);
+
+        public signal void polling_started();
+
+        public signal void polling_stopped(GLib.Error? error);
+
+        public delegate void EventCallback(Matrix.Client client, string? room_id, Json.Node raw_event, Matrix.Event.Base? matrix_event);
+
+        public abstract void login_with_password(string username, string password)
+        throws Matrix.Error;
+
+        public abstract void register_with_password(string? username, string password)
+        throws Matrix.Error;
+
+        public abstract void logout()
+        throws Matrix.Error;
+
+        public abstract void begin_polling()
+        throws Matrix.Error;
+
+        public abstract void stop_polling(bool cancel_ongoing)
+        throws Matrix.Error;
+
+        public void emit_login_finished(bool success);
+
+        public void incoming_event(string? room_id, Json.Node raw_event, Matrix.Event.Base? matrix_event);
+
+        public void
+        connect_event(GLib.Type event_gtype, owned EventCallback event_callback);
+
+        public abstract Profile?
+            get_user_profile(string user_id, string? room_id = null)
+        throws Matrix.Error;
+
+        public abstract Presence
+        get_user_presence(string user_id, string? room_id = null)
+        throws Matrix.Error;
+
+        public abstract Room
+        get_room_by_id(string room_id)
+        throws Matrix.Error;
+
+        public abstract Room
+        get_room_by_alias(string room_alias)
+        throws Matrix.Error;
+
+        public delegate void
+        SendCallback(string? event_id, GLib.Error? err);
+
+        public abstract void
+        send(string room_id,
+             Matrix.Event.Base evt,
+             SendCallback? cb,
+             out ulong txn_id)
+        throws Matrix.Error;
+
+        public abstract void
+        save_state(string filename)
+        throws Matrix.Error, GLib.Error;
+
+        public abstract void
+        load_state(string filename)
+        throws Matrix.Error, GLib.Error;
+    }
+
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
