@@ -8,7 +8,7 @@ DIE=0
 PKG_NAME="matrix-glib"
 
 (test -f "$srcdir/configure.ac" \
- && test -f "$srcdir/src/matrix-client.vala") || {
+ && test -f "$srcdir/src/matrix-client.c") || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level $PKG_NAME directory"
 
