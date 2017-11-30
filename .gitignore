@@ -36,6 +36,7 @@ Makefile.in
 /GTAGS
 /INSTALL
 /ChangeLog
+/.dir-locals.el
 /src/matrix-version.h
 /src/matrix-enumtypes.[ch]
 /src/matrix-marshalers.[ch]
