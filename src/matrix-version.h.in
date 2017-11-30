@@ -30,9 +30,9 @@ matrix_glib_check_version(guint required_major,
                      guint required_minor,
                      guint required_micro);
 
-#define MATRIX_GLIB_CHECK_VERSION(major, minor, micro) \
-    (MATRIX_GLIB_MAJOR_VERSION > (major) || \
-    (MATRIX_GLIB_MAJOR_VERSION == (major) && MATRIX_GLIB_MINOR_VERSION > (minor)) || \
-     (MATRIX_GLIB_MAJOR_VERSION == (major) && MATRIX_GLIB_MINOR_VERSION == (minor) && MATRIX_GLIB_MICRO_VERSION >= (micro)))
+#define MATRIX_GLIB_CHECK_VERSION(required_major, required_minor, required_micro) \
+    (MATRIX_GLIB_MAJOR_VERSION > (required_major) || \
+    (MATRIX_GLIB_MAJOR_VERSION == (required_major) && MATRIX_GLIB_MINOR_VERSION > (required_minor)) || \
+     (MATRIX_GLIB_MAJOR_VERSION == (required_major) && MATRIX_GLIB_MINOR_VERSION == (required_minor) && MATRIX_GLIB_MICRO_VERSION >= (required_micro)))
 
 #endif /* __MATRIX_VERSION_H__ */

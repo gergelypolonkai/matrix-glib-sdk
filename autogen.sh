@@ -15,6 +15,15 @@ PKG_NAME="matrix-glib"
     exit 1
 }
 
+(gtkdocize --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`gtkdocize' installed."
+    echo "Download the appropriate package for your distribution,"
+    echo "or get the source tarball at ftp://ftp.gnome.org/"
+
+    DIE=1
+}
+
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`autoconf' installed."
@@ -95,6 +104,11 @@ fi
 
 echo "Running aclocal $aclocalinclude ..."
 aclocal $m4dir $ACLOCAL_FLAGS $aclocalinclude || exit $?
+
+if grep "^GTK_DOC_CHECK" "$coin" > /dev/null; then
+    echo "Running gtkdocize ..."
+    gtkdocize || exit $?
+fi
 
 if grep "^A[CM]_CONFIG_HEADER" "$coin" > /dev/null; then
     echo "Running autoheader ..."

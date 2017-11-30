@@ -93,12 +93,17 @@ LIBVALA_REQUIRED=0.30
 GIO_REQUIRED=2.22
 SOUP_REQUIRED=2.44.2
 JSON_REQUIRED=0.16.2
-VALADOC_REQUIRED=0.3.1
 
 # Check GLib
 PKG_CHECK_MODULES([GLIB],
                   [glib-2.0 >= $GLIB_REQUIRED
                    gobject-2.0 >= $GLIB_REQUIRED])
+
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.25], [--flavour no-tmpl])
+], [
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
 
 # Check for vala
 VALAC_CHECK
@@ -114,52 +119,6 @@ PKG_CHECK_MODULES([JSON], [json-glib-1.0 >= $JSON_REQUIRED])
 
 # Check for GObject Introspection
 GOBJECT_INTROSPECTION_CHECK([1.32.0])
-
-# Documentation with Valadoc
-AC_ARG_ENABLE([docs],
-              AS_HELP_STRING([--enable-docs],
-                             [Enable documentation generation]),
-              [enable_docs=$enableval], [enable_docs=no])
-AM_CONDITIONAL([ENABLE_DOCS], [test x$enable_docs = xyes])
-
-have_valadoc=no
-if test x$enable_docs = xyes; then
-    # Make sure the library is new enough and the program exists
-    AC_PATH_PROG([VALADOC], [valadoc], [no])
-    if test "x$VALADOC" = "xno"; then
-        AC_MSG_RESULT([valadoc documentation will not build because valadoc is not found])
-    else
-        VAPIDIR=`$PKG_CONFIG --variable=vapidir libvala-$LIBVALA_REQUIRED`
-        have_valadoc="yes"
-        AC_SUBST([VALADOC])
-    fi
-fi
-AM_CONDITIONAL([HAVE_VALADOC], [test x$have_valadoc = xyes])
-
-AC_ARG_ENABLE([gtk-doc],
-              AS_HELP_STRING([--enable-gtk-doc],
-                             [Enable GTK-Doc documentation generation]),
-              [enable_gtk_docs=$enableval], [enable_gtk_docs=no])
-
-have_gtkdoc=no
-if test x$enable_gtk_docs = xyes; then
-    if test x$have_valadoc = xyes; then
-        PKG_CHECK_MODULES([GTKDOC], gtk-doc)
-        have_gtkdoc=yes
-    else
-        AC_MSG_ERROR([valadoc is required to generate GTK-Doc documentation. Use --enable-valadoc])
-    fi
-fi
-
-gtkdocs=no
-
-if test x$enable_docs = xyes; then
-    if test x$enable_gtk_docs = xyes; then
-        gtkdocs=yes
-    fi
-fi
-
-AM_CONDITIONAL([ENABLE_GTK_DOCS], [test "x$gtkdocs" = "xyes"])
 
 debug=no
 AC_ARG_ENABLE(debug,
@@ -202,9 +161,7 @@ AC_CONFIG_FILES([
     src/matrix-version.h
     src/matrix-glib-0.0.pc
     src/namespace-info.vala
-    docs/Makefile
-    docs/valadoc/Makefile
-    docs/valadoc/gtk-doc/Makefile
+    docs/reference/matrix-glib-sdk/Makefile
 ])
 AC_OUTPUT
 
@@ -212,7 +169,6 @@ AC_OUTPUT
 echo ""
 echo " Configuration summary for Matrix-$MATRIX_GLIB_VERSION"
 echo "   Installation prefix:     $prefix"
-echo "   Documentation:           ${enable_docs}"
-echo "       Gtk-Doc:             `if test x${gtkdocs} = xyes; then echo yes; else echo no; fi`"
+echo "   Documentation:           ${enable_gtk_doc}"
 echo "   Debug:                   $debug"
 echo ""

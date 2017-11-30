@@ -18,6 +18,54 @@
 
 #include "matrix-version.h"
 
+/**
+ * SECTION:matrix-version
+ * @short_description: Library version information
+ * @title: Version information for the SDK
+ *
+ * Version information macros and functions for the Matrix GLib SDK
+ */
+
+/**
+ * MATRIX_GLIB_MAJOR_VERSION:
+ *
+ * The major version number of the Matrix.org GLib SDK.
+ */
+
+/**
+ * MATRIX_GLIB_MINOR_VERSION:
+ *
+ * The minor version number of the Matrix.org GLib SDK.
+ */
+
+/**
+ * MATRIX_GLIB_MICRO_VERSION:
+ *
+ * The micro (patch) version number of the Matrix.org GLib SDK.
+ */
+
+/**
+ * MATRIX_GLIB_CHECK_VERSION:
+ * @required_major: the required major version
+ * @required_minor: the required minor version
+ * @required_micro: the required micro version
+ *
+ * Macro to check that the Matrix.org GLib SDK being compiled against is compatible with the given
+ * version.
+ *
+ * Returns: TRUE if the required version is satisfied; FALSE otherwise.
+ */
+
+/**
+ * matrix_glib_check_version:
+ * @required_major: the required major version
+ * @required_minor: the required minor version
+ * @required_micro: the required micro version
+ *
+ * Check that the Matrix.org GLib SDK in use is compatible with the given version.
+ *
+ * Returns: TRUE if the required version is satisfied; FALSE otherwise.
+ */
 gboolean
 matrix_glib_check_version(guint required_major,
                           guint required_minor,
