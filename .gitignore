@@ -47,7 +47,6 @@ Makefile.in
 /src/vala-temp
 /src/vala-stamp
 /src/matrix-glib.h
-/src/matrix-http-client.c
 /src/namespace-info.vala
 /src/namespace-info.c
 /src/matrix-glib-0.0.pc

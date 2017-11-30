@@ -19,7 +19,8 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 
-#include "matrix-glib.h"
+#include "matrix-client.h"
+#include "matrix-http-client.h"
 #include "matrix-event-presence.h"
 #include "matrix-event-room-member.h"
 #include "matrix-event-room-message.h"
