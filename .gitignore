@@ -40,7 +40,6 @@ Makefile.in
 /src/matrix-enumtypes.[ch]
 /src/matrix-marshalers.[ch]
 /src/stamp-matrix-marshalers
-/docs/valadoc/gtk-doc/gtk-doc
 
 # Vala related files
 /src/Matrix-0.0.vapi
