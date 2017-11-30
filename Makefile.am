@@ -63,4 +63,22 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
-.PHONY: ChangeLog
+.PHONY: ChangeLog .dir-locals.el
+
+.dir-locals.el:
+	@echo -n ""; \
+	includes=`echo -I$(top_srcdir) $(GLIB_CFLAGS) $(GOBJECT_CFLAGS) $(SOUP_CFLAGS) $(JSON_CFLAGS) $(VALA_CFLAGS) | tr " " "\n" | grep '^-I' | sed 's/^-I//'`; \
+	flycheck_path='('; \
+	company_path='('; \
+	for incl in $$includes; \
+	do \
+	    if [ "$$incl" == "." ]; \
+	    then \
+	        incl="$(abs_top_srcdir)"; \
+	    fi; \
+	    flycheck_path="$$flycheck_path \"$$incl\""; \
+	    company_path="$$company_path \"-I$$incl\""; \
+	done; \
+	flycheck_path="$$flycheck_path)"; \
+	company_path="$$company_path)"; \
+	echo "((c-mode . ((flycheck-clang-include-path . $$flycheck_path) (company-clang-arguments . $$company_path))))" > $@
