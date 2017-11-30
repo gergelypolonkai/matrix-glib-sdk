@@ -314,7 +314,7 @@ _matrix_http_api_response_callback(SoupSession *session, SoupMessage *msg, gpoin
                                           "Malformed response (invalid JSON)");
 
 #if DEBUG
-                g_debug("Malformed response (%s): %s", request_url, data);
+                g_debug("Malformed response (%s): %s", request_url, buffer->data);
 #endif
             }
         }

@@ -1018,6 +1018,48 @@ namespace Matrix {
         throws Matrix.Error, GLib.Error;
     }
 
+    [CCode (cheader_filename = "matrix-http-client.h")]
+    public class HTTPClient : HTTPAPI, Client {
+        public HTTPClient(string base_url);
+
+        public void login_with_password(string username, string password)
+            throws Matrix.Error;
+
+        public void register_with_password(string? username, string password)
+        throws Matrix.Error;
+
+        public new void logout()
+        throws Matrix.Error;
+
+        public void begin_polling()
+        throws Matrix.Error;
+
+        public void stop_polling(bool cancel_ongoing)
+        throws Matrix.Error;
+
+        public Profile? get_user_profile(string user_id, string? room_id = null)
+        throws Matrix.Error;
+
+        public Presence get_user_presence(string user_id, string? room_id = null)
+        throws Matrix.Error;
+
+        public Room get_room_by_id(string room_id)
+        throws Matrix.Error;
+
+        public Room get_room_by_alias(string room_alias)
+        throws Matrix.Error;
+
+        public ulong next_txn_id();
+
+        public void send(string room_id, Matrix.Event.Base evt, Matrix.Client.SendCallback? cb, out ulong txn_id)
+        throws Matrix.Error;
+
+        public void save_state(string filename)
+        throws Matrix.Error, GLib.Error;
+
+        public void load_state(string filename)
+        throws Matrix.Error, GLib.Error;
+    }
     /**
      * The major version number of the Matrix.org GLib SDK.
      */
