@@ -133,7 +133,14 @@ if test x"$debug" = x"$enableval"; then
     if test x"$cflags_set" != x"set"; then
         case " $CFLAGS " in
             *[[\ \	]]-g[[\ \	]]*) ;;
-            *) CFLAGS="$CFLAGS -g" ;;
+            *)
+                CFLAGS="$CFLAGS -g"
+
+                if test x"$USE_MAINTAINER_MODE" = x"$enableval"; then
+                    CFLAGS="$CFLAGS -O0"
+                fi
+
+                ;;
         esac
     fi
 else
