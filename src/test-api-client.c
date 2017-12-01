@@ -84,17 +84,18 @@ get_presence_finished(MatrixAPI *api,
 
     g_info("Avatar URL: %s", avatar_url);
 
-    avatar_uri = soup_uri_new(avatar_url);
-    g_info("Scheme: %s; authority: %s; path: %s",
-           soup_uri_get_scheme(avatar_uri),
-           soup_uri_get_host(avatar_uri),
-           soup_uri_get_path(avatar_uri));
-    matrix_api_media_download(api,
-                              soup_uri_get_host(avatar_uri),
-                              soup_uri_get_path(avatar_uri) + 1,
-                              NULL, NULL,
-                              NULL);
-    soup_uri_free(avatar_uri);
+    if ((avatar_uri = soup_uri_new(avatar_url)) != NULL) {
+        g_info("Scheme: %s; authority: %s; path: %s",
+               soup_uri_get_scheme(avatar_uri),
+               soup_uri_get_host(avatar_uri),
+               soup_uri_get_path(avatar_uri));
+        matrix_api_media_download(api,
+                                  soup_uri_get_host(avatar_uri),
+                                  soup_uri_get_path(avatar_uri) + 1,
+                                  NULL, NULL,
+                                  NULL);
+        soup_uri_free(avatar_uri);
+    }
 }
 
 static void
