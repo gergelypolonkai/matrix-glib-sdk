@@ -1,6 +1,6 @@
 include $(top_srcdir)/vala-globals.mk
 
-AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Matrix-GLib\"
+AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Matrix-GLib\" -D__MATRIX_GLIB_SDK_COMPILATION
 
 # Empty variables for elements to be added later
 CLEANFILES =
