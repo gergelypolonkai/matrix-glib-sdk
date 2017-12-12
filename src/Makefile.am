@@ -1,23 +1,12 @@
-include $(top_srcdir)/vala-globals.mk
-
 AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Matrix-GLib\" -D__MATRIX_GLIB_SDK_COMPILATION
 
 # Empty variables for elements to be added later
 CLEANFILES =
 BUILT_SOURCES =
 EXTRA_DIST =
-AM_VALAFLAGS =
-
-# Name of the public header file
-PUBLIC_HEADER = matrix-glib.h
 
 # Libraries to create
 lib_LTLIBRARIES = libmatrix-glib-0.0.la
-
-# Vala source files
-libmatrix_glib_0_0_la_VALA_SOURCES = \
-	namespace-info.vala \
-	$(NULL)
 
 AM_CPPFLAGS += \
 	-include $(CONFIG_HEADER) \
@@ -28,60 +17,21 @@ AM_CPPFLAGS += \
 	$(GOBJECT_CFLAGS) \
 	$(SOUP_CFLAGS) \
 	$(JSON_CFLAGS) \
-	$(VALA_CFLAGS) \
 	$(NULL)
-
-AM_VALAFLAGS += \
-	--library=Matrix-$(MATRIX_GLIB_API_VERSION) \
-	$(VALA_PKG_LIST) \
-	--vapi=Matrix-$(MATRIX_GLIB_API_VERSION).vapi \
-	-H $(PUBLIC_HEADER) \
-	-C \
-	--use-header \
-	--gir=Matrix-$(MATRIX_GLIB_API_VERSION).gir \
-	--vapidir=$(top_srcdir)/vapi \
-	$(NULL)
-
-vala-stamp: $(libmatrix_glib_0_0_la_VALA_SOURCES)
-	@rm -f vala-temp
-	@touch vala-temp
-	$(AM_V_GEN) $(VALAC) $(AM_VALAFLAGS) $^
-	@mv -f vala-temp $@
-
-CLEANFILES += \
-	$(PUBLIC_HEADER) \
-	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
-	$(NULL)
-
-$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c): vala-stamp
-	@if test -f $@; then :; else \
-	    trap 'rm -rf vala-lock vala-stamp' 1 2 13 15; \
-	    if mkdir vala-lock 2> /dev/null; then \
-	        rm -f vala-stamp; \
-	        $(MAKE) $(AM_MAKEFLAGS) vala-stamp; \
-	        rmdir vala-lock; \
-	    else \
-	        while test -d vala-lock; do sleep 1; done; \
-	        test -f vala-stamp; exit $$?; \
-	    fi \
-	fi
 
 # Binaries to create
 bin_PROGRAMS = test-api-client test-client
 
-INST_H_SRC_FILES = \
-	matrix-types.h \
-	matrix-compacts.h \
-	matrix-api.h \
-	matrix-http-api.h \
-	matrix-client.h \
-	matrix-http-client.h \
+EVENT_H_FILES = \
 	matrix-event-base.h \
 	matrix-event-call-base.h \
 	matrix-event-call-answer.h \
 	matrix-event-call-hangup.h \
 	matrix-event-call-invite.h \
 	matrix-event-call-candidates.h \
+	$(NULL)
+
+MESSAGE_H_FILES = \
 	matrix-message-base.h \
 	matrix-message-text.h \
 	matrix-message-location.h \
@@ -112,6 +62,17 @@ INST_H_SRC_FILES = \
 	matrix-event-room-third-party-invite.h \
 	matrix-event-typing.h \
 	matrix-event-receipt.h \
+	$(NULL)
+
+INST_H_SRC_FILES = \
+	matrix-types.h \
+	matrix-compacts.h \
+	matrix-api.h \
+	matrix-http-api.h \
+	matrix-client.h \
+	matrix-http-client.h \
+	$(EVENT_H_FILES) \
+	$(MESSAGE_H_FILES) \
 	utils.h \
 	matrix-profile.h \
 	matrix-room.h \
@@ -130,7 +91,6 @@ matrix_enum_headers = \
 libmatrix_glib_0_0_la_SOURCES = \
 	$(INST_H_BUILT_FILES) \
 	matrix-marshalers.c \
-	$(libmatrix_glib_0_0_la_VALA_SOURCES:.vala=.c) \
 	matrix-event-types.c \
 	matrix-version.c \
 	matrix-api.c \
@@ -199,15 +159,6 @@ libmatrix_glib_0_0_la_LIBADD = \
 libmatrix_glib_0_0_la_LDFLAGS = \
 	-version-info "$(LT_CURRENT)":"$(LT_REVISION)":"$(LT_AGE)"
 
-$(PUBLIC_HEADER): vala-stamp
-
-Matrix-0.0.vapi: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
-vapidir = $(datadir)/vala/vapi
-dist_vapi_DATA = \
-	Matrix-$(MATRIX_GLIB_API_VERSION).vapi \
-	Matrix-$(MATRIX_GLIB_API_VERSION).deps \
-	$(NULL)
-
 BUILT_SOURCES += \
 	matrix-enumtypes.c \
 	matrix-enumtypes.h \
@@ -272,29 +223,75 @@ matrix-marshalers.c: matrix-marshalers.h
 
 CLEANFILES += stamp-matrix-marshalers
 
-limtatrix_glib_dlname = \
+libmatrix_glib_dlname = \
 	`$(SED) -nE "s/^dlname='([A-Za-z0-9.+-]+)'/\1/p" libmatrix-glib-0.0.la`¬
-INTROSPECTION_GIRS = Matrix-$(MATRIX_GLIB_API_VERSION).gir
-INTROSPECTION_COMPILER_ARGS = --includedir=. $(libmatrix_glib_dlname)
 
-Matrix-0.0.gir: libmatrix-glib-$(MATRIX_GLIB_API_VERSION).la
-Matrix-0.0.typelib: $(INTROSPECTION_GIRS)
-	$(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
+if HAVE_INTROSPECTION
+
+include $(INTROSPECTION_MAKEFILE)
+
+INTROSPECTION_GIRS = \
+	Matrix-$(MATRIX_GLIB_API_VERSION).gir \
+	MatrixEvent-$(MATRIX_GLIB_API_VERSION).gir \
+	MatrixMessage-$(MATRIX_GLIB_API_VERSION).gir \
+	$(NULL)
+
+Matrix-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
+Matrix_0_0_gir_FILES = $(INST_H_SRC_FILE) $(INST_H_BUILT_FILES) $(filter %.c,$(libmatrix_glib_0_0_la_SOURCES))
+Matrix_0_0_gir_LIBS = libmatrix-glib-0.0.la
+Matrix_0_0_gir_SCANNERFLAGS = --identifier-prefix=Matrix --symbol-prefix=matrix --warn-all
+Matrix_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
+Matrix_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
+Matrix_0_0_gir_EXPORT_PACKAGES = matrix-glib
+MatrixEvent-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
+MatrixEvent_0_0_gir_FILES = $(EVENT_H_FILES) $(libmatrix_glib_0_0_la_SOURCES)
+MatrixEvent_0_0_gir_LIBS = libmatrix-glib-0.0.la
+MatrixEvent_0_0_gir_SCANNERFLAGS = --identifier-prefix=MatrixEvent --symbol-prefix=matrix_event --warn-all
+MatrixEvent_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
+MatrixEvent_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
+MatrixEvent_0_0_gir_EXPORT_PACKAGES = matrix-event-glib
+MatrixMessage-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
+MatrixMessage_0_0_gir_FILES = $(filter matrix-message-%.h,$(Matrix_0_0_gir_FILES))
+MatrixMessage_0_0_gir_LIBS = libmatrix-glib-0.0.la
+MatrixMessage_0_0_gir_SCANNERFLAGS = --identifier-prefix=MatrixMessage --symbol-prefix=matrix_message --warn-all
+MatrixMessage_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
+MatrixMessage_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
+MatrixMessage_0_0_gir_EXPORT_PACKAGES = matrix-message-glib
 
 girdir = $(INTROSPECTION_GIRDIR)
 gir_DATA = $(INTROSPECTION_GIRS)
+
 typelibdir = $(INTROSPECTION_TYPELIBDIR)
 typelib_DATA = Matrix-$(MATRIX_GLIB_API_VERSION).typelib
 
-CLEANFILES += $(gir_DATA) $(typelibs_DATA)
-
-
 headerdir = $(includedir)/matrix-glib-$(MATRIX_GLIB_API_VERSION)
 header_DATA = \
-	$(PUBLIC_HEADER) \
 	$(INST_H_SRC_FILES) \
 	$(INST_H_BUILT_FILES) \
 	$(NULL)
+
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
+if HAVE_VAPIGEN
+
+include $(VAPIGEN_MAKEFILE)
+
+VAPIGEN_VAPIS = Matrix-$(MATRIX_GLIB_API_VERSION).vapi
+
+Matrix_0_0_vapi_DEPS = \
+	json-glib-1.0 \
+	gio-2.0 \
+	libsoup-2.4 \
+	$(NULL)
+Matrix_0_0_vapi_GIRS = $(INTROSPECTION_GIRS)
+Matrix_0_0_vapi_FILES = $(INTROSPECTION_GIRS)
+
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = $(VAPIGEN_VAPIS)
+
+endif
+
+endif
 
 pkgconfig_in = matrix-glib-$(MATRIX_GLIB_API_VERSION).pc.in
 pkgconfigdir = $(libdir)/pkgconfig
