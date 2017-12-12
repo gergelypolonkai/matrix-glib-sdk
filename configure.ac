@@ -105,9 +105,6 @@ GTK_DOC_CHECK([1.25], [--flavour no-tmpl])
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
 
-# Check for vala
-VALAC_CHECK
-
 # Check for GIO
 PKG_CHECK_MODULES([GIO], [gio-2.0 >= $GIO_REQUIRED])
 
@@ -118,7 +115,20 @@ PKG_CHECK_MODULES([SOUP], [libsoup-2.4 >= $SOUP_REQUIRED])
 PKG_CHECK_MODULES([JSON], [json-glib-1.0 >= $JSON_REQUIRED])
 
 # Check for GObject Introspection
+m4_ifdef([GOBJECT_INTROSPECTION_CHECK], [
 GOBJECT_INTROSPECTION_CHECK([1.32.0])
+],[
+AM_CONDITIONAL([HAVE_INTROSPECTION], false)
+])
+
+m4_ifdef([VALA_PROG_VAPIGEN], [
+VALAC_CHECK([0.38], [0.38])
+
+VALA_PROG_VAPIGEN([0.38])
+AM_CONDITIONAL([HAVE_VAPIGEN], true)
+],[
+AM_CONDITIONAL([HAVE_VAPIGEN], false)
+])
 
 debug=no
 AC_ARG_ENABLE(debug,
@@ -167,7 +177,6 @@ AC_CONFIG_FILES([
     src/Makefile
     src/matrix-version.h
     src/matrix-glib-0.0.pc
-    src/namespace-info.vala
     docs/reference/matrix-glib-sdk/Makefile
 ])
 AC_OUTPUT
