@@ -47,7 +47,7 @@ struct _MatrixHTTPAPIClass {
 };
 
 GType matrix_http_api_get_type(void) G_GNUC_CONST;
-MatrixHTTPAPI *matrix_http_api_new(const gchar *base_url, const gchar *token, const gchar *refresh_token);
+MatrixHTTPAPI *matrix_http_api_new(const gchar *base_url, const gchar *token);
 const gchar *matrix_http_api_get_base_url(MatrixHTTPAPI *http_api);
 void matrix_http_api_set_base_url(MatrixHTTPAPI *http_api, const gchar *base_url);
 gboolean matrix_http_api_get_validate_certificate(MatrixHTTPAPI *http_api);
