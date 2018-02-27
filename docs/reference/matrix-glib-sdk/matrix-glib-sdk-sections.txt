@@ -53,7 +53,6 @@ matrix_api_leave_room
 matrix_api_unban_user
 matrix_api_login
 matrix_api_logout
-matrix_api_token_refresh
 matrix_api_get_presence_list
 matrix_api_update_presence_list
 matrix_api_get_presence
@@ -73,8 +72,6 @@ matrix_api_media_thumbnail
 matrix_api_media_upload
 matrix_api_get_token
 matrix_api_set_token
-matrix_api_get_refresh_token
-matrix_api_set_refresh_token
 matrix_api_get_user_id
 matrix_api_get_homeserver
 MatrixAPI

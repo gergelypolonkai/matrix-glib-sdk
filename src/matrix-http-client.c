@@ -118,7 +118,6 @@ logout_callback(MatrixAPI *matrix_api, const gchar *content_type, JsonNode *json
 {
     matrix_api_abort_pending(matrix_api);
     matrix_api_set_token(matrix_api, NULL);
-    matrix_api_set_refresh_token(matrix_api, NULL);
 }
 
 static void
@@ -330,19 +329,6 @@ _process_event_list_obj(MatrixHTTPClient *matrix_http_client, JsonNode* node, co
 }
 
 static void
-refresh_callback(MatrixAPI *matrix_api, const gchar *content_type, JsonNode *json_content, GByteArray *raw_content, GError *err, gpointer user_data)
-{
-    g_signal_emit_by_name(MATRIX_CLIENT(matrix_api), "login-finished", g_error_matches(err, MATRIX_ERROR, MATRIX_ERROR_NONE));
-
-    if (matrix_api_get_token(matrix_api) == NULL) {
-        matrix_api_set_refresh_token(matrix_api, NULL);
-        g_signal_emit_by_name(MATRIX_CLIENT(matrix_api), "polling-stopped", err);
-
-        matrix_client_stop_polling(MATRIX_CLIENT(matrix_api), FALSE, NULL);
-    }
-}
-
-static void
 cb_sync(MatrixAPI *matrix_api, const gchar *content_type, JsonNode *json_content, GByteArray *raw_content, GError *error, gpointer user_data)
 {
     MatrixHTTPClientPrivate *priv = matrix_http_client_get_instance_private(MATRIX_HTTP_CLIENT(matrix_api));
@@ -448,10 +434,6 @@ cb_sync(MatrixAPI *matrix_api, const gchar *content_type, JsonNode *json_content
                 (error->code == MATRIX_ERROR_M_UNKNOWN_TOKEN) ||
                 (error->code == MATRIX_ERROR_M_UNAUTHORIZED))) {
         matrix_api_set_token(matrix_api, NULL);
-        matrix_api_token_refresh(matrix_api,
-                                 NULL,
-                                 refresh_callback, NULL,
-                                 NULL);
     }
 
     // It is possible that polling has been disabled while we were processing events. Don’t
@@ -728,7 +710,6 @@ matrix_http_client_real_save_state(MatrixClient *matrix_client, const gchar *fil
     const gchar *user_id;
     const gchar *homeserver;
     const gchar *token;
-    const gchar *refresh_token;
     JsonNode *node;
     JsonGenerator *generator;
 
@@ -750,10 +731,6 @@ matrix_http_client_real_save_state(MatrixClient *matrix_client, const gchar *fil
 
     if ((token = matrix_api_get_token(MATRIX_API(matrix_client))) != NULL) {
         json_object_set_string_member(root, "access_token", token);
-    }
-
-    if ((refresh_token = matrix_api_get_refresh_token(MATRIX_API(matrix_client))) != NULL) {
-        json_object_set_string_member(root, "refresh_token", refresh_token);
     }
 
     node = json_node_new(JSON_NODE_OBJECT);
@@ -853,14 +830,6 @@ matrix_http_client_real_load_state(MatrixClient *matrix_client, const gchar *fil
 
 #if DEBUG
         g_debug("Loaded access token %s", matrix_api_get_token(MATRIX_API(matrix_client)));
-#endif
-    }
-
-    if ((node = json_object_get_member(root, "refresh_token")) != NULL) {
-        matrix_api_set_refresh_token(MATRIX_API(matrix_client), json_node_get_string(node));
-
-#if DEBUG
-        g_debug("Loaded refresh token %s", matrix_api_get_refresh_token(MATRIX_API(matrix_client)));
 #endif
     }
 }
