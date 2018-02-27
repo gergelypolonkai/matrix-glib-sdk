@@ -81,7 +81,6 @@
  * @unban_user: the virtual function pointer to matrix_api_unban_user()
  * @login: the virtual function pointer to matrix_api_login()
  * @logout: the virtual function pointer to matrix_api_logout()
- * @token_refresh: the virtual function pointer to matrix_api_get_token_refresh()
  * @get_presence_list: the virtual function pointer to matrix_api_get_presence_list()
  * @update_presence_list: the virtual function pointer to matrix_api_update_presence_list()
  * @get_presence: the virtual function pointer to matrix_api_get_presence()
@@ -101,8 +100,6 @@
  * @media_upload: the virtual function pointer to matrix_api_media_upload()
  * @get_token: the virtual function pointer to matrix_api_get_token()
  * @set_token: the virtual function pointer to matrix_api_set_token()
- * @get_refresh_token: the virtual function pointer to matrix_api_get_refresh_token()
- * @set_refresh_token: the virtual function pointer to matrix_api_set_refresh_token()
  * @get_user_id: the virtual function pointer to matrix_api_get_user_id()
  * @get_homeserver: the virtual function pointer to matrix_api_get_homeserver()
  *
@@ -1434,31 +1431,6 @@ matrix_api_logout(MatrixAPI *matrix_api,
 }
 
 /**
- * matrix_api_token_refresh:
- * @api: a #MatrixAPI
- * @refresh_token: the refresh token that was issued by the server
- * @callback: the function to call when the request is finished
- * @user_data: user data to be passed to @callback
- * @error: (nullable): a #GError, or %NULL to ignore errors
- *
- * Exchanges a refresh token for a new access token.  This is intended to be used if the access
- * token has expired. If @refresh_token is %NULL, implementations MUST send the stored refresh
- * token.  If it is not pesent(e.g. because login hasn’t happened yet), this function MUST
- * return with error.
- */
-void
-matrix_api_token_refresh(MatrixAPI *matrix_api,
-                         const gchar *refresh_token,
-                         MatrixAPICallback callback,
-                         gpointer user_data,
-                         GError **error)
-{
-    g_return_if_fail(matrix_api != NULL);
-
-    MATRIX_API_GET_IFACE(matrix_api)->token_refresh(matrix_api, callback, user_data, refresh_token, error);
-}
-
-/**
  * matrix_api_get_presence_list:
  * @api: a #MatrixAPI
  * @user_id: (not nullable): the user whose presence list should be retrieved
@@ -1946,39 +1918,6 @@ matrix_api_set_token(MatrixAPI *matrix_api, const gchar *value)
 }
 
 /**
- * matrix_api_get_refresh_token:
- * @api: a #MatrixAPI
- *
- * Get the refresh token used in @api.
- *
- * The returned value is owned by @api and should not be freed.
- *
- * Returns: (transfer none) (nullable): a refresh token, or %NULL if not yet set
- */
-const gchar *
-matrix_api_get_refresh_token(MatrixAPI *matrix_api)
-{
-    g_return_val_if_fail(matrix_api != NULL, NULL);
-
-    return MATRIX_API_GET_IFACE(matrix_api)->get_refresh_token(matrix_api);
-}
-
-/**
- * matrix_api_set_refresh_token:
- * @api: a #MatrixAPI
- * @refresh_token: a refresh token
- *
- * Set the refresh token to be used for access token refresh while using @api.
- */
-void
-matrix_api_set_refresh_token(MatrixAPI *matrix_api, const gchar *value)
-{
-    g_return_if_fail(matrix_api != NULL);
-
-    MATRIX_API_GET_IFACE(matrix_api)->set_refresh_token(matrix_api, value);
-}
-
-/**
  * matrix_api_get_user_id:
  * @api: a #MatrixAPI
  *
@@ -2031,19 +1970,6 @@ matrix_api_default_init(MatrixAPIInterface *iface)
         g_object_interface_install_property(iface,
                                             g_param_spec_string(
                                                     "token", "token", "token",
-                                                    NULL,
-                                                    G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
-
-        /**
-         * MatrixAPI:refresh-token:
-         *
-         * The token to use for refreshing the authorization token. It is
-         * issued by the server after a successful registration, login or
-         * token refresh.
-         */
-        g_object_interface_install_property(iface,
-                                            g_param_spec_string(
-                                                    "refresh-token", "refresh-token", "refresh-token",
                                                     NULL,
                                                     G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
 

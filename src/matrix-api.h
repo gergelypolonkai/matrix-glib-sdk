@@ -344,11 +344,6 @@ struct _MatrixAPIInterface {
                    MatrixAPICallback callback,
                    gpointer user_data,
                    GError **error);
-    void (*token_refresh)(MatrixAPI *api,
-                          MatrixAPICallback callback,
-                          gpointer user_data,
-                          const gchar *refresh_token,
-                          GError **error);
     void (*get_presence_list)(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
@@ -460,8 +455,6 @@ struct _MatrixAPIInterface {
                          GError **error);
     const gchar *(*get_token)(MatrixAPI *api);
     void (*set_token)(MatrixAPI *api, const gchar *token);
-    const gchar *(*get_refresh_token)(MatrixAPI *api);
-    void (*set_refresh_token)(MatrixAPI *api, const gchar *value);
     const gchar *(*get_user_id)(MatrixAPI *api);
     const gchar *(*get_homeserver)(MatrixAPI *api);
 };
@@ -770,11 +763,6 @@ void matrix_api_logout(MatrixAPI *api,
                        MatrixAPICallback callback,
                        gpointer user_data,
                        GError **error);
-void matrix_api_token_refresh(MatrixAPI *api,
-                              const gchar *refresh_token,
-                              MatrixAPICallback callback,
-                              gpointer user_data,
-                              GError **error);
 void matrix_api_get_presence_list(MatrixAPI *api,
                                   const gchar *user_id,
                                   MatrixAPICallback callback,
@@ -886,8 +874,6 @@ void matrix_api_media_upload(MatrixAPI *api,
                              GError **error);
 const gchar *matrix_api_get_token(MatrixAPI *api);
 void matrix_api_set_token(MatrixAPI *api, const gchar *token);
-const gchar *matrix_api_get_refresh_token(MatrixAPI *api);
-void matrix_api_set_refresh_token(MatrixAPI *api, const gchar *refresh_token);
 const gchar *matrix_api_get_user_id(MatrixAPI *api);
 const gchar *matrix_api_get_homeserver(MatrixAPI *api);
 

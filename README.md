@@ -29,7 +29,6 @@ For a working example, see [test-client.c](src/test-client.c).
 
     // Set tokens for the session. Alternatively you may want to login with matrix_api_login() or matrix_client_login_with_password()
     matrix_api_set_token(MATRIX_API(client), "your_access_token");
-    matrix_api_set_refresh_token(MATRIX_API(client), "your_refresh_token");
 
     // Connect a callback that gets called when a m.room.message event arrives
     matrix_client_connect_event(client, MATRIX_EVENT_TYPE_ROOM_MESSAGE, message_callback, NULL);

@@ -39,7 +39,6 @@ enum  {
     PROP_VALIDATE_CERTIFICATE,
     PROP_USER_ID,
     PROP_TOKEN,
-    PROP_REFRESH_TOKEN,
     PROP_HOMESERVER,
     NUM_PROPERTIES
 };
@@ -52,7 +51,6 @@ typedef struct {
     SoupURI *api_uri;
     SoupURI *media_uri;
     gchar *token;
-    gchar *refresh_token;
 } MatrixHTTPAPIPrivate;
 
 static void matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface);
@@ -102,14 +100,13 @@ _matrix_http_api_set_url(MatrixHTTPAPI *matrix_http_api, SoupURI **uri, const gc
  * matrix_http_api_new:
  * @base_url: the base URL of the homeserver to use
  * @token: an access token to use
- * @refresh_token: a refresh token to use
  *
  * Create a new #MatrixHTTPAPI object.
  *
  * Returns: (transfer full): a new #MatrixHTTPAPI object
  */
 MatrixHTTPAPI *
-matrix_http_api_new(const gchar *base_url, const gchar *token, const gchar *refresh_token)
+matrix_http_api_new(const gchar *base_url, const gchar *token)
 {
     MatrixHTTPAPI *ret;
     MatrixHTTPAPIPrivate *priv;
@@ -119,7 +116,6 @@ matrix_http_api_new(const gchar *base_url, const gchar *token, const gchar *refr
     ret = (MatrixHTTPAPI*) g_object_new(MATRIX_TYPE_HTTP_API,
                                         "base-url", base_url,
                                         "token", token,
-                                        "refresh-token", refresh_token,
                                         NULL);
     priv = matrix_http_api_get_instance_private(ret);
 
@@ -209,21 +205,6 @@ _matrix_http_api_response_callback(SoupSession *session, SoupMessage *msg, gpoin
 
                         g_free(priv->token);
                         priv->token = g_strdup(access_token);
-                    }
-                }
-
-                /* Check if the response holds a refresh token; if it
-                 * does, set it as our new refresh token */
-                if ((node = json_object_get_member(root, "refresh_token")) != NULL) {
-                    const gchar *refresh_token;
-
-                    if ((refresh_token = json_node_get_string(node)) != NULL) {
-#if DEBUG
-                        g_debug("Got new refresh token: %s", refresh_token);
-#endif
-
-                        g_free(priv->refresh_token);
-                        priv->refresh_token = g_strdup(refresh_token);
                     }
                 }
 
@@ -1765,38 +1746,6 @@ matrix_http_api_login(MatrixAPI *matrix_api, MatrixAPICallback cb, void *cb_targ
 }
 
 static void
-matrix_http_api_token_refresh(MatrixAPI *matrix_api, MatrixAPICallback cb, void *cb_target, const gchar *refresh_token, GError **error)
-{
-    JsonBuilder *builder;
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(matrix_api));
-    JsonNode *root_node;
-
-    if ((refresh_token == NULL) && (priv->refresh_token == NULL)) {
-        g_set_error(error, MATRIX_ERROR, MATRIX_ERROR_M_MISSING_TOKEN, "No token available");
-
-        return;
-    }
-
-    builder = json_builder_new();
-
-    json_builder_begin_object(builder);
-
-    json_builder_set_member_name(builder, "refresh_token");
-    json_builder_add_string_value(builder, (refresh_token != NULL) ? refresh_token : priv->refresh_token);
-
-    json_builder_end_object(builder);
-    root_node = json_builder_get_root(builder);
-
-    _matrix_http_api_send(MATRIX_HTTP_API(matrix_api),
-                          cb, cb_target,
-                          CALL_TYPE_API, "POST", "tokenrefresh",
-                          NULL, NULL, root_node, NULL, FALSE, error);
-
-    json_node_unref(root_node);
-    g_object_unref(builder);
-}
-
-static void
 matrix_http_api_logout(MatrixAPI *matrix_api, MatrixAPICallback cb, void *cb_target, GError **error)
 {
     _matrix_http_api_send(MATRIX_HTTP_API(matrix_api),
@@ -2282,11 +2231,9 @@ matrix_http_api_set_base_url(MatrixHTTPAPI *matrix_http_api, const gchar *base_u
         priv->base_url = g_strdup(base_url);
 
         g_free(priv->token);
-        g_free(priv->refresh_token);
         g_free(matrix_http_api->_homeserver);
         g_free(matrix_http_api->_user_id);
         priv->token = NULL;
-        priv->refresh_token = NULL;
         matrix_http_api->_homeserver = NULL;
         matrix_http_api->_user_id = NULL;
 
@@ -2365,27 +2312,6 @@ matrix_http_api_set_token(MatrixAPI *matrix_api, const gchar *token)
 }
 
 static const gchar *
-matrix_http_api_get_refresh_token (MatrixAPI *matrix_api)
-{
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(matrix_api));
-
-    return priv->refresh_token;
-}
-
-static void
-matrix_http_api_set_refresh_token(MatrixAPI *matrix_api, const gchar *refresh_token)
-{
-    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(matrix_api));
-
-    if (g_strcmp0(refresh_token, priv->refresh_token) != 0) {
-        g_free(priv->refresh_token);
-        priv->refresh_token = g_strdup(refresh_token);
-
-        g_object_notify_by_pspec((GObject *)matrix_api, matrix_http_api_properties[PROP_REFRESH_TOKEN]);
-    }
-}
-
-static const gchar *
 matrix_http_api_get_homeserver(MatrixAPI *api) {
     return MATRIX_HTTP_API(api)->_homeserver;
 }
@@ -2409,7 +2335,6 @@ matrix_http_api_finalize(GObject *gobject)
 
     g_free(matrix_http_api->_user_id);
     g_free(priv->token);
-    g_free(priv->refresh_token);
     g_free(matrix_http_api->_homeserver);
 
     G_OBJECT_CLASS(matrix_http_api_parent_class)->finalize(gobject);
@@ -2435,10 +2360,6 @@ matrix_http_api_get_property(GObject *gobject, guint property_id, GValue *value,
             break;
         case PROP_TOKEN:
             g_value_set_string(value, matrix_api_get_token((MatrixAPI*) matrix_http_api));
-
-            break;
-        case PROP_REFRESH_TOKEN:
-            g_value_set_string(value, matrix_api_get_refresh_token((MatrixAPI*) matrix_http_api));
 
             break;
         case PROP_HOMESERVER:
@@ -2468,10 +2389,6 @@ matrix_http_api_set_property(GObject *gobject, guint property_id, const GValue *
             break;
         case PROP_TOKEN:
             matrix_api_set_token((MatrixAPI*) matrix_http_api, g_value_get_string(value));
-
-            break;
-        case PROP_REFRESH_TOKEN:
-            matrix_api_set_refresh_token((MatrixAPI*) matrix_http_api, g_value_get_string(value));
 
             break;
         default:
@@ -2522,12 +2439,6 @@ matrix_http_api_class_init(MatrixHTTPAPIClass *klass)
             NULL,
             G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
     g_object_class_install_property(G_OBJECT_CLASS(klass), PROP_TOKEN, matrix_http_api_properties[PROP_TOKEN]);
-
-    matrix_http_api_properties[PROP_REFRESH_TOKEN] = g_param_spec_string(
-            "refresh-token", "refresh-token", "refresh-token",
-            NULL,
-            G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
-    g_object_class_install_property(G_OBJECT_CLASS(klass), PROP_REFRESH_TOKEN, matrix_http_api_properties[PROP_REFRESH_TOKEN]);
 
     matrix_http_api_properties[PROP_HOMESERVER] = g_param_spec_string(
             "homeserver", "homeserver", "homeserver",
@@ -2587,7 +2498,6 @@ matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface)
     iface->whois = matrix_http_api_whois;
     iface->versions = matrix_http_api_versions;
     iface->login = matrix_http_api_login;
-    iface->token_refresh = matrix_http_api_token_refresh;
     iface->logout = matrix_http_api_logout;
     iface->get_3pids = matrix_http_api_get_3pids;
     iface->add_3pid = matrix_http_api_add_3pid;
@@ -2608,8 +2518,6 @@ matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface)
     iface->get_user_id = matrix_http_api_get_user_id;
     iface->get_token = matrix_http_api_get_token;
     iface->set_token = matrix_http_api_set_token;
-    iface->get_refresh_token = matrix_http_api_get_refresh_token;
-    iface->set_refresh_token = matrix_http_api_set_refresh_token;
     iface->get_homeserver = matrix_http_api_get_homeserver;
 }
 
@@ -2623,5 +2531,4 @@ matrix_http_api_init(MatrixHTTPAPI *matrix_http_api)
     priv->api_uri = NULL;
     priv->media_uri = NULL;
     priv->token = NULL;
-    priv->refresh_token = NULL;
 }

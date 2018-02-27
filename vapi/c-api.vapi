@@ -489,7 +489,6 @@ namespace Matrix {
     [CCode (cheader_filename = "matrix-api.h", type_cname = "MatrixAPIInterface")]
     public interface API : GLib.Object {
         public abstract string? token { get; set; default = null; }
-        public abstract string? refresh_token { get; set; default = null; }
         public abstract string? user_id { get; default = null; }
         public abstract string? homeserver { get; default = null; }
 
@@ -649,9 +648,6 @@ namespace Matrix {
         public abstract void logout([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback)
         throws Matrix.Error;
 
-        public abstract void token_refresh([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string? refresh_token)
-        throws Matrix.Error;
-
         public abstract void get_presence_list([CCode (delegate_target_pos = 1.5, scope = "async")] owned Matrix.API.Callback? @callback, string user_id)
         throws Matrix.Error;
 
@@ -711,11 +707,8 @@ namespace Matrix {
         protected string? _user_id;
         public string? user_id { get; default = null; }
         public string? token { get; set; default = null; }
-        public string? refresh_token { get; set; default = null; }
         protected string? _homeserver;
         public string? homeserver { get; default = null; }
-
-        protected HTTPAPI(string base_url, string? token = null, string? refresh_token = null);
 
         /* Media */
 
@@ -886,9 +879,6 @@ namespace Matrix {
         /* Session management */
 
         public void login(API.Callback? cb, string login_type, Json.Node? content)
-        throws Matrix.Error;
-
-        public void token_refresh(API.Callback? cb, string? refresh_token)
         throws Matrix.Error;
 
         public void logout(API.Callback? cb)
