@@ -116,6 +116,7 @@ typedef enum {
 } MatrixPusherKind;
 
 typedef enum {
+    MATRIX_RECEIPT_TYPE_UNKNOWN,
     MATRIX_RECEIPT_TYPE_READ
 } MatrixReceiptType;
 
