@@ -45,6 +45,7 @@
  * @get_display_name: the virtual function pointer to matrix_api_get_display_name()
  * @set_display_name: the virtual function pointer to matrix_api_set_display_name()
  * @register_account: the virtual function pointer to matrix_api_register_account()
+ * @register_account_email: the virtual function pointer to matrix_api_register_account_email()
  * @set_account_data: the virtual function pointer to matrix_api_set_account_data()
  * @get_room_tags: the virtual function pointer to matrix_api_get_room_tags()
  * @delete_room_tag: the virtual function pointer to matrix_api_delete_room_tag()
@@ -402,6 +403,28 @@ matrix_api_register_account(MatrixAPI *matrix_api,
     g_return_if_fail(password != NULL);
 
     MATRIX_API_GET_IFACE(matrix_api)->register_account(matrix_api, callback, user_data, account_kind, bind_email, username, password, error);
+}
+
+/**
+ * matrix_api_register_account_email:
+ * @callback: (scope async): the function to call when the request is finished
+ */
+void
+matrix_api_register_account_email(MatrixAPI *api,
+                                  const gchar *id_server,
+                                  const gchar *client_secret,
+                                  const gchar *email,
+                                  guint send_attempt,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  GError **error)
+{
+    g_return_if_fail(api != NULL);
+    g_return_if_fail(id_server);
+    g_return_if_fail(client_secret);
+    g_return_if_fail(email);
+
+    MATRIX_API_GET_IFACE(api)->register_account_email(api, callback, user_data, id_server, client_secret, email, send_attempt, error);
 }
 
 /**

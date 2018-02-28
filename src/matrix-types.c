@@ -70,6 +70,7 @@
  * @MATRIX_ERROR_M_THREEPID_AUTH_FAILED: 3rd party authentication failed
  * @MATRIX_ERROR_M_THREEPID_IN_USE: the provided 3rd party ID is already in use
  * @MATRIX_ERROR_M_INVALID_USERNAME: the given username is invalid
+ * @MATRIX_ERROR_M_THREEPID_NOT_FOUND: the provided 3rd party ID is not found
  * @MATRIX_ERROR_UNSPECIFIED: no error code was sent by the homeserver. If you see this error,
  *     that usually indicates a homeserver bug
  * @MATRIX_ERROR_UNKNOWN_ERROR: an error unknown to this library
