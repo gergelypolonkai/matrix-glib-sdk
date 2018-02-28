@@ -71,7 +71,9 @@ matrix_api_media_upload
 matrix_api_get_token
 matrix_api_set_token
 matrix_api_get_user_id
+matrix_api_set_user_id
 matrix_api_get_homeserver
+matrix_api_set_homeserver
 <SUBSECTION Standard>
 MatrixAPI
 MATRIX_TYPE_API
