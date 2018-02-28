@@ -159,6 +159,7 @@ G_DEFINE_QUARK(matrix-error-quark, matrix_error);
 
 /**
  * MatrixReceiptType:
+ * @MATRIX_RECEIPT_TYPE_UNKNOWN: the receipt type is unknown to this SDK
  * @MATRIX_RECEIPT_TYPE_READ: indicate that the message has been read
  *
  * Receipt types of acknowledgment.
