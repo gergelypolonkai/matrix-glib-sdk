@@ -232,8 +232,6 @@ include $(INTROSPECTION_MAKEFILE)
 
 INTROSPECTION_GIRS = \
 	Matrix-$(MATRIX_GLIB_API_VERSION).gir \
-	MatrixEvent-$(MATRIX_GLIB_API_VERSION).gir \
-	MatrixMessage-$(MATRIX_GLIB_API_VERSION).gir \
 	$(NULL)
 
 Matrix-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
@@ -242,21 +240,7 @@ Matrix_0_0_gir_LIBS = libmatrix-glib-0.0.la
 Matrix_0_0_gir_SCANNERFLAGS = --identifier-prefix=Matrix --symbol-prefix=matrix --warn-all
 Matrix_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
 Matrix_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
-Matrix_0_0_gir_EXPORT_PACKAGES = matrix-glib
-MatrixEvent-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
-MatrixEvent_0_0_gir_FILES = $(EVENT_H_FILES) $(libmatrix_glib_0_0_la_SOURCES)
-MatrixEvent_0_0_gir_LIBS = libmatrix-glib-0.0.la
-MatrixEvent_0_0_gir_SCANNERFLAGS = --identifier-prefix=MatrixEvent --symbol-prefix=matrix_event --warn-all
-MatrixEvent_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
-MatrixEvent_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
-MatrixEvent_0_0_gir_EXPORT_PACKAGES = matrix-event-glib
-MatrixMessage-$(MATRIX_GLIB_API_VERSION).gir: libmatrix-glib-0.0.la
-MatrixMessage_0_0_gir_FILES = $(filter matrix-message-%.h,$(Matrix_0_0_gir_FILES))
-MatrixMessage_0_0_gir_LIBS = libmatrix-glib-0.0.la
-MatrixMessage_0_0_gir_SCANNERFLAGS = --identifier-prefix=MatrixMessage --symbol-prefix=matrix_message --warn-all
-MatrixMessage_0_0_gir_INCLUDES = GLib-2.0 GObject-2.0
-MatrixMessage_0_0_gir_CFLAGS = -D_MATRIX_GLIB_SDK_COMPILATION -I$(top_srcdir) -I$(srcdir) -I$(builddir) $(AM_CPPFLAGS)
-MatrixMessage_0_0_gir_EXPORT_PACKAGES = matrix-message-glib
+Matrix_0_0_gir_EXPORT_PACKAGES = MatrixGLib
 
 girdir = $(INTROSPECTION_GIRDIR)
 gir_DATA = $(INTROSPECTION_GIRS)
