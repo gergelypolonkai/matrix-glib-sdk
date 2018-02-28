@@ -2156,6 +2156,15 @@ matrix_http_api_get_turn_server(MatrixAPI *matrix_api, MatrixAPICallback cb, voi
 }
 
 static void
+whoami(MatrixAPI *api, MatrixAPICallback cb, void *cb_target, GError **error)
+{
+    _matrix_http_api_send(MATRIX_HTTP_API(api),
+                          cb, cb_target,
+                          CALL_TYPE_API, "GET", "account/whoami",
+                          NULL, NULL, NULL, NULL, FALSE, error);
+}
+
+static void
 matrix_http_api_abort_pending (MatrixAPI *matrix_api)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(matrix_api));
@@ -2524,6 +2533,7 @@ matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface)
     iface->get_token = matrix_http_api_get_token;
     iface->set_token = matrix_http_api_set_token;
     iface->get_homeserver = matrix_http_api_get_homeserver;
+    iface->whoami = whoami;
 }
 
 static void
