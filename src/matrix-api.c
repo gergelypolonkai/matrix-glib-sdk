@@ -38,6 +38,7 @@
  * @add_3pid: the virtual function pointer to matrix_api_add_3pid()
  * @deactivate_account: the virtual function pointer to matrix_api_deactivate_account()
  * @change_password: the virtual function pointer to matrix_api_change_password()
+ * @whoami: the virtual function pointer to matrix_api_whoami()
  * @get_profile: the virtual function pointer to matrix_api_get_profile()
  * @get_avatar_url: the virtual function pointer to matrix_api_get_avatar_url()
  * @set_avatar_url: the virtual function pointer to matrix_api_set_avatar_url()
@@ -229,6 +230,26 @@ matrix_api_change_password(MatrixAPI *matrix_api,
     g_return_if_fail(new_password != NULL);
 
     MATRIX_API_GET_IFACE(matrix_api)->change_password(matrix_api, callback, user_data, new_password, error);
+}
+
+/**
+ * matrix_api_whoami:
+ * @api: a #MatrixAPI
+ * @callback: the function to call when the request is finished
+ * @user_data: user data to be passed to @callback
+ * @error: (nullable): a #GError, or %NULL to ignore errors
+ *
+ * Get the user’s Matrix ID.
+ */
+void
+matrix_api_whoami(MatrixAPI *api,
+                  MatrixAPICallback callback,
+                  gpointer user_data,
+                  GError **error)
+{
+    g_return_if_fail(api != NULL);
+
+    MATRIX_API_GET_IFACE(api)->whoami(api, callback, user_data, error);
 }
 
 /**

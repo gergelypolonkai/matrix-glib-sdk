@@ -10,6 +10,7 @@ matrix_api_get_3pids
 matrix_api_add_3pid
 matrix_api_deactivate_account
 matrix_api_change_password
+matrix_api_whoami
 matrix_api_get_profile
 matrix_api_get_avatar_url
 matrix_api_set_avatar_url

@@ -66,6 +66,10 @@ struct _MatrixAPIInterface {
                             gpointer user_data,
                             const gchar *new_password,
                             GError **error);
+    void (*whoami)(MatrixAPI *api,
+                   MatrixAPICallback callback,
+                   gpointer user_data,
+                   GError **error);
     void (*get_profile)(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
@@ -483,6 +487,10 @@ void matrix_api_change_password(MatrixAPI *api,
                                 MatrixAPICallback callback,
                                 gpointer user_data,
                                 GError **error);
+void matrix_api_whoami(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       GError **error);
 void matrix_api_get_profile(MatrixAPI *api,
                             const gchar *user_id,
                             MatrixAPICallback callback,
