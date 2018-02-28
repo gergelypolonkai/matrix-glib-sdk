@@ -48,6 +48,7 @@ matrix_api_forget_room
 matrix_api_invite_user_3rdparty
 matrix_api_invite_user
 matrix_api_join_room
+matrix_api_get_joined_rooms
 matrix_api_kick_user
 matrix_api_leave_room
 matrix_api_unban_user

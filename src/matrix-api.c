@@ -78,6 +78,7 @@
  * @invite_user_3rdparty: the virtual function pointer to matrix_api_invite_user_3rdparty()
  * @invite_user: the virtual function pointer to matrix_api_invite_user()
  * @join_room: the virtual function pointer to matrix_api_join_room()
+ * @get_joined_rooms: the virtual function pointer to matrix_api_get_joined_rooms()
  * @kick_user: the virtual function pointer to matrix_api_kick_user()
  * @leave_room: the virtual function pointer to matrix_api_leave_room()
  * @unban_user: the virtual function pointer to matrix_api_unban_user()
@@ -659,6 +660,26 @@ matrix_api_delete_room_alias(MatrixAPI *matrix_api,
     g_return_if_fail(room_alias != NULL);
 
     MATRIX_API_GET_IFACE(matrix_api)->delete_room_alias(matrix_api, callback, user_data, room_alias, error);
+}
+
+/**
+ * matrix_api_get_joined_rooms:
+ * @api: a #MatrixAPI
+ * @callback: (scope async): the function to call when the request is finished
+ * @user_data: user data to be passed to @callback
+ * @error: (nullable): a #GError, or %NULL to ignore errors
+ *
+ * Get the rooms the current user is joined to.
+ */
+void
+matrix_api_get_joined_rooms(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            GError **error)
+{
+    g_return_if_fail(api != NULL);
+
+    MATRIX_API_GET_IFACE(api)->get_joined_rooms(api, callback, user_data, error);
 }
 
 /**
