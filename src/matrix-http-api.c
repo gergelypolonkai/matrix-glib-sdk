@@ -51,6 +51,8 @@ typedef struct {
     SoupURI *api_uri;
     SoupURI *media_uri;
     gchar *token;
+    gchar *homeserver;
+    gchar *user_id;
 } MatrixHTTPAPIPrivate;
 
 static void matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface);
@@ -222,8 +224,8 @@ _matrix_http_api_response_callback(SoupSession *session, SoupMessage *msg, gpoin
                     g_debug("Our home server calls itself %s", homeserver);
 #endif
 
-                    g_free(matrix_http_api->_homeserver);
-                    matrix_http_api->_homeserver = g_strdup(homeserver);
+                    g_free(priv->homeserver);
+                    priv->homeserver = g_strdup(homeserver);
                 }
 
                 /* Check if the response holds a user ID; if it does,
@@ -235,8 +237,8 @@ _matrix_http_api_response_callback(SoupSession *session, SoupMessage *msg, gpoin
                     g_debug("We are reported to be logged in as %s", user_id);
 #endif
 
-                    g_free(matrix_http_api->_user_id);
-                    matrix_http_api->_user_id = g_strdup(user_id);
+                    g_free(priv->user_id);
+                    priv->user_id = g_strdup(user_id);
                 }
 
                 /* Check if the response holds an error */
@@ -2237,11 +2239,11 @@ matrix_http_api_set_base_url(MatrixHTTPAPI *matrix_http_api, const gchar *base_u
         priv->base_url = g_strdup(base_url);
 
         g_free(priv->token);
-        g_free(matrix_http_api->_homeserver);
-        g_free(matrix_http_api->_user_id);
         priv->token = NULL;
-        matrix_http_api->_homeserver = NULL;
-        matrix_http_api->_user_id = NULL;
+        g_free(priv->homeserver);
+        g_free(priv->user_id);
+        priv->homeserver = NULL;
+        priv->user_id = NULL;
 
 #if DEBUG
         gchar *uri;
@@ -2293,7 +2295,9 @@ matrix_http_api_set_validate_certificate(MatrixHTTPAPI *matrix_http_api, gboolea
 static const gchar *
 matrix_http_api_get_user_id (MatrixAPI *api)
 {
-    return MATRIX_HTTP_API(matrix_api)->_user_id;
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(api));
+
+    return priv->user_id;
 }
 
 static const gchar *
@@ -2319,13 +2323,14 @@ matrix_http_api_set_token(MatrixAPI *matrix_api, const gchar *token)
 
 static const gchar *
 matrix_http_api_get_homeserver(MatrixAPI *api) {
-    return MATRIX_HTTP_API(api)->_homeserver;
+    MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(api));
+
+    return priv->homeserver;
 }
 
 static void
 matrix_http_api_finalize(GObject *gobject)
 {
-    MatrixHTTPAPI *matrix_http_api = MATRIX_HTTP_API(gobject);
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(gobject));
 
     g_object_unref(priv->soup_session);
@@ -2339,9 +2344,9 @@ matrix_http_api_finalize(GObject *gobject)
         soup_uri_free(priv->media_uri);
     }
 
-    g_free(matrix_http_api->_user_id);
     g_free(priv->token);
-    g_free(matrix_http_api->_homeserver);
+    g_free(priv->user_id);
+    g_free(priv->homeserver);
 
     G_OBJECT_CLASS(matrix_http_api_parent_class)->finalize(gobject);
 }
@@ -2537,4 +2542,6 @@ matrix_http_api_init(MatrixHTTPAPI *matrix_http_api)
     priv->api_uri = NULL;
     priv->media_uri = NULL;
     priv->token = NULL;
+    priv->homeserver = NULL;
+    priv->user_id = NULL;
 }

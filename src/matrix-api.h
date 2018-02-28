@@ -456,7 +456,9 @@ struct _MatrixAPIInterface {
     const gchar *(*get_token)(MatrixAPI *api);
     void (*set_token)(MatrixAPI *api, const gchar *value);
     const gchar *(*get_user_id)(MatrixAPI *api);
+    void (*set_user_id)(MatrixAPI *api, const gchar *user_id);
     const gchar *(*get_homeserver)(MatrixAPI *api);
+    void (*set_homeserver)(MatrixAPI *api, const gchar *homeserver);
 };
 
 void matrix_api_abort_pending(MatrixAPI *api);
@@ -875,7 +877,9 @@ void matrix_api_media_upload(MatrixAPI *api,
 const gchar *matrix_api_get_token(MatrixAPI *api);
 void matrix_api_set_token(MatrixAPI *api, const gchar *token);
 const gchar *matrix_api_get_user_id(MatrixAPI *api);
+void matrix_api_set_user_id(MatrixAPI *api, const gchar *user_id);
 const gchar *matrix_api_get_homeserver(MatrixAPI *api);
+void matrix_api_set_homeserver(MatrixAPI *api, const gchar *homeserver);
 
 G_END_DECLS
 
