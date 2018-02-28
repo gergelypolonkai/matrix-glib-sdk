@@ -172,6 +172,10 @@ struct _MatrixAPIInterface {
                               gpointer user_data,
                               const gchar *room_alias,
                               GError **error);
+    void (*get_joined_rooms)(MatrixAPI *api,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             GError **error);
     void (*get_room_id)(MatrixAPI *api,
                         MatrixAPICallback callback,
                         gpointer user_data,
@@ -601,6 +605,10 @@ void matrix_api_delete_room_alias(MatrixAPI *api,
                                   MatrixAPICallback callback,
                                   gpointer user_data,
                                   GError **error);
+void matrix_api_get_joined_rooms(MatrixAPI *api,
+                                 MatrixAPICallback callback,
+                                 gpointer user_data,
+                                 GError **error);
 void matrix_api_get_room_id(MatrixAPI *api,
                             const gchar *room_alias,
                             MatrixAPICallback callback,
