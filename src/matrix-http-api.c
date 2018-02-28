@@ -2007,6 +2007,48 @@ matrix_http_api_register_account(MatrixAPI *matrix_api, MatrixAPICallback cb, vo
 }
 
 static void
+register_account_email(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       const gchar *id_server,
+                       const gchar *client_secret,
+                       const gchar *email,
+                       guint send_attempt,
+                       GError **error)
+{
+    JsonBuilder *builder;
+    JsonNode *root_node;
+
+    builder = json_builder_new();
+
+    json_builder_begin_object(builder);
+
+    json_builder_set_member_name(builder, "id_server");
+    json_builder_add_string_value(builder, id_server);
+
+    json_builder_set_member_name(builder, "client_secret");
+    json_builder_add_string_value(builder, client_secret);
+
+    json_builder_set_member_name(builder, "email");
+    json_builder_add_string_value(builder, email);
+
+    json_builder_set_member_name(builder, "send_attempt");
+    json_builder_add_int_value(builder, send_attempt);
+
+    json_builder_end_object(builder);
+
+    root_node = json_builder_get_root(builder);
+
+    _matrix_http_api_send(MATRIX_HTTP_API(api),
+                          callback, user_data,
+                          CALL_TYPE_API, "POST", "register/email/requestToken",
+                          NULL, NULL, root_node, NULL, FALSE, error);
+
+    json_node_unref(root_node);
+    g_object_unref(builder);
+}
+
+static void
 matrix_http_api_set_account_data(MatrixAPI *matrix_api, MatrixAPICallback cb, void *cb_target, const gchar *user_id, const gchar *room_id, const gchar *event_type, JsonNode *content, GError **error)
 {
     gchar *path;
@@ -2522,6 +2564,7 @@ matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface)
     iface->get_display_name = matrix_http_api_get_display_name;
     iface->set_display_name = matrix_http_api_set_display_name;
     iface->register_account = matrix_http_api_register_account;
+    iface->register_account_email = register_account_email;
     iface->set_account_data = matrix_http_api_set_account_data;
     iface->get_room_tags = matrix_http_api_get_room_tags;
     iface->delete_room_tag = matrix_http_api_delete_room_tag;

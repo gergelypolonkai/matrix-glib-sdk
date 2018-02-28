@@ -64,6 +64,7 @@ typedef enum {
     MATRIX_ERROR_M_THREEPID_AUTH_FAILED,
     MATRIX_ERROR_M_THREEPID_IN_USE,
     MATRIX_ERROR_M_INVALID_USERNAME,
+    MATRIX_ERROR_M_THREEPID_NOT_FOUND,
 
     /* Allow for a lot of Matrix.org defined codes. Do not define
      * Matrix-specific error codes after this! */
