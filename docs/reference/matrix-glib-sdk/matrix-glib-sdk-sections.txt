@@ -17,6 +17,7 @@ matrix_api_set_avatar_url
 matrix_api_get_display_name
 matrix_api_set_display_name
 matrix_api_register_account
+matrix_api_register_account_email
 matrix_api_set_account_data
 matrix_api_get_room_tags
 matrix_api_delete_room_tag
