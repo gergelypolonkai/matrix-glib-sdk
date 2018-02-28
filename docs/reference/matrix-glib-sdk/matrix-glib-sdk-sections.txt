@@ -74,6 +74,8 @@ matrix_api_get_turn_server
 matrix_api_media_download
 matrix_api_media_thumbnail
 matrix_api_media_upload
+matrix_api_get_devices
+matrix_api_get_device
 matrix_api_get_token
 matrix_api_set_token
 matrix_api_get_user_id

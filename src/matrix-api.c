@@ -102,6 +102,8 @@
  * @media_download: the virtual function pointer to matrix_api_media_download()
  * @media_thumbnail: the virtual function pointer to matrix_api_media_thumbnail()
  * @media_upload: the virtual function pointer to matrix_api_media_upload()
+ * @get_devices: the virtual function pointer to matrix_api_get_devices()
+ * @get_device: the virtual function pointer to matrix_api_get_device()
  * @get_token: the virtual function pointer to matrix_api_get_token()
  * @set_token: the virtual function pointer to matrix_api_set_token()
  * @get_user_id: the virtual function pointer to matrix_api_get_user_id()
@@ -1973,6 +1975,49 @@ matrix_api_media_upload(MatrixAPI *matrix_api,
     g_return_if_fail(content != NULL);
 
     MATRIX_API_GET_IFACE(matrix_api)->media_upload(matrix_api, callback, user_data, content_type, content, error);
+}
+
+/**
+ * matrix_api_get_devices:
+ * @api: a #MatrixAPI
+ * @callback: a function to call when the request is finished
+ * @user_data: user data to be passed to @callback
+ * @error: (nullable): a #GError, or %NULL to ignore errors
+ *
+ * Get the list of devices for the current user.
+ */
+void
+matrix_api_get_devices(MatrixAPI *api,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       GError **error)
+{
+    g_return_if_fail(api != NULL);
+
+    MATRIX_API_GET_IFACE(api)->get_devices(api, callback, user_data, error);
+}
+
+/**
+ * matrix_api_get_device:
+ * @api: a #MatrixAPI
+ * @device_id: a device ID
+ * @callback: a function to call when the request is finished
+ * @user_data: user data to be passed to @callback
+ * @error: (nullable): a #GError, or %NULL to ignore errors
+ *
+ * Get the details of the given device.
+ */
+void
+matrix_api_get_device(MatrixAPI *api,
+                      const gchar *device_id,
+                      MatrixAPICallback callback,
+                      gpointer user_data,
+                      GError **error)
+{
+    g_return_if_fail(api != NULL);
+    g_return_if_fail(device_id != NULL);
+
+    MATRIX_API_GET_IFACE(api)->get_device(api, device_id, callback, user_data, error);
 }
 
 /**

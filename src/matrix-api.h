@@ -476,6 +476,15 @@ struct _MatrixAPIInterface {
                          const gchar *content_type,
                          GByteArray *content,
                          GError **error);
+    void (*get_devices)(MatrixAPI *api,
+                        MatrixAPICallback callback,
+                        gpointer user_data,
+                        GError **error);
+    void (*get_device)(MatrixAPI *api,
+                       const gchar *device_id,
+                       MatrixAPICallback callback,
+                       gpointer user_data,
+                       GError **error);
     const gchar *(*get_token)(MatrixAPI *api);
     void (*set_token)(MatrixAPI *api, const gchar *value);
     const gchar *(*get_user_id)(MatrixAPI *api);
@@ -920,6 +929,15 @@ void matrix_api_media_upload(MatrixAPI *api,
                              MatrixAPICallback callback,
                              gpointer user_data,
                              GError **error);
+void matrix_api_get_devices(MatrixAPI *api,
+                            MatrixAPICallback callback,
+                            gpointer user_data,
+                            GError **error);
+void matrix_api_get_device(MatrixAPI *api,
+                           const gchar *device_id,
+                           MatrixAPICallback callback,
+                           gpointer user_data,
+                           GError **error);
 const gchar *matrix_api_get_token(MatrixAPI *api);
 void matrix_api_set_token(MatrixAPI *api, const gchar *token);
 const gchar *matrix_api_get_user_id(MatrixAPI *api);
