@@ -91,6 +91,7 @@
  * @list_public_rooms: the virtual function pointer to matrix_api_list_public_rooms()
  * @get_pushers: the virtual function pointer to matrix_api_get_pushers()
  * @update_pusher: the virtual function pointer to matrix_api_update_pusher()
+ * @get_notifications: the virtual function pointer to matrix_api_get_notifications()
  * @get_pushrules: the virtual function pointer to matrix_api_get_pushrules()
  * @delete_pushrule: the virtual function pointer to matrix_api_delete_pushrule()
  * @get_pushrule: the virtual function pointer to matrix_api_get_pushrule()
@@ -1668,6 +1669,33 @@ matrix_api_update_pusher(MatrixAPI *matrix_api,
     g_return_if_fail(matrix_api != NULL);
 
     MATRIX_API_GET_IFACE(matrix_api)->update_pusher(matrix_api, callback, user_data, pusher, error);
+}
+
+/**
+ * matrix_api_get_notifications:
+ * @api: a #MatrixAPI
+ * @from_token: (nullable): Pagination token to retrieve the next set of events
+ * @limit: Limit on the number of events to return in the request.  Set to 0 for no limit
+ * @filter: (nullable): Allows basic filtering of the events returned.  Set it to `"highlight"` to
+ *     return only events where the notification had the highlight tweak set.
+ * @callback: (scope async): a function to call when the request is finished
+ * @user_data: user data to be passed to @callback
+ * @error: (nullable): a #GError, or %NULL to ignore errors
+ *
+ * Get notifications from the server.
+ */
+void
+matrix_api_get_notifications(MatrixAPI *api,
+                             const gchar *from_token,
+                             guint limit,
+                             const gchar *filter,
+                             MatrixAPICallback callback,
+                             gpointer user_data,
+                             GError **error)
+{
+    g_return_if_fail(api != NULL);
+
+    MATRIX_API_GET_IFACE(api)->get_notifications(api, from_token, limit, filter, callback, user_data, error);
 }
 
 /**
