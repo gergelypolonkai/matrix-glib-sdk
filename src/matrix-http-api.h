@@ -37,9 +37,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(MatrixHTTPAPI, g_object_unref)
 
 struct _MatrixHTTPAPI {
     GObject parent_instance;
-
-    gchar *_homeserver;
-    gchar *_user_id;
 };
 
 struct _MatrixHTTPAPIClass {

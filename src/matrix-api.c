@@ -101,7 +101,9 @@
  * @get_token: the virtual function pointer to matrix_api_get_token()
  * @set_token: the virtual function pointer to matrix_api_set_token()
  * @get_user_id: the virtual function pointer to matrix_api_get_user_id()
+ * @set_user_id: the virtual function pointer to matrix_api_set_user_id()
  * @get_homeserver: the virtual function pointer to matrix_api_get_homeserver()
+ * @set_homeserver: the virtual function pointer to matrix_api_set_homeserver()
  *
  * The virtual function table for for #MatrixAPI.
  */
@@ -1936,6 +1938,21 @@ matrix_api_get_user_id(MatrixAPI *matrix_api)
 }
 
 /**
+ * matrix_api_set_user_id:
+ * @api: a #MatrixAPI
+ * @user_id: (nullable): a Matrix ID
+ *
+ * Set the user ID of the user logged in using @api.  This might be useful for restoring state.
+ */
+void
+matrix_api_set_user_id(MatrixAPI *matrix_api, const gchar *user_id)
+{
+    g_return_if_fail(matrix_api != NULL);
+
+    MATRIX_API_GET_IFACE(matrix_api)->set_user_id(matrix_api, user_id);
+}
+
+/**
  * matrix_api_get_homeserver:
  * @api: a #MatrixAPI
  *
@@ -1951,6 +1968,22 @@ matrix_api_get_homeserver(MatrixAPI *matrix_api)
     g_return_val_if_fail(matrix_api != NULL, NULL);
 
     return MATRIX_API_GET_IFACE(matrix_api)->get_homeserver(matrix_api);
+}
+
+/**
+ * matrix_api_set_homeserver:
+ * @api: a #MatrixAPI
+ * @homeserver: (nullable): a homeserver name
+ *
+ * Set the name of the homeserver, as it calls itself.  This might be useful for
+ * restoring state.
+ */
+void
+matrix_api_set_homeserver(MatrixAPI *api, const gchar *homeserver)
+{
+    g_return_if_fail(api != NULL);
+
+    MATRIX_API_GET_IFACE(api)->set_homeserver(api, homeserver);
 }
 
 static void

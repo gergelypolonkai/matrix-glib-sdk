@@ -802,20 +802,18 @@ matrix_http_client_real_load_state(MatrixClient *matrix_client, const gchar *fil
     matrix_http_api_set_validate_certificate(MATRIX_HTTP_API(matrix_client), json_node_get_boolean(node));
 
     if ((node = json_object_get_member(root, "user_id")) != NULL) {
-        g_free(MATRIX_HTTP_API(matrix_client)->_user_id);
-        MATRIX_HTTP_API(matrix_client)->_user_id = g_strdup(json_node_get_string(node));
+        matrix_api_set_user_id(MATRIX_API(matrix_client), json_node_get_string(node));
 
 #if DEBUG
-        g_debug("Loaded user ID %s", MATRIX_HTTP_API(matrix_client)->_user_id);
+        g_debug("Loaded user ID %s", matrix_api_get_user_id(MATRIX_API(matrix_client)));
 #endif
     }
 
     if ((node = json_object_get_member(root, "homeserver_name")) != NULL) {
-        g_free(MATRIX_HTTP_API(matrix_client)->_homeserver);
-        MATRIX_HTTP_API(matrix_client)->_homeserver = g_strdup(json_node_get_string(node));
+        matrix_api_set_homeserver(MATRIX_API(matrix_client), json_node_get_string(node));
 
 #if DEBUG
-        g_debug("Loaded homeserver name %s", MATRIX_HTTP_API(matrix_client)->_homeserver);
+        g_debug("Loaded homeserver name %s", matrix_api_get_homeserver(MATRIX_API(matrix_client)));
 #endif
     }
 
