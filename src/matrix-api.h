@@ -399,6 +399,13 @@ struct _MatrixAPIInterface {
                           gpointer user_data,
                           MatrixPusher *pusher,
                           GError **error);
+    void (*get_notifications)(MatrixAPI *api,
+                              const gchar *from_token,
+                              guint limit,
+                              const gchar *filter,
+                              MatrixAPICallback callback,
+                              gpointer user_data,
+                              GError **error);
     void (*get_pushrules)(MatrixAPI *api,
                           MatrixAPICallback callback,
                           gpointer user_data,
@@ -836,6 +843,13 @@ void matrix_api_update_pusher(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
                               GError **error);
+void matrix_api_get_notifications(MatrixAPI *api,
+                                  const gchar *from_token,
+                                  guint limit,
+                                  const gchar *filter,
+                                  MatrixAPICallback callback,
+                                  gpointer user_data,
+                                  GError **error);
 void matrix_api_get_pushrules(MatrixAPI *api,
                               MatrixAPICallback callback,
                               gpointer user_data,
