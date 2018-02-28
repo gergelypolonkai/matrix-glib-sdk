@@ -63,6 +63,7 @@ matrix_api_set_presence
 matrix_api_list_public_rooms
 matrix_api_get_pushers
 matrix_api_update_pusher
+matrix_api_get_notifications
 matrix_api_get_pushrules
 matrix_api_delete_pushrule
 matrix_api_get_pushrule

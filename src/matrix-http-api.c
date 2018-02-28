@@ -2222,6 +2222,41 @@ get_joined_rooms(MatrixAPI *api, MatrixAPICallback cb, void *cb_target, GError *
 }
 
 static void
+get_notifications(MatrixAPI *api, const gchar *from_token, guint limit, const gchar *filter, MatrixAPICallback callback, gpointer user_data, GError **error)
+{
+    GHashTable *parms = NULL;
+
+    if (from_token != NULL) {
+        parms = _matrix_http_api_create_query_params();
+
+        g_hash_table_replace(parms, g_strdup("from"), g_strdup(from_token));
+    }
+
+    if (limit != 0) {
+        if (parms == NULL) {
+            parms = _matrix_http_api_create_query_params();
+        }
+
+        g_hash_table_replace(parms, g_strdup("limit"), g_strdup_printf("%u", limit));
+    }
+
+    if (filter != NULL) {
+        if (parms == NULL) {
+            parms = _matrix_http_api_create_query_params();
+        }
+
+        g_hash_table_replace(parms, g_strdup("only"), g_strdup(filter));
+    }
+
+    _matrix_http_api_send(MATRIX_HTTP_API(api),
+                          callback, user_data,
+                          CALL_TYPE_API, "POST", "register",
+                          parms, NULL, NULL, NULL, FALSE, error);
+
+    g_hash_table_unref(parms);
+}
+
+static void
 matrix_http_api_abort_pending (MatrixAPI *matrix_api)
 {
     MatrixHTTPAPIPrivate *priv = matrix_http_api_get_instance_private(MATRIX_HTTP_API(matrix_api));
@@ -2593,6 +2628,7 @@ matrix_http_api_matrix_api_interface_init(MatrixAPIInterface * iface)
     iface->get_homeserver = matrix_http_api_get_homeserver;
     iface->whoami = whoami;
     iface->get_joined_rooms = get_joined_rooms;
+    iface->get_notifications = get_notifications;
 }
 
 static void
