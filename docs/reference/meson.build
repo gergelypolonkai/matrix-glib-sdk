@@ -1,0 +1,1 @@
+subdir('matrix-glib-sdk')
