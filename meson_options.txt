@@ -1,0 +1,24 @@
+option('debug',
+       type : 'boolean',
+       value : false,
+       description : 'compile with debugging support')
+
+option('maintainer-mode',
+       type : 'boolean',
+       value : false,
+       description : 'enable maintainer mode')
+
+option('gtk-doc',
+       type : 'boolean',
+       value : false,
+       description : 'generate API reference')
+
+option('introspection',
+       type : 'boolean',
+       value : true,
+       description : 'generate GObject Introspection data')
+
+option('test-clients',
+       type : 'boolean',
+       value : true,
+       description : 'compile the test clients')
