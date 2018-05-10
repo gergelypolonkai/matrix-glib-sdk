@@ -20,5 +20,5 @@ option('introspection',
 
 option('test-clients',
        type : 'boolean',
-       value : true,
+       value : false,
        description : 'compile the test clients')
