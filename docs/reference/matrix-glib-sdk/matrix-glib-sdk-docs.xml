@@ -3,16 +3,14 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
-  <!ENTITY % gtkdocentities SYSTEM "xml/gtkdocentities.ent">
-  %gtkdocentities;
 ]>
 <book id="index">
   <bookinfo>
-    <title>&package_name; Reference Manual</title>
+    <title>Matrix-GLib-SDK Reference Manual</title>
     <releaseinfo>
-      for &package_string;.
+      for Matrix-GLib-SDK 0.0.1.
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://[SERVER]/&package_name;/index.html">http://[SERVER]/&package_name;/</ulink>.
+      <ulink role="online-location" url="https://gergely.polonkai.eu/matrxix-glib-sdk/">https://gergely.polonkai.eu/matrix-glib-sdk/</ulink>.
     </releaseinfo>
   </bookinfo>
 
@@ -78,11 +76,6 @@
     <xi:include href="xml/matrix-client.xml"/>
     <xi:include href="xml/matrix-http-api.xml"/>
     <xi:include href="xml/matrix-http-client.xml"/>
-  </chapter>
-
-  <chapter id="object-tree">
-    <title>Object Hierarchy</title>
-    <xi:include href="xml/tree_index.sgml"/>
   </chapter>
 
   <index id="api-index-full">
