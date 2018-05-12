@@ -25,7 +25,7 @@ if matrix_glib_released == '1'
     matrix_glib_maybe_datestamp = ''
 else
     datestamp = run_command('date', '+.%Y%m%d')
-    matrix_glib_maybe_datestamp = '.' + datestamp.stdout().strip()
+    matrix_glib_maybe_datestamp = datestamp.stdout().strip()
 endif
 
 matrix_glib_version = matrix_glib_full_version + matrix_glib_maybe_datestamp
