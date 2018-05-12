@@ -176,3 +176,12 @@ if get_option('introspection')
                                     link_with : matrixglib,
                                     install : true)
 endif
+
+pkg.generate(name : 'libmatrix-glib',
+             description : 'GObject API for communicating with a Matrix.org Homeserver',
+             version : matrix_glib_version,
+             filebase : 'matrix-glib-' + matrix_glib_api_version,
+             libraries : '-L${libdir} -lmatrix-glib-' + matrix_glib_api_version,
+             subdirs : 'matrix-glib-' + matrix_glib_api_version,
+             requires : ['glib-2.0', 'gobject-2.0', 'gio-2.0', 'json-glib-1.0', 'libsoup-2.4'],
+             url : 'https://gergely.polonkai.eu/matrix-glib-sdk/')

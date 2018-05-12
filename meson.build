@@ -1,5 +1,8 @@
 project('matrix-glib', 'c', version : '0.0.1')
 
+gnome = import('gnome')
+pkg = import('pkgconfig')
+
 sdk_version = meson.project_version()
 ver_arr = sdk_version.split('.')
 
@@ -33,7 +36,6 @@ matrix_glib_major_minor_version = matrix_glib_major_version + '.' + matrix_glib_
 matrix_glib_module_version = lt_current
 matrix_glib_api_version = matrix_glib_major_version + '.0'
 
-gnome = import('gnome')
 
 glib_required = '>= 2.40.0'
 vala_required = '>= 0.30.0'
